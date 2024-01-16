@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    background-color: #333;
+    padding: 20px 0;
+    text-align: center;
+}
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-bottom: 10px; /* Added margin for spacing between links */
+}
+nav a:hover {
+    background-color: #555;
+}
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.logo a {
+    display: block;
+}
+.logo img {
+    max-width: 150px;
+    height: auto;
+}
+section {
+    padding: 20px;
+    text-align: center;
+}
+@media only screen and (max-width: 500px) {
+    nav a {
+        width: 43%; /* Make links take full width on smaller screens */
+        box-sizing: border-box; /* Ensure padding is included in width */
+        margin-bottom: 5px; /* Adjust spacing between links */
+    }
+}

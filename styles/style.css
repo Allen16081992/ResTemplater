@@ -34,14 +34,18 @@ nav a:hover {
     display: block;
 }
 .logo img {
-    max-width: 150px;
+    max-width: 10%;
     height: auto;
 }
 section {
     padding: 20px;
     text-align: center;
 }
+.hidden { display: none; }
 @media only screen and (max-width: 500px) {
+    .logo img {
+        max-width: 20%;
+    }
     nav a {
         width: 43%; /* Make links take full width on smaller screens */
         box-sizing: border-box; /* Ensure padding is included in width */

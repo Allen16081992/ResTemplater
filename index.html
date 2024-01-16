@@ -13,20 +13,68 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="styles/style.css"> 
     <title>Home | CV Templater</title>
+    <script defer src="components/view-painter.js"></script>
 </head>
 <body>
     <header>
-        <div class="logo"><a href="#"><img src="images/CV-mascot.webp" alt="Games Association Logo"></a></div>
+        <div class="logo"><a href="#" id="home"><img src="images/CV-mascot.webp" alt="CV Mascot Logo - Click to visit the Homepage"></a></div>
         <nav>
-            <a href="#">Inloggen</a>
-            <a href="#">Account Maken</a>
-            <a href="#">Contact</a>
+            <a href="#" data-section="news">Nieuws</a>
+            <a href="#" data-section="login">Inloggen</a>
+            <a href="#" data-section="contact">Contact</a>
         </nav>
     </header>
 
     <main>
-        <button></button>
-        <button></button>
+        <section id="home" class="current">
+            <h2>Welcome</h2>
+            <p>hey, I am still empty. You should fill me up.</p>
+        </section>
+
+        <section id="news" class="hidden">
+            <h2>Nieuws</h2>
+            <p>hey, I am still empty. You should fill me up.</p>
+        </section>
+
+        <section id="login" class="hidden">
+            <h2>Inloggen</h2>
+            <div class="form-window">
+                <form>
+                    <p class="error-msg"></p>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" placeholder="Username">
+                    <label for="pwd">Password</label>
+                    <input type="password" name="pwd" placeholder="Password">
+                    <input type='submit' name='signin' value='Inloggen'>
+                </form>
+            </div>
+        </section>
+
+        <section id="signup" class="hidden">
+            <h2>Account maken</h2>
+            <p>hey, I am still empty. You should fill me up.</p>
+        </section>
+
+        <section id="contact" class="hidden">
+            <h2>Contact opnemen</h2>
+            <div class="form-window">
+                <p class="error-msg"></p>
+                <label for="name">Naam</label>
+                <input type="text" name="name" placeholder="Naam">
+                <label for="email">Your Email</label>
+                <input type="text" name="email" placeholder="Email">
+                <label for="message">Jouw bericht</label>
+                <textarea name="message" placeholder="..." rows="4"></textarea>
+                <input type='submit' name='contact' value='Verzenden'>
+            </div>
+        </section>
+
+        <!-- Displayed if JavaScript is disabled -->
+        <noscript>
+            <div>
+                <p>JavaScript is disabled in your browser. No worries, this site is designed to work without it. Who needs Javascript anyway? Websites should also function without, right?</p>
+            </div>
+        </noscript>        
     </main>
 </body>
 </html>

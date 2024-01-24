@@ -3,6 +3,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-y: scroll;
 }
 header {
     background-color: #333;
@@ -21,14 +22,14 @@ nav a {
     margin: 0 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
-    margin-bottom: 10px; /* Added margin for spacing between links */
+
 }
 nav a:hover {
     background-color: #555;
 }
 .logo {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .logo a {
     display: block;
@@ -38,17 +39,45 @@ nav a:hover {
     height: auto;
 }
 section {
-    padding: 20px;
+    display: flex;
     text-align: center;
+    flex-direction: column;
+    align-items: center;
+    /*padding: 20px;
+    border: 2px dashed orange; */
+}
+.form-window form {
+    padding:0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border:2px solid grey;
+    border-radius:15px;
+    min-width:25rem;
+}
+.form-window input,
+.form-window textarea {
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="submit"], textarea {
+    padding: 0.6em 0.6em;
+    font-size: 1em;
+    width: 100%;
 }
 .hidden { display: none; }
+
 @media only screen and (max-width: 500px) {
-    .logo img {
-        max-width: 20%;
-    }
+    .logo img { max-width: 20%; }
     nav a {
         width: 43%; /* Make links take full width on smaller screens */
         box-sizing: border-box; /* Ensure padding is included in width */
         margin-bottom: 5px; /* Adjust spacing between links */
+    }
+    .form-window form {
+        min-width:23rem;
     }
 }

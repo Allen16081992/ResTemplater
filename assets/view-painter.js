@@ -42,5 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Display the 'home' section when the page loads
+    // We call the first section of pages 'home' to indicate the main or most important content.
     paintSection('home');
 });

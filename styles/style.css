@@ -43,8 +43,6 @@ section {
     text-align: center;
     flex-direction: column;
     align-items: center;
-    /*padding: 20px;
-    border: 2px dashed orange; */
 }
 .form-window form {
     padding:0 10px 10px;
@@ -53,10 +51,9 @@ section {
     align-items: center;
     border:2px solid grey;
     border-radius:15px;
-    min-width:25rem;
+    min-width:23rem;
 }
-.form-window input,
-.form-window textarea {
+.form-window input, textarea {
     box-sizing: border-box;
     margin-top: 5px;
 }
@@ -76,8 +73,5 @@ input[type="submit"], textarea {
         width: 43%; /* Make links take full width on smaller screens */
         box-sizing: border-box; /* Ensure padding is included in width */
         margin-bottom: 5px; /* Adjust spacing between links */
-    }
-    .form-window form {
-        min-width:23rem;
     }
 }

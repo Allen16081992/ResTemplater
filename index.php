@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <meta property="og:title" content="CV Templater">
     <meta property="og:type" content="website"/>
-    <meta property="og:description" content="Your resume builder to spearhead your conquest.">
+    <meta property="og:description" content="Jouw cv editor voor het veroveren van functies.">
     <meta property="og:locale" content="nl_NL" />
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">

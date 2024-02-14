@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="styles/style.css"> 
     <title>Home | CV Templater - Koloniseer die Vacature!</title>
     <script defer src="assets/view-painter.js"></script>
+    <script defer src="assets/form.multi-step.js"></script>
 </head>
 <body>
     <header>
@@ -46,10 +47,10 @@
                 <h2>Inloggen</h2>
                 <form>
                     <p class="error-msg"></p>
-                    <label for="username">Username</label>
-                    <input type="text" name="username" placeholder="Username">
-                    <label for="pwd">Password</label>
-                    <input type="password" name="pwd" placeholder="Password">
+                    <label for="username">Gebruikersnaam</label>
+                    <input type="text" name="username" placeholder="Gebruikersnaam">
+                    <label for="pwd">Wachtwoord</label>
+                    <input type="password" name="pwd" placeholder="Wachtwoord">
                     <input type='submit' name='signin' value='Inloggen'>
                 </form>
             </div>
@@ -58,16 +59,32 @@
         <section id="signup" class="hidden">
             <div class="form-window">
                 <h2>Account maken</h2>
-                <form>
+                <form id="rotateForm">
+                    <div style="text-align:center;margin-top:10px; cursor:default;">
+                        <span class="step"></span>
+                        <span class="step"></span>
+                    </div>
                     <p class="error-msg"></p>
-                    <!-- <label for="username">Gebruikersnaam</label>
-                    <input type="text" name="username" placeholder="Gebruikersnaam">
-                    <label for="firstname">Naam</label>
+                    <div class="tab">
+                        <label for="username">Gebruikersnaam</label>
+                        <input type="text" name="username" placeholder="Gebruikersnaam">
+                        <label for="email">E-mailadres</label> 
+                        <input type="text" name="email" placeholder="E-mailadres">
+                    </div>
+                    <div class="tab">
+                        <label for="pwd">Wachtwoord</label>
+                        <input type="password" name="pwd" placeholder="Wachtwoord">
+                        <label for="pwd">Herhaal Wachtwoord</label>
+                        <input type="password" name="pwdR" placeholder="Herhaal Wachtwoord">
+                        <label for="terms"></label>
+                        <span><input type="checkbox" title="terms" name="terms" required> Lees en accepteer de <a href="terms-and-conditions.php" target="_blank">algemene voorwaarden</a>.</span>
+                    </div>
+                    
+                    <!-- <label for="firstname">Naam</label>
                     <input type="text" name="firstname" placeholder="Naam">
                     <label for="lastname">Achteraam</label>
                     <input type="text" name="lastname" placeholder="Achternaam"> -->
-                    <label for="email">E-mailadres</label> 
-                    <input type="text" name="email" placeholder="E-mailadres">
+
                     <!-- <label for="country">Nationaliteit</label>
                     <input type="text" name="country" placeholder="Nationaliteit"> 
                     <label for="birth">Geboortedatum</label>
@@ -103,14 +120,11 @@
                     <input type="text" name="postal" placeholder="Postcode"> -->
                     <!-- <label for="city">Stad</label> 
                     <input type="text" name="city" placeholder="Stad"> -->
-                    <label for="pwd">Wachtwoord</label>
-                    <input type="password" name="pwd" placeholder="Wachtwoord">
-                    <span class="password-strength"></span>
-                    <label for="pwd">Herhaal Wachtwoord</label>
-                    <input type="password" name="pwdR" placeholder="Herhaal Wachtwoord">
-                    <label for="terms"></label>
-                    <span><input type="checkbox" title="terms" name="terms" required> Lees en accepteer de <a href="terms-and-conditions.php" target="_blank">algemene voorwaarden</a>.</span>
-                    <input type="submit" name="signup" value="Account maken">
+
+                    <div class="rotator">
+                        <button type="submit" id="prevBtn" onclick="nextPrev(-1)">Terug</button>
+                        <button type="submit" id="nextBtn" onclick="nextPrev(1)">Verder</button>
+                    </div>
                 </form>
             </div>
         </section>

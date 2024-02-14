@@ -44,6 +44,12 @@ section {
     flex-direction: column;
     align-items: center;
 }
+.error-msg { 
+    position:relative;
+    height:18px; 
+    width:100%;
+    border: 2px dotted green;
+}
 .form-window form {
     padding:0 10px 10px;
     display: flex;
@@ -51,27 +57,46 @@ section {
     align-items: center;
     border:2px solid grey;
     border-radius:15px;
-    min-width:23rem;
+    width:23rem;
 }
-.form-window input, textarea {
+.form-window input, button, textarea {
     box-sizing: border-box;
     margin-top: 5px;
 }
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="submit"], textarea {
+input[type="submit"], button, textarea {
     padding: 0.6em 0.6em;
     font-size: 1em;
     width: 100%;
 }
-.hidden { display: none; }
+
+.step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+} .step.active {opacity: 1;} .step.finish {background-color: #04AA6D;}
+
+.rotator {
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+} #prev, #next { width:35%; } #next { float:right; }
+input.invalid {background-color: #ffdddd;}
+.hidden, .tab { display: none; }
 
 @media only screen and (max-width: 500px) {
-    .logo img { max-width: 20%; }
+    .logo img {max-width:20%;}
     nav a {
         width: 43%; /* Make links take full width on smaller screens */
         box-sizing: border-box; /* Ensure padding is included in width */
         margin-bottom: 5px; /* Adjust spacing between links */
     }
+    .form-window form {width:20rem;}
 }

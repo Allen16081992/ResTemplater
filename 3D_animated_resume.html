@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated 3D Resume Illustration</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #849ae1;
+            margin: 0;
+        }
+        .resume-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            transform-style: preserve-3d;
+        }
+        .shape {
+            position: absolute;
+            transform: rotateX(30deg) rotateY(30deg);
+        }
+        .rect {
+            width: 200px;
+            height: 350px;
+            background-color: #dfe9ef;
+            /* animation: move 6s infinite ease-in-out; */
+        }
+        .rect-edge {
+            width: 200px;
+            height: 10px;
+            top:-9px;
+            left:5px;
+            background-color: rgb(197, 201, 211);
+            position: absolute;
+            transform: rotateX(45deg) skewX(-45deg);
+        }
+        .rect-edge2 {
+            width: 10px;
+            height: 495px;
+            top:-76px;
+            left:200px;
+            background-color: rgb(197, 201, 211);
+            position: absolute;
+            transform: rotateX(45deg) skewY(-50deg);
+        }
+        .circle {
+            top: 100px;
+            left: 80px;
+            width: 50px;
+            height: 50px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            /* animation: move 5s infinite ease-in-out; */
+        }
+        .skills {
+            position:absolute;
+            top: 180px;
+            left: 10px;
+            width: 45px;
+            height: 180px;
+            background-color: #3c4ae7;
+            /* animation: nas 4s infinite ease-in-out; */
+        }
+        .line {
+            height: 2px;
+            background-color: #2c3e50;
+            /* animation: move 5s infinite ease-in-out; */
+        }
+        /* .paragraph-1, .paragraph-2 {
+            animation: sledge 5s infinite ease-in-out;
+        }
+        .paragraph-3 {
+            animation: sledge 3s infinite ease-in-out;
+        } */
+
+        @keyframes move {
+            0% { transform: translate(0, 0) rotateX(30deg) rotateY(30deg); }
+            25% { transform: translate(10px, -10px) rotateX(30deg) rotateY(30deg); }
+            50% { transform: translate(-10px, 10px) rotateX(30deg) rotateY(30deg); }
+            75% { transform: translate(10px, 10px) rotateX(30deg) rotateY(30deg); }
+            100% { transform: translate(0, 0) rotateX(30deg) rotateY(30deg); }
+        }
+
+        @keyframes sledge {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -10px); }
+            50% { transform: translate(-10px, 10px); }
+            75% { transform: translate(10px, 10px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes nas {
+            0% { transform: translate(0, 0) rotateX(30deg) rotateY(30deg); }
+            25% { transform: translate(10px, -10px) rotateX(30deg) rotateY(30deg); }
+            50% { transform: translate(0, 0) rotateX(30deg) rotateY(30deg); }
+            75% { transform: translate(10px, 10px) rotateX(30deg) rotateY(30deg); }
+            100% { transform: translate(0, 0) rotateX(30deg) rotateY(30deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <div class="shape rect" style="top: 50px; left: 50px;">
+            <div class="rect-edge"></div>
+            <div class="rect-edge2"></div>
+        </div>
+        <div class="shape circle"></div>
+        <div class="shape skills"></div>
+        <!-- Lines will be dynamically generated here -->
+    </div>
+
+    <script>
+        const paragraphsData = [
+            // Paragraph 1
+            [
+                { top: 100, left: 125, width: 100 },
+                { top: 100, left: 130, width: 20 },
+                { top: 104, left: 152, width: 5 },
+                { top: 107, left: 160, width: 10 },
+                { top: 110, left: 160, width: 30 },
+                { top: 116, left: 195, width: 5 },
+                { top: 120, left: 205, width: 14 }
+            ],
+            // Paragraph 2
+            [
+                { top: 125, left: 128, width: 40 },
+                { top: 132, left: 170, width: 4 },
+                { top: 135, left: 180, width: 5 },
+                { top: 137, left: 190, width: 2 },
+                { top: 142, left: 195, width: 25 },
+                { top: 132, left: 130, width: 5 },
+                { top: 134, left: 140, width: 2 },
+                { top: 136, left: 145, width: 7 },
+                { top: 138, left: 156, width: 2 },
+                { top: 142, left: 162, width: 20 },
+                { top: 151, left: 185, width: 36 }
+            ],
+            // Paragraph 3
+            [
+                { top: 160, left: 120, width: 50 },
+                { top: 165, left: 130, width: 30 },
+                { top: 170, left: 140, width: 20 },
+                { top: 175, left: 150, width: 10 },
+                { top: 180, left: 160, width: 40 },
+                { top: 185, left: 170, width: 25 },
+                { top: 190, left: 180, width: 15 }
+            ]
+        ];
+
+        function generateLines(paragraph, linesData) {
+            linesData.forEach(data => {
+                const line = document.createElement('div');
+                line.className = 'shape line';
+                line.style.top = data.top + 'px';
+                line.style.left = data.left + 'px';
+                line.style.width = data.width + 'px';
+                paragraph.appendChild(line);
+            });
+        }
+
+        function generateParagraphs(container, paragraphsData) {
+            paragraphsData.forEach((linesData, index) => {
+                const paragraph = document.createElement('div');
+                paragraph.className = `paragraph paragraph-${index + 1}`;
+                generateLines(paragraph, linesData);
+                container.appendChild(paragraph);
+            });
+        }
+
+        const resumeContainer = document.querySelector('.resume-container');
+        generateParagraphs(resumeContainer, paragraphsData);
+    </script>
+</body>
+</html>

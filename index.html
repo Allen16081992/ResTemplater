@@ -23,6 +23,8 @@
     <!-- Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Een CV WebApp van Nederlandse Bodem | CV Templater</title>
+    <!-- Javascript -->
+    <script defer src="assets/js/3d_dummy_lines.js"></script>
 </head>
 <body>
     <header>
@@ -40,7 +42,15 @@
 
     <main>
         <section id="home" class="current">
-
+            <div class="resume-container">
+                <div class="shape paper">
+                    <div class="paper-edge-top"></div>
+                    <div class="paper-edge-side"></div>
+                </div>
+                <div class="shape circle"></div>
+                <div class="shape skills"></div>
+                <!-- Lines will be dynamically generated here -->
+            </div>
         </section>
     </main>
 </body>

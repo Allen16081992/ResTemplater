@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; upgrade-insecure-requests;"> -->
     <meta name="description" content="Trek je oude cv uit de sloot met ons handige web applicatie.">
     <!-- Open Graph meta tags for social sharing -->
     <meta property="og:title" content="CV Templater - Het Curriculum Vitae Ombouw Kistje van Nederlandse Bodem.">
@@ -20,10 +21,9 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
-    <!-- Boxicons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Een CV WebApp van Nederlandse Bodem | CV Templater</title>
     <!-- Javascript -->
+    <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
 </head>
 <body>
@@ -31,17 +31,18 @@
         <div class="logo">
             <a href="index.html" id="logo"><img src="assets/image/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
-        <nav><!-- Make JS add icons in mobile window only -->
-            <a href="#" data-section="#">Inloggen</a>
-            <a href="#" data-section="#">Portfolio</a>
-            <a href="#" data-section="#">Privacy</a>
-            <a href="#" data-section="#">Contact</a>
+        <nav>
+            <a href="#" data-section="login">Inloggen</a>
+            <a href="#" data-section="author">Mijn CV</a>
+            <a href="#" data-section="policy">Privacy</a>
+            <a href="#" data-section="contact">Contact</a>
         </nav>
     </header>
     <div class="skew"></div>
 
     <main>
         <section id="home" class="current">
+            <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1>
             <div class="resume-container">
                 <div class="shape paper">
                     <div class="paper-edge-top"></div>
@@ -51,7 +52,113 @@
                 <div class="shape skills"></div>
                 <!-- Lines will be dynamically generated here -->
             </div>
+            <div class="grid-container">
+                <div class="box"></div>
+                <div class="box">
+                    <p>Wij geloven we dat iedereen een kans verdient om zijn of haar talenten te laten zien. Daarom bieden wij een eenvoudige en efficiënte manier om je cv te maken, aan te passen en te delen.</p>
+                    <a href="#" class="btn">Begin Nu</a>
+                    <!-- <p>Met onze intuïtieve interface kan iedereen, ongeacht technische vaardigheden, een indrukwekkend cv maken.</p> -->
+                </div>
+                <div class="box">
+                    <h2>Hoe werkt het?</h2>
+                    <p>Maak een account aan, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</p>
+                </div>
+                <div class="box"></div>
+            </div>
         </section>
+
+        <section id="login" class="hidden"></section>
+        <section id="author" class="hidden"></section>
+
+        <section id="policy" class="hidden">
+            <div class="policy-page">
+                <h2>Privacybeleid en veiligheid</h2>
+                <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
+                    gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
+                    Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
+                </p>
+
+                <div class="box">
+                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
+
+                    <h2>Algemene Voorwaarden</h2>
+                    <strong>Uw Gebruikersaccount</strong>
+                    <p>Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account nodig, een internet verbinding, en bent u minimaal 16 jaar of
+                       heeft u goedkeuring van uw ouders of wettelijke voogd.</p>
+
+                    <h2>Privacybeleid</h2>
+                    <h3>1. Informatie die we verzamelen</h3>
+                    <p>Wij verzamelen de volgende persoonlijke gegevens via onze website wanneer u zich registreert.</p>
+                    <ul>
+                        <li>Voornaam</li>
+                        <li>Achternaam</li>
+                        <li>Geboortedatum</li>
+                        <li>Nationaliteit</li>
+                        <li>Postcode en Woonplaats</li>
+                        <li>Telefoonnummer</li>
+                        <li>Emailadres</li>
+                        <li>Gebruikersnaam</li>
+                        <li>Wachtwoord</li>
+                    </ul>
+                    <p>Wij verzamelen nog deze aanvullende gegevens wanneer u een cv maakt.</p>
+                    <ul>
+                        <li>Ervaring uit werk</li>
+                        <li>Genoten opleidingen</li>
+                        <li>Vaardigheden en Hobbies</li>
+                    </ul>
+        
+                    <h3>2. Hoe we deze informatie gebruiken</h3>
+                    <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
+                    <ul>
+                        <li>Om u onze dienst (CV Templater) beschikbaar te stellen</li>
+                        <li>Om u uw account te kunnen laten beheren of wijzigen</li>
+                        <li>Om uw account te kunnen voorzien van de juiste rechten</li>
+                        <li>Om onze dienst en website functionaliteit te verbeteren</li>
+                    </ul>
+
+                    <h3>3. Juridische Grondslag voor Verwerking</h3>
+                    <p>We verwerken uw persoonlijke gegevens op basis van de volgende juridische gronden.</p>
+                    <ul>
+                        <li>Door deze te verstrekken, stemt u in met de verwerking comform onze doeleinden.</li>
+                        <li>Verwerking is noodzakelijk voor onze gerechtvaardigde belangen, zoals het verbeteren van onze diensten en het waarborgen van de veiligheid van onze website.</li>
+                    </ul>
+
+                    <h3>4. Gegevensbeveiliging</h3>
+                    <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
+                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerde toegang, 
+                        wijziging, openbaarmaking of vernietiging. Deze maatregelen omvatten:
+                    </p>
+                    <ul>
+                        <li>Beveiligde servers bij onze webhosting aanbieder</li>
+                        <li>Versleutelde verbindingen (HTTPS/SSL)</li>
+                        <li>Periodieke beveiligingsaudits</li>
+                        <li>Encryptie van wachtwoorden</li>
+                        <li>Sterk wachtwoordbeleid</li>
+                    </ul>
+
+                    <h3>5. Gegevensbewaring</h3>
+                    <p>We bewaren uw persoonlijke gegevens zo lang als nodig is om onze in deze privacybeleid beschreven doeleinden te vervullen, 
+                        of zoals wettelijk vereist. Wanneer deze gegevens niet langer nodig zijn, bijvoorbeeld wanneer u besluit uw account te sluiten,
+                        zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
+                    </p>
+
+                    <h3>6. Wijzigingen in Dit Privacybeleid</h3>
+                    <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
+                        We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
+                        Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
+                    </p>
+                    <p>
+                        Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="hidden"></section>
+
+        <footer>
+            <p>CV Templater © 2024</p>
+        </footer>
     </main>
 </body>
 </html>

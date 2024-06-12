@@ -5,7 +5,9 @@ body {
     padding: 0;
     /* box-sizing: border-box;*/
     background-color: #a7b5e4;
+    color: #333;
 }
+footer {text-align: center;}
 header {
     display: flex;
     justify-content: space-between;
@@ -30,12 +32,12 @@ nav a {
 }
 nav a:hover, nav a.current {background-color: #555;}
 nav a.current { cursor: default; }
+.hidden { display: none; }
 .skew {
     width:0;
     height:0;
     border-right: 100vw solid #333;
     border-bottom: 3.9vw solid transparent;
-    /* margin-top: -1vw; */
 }
 section {
     display: flex;
@@ -43,6 +45,11 @@ section {
     align-items: center;
     text-align: center;
     padding:10px;
+}
+.policy-page { max-width:50%; text-align:left; }
+.policy-card {
+    justify-content: left;
+    align-items: left;
 }
 
 @media only screen and (max-width: 400px) {

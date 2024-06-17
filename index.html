@@ -6,8 +6,8 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; upgrade-insecure-requests;"> -->
     <meta name="description" content="Trek je oude cv uit de sloot met ons handige web applicatie.">
     <!-- Open Graph meta tags for social sharing -->
-    <meta property="og:title" content="CV Templater - Het Curriculum Vitae Ombouw Kistje van Nederlandse Bodem.">
-    <meta property="og:description" content="Een schoolproject met teveel aanzien.">
+    <meta property="og:title" content="CV Templater">
+    <meta property="og:description" content="Het Curriculum Vitae Ombouw Kistje van Nederlandse Bodem.">
     <meta property="og:image" content="assets/image/falcon250.webp">
     <meta property="og:locale" content="nl_NL">
     <meta property="og:type" content="website">
@@ -21,7 +21,7 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
-    <title>Een CV WebApp van Nederlandse Bodem | CV Templater</title>
+    <title>Jouw Mobiele CV Editor | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
@@ -32,10 +32,10 @@
             <a href="index.html" id="logo"><img src="assets/image/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="login">Inloggen</a>
-            <a href="#" data-section="author">Mijn CV</a>
+            <a href="#" data-section="author">Over mij</a>
             <a href="#" data-section="policy">Privacy</a>
             <a href="#" data-section="contact">Contact</a>
+            <a href="#" data-section="login">Log in</a>
         </nav>
     </header>
     <div class="skew"></div>
@@ -57,18 +57,37 @@
                 <div class="box">
                     <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te laten zien als werknemer. 
                         Daarom bieden wij een eenvoudige en efficiënte manier om je cv te maken, aan te passen en te delen.</p>
-                    <a href="#" class="btn">Begin Nu</a>
+                    
                     <!-- <p>Met onze intuïtieve interface kan iedereen, ongeacht technische vaardigheden, een indrukwekkend cv maken.</p> -->
                 </div>
                 <div class="box">
                     <h2>Hoe werkt het?</h2>
-                    <p>Maak een account aan, voeg je ervaringen toe, kies een sjabloon, en download je cv. Of neem een abbonement op onze exclusieve sjablonen en uitgebreide gids voor maar €5,- per maand! (maandelijks opzegbaar.)</p>
+                    <p>Log in of <a href="#" >Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</p>
                 </div>
                 <div class="box"></div>
             </div>
         </section>
 
-        <section id="login" class="hidden"></section>
+        <section id="login" class="hidden">
+            <div class="grid-container">
+                <div class="form-window">
+                    <h2>Aanmelden</h2>
+                    <form action="controllers/submission_handler.control.php" method="post">
+                        <label for="email">E-mailadres</label>
+                        <input type="text" id="email" name="email" placeholder="Email" required>
+                        <label for="pwd">Wachtwoord</label>
+                        <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
+    
+                        <button type="submit" name="login">Log in</button>
+                        <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
+                    </form>
+                </div>
+                <div class="art-window">
+
+                </div>
+            </div>
+        </section>
+
         <section id="author" class="hidden"></section>
 
         <section id="policy" class="hidden">
@@ -80,12 +99,11 @@
                 </p>
 
                 <div class="box">
-                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
-
                     <h2>Algemene Voorwaarden</h2>
+                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
                     <strong>Uw Gebruikersaccount</strong>
-                    <p>Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account nodig, een internet verbinding, en bent u minimaal 16 jaar of
-                       heeft u goedkeuring van uw ouders of wettelijke voogd.</p>
+                    <p>Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
+                       u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
 
                     <h2>Privacybeleid</h2>
                     <h3>1. Informatie die we verzamelen</h3>
@@ -93,28 +111,20 @@
                     <ul>
                         <li>Voornaam</li>
                         <li>Achternaam</li>
-                        <li>Geboortedatum</li>
                         <li>Nationaliteit</li>
-                        <li>Postcode en Woonplaats</li>
+                        <li>Geboortedatum</li>
                         <li>Telefoonnummer</li>
+                        <li>Postcode en Woonplaats</li>
                         <li>Emailadres</li>
-                        <li>Gebruikersnaam</li>
-                        <li>Wachtwoord</li>
-                    </ul>
-                    <p>Wij verzamelen nog deze aanvullende gegevens wanneer u een cv maakt.</p>
-                    <ul>
-                        <li>Ervaring uit werk</li>
-                        <li>Genoten opleidingen</li>
-                        <li>Vaardigheden en Hobbies</li>
                     </ul>
         
                     <h3>2. Hoe we deze informatie gebruiken</h3>
                     <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
                     <ul>
-                        <li>Om u onze dienst (CV Templater) beschikbaar te stellen</li>
-                        <li>Om u uw account te kunnen laten beheren of wijzigen</li>
-                        <li>Om uw account te kunnen voorzien van de juiste rechten</li>
-                        <li>Om onze dienst en website functionaliteit te verbeteren</li>
+                        <li>Om onze dienst (CV Templater) aan u beschikbaar te stellen</li>
+                        <li>Om uw account te kunnen laten beheren door uzelf</li>
+                        <li>Om uw account te voorzien van de juiste rechten</li>
+                        <li>Om onze website functionaliteit te verbeteren</li>
                     </ul>
 
                     <h3>3. Juridische Grondslag voor Verwerking</h3>
@@ -126,8 +136,8 @@
 
                     <h3>4. Gegevensbeveiliging</h3>
                     <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
-                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerde toegang, 
-                        wijziging, openbaarmaking of vernietiging. Deze maatregelen omvatten:
+                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerd toegang, 
+                        het wijzigen, vernietigen of diefstal door kwaadwillenden. Deze maatregelen omvatten:
                     </p>
                     <ul>
                         <li>Beveiligde servers bij onze webhosting aanbieder</li>
@@ -155,11 +165,24 @@
             </div>
         </section>
 
-        <section id="contact" class="hidden"></section>
-
-        <footer>
-            <p>Donkere Heiligdom © 2011-2024</p>
-        </footer>
+        <section id="contact" class="hidden">
+            <div class="policy-page">
+                <h2>Contact Opnemen</h2>
+                <p><strong>Let op!</strong> Om spam en bots tegen te gaan, gebruiken wij geen contact formulier.</p>
+                <div class="box">
+                    <strong>Email</strong>
+                    <p>info@donkereheiligdom en vergeet niet .nl erbij te zetten.</p>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <noscript><!-- Als Javascript is uitgeschakeld -->
+        <p>Het lijkt erop dat JavaScript is uitgeschakeld in uw browser. Hierdoor werkt de site niet meer.</p>
+    </noscript>
+
+    <footer>
+        <p>Donkere Heiligdom © 2011-2024</p>
+    </footer>
 </body>
 </html>

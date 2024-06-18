@@ -14,7 +14,7 @@
     width: 300px;
     height: 400px;
 }
-#login .grid-container {
+#login .grid-container, #sign_up .form-window {
     background:#f3f3f3;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -26,7 +26,11 @@
     margin:20px;
     transform: skewX(-2deg);
 }
-.policy-page .box {border-radius: 8px;}
+.sheet { 
+    max-width:50em; 
+    text-align:left; 
+}
+.sheet .box {border-radius: 8px;}
 .box { 
     padding: 20px; 
     background:rgba(255, 255, 255, 0.944);

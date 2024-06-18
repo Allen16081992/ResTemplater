@@ -12,7 +12,6 @@
     <meta property="og:locale" content="nl_NL">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.donkereheiligdom.nl">
-    <link rel="canonical" href="https://www.donkereheiligdom.nl">
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/image/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/image/favicon/favicon-32x32.png">
@@ -21,6 +20,7 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Jouw Mobiele CV Editor | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -62,36 +62,16 @@
                 </div>
                 <div class="box">
                     <h2>Hoe werkt het?</h2>
-                    <p>Log in of <a href="#" >Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</p>
+                    <p>Log in of <a href="#" data-section="sign_up">Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</p>
                 </div>
                 <div class="box"></div>
-            </div>
-        </section>
-
-        <section id="login" class="hidden">
-            <div class="grid-container">
-                <div class="form-window">
-                    <h2>Aanmelden</h2>
-                    <form action="controllers/submission_handler.control.php" method="post">
-                        <label for="email">E-mailadres</label>
-                        <input type="text" id="email" name="email" placeholder="Email" required>
-                        <label for="pwd">Wachtwoord</label>
-                        <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
-    
-                        <button type="submit" name="login">Log in</button>
-                        <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
-                    </form>
-                </div>
-                <div class="art-window">
-
-                </div>
             </div>
         </section>
 
         <section id="author" class="hidden"></section>
 
         <section id="policy" class="hidden">
-            <div class="policy-page">
+            <div class="sheet">
                 <h2>Privacybeleid en veiligheid</h2>
                 <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
                     gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
@@ -166,13 +146,85 @@
         </section>
 
         <section id="contact" class="hidden">
-            <div class="policy-page">
+            <div class="sheet">
                 <h2>Contact Opnemen</h2>
                 <p><strong>Let op!</strong> Om spam en bots tegen te gaan, gebruiken wij geen contact formulier.</p>
                 <div class="box">
                     <strong>Email</strong>
                     <p>info@donkereheiligdom en vergeet niet .nl erbij te zetten.</p>
                 </div>
+            </div>
+        </section>
+
+        <section id="login" class="hidden">
+            <div class="grid-container">
+                <div class="form-window">
+                    <h2>Aanmelden</h2>
+                    <form id="login_form">
+                        <label for="email">E-mailadres</label>
+                        <input type="text" id="email" name="email" placeholder="Email" required>
+                        <label for="pwd">Wachtwoord</label>
+                        <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
+
+                        <button type="submit" name="login">Log in</button>
+                        <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
+                    </form>
+                </div>
+                <div class="art-window"></div>
+            </div>
+        </section>
+
+        <section id="sign_up" class="hidden">
+            <div class="form-window">
+                <h2>Registreren</h2>
+                <form id="signup_form">
+                    <strong>Gegevens</strong>
+                    <label for="firstname">Voornaam</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
+                    <label for="lastname">Achteraam</label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
+                    <label for="day month year">Geboortedatum</label>
+                    <select name="day">
+                        <option selected>--</option>
+                        <?php
+                            for ($day = 1; $day <= 31; $day++) {
+                                echo '<option value="'.$day.'">'.$day.'</option>';
+                            }
+                        ?>
+                    </select>
+                    <select name="month">
+                        <option selected>--</option>
+                        <?php
+                            for ($month = 1; $month <= 12; $month++) {
+                                echo '<option value="'.$month.'">'.$month.'</option>';
+                            }
+                        ?>
+                    </select>
+                    <select name="year" id="year-select">
+                      <option selected>----</option>
+                      <?php
+                        $currentYear = date('Y');
+                        $targetYear = 1908;
+                        for ($year = $currentYear - 15; $year >= $targetYear; $year--) {
+                            echo '<option value="'.$year.'">'.$year.'</option>';
+                        }
+                      ?>
+                    </select>
+                    <hr class="divider" />
+                    <strong>Account</strong>
+                    <label for="email">E-mailadres</label> 
+                    <input type="text" id="email" name="email" placeholder="E-mailadres" required>
+                    <div class="toggle-eye">
+                        <i class='bx bx-low-vision'></i>
+                    </div>
+                    <label for="pwdField">Wachtwoord</label>
+                    <input type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
+                    
+                    <label for="terms">Lees en accepteer onze <a href="terms-and-conditions.php" target="_blank">algemene voorwaarden.</a></label>
+                    <input type="checkbox" id="terms" name="terms" required>
+
+                    <button type="submit" id="nextBtn">Verder</button>
+                </form>
             </div>
         </section>
     </main>

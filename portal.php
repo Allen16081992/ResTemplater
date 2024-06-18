@@ -40,11 +40,11 @@
     <div class="skew"></div>
 
     <main>
-        <section id="user" class="hidden">
+        <section id="home" class="current">
 
         </section>
-
-        <section id="home" class="current">
+        
+        <section id="user" class="hidden">
 
         </section>
 

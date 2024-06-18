@@ -5,7 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const nav = document.querySelector('nav');
     const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main section');
+    const signupLink = document.querySelector('main section#login a[data-section="sign_up"]');
+    const signupAction = document.querySelector('main section#home .grid-container .box a[data-section="sign_up"]');
+    const eye = document.querySelector('.toggle-eye i');
+    const pwdID = document.getElementById('pwdField');
     let activeLink = null; // keep track of the currently active link
+    let setPage = null; // page parser
 
     // Toggle visibility of sections based on the selected sectionId
     function paintSection(sectionId) {
@@ -54,23 +59,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    eye.addEventListener('click', () => {
+        // Toggle the type attribute
+        if (pwdID.type === "password") {
+            pwdID.type = "text";
+            eye.classList.replace('bx-low-vision', 'bx-show');
+        } else {
+            pwdID.type = 'password';
+            eye.classList.replace('bx-show', 'bx-low-vision');
+        }
+    });
+
+    // Verify if we can signup. (if not, then its no homepage)
+    if (signupLink || signupAction) {
+        // Event listener for account creation
+        signupLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            const sectionId = 'sign_up'; // Show sign up page
+            paintSection(sectionId);
+        });
+        signupAction.addEventListener('click', function (event) {
+            event.preventDefault();
+            const sectionId = 'sign_up'; // Show sign up page
+            paintSection(sectionId);
+        });
+    }
+
     // Display the 'home' section when the page loads
     // We call the first section of pages 'home' to indicate the main or most important content.
-    paintSection('home');
+    switch (setPage) {
+        case 1:
+            paintSection('login');
+            break;
+        case 2:
+            paintSection('sign_up');
+            break;
+        case 3:
+            paintSection('user');
+            break;
+        default:
+            paintSection('sign_up');
+    }
 });
 
-// JavaScript to remove messages after a certain duration
-window.onload = function() {
-    var serverMsg = document.getElementById('server-msg');
+// Remove messages after a certain duration
+// window.onload = function() {
+//     var serverMsg = document.getElementById('server-msg');
 
-    // Set timeout to remove error message after 5 seconds
-    if (serverMsg) {
-        setTimeout(function() {
-            serverMsg.style.transition = 'opacity 0.3s ease'; 
-            serverMsg.style.opacity = '0'; 
-            setTimeout(function() {
-                serverMsg.style.display = 'none'; 
-            }, 4500);
-        }, 5000); // 5000 milliseconds = 5 seconds
-    }
-};
+//     // Set timeout to remove error message after 5 seconds
+//     if (serverMsg) {
+//         setTimeout(function() {
+//             serverMsg.style.transition = 'opacity 0.3s ease'; 
+//             serverMsg.style.opacity = '0'; 
+//             setTimeout(function() {
+//                 serverMsg.style.display = 'none'; 
+//             }, 4500);
+//         }, 5000); // 5000 milliseconds = 5 seconds
+//     }
+// };

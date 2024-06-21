@@ -2,63 +2,81 @@
 // Single Page Application
 document.addEventListener('DOMContentLoaded', function () {
     // Select the navigation elements
-    const nav = document.querySelector('nav');
     const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main section');
-    const signupLink = document.querySelector('main section#login a[data-section="sign_up"]');
-    const signupAction = document.querySelector('main section#home .grid-container .box a[data-section="sign_up"]');
-    const eye = document.querySelector('.toggle-eye i');
-    const pwdID = document.getElementById('pwdField');
+    const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section]');
     let activeLink = null; // keep track of the currently active link
     let setPage = null; // page parser
 
+    // Password visibility toggle
+    const eye = document.querySelector('.toggle-eye i');
+    const pwdID = document.getElementById('pwdField');
+
+    // Date Selecter
+    const daySelect = document.getElementById('day-select');
+    const monthSelect = document.getElementById('month-select');
+    const yearSelect = document.getElementById('year-select');
+
     // Toggle visibility of sections based on the selected sectionId
     function paintSection(sectionId) {
-        // Iterate over all sections
         sections.forEach(section => {
             if (section.id === sectionId) {
-                // Show the selected section and add 'current' class
-                section.classList.remove('hidden');
-                section.classList.add('current');
+                section.classList.replace('hidden', 'current');
             } else {
-                // Hide other sections and remove 'current' class
-                section.classList.add('hidden');
-                section.classList.remove('current');
+                section.classList.replace('current', 'hidden');
             }
         });
-    }    
-
-    // Event listener for company logo
-    logoLink.addEventListener('click', function (event) {
-        event.preventDefault();
-        
-        // If there is an active link, remove the 'current' class and reset the variable
-        if (activeLink) {
-            activeLink.classList.remove('current');
-            activeLink = null; // Reset active link as no link should be active
-        }
-
-        // Call the function to show the home section
-        const sectionId = 'home';
-        paintSection(sectionId);
-    });
+    }   
 
     // Event listener for navigation bar
-    nav.addEventListener('click', function (event) {
-        if (!(event.target.id === 'logout')) {
-            event.preventDefault();
-    
-            const sectionId = event.target.getAttribute('data-section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link action
+            const sectionId = this.getAttribute('data-section'); // Get the data-section value
+
+            // Paint the section based on the clicked link
             paintSection(sectionId);
-    
+
+            // Update active link across all related links
+            updateActiveLink(sectionId);
+        });
+    });
+
+    function updateActiveLink(sectionId) {
+        // Remove 'current' class from all links
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-section') === sectionId) {
+                link.classList.add('current');
+            } else {
+                link.classList.remove('current');
+            }
+        });
+
+        // Find the active navigation link and set it as the active link
+        const activeNavLink = document.querySelector(`nav a[data-section='${sectionId}']`);
+        if (activeNavLink) {
             if (activeLink) {
                 activeLink.classList.remove('current');
             }
-            event.target.classList.add('current');
-            activeLink = event.target; // Update the currently active link
+            activeNavLink.classList.add('current');
+            activeLink = activeNavLink; // Update the globally active link
         }
+    }
+
+    // Event listener for company logo
+    logoLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        // Reset active link and show the home section
+        if (activeLink) {
+            activeLink.classList.remove('current');
+            activeLink = null; // Ensure no link is marked as active
+        }
+
+        paintSection('home'); // Assume 'home' is the default section to show
     });
 
+    // Password show/hide icon
     eye.addEventListener('click', () => {
         // Toggle the type attribute
         if (pwdID.type === "password") {
@@ -70,19 +88,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Verify if we can signup. (if not, then its no homepage)
-    if (signupLink || signupAction) {
-        // Event listener for account creation
-        signupLink.addEventListener('click', function (event) {
-            event.preventDefault();
-            const sectionId = 'sign_up'; // Show sign up page
-            paintSection(sectionId);
-        });
-        signupAction.addEventListener('click', function (event) {
-            event.preventDefault();
-            const sectionId = 'sign_up'; // Show sign up page
-            paintSection(sectionId);
-        });
+    // Date Selector
+    if (daySelect && monthSelect && yearSelect) {
+        // Populate days
+        for (let day = 1; day <= 31; day++) {
+            const formatDay = ('0' + day).slice(-2); // Ensure two digits
+            const dayOption = new Option(formatDay, formatDay);
+            daySelect.add(dayOption);
+        }
+        // Populate months
+        for (let month = 1; month <= 12; month++) {
+            const formatMonth = ('0' + month).slice(-2); // Ensure two digits
+            const monthOption = new Option(formatMonth, formatMonth);
+            monthSelect.add(monthOption);
+        }
+        // Populate years
+        const currentYear = new Date().getFullYear();
+        const targetYear = 1954;
+        for (let year = currentYear - 15; year >= targetYear; year--) {
+            const yearOption = new Option(year, year);
+            yearSelect.add(yearOption);
+        }
     }
 
     // Display the 'home' section when the page loads

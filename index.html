@@ -25,6 +25,7 @@
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
+    <script defer src="assets/js/multi_step_rotator.js"></script>
 </head>
 <body>
     <header>
@@ -32,7 +33,7 @@
             <a href="index.html" id="logo"><img src="assets/image/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="author">Over mij</a>
+            <a href="#" data-section="author">Tips</a>
             <a href="#" data-section="policy">Privacy</a>
             <a href="#" data-section="contact">Contact</a>
             <a href="#" data-section="login">Log in</a>
@@ -62,7 +63,7 @@
                 </div>
                 <div class="box">
                     <h2>Hoe werkt het?</h2>
-                    <p>Log in of <a href="#" data-section="sign_up">Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</p>
+                    <span>Log in of <a href="#" data-section="sign_up">Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</span>
                 </div>
                 <div class="box"></div>
             </div>
@@ -133,7 +134,7 @@
                         zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
                     </p>
 
-                    <h3>6. Wijzigingen in Dit Privacybeleid</h3>
+                    <h3>6. Wijzigingen in dit Privacybeleid</h3>
                     <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
                         We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
                         Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
@@ -178,53 +179,104 @@
             <div class="form-window">
                 <h2>Registreren</h2>
                 <form id="signup_form">
+                    <div class="wizard-info">
+                        <span class="step">Algemeen</span>
+                        <span class="step">Contact</span>
+                        <span class="step">Account</span>
+                    </div>
+
+                    <div class="tab">
+                        <div class="input-group">   
+                            <label for="firstname">Voornaam</label>
+                            <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastname">Achteraam</label>
+                            <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
+                        </div>
+                        <div style="width:100%;">
+                            <label for="nationality">Nationaliteit</label>
+                            <input type="text" name="nationality" placeholder="(Optioneel)">
+                        </div>
+                    </div>
+
+                    <div class="tab">
+                        <div class="date-options">
+                            <label for="day-select">Geboortedatum</label>
+                            <select id="day-select" name="day" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select id="month-select" name="month" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select id="year-select" name="year" required>
+                                <option value="" selected disabled>----</option>
+                                <!-- Populated with JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="city">Woonplaats</label>
+                            <input type="text" name="city" placeholder="Woonplaats" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Telefoonnummer</label>
+                            <input type="text" name="phone" placeholder="Telefoonnummer" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">E-mailadres</label> 
+                            <input type="text" id="email" name="email" placeholder="E-mailadres" required>
+                        </div>
+                    </div>
+
+                    <div class="tab">
+                        <div class="toggle-eye">
+                            <label for="username">Gebruikersnaam</label>
+                            <input type="text" name="username" placeholder="(Optioneel)">
+                            <label for="pwdField">Wachtwoord</label>
+                            <input type="password" id="pwdField" name="pwd" aria-describedby="passwordError" placeholder="Wachtwoord" required>
+                            <i class='bx bx-low-vision'></i>
+                            <span id="error-msg"></span>
+                            <label for="terms">Ik heb de <a href="#" data-section="policy">privacyverklaring</a> en <a href="#" data-section="policy">algemene voorwaarden</a> gelezen en ga hiermee akkoord. <input type="checkbox" id="terms" name="terms" required></label>                    
+                        </div>
+                    </div>
+                    
+                    <div class="rotator">
+                        <button type="submit" id="prevBtn">Terug</button>
+                        <button type="submit" id="nextBtn">Verder</button>                        
+                    </div>
+                </form>
+                <!-- <form id="signup_form">
                     <strong>Gegevens</strong>
                     <label for="firstname">Voornaam</label>
                     <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
                     <label for="lastname">Achteraam</label>
                     <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
                     <label for="day month year">Geboortedatum</label>
-                    <select name="day">
+                    <select id="day-select">
                         <option selected>--</option>
-                        <?php
-                            for ($day = 1; $day <= 31; $day++) {
-                                echo '<option value="'.$day.'">'.$day.'</option>';
-                            }
-                        ?>
                     </select>
-                    <select name="month">
+                    <select id="month-select">
                         <option selected>--</option>
-                        <?php
-                            for ($month = 1; $month <= 12; $month++) {
-                                echo '<option value="'.$month.'">'.$month.'</option>';
-                            }
-                        ?>
                     </select>
-                    <select name="year" id="year-select">
+                    <select id="year-select">
                       <option selected>----</option>
-                      <?php
-                        $currentYear = date('Y');
-                        $targetYear = 1908;
-                        for ($year = $currentYear - 15; $year >= $targetYear; $year--) {
-                            echo '<option value="'.$year.'">'.$year.'</option>';
-                        }
-                      ?>
                     </select>
                     <hr class="divider" />
                     <strong>Account</strong>
                     <label for="email">E-mailadres</label> 
                     <input type="text" id="email" name="email" placeholder="E-mailadres" required>
-                    <div class="toggle-eye">
-                        <i class='bx bx-low-vision'></i>
-                    </div>
-                    <label for="pwdField">Wachtwoord</label>
-                    <input type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
-                    
-                    <label for="terms">Lees en accepteer onze <a href="terms-and-conditions.php" target="_blank">algemene voorwaarden.</a></label>
-                    <input type="checkbox" id="terms" name="terms" required>
 
-                    <button type="submit" id="nextBtn">Verder</button>
-                </form>
+                    <div class="toggle-eye">
+                        <label for="pwdField">Wachtwoord</label>
+                        <input type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
+                        <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
+                    </div>
+                    
+                    <label for="terms">Ik heb de <a href="#" data-section="policy">privacyverklaring</a> en <a href="#" data-section="policy">algemene voorwaarden</a> gelezen en ga hiermee akkoord. <input type="checkbox" id="terms" name="terms" required></label>                    
+                    <button type="submit" id="nextBtn">Maak mijn Account</button>
+                </form> -->
             </div>
         </section>
     </main>

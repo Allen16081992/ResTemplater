@@ -70,7 +70,19 @@ document.addEventListener("DOMContentLoaded", function() {
             if (inputs[i].value === "" && inputs[i].required) {
                 inputs[i].classList.add("invalid");
                 valid = false;
-            } else {
+            } else if (inputs[i].type === "email") {
+                // Email-specific validation
+                if (!validateEmail(inputs[i].value)) {
+                    errorMsg.textContent = "Vul een geldig e-mailadres in.";
+                    errorMsg.style.display = "block";
+                    inputs[i].classList.add("invalid");
+                    valid = false;
+                } else {
+                    errorMsg.style.display = "none";
+                    inputs[i].classList.remove("invalid");
+                }
+            }
+            else {
                 inputs[i].classList.remove("invalid");
             }
 
@@ -90,6 +102,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
         return valid;
+    }
+
+    function validateEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     }
 
     // Separate function to handle password validation rules

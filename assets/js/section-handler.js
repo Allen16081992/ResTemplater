@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
             paintSection('user');
             break;
         default:
-            paintSection('sign_up');
+            paintSection('home');
     }
 });
 

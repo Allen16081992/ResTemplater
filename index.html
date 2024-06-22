@@ -139,9 +139,7 @@
                         We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
                         Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
                     </p>
-                    <p>
-                        Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.
-                    </p>
+                    <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
                 </div>
             </div>
         </section>
@@ -184,7 +182,7 @@
                         <span class="step">Contact</span>
                         <span class="step">Account</span>
                     </div>
-
+ 
                     <div class="tab">
                         <div class="input-group">   
                             <label for="firstname">Voornaam</label>
@@ -194,9 +192,9 @@
                             <label for="lastname">Achteraam</label>
                             <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
                         </div>
-                        <div style="width:100%;">
-                            <label for="nationality">Nationaliteit</label>
-                            <input type="text" name="nationality" placeholder="(Optioneel)">
+                        <div class="input-width">
+                            <label for="country">Nationaliteit</label>
+                            <input type="text" id="country" name="country" placeholder="(Optioneel)">
                         </div>
                     </div>
 
@@ -218,22 +216,23 @@
                         </div>
                         <div>
                             <label for="city">Woonplaats</label>
-                            <input type="text" name="city" placeholder="Woonplaats" required>
+                            <input type="text" id="city" name="city" placeholder="Woonplaats" required>
                         </div>
                         <div class="input-group">
                             <label for="phone">Telefoonnummer</label>
-                            <input type="text" name="phone" placeholder="Telefoonnummer" required>
+                            <input type="text" id="phone" name="phone" placeholder="Telefoonnummer" required>
                         </div>
                         <div class="input-group">
                             <label for="email">E-mailadres</label> 
-                            <input type="text" id="email" name="email" placeholder="E-mailadres" required>
+                            <input type="email" id="email" name="email" placeholder="E-mailadres" required>
+                            <span id="error-msg"></span>
                         </div>
                     </div>
 
                     <div class="tab">
                         <div class="toggle-eye">
                             <label for="username">Gebruikersnaam</label>
-                            <input type="text" name="username" placeholder="(Optioneel)">
+                            <input type="text" id="username" name="username" placeholder="(Optioneel)">
                             <label for="pwdField">Wachtwoord</label>
                             <input type="password" id="pwdField" name="pwd" aria-describedby="passwordError" placeholder="Wachtwoord" required>
                             <i class='bx bx-low-vision'></i>

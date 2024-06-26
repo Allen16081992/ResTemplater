@@ -8,16 +8,16 @@
     <!-- Open Graph meta tags for social sharing -->
     <meta property="og:title" content="CV Templater">
     <meta property="og:description" content="Het Curriculum Vitae Ombouw Kistje van Nederlandse Bodem.">
-    <meta property="og:image" content="assets/image/falcon250.webp">
+    <meta property="og:image" content="assets/images/falcon250.webp">
     <meta property="og:locale" content="nl_NL">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.donkereheiligdom.nl">
     <link rel="canonical" href="https://www.donkereheiligdom.nl">
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/image/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/image/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/image/favicon/favicon-16x16.png">
-    <link rel="manifest" href="assets/image/favicon/site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/images/favicon/site.webmanifest">
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
@@ -28,7 +28,7 @@
 <body>
     <header>
         <div class="logo">
-            <a href="portal.php" id="logo"><img src="assets/image/falcon250x.webp" alt="CV Templater Logo"></a>
+            <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
             <a href="#" data-section="user">[my_user_name]</a>

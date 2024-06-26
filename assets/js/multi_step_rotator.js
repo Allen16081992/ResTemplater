@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var steps = document.getElementsByClassName("step");
     var prevBtn = document.getElementById("prevBtn");
     var nextBtn = document.getElementById("nextBtn");
-    var errorMsg = document.getElementById("error-msg");
 
     // Display the current tab
     showTab(currentTab);
@@ -49,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (currentTab >= tabs.length) {
             const terms = document.getElementById("terms");
             if (!terms.checked) {
+                console.log("Terms not checked, adding invalid class.");
                 terms.classList.add("invalid");
                 currentTab--; // Decrement the tab index to stay on the last tab
                 showTab(currentTab); // Show the last tab again
@@ -65,43 +65,47 @@ document.addEventListener("DOMContentLoaded", function() {
     function validateForm() {
         var valid = true;
         var inputs = tabs[currentTab].getElementsByTagName("input");
+
+        // Remove existing error messages at the beginning of validation
+        var existingErrors = tabs[currentTab].getElementsByClassName("error-msg");
+        while (existingErrors.length > 0) {
+            existingErrors[0].parentNode.removeChild(existingErrors[0]);
+        }
         
         for (var i = 0; i < inputs.length; i++) {
             if (inputs[i].value === "" && inputs[i].required) {
                 inputs[i].classList.add("invalid");
+                showErrorMessage(inputs[i], "Dit veld is verplicht.");
                 valid = false;
             } else if (inputs[i].type === "email") {
                 // Email-specific validation
                 if (!validateEmail(inputs[i].value)) {
-                    errorMsg.textContent = "Vul een geldig e-mailadres in.";
-                    errorMsg.style.display = "block";
                     inputs[i].classList.add("invalid");
+                    showErrorMessage(inputs[i], "Vul een geldig e-mailadres in.");
                     valid = false;
-                } else {
-                    errorMsg.style.display = "none";
-                    inputs[i].classList.remove("invalid");
+                }
+            } else if (inputs[i].type === "password") {
+                // Enhanced password validation
+                var passwordErrors = validatePassword(inputs[i].value);
+                if (passwordErrors.length > 0) {
+                    inputs[i].classList.add("invalid");
+                    showErrorMessage(inputs[i], passwordErrors[0]);
+                    valid = false;
                 }
             }
             else {
                 inputs[i].classList.remove("invalid");
             }
-
-            // Enhanced password validation
-            if (inputs[i].type === "password") {
-                // Check if the password meets all requirements
-                var passwordErrors = validatePassword(inputs[i].value);
-                if (passwordErrors.length > 0) {
-                    // Display the first error message from the list
-                    errorMsg.textContent = passwordErrors[0];
-                    errorMsg.style.display = "block";
-                    inputs[i].classList.add("invalid");
-                    valid = false;
-                } else {
-                    errorMsg.style.display = "none";
-                }
-            }
         }
         return valid;
+    }
+
+    function showErrorMessage(inputElement, message) {
+        var errorMsg = document.createElement("span");
+        errorMsg.className = "error-msg";
+        errorMsg.textContent = message;
+        errorMsg.style.display = "block";
+        inputElement.parentNode.insertBefore(errorMsg, inputElement.nextSibling);
     }
 
     function validateEmail(email) {

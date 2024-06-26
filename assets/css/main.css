@@ -83,13 +83,13 @@ section {
     max-width: 100%; 
     text-align: center; 
 }
-.input-width {width:100%;}
 #prevBtn, #nextBtn { width:100%;}
 #nextBtn { float:right; }
 .rotator {
   width:100%;
   display: flex;
   justify-content: space-between;
+  margin-top:5px;
 }
 input.invalid {
     background-color: #ffdddd;
@@ -154,7 +154,8 @@ select {
     cursor: pointer;   
 }
 .date-options {margin-bottom:20px;}
-#error-msg { 
+.error-msg { 
+    position:absolute;
     display:none;
     color:red;
     font-size:12px;

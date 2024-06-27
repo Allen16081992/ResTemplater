@@ -1,3 +1,12 @@
+<?php 
+  // Start a session for handling data and error messages.
+  require_once 'src/session_manager.src.php'; 
+  Unauthorized_Access(); // Verify access
+  sessionRegenTimer(); // Regenerate the session periodically
+  // Load PHP files to retrieve data
+  //require_once "config/ViewResumes.config.php";
+  //require_once "config/FetchResumeTables.config.php";
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -31,7 +40,7 @@
             <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="user">[my_user_name]</a>
+            <a href="#" data-section="user"><?= isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_SESSION['firstname']; ?></a>
             <a href="#" data-section="home">Mijn CV</a>
             <a href="#" data-section="guide">Onze Gids</a>
             <a href="#" data-section="logout">Uitloggen</a>
@@ -53,7 +62,10 @@
         </section>
 
         <section id="logout" class="hidden">
-
+            <h2>Weet je zeker dat je wilt uitloggen?</h2>
+            <form action="" method="post">
+                <button type="submit" name="logout">Uitloggen</button>
+            </form> 
         </section>
     </main>
 

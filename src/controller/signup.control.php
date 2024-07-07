@@ -1,7 +1,7 @@
 <?php
     require_once "validator.control.php";
 
-    class loginControl extends Account {
+    class signupControl extends Account {
         // Properties
         use Validators;
         private $formFields;
@@ -11,16 +11,14 @@
             $this->formFields = $formFields;
         }
 
-        public function loginRequest() {
+        public function signupRequest() {
             // Activate security validations
             if ($this->emptyInput()) {
-                // Empty input, no values given for account.
-                $serverMsg = 'No '.$this->emptyInput().' provided.';
+                $serverMsg = $this->emptyInput().' is required.';
                 header('Content-Type: application/json; charset=utf-8');
                 echo json_encode($serverMsg);
                 exit();
-            } else {
-                //$this->getUser($this->formFields);
             }
+            // Verder aanvullen
         }
     }

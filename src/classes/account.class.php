@@ -2,14 +2,34 @@
     // Load Database connection
     require_once '../database/singleton.db.php';
 
-    class Users {
+    // Code Convention: PascalCase
+    class Account {
 
-        protected function getUser($formFields) {
+        // Register
+        protected function signupUser($formFields) {
+
+        }
+
+        // Fetch Info
+        protected function Read_User($formFields) {
+
+        } 
+        
+        protected function Update_User($formFields) {
+
+        } 
+        
+        protected function Delete_User($formFields) {
+
+        } 
+
+        // Login
+        protected function loginUser($formFields) {
             // Get the singleton instance of the Database class to establish a database connection.
             $db = Database::getInstance();
 
-            $stmt = $db->connect()->prepare("SELECT userID, username, 'password' FROM accounts WHERE username = :uid OR email = :uid;");
-            $stmt->bindParam(":uid", $formFields['uid']);
+            $stmt = $db->connect()->prepare("SELECT userID, username, 'password' FROM accounts WHERE email = :email;");
+            $stmt->bindParam(":email", $formFields['email']);
             $stmt->bindParam(":password", $formFields['password']);
 
             // If this fails, kick back to homepage.
@@ -43,10 +63,18 @@
             }
 
             $_SESSION['user_id'] = $userData['userID'];
-            $_SESSION['user_name'] = htmlspecialchars($userData['username']);
             $_SESSION['success'] = "Hallo, ".htmlspecialchars($userData['username']);
+
+            // Verify if the user made a username
+            if (isset($userData['username'])) { 
+                $_SESSION['user_name'] = htmlspecialchars($userData['username']);
+            } else { 
+                $_SESSION['user_name'] = htmlspecialchars($userData['firstname']); 
+            }
 
             // Clean up variables from memory
             unset($userData, $stmt, $db);
+            header('location: ../client.php?');
+            exit();
         }
     }

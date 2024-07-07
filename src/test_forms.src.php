@@ -9,24 +9,25 @@ $response = [
 
 // Check request method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Extract form data
-    $email = isset($_POST['email']) ? $_POST['email'] : '';
-    $password = isset($_POST['pwd']) ? $_POST['pwd'] : '';
 
-    // Log received data
-    error_log("Received email: " . $email);
-    error_log("Received password: " . $password);
-
-    // Simple email and password validation
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $response['errors']['email'] = 'Invalid email address';
+    // Simple email validation
+    if (empty($_POST['email'])) {
+        $response['errors']['email'] = 'Dit veld is verplicht';
+    } 
+    elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $response['errors']['email'] = 'Vul een geldig e-mailadres in.';
     }
-    if (strlen($password) < 8) {
-        $response['errors']['password'] = 'Password must be at least 8 characters long';
+
+    // Simple password validation
+    if (empty($_POST['pwd'])) {
+        $response['errors']['pwd'] = 'Dit veld is verplicht';
+    }
+    elseif (strlen($_POST['pwd']) < 8) {
+        $response['errors']['pwd'] = 'Wachtwoord moet minstens 8 tekens lang zijn.';
     }
 
     // Check if there are any validation errors
-    if (empty($response['errors'])) {
+    if (!isset($response['errors'])) {
         // Simulate successful form processing
         $response['success'] = true;
     }

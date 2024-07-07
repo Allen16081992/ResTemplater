@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var steps = document.getElementsByClassName("step");
     var prevBtn = document.getElementById("prevBtn");
     var nextBtn = document.getElementById("nextBtn");
+    var loginBtn = document.getElementById("loginBtn");
 
     // Display the current tab
     showTab(currentTab);
@@ -36,6 +37,18 @@ document.addEventListener("DOMContentLoaded", function() {
     nextBtn.addEventListener('click', function() {
         nextPrev(1);
     });
+    loginBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        // Remove existing error messages at the beginning of validation
+        var existingErrors = document.getElementsByClassName("error-msg");
+        while (existingErrors.length > 0) {
+            existingErrors[0].parentNode.removeChild(existingErrors[0]);
+        }
+        submitFormAjax(document.getElementById("login_form"));
+        // if (validateForm(true)) {
+            
+        // }
+    });
 
     function nextPrev(direction) {
         if (direction == 1 && !validateForm()) return; // Stop if form is not valid
@@ -48,14 +61,15 @@ document.addEventListener("DOMContentLoaded", function() {
         if (currentTab >= tabs.length) {
             const terms = document.getElementById("terms");
             if (!terms.checked) {
-                console.log("Terms not checked, adding invalid class.");
                 terms.classList.add("invalid");
+                showErrorMessage(terms, "Lees ons privacybeleid en algemene voorwaarden");
                 currentTab--; // Decrement the tab index to stay on the last tab
                 showTab(currentTab); // Show the last tab again
                 return false;
             }
 
-            document.getElementById("signup_form").submit();
+            // Submit the signup form via AJAX
+            submitFormAjax(document.getElementById("signup_form"));
             return;
         }
         showTab(currentTab);
@@ -130,8 +144,45 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         if (!/[!@#$%^&*()_+=[\]{};:'",<.>/?\\|~-]/.test(password)) {
             errors.push("Wachtwoord moet minstens één speciale teken hebben.");
-        }
-        
+        } 
         return errors;
+    }
+
+    // Ajax Form Submission 
+    function submitFormAjax(form) {
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST', // All form submissions will use POST
+            body: formData,
+        })
+        .then(response => {
+            // Check if the response is OK (status in the range 200-299)
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json(); // Parse JSON directly since response is valid
+        })
+        .then(data => {
+            // Handle the JSON response from the server
+            if (!data.success) {
+                // Handle errors returned from the server
+                for (const key in data.errors) {
+                    if (data.errors.hasOwnProperty(key)) {
+                        const inputElement = form.querySelector(`[name="${key}"]`);
+                        if (inputElement) {
+                            showErrorMessage(inputElement, data.errors[key]);
+                        }
+                    }
+                }
+            } else {
+                // Success, you can add further actions here if needed
+                alert("Form submitted successfully!");
+            }
+        })
+        .catch(error => {
+            // Enhanced error handling
+            showErrorMessage(form, "Server Error: " + error.message);
+        });
     }
 });

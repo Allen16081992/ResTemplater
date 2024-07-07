@@ -159,13 +159,13 @@
             <div class="grid-container">
                 <div class="form-window">
                     <h2>Aanmelden</h2>
-                    <form id="login_form">
+                    <form id="login_form" action="src/test_forms.src.php">
                         <label for="email">E-mailadres</label>
                         <input type="text" id="email" name="email" placeholder="Email" required>
                         <label for="pwd">Wachtwoord</label>
                         <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
 
-                        <button type="submit" name="login">Log in</button>
+                        <button type="submit" id="loginBtn" name="login">Log in</button>
                         <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
                     </form>
                 </div>

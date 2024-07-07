@@ -176,8 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             } else {
-                // Success, you can add further actions here if needed
-                alert("Form submitted successfully!");
+                // Success, no further actions needed
             }
         })
         .catch(error => {

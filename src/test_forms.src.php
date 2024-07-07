@@ -18,16 +18,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['errors']['email'] = 'Vul een geldig e-mailadres in.';
     }
 
-    // Simple password validation
+    // Enhanced password validation
     if (empty($_POST['pwd'])) {
         $response['errors']['pwd'] = 'Dit veld is verplicht';
     }
     elseif (strlen($_POST['pwd']) < 8) {
         $response['errors']['pwd'] = 'Wachtwoord moet minstens 8 tekens lang zijn.';
     }
+    elseif (!preg_match('/[a-z]/', $_POST['pwd'])) {
+        $response['errors']['pwd'] = 'Wachtwoord moet minstens één kleine letter hebben.';
+    }
+    elseif (!preg_match('/[A-Z]/', $_POST['pwd'])) {
+        $response['errors']['pwd'] = 'Wachtwoord moet minstens één hoofdletter hebben.'; 
+    }
+    elseif (!preg_match('/[0-9]/', $_POST['pwd'])) {
+        $response['errors']['pwd'] = 'Wachtwoord moet minstens één getal hebben.'; 
+    }
+    elseif (!preg_match('/[!@#$%^&*()_+=[\]{};:\'",<.>\/?\\|~-]/', $_POST['pwd'])) {
+        $response['errors']['pwd'] = 'Wachtwoord moet minstens één speciale teken hebben.'; 
+    }
 
     // Check if there are any validation errors
-    if (!isset($response['errors'])) {
+    if (empty($response['errors'])) {
         // Simulate successful form processing
         $response['success'] = true;
     }

@@ -13,50 +13,38 @@
         private function emptyInput() {
             foreach ($this->formFields as $fieldName => $fieldValue) {
                 if (empty($fieldValue)) {
-                    return $fieldName; // Returns the specified empty fields
+                    return $response['errors'][$fieldName] = 'Dit veld is verplicht';
                 } 
             }
         }
         
         private function invalidInput() {
-            if (strlen($this->formFields['password']) < 10) {
-
-            } elseif (!preg_match('/[a-z]/', $this->formFields['password'])) {
-
-            } elseif (!preg_match('/[A-Z]/', $this->formFields['password'])) {
-
-            } elseif (!preg_match('/[0-9]/', $this->formFields['password'])) {
-
-            } elseif (!preg_match('/[0-9]/', $this->formFields['password'])) {
-
-            } elseif (!preg_match('/[!@#$%^&*()_+=[\]{};:\'",<.>/?\\|~-]/', $this->formFields['password'])) {
-
+            // Verify email element
+            if (isset($this->formFields['email'])) {
+                // Start validating...
+                if (!filter_var($this->formFields['email'], FILTER_VALIDATE_EMAIL)) {
+                    return $response['errors']['email'] = 'Vul een geldig e-mailadres in';
+                }
             }
 
-            foreach ($this->formFields as $fieldName => $fieldValue) {
-                if ($fieldName === 'email') {
-                    // Verify submitted email
-                    if (!filter_var($fieldValue, FILTER_VALIDATE_EMAIL)) {
-                        return $fieldName;
-                    }
+            // Avoid iteration overhead and improve memory efficiency
+            // Verify password element
+            if (isset($this->formFields['pwd'])) {
+                // Start validating...
+                if (strlen($this->formFields['pwd']) < 8) {
+                    return $response['errors']['pwd'] = 'Wachtwoord moet minstens 8 tekens lang zijn.';
                 }
-                elseif ($fieldName === 'password') {
-                    // Check for password requirements
-                    if (strlen($fieldValue) < 10 || 
-                        !preg_match('/[a-z]/', $fieldValue) ||  // At least one lowercase letter
-                        !preg_match('/[A-Z]/', $fieldValue) ||  // At least one uppercase letter
-                        !preg_match('/[0-9]/', $fieldValue) ||  // At least one digit
-                        !preg_match('/[!@#$%^&*()_+=[\]{};:\'",<.>/?\\|~-]/', $fieldValue)) {  // At least one special character
-                        return $fieldName;
-                    }
-                } 
-                else {
-                    if (!preg_match("/^[a-zA-ZÀ-ÿ0-9_\-\.]*$/", $fieldValue)) {
-                        return $fieldName;  
-                        // return "Usernames may contain:<br> 
-                        // ● Letters ● Numbers ● Underscores<br>
-                        // ● Hyphens ● Periods.";
-                    }
+                elseif (!preg_match('/[a-z]/', $this->formFields['pwd'])) {
+                    return $response['errors']['pwd'] = 'Wachtwoord moet minstens één kleine letter hebben.';
+                }
+                elseif (!preg_match('/[A-Z]/', $this->formFields['pwd'])) {
+                    return $response['errors']['pwd'] = 'Wachtwoord moet minstens één hoofdletter hebben.'; 
+                }
+                elseif (!preg_match('/[0-9]/', $this->formFields['pwd'])) {
+                    return $response['errors']['pwd'] = 'Wachtwoord moet minstens één getal hebben.'; 
+                }
+                elseif (!preg_match('/[!@#$%^&*()_+=[\]{};:\'",<.>\/?\\|~-]/', $this->formFields['pwd'])) {
+                    return $response['errors']['pwd'] = 'Wachtwoord moet minstens één speciale teken hebben.'; 
                 }
             }
         }

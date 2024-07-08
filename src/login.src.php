@@ -1,11 +1,11 @@
 <?php   
     // These variables are free to use by anything.
-    if(isset($_POST['sign_in'])) {
+    if(isset($_POST['login'])) {
 
         // Absorb the first part provided data from the registration form.
         $formFields = [
             'email' => $_POST['email'],
-            'password' => $_POST['pwd']
+            'pwd' => $_POST['pwd']
         ];
 
         // Initialise login class
@@ -19,6 +19,6 @@
         $login->loginRequest();
 
         // When verification completes, open the client environment MyResume.
-        header('Location: ../client.php');
-        exit();
+        //header('Location: ../client.php');
+        //exit();
     }

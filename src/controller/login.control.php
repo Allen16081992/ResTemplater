@@ -14,10 +14,10 @@
         public function loginRequest() {
             // Activate security validations
             if ($this->emptyInput()) {
-                // Empty input, no values given for account.
-                $serverMsg = 'No '.$this->emptyInput().' provided.';
+                // Return JSON response
                 header('Content-Type: application/json; charset=utf-8');
-                echo json_encode($serverMsg);
+                // $serverMsg = $this->emptyInput();
+                echo json_encode($this->emptyInput());
                 exit();
             } else {
                 //$this->getUser($this->formFields);

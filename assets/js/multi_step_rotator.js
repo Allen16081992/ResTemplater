@@ -37,6 +37,15 @@ document.addEventListener("DOMContentLoaded", function() {
     nextBtn.addEventListener('click', function() {
         nextPrev(1);
     });
+    // document.getElementById('login_form').addEventListener('submit', function(event) {
+    //     event.preventDefault(); // Prevent default form submission
+    //     // Remove existing error messages at the beginning of validation
+    //     var existingErrors = document.getElementsByClassName("error-msg");
+    //     while (existingErrors.length > 0) {
+    //         existingErrors[0].parentNode.removeChild(existingErrors[0]);
+    //     }
+    //     submitFormAjax(this); // Call the AJAX function
+    // });
     loginBtn.addEventListener('click', function(event) {
         event.preventDefault();
         // Remove existing error messages at the beginning of validation
@@ -45,9 +54,6 @@ document.addEventListener("DOMContentLoaded", function() {
             existingErrors[0].parentNode.removeChild(existingErrors[0]);
         }
         submitFormAjax(document.getElementById("login_form"));
-        // if (validateForm(true)) {
-            
-        // }
     });
 
     function nextPrev(direction) {
@@ -148,22 +154,30 @@ document.addEventListener("DOMContentLoaded", function() {
         return errors;
     }
 
-    // Ajax Form Submission 
-    function submitFormAjax(form) {
+    // Ajax Form Submission (async looks more like php)
+    async function submitFormAjax(form) {
         const formData = new FormData(form);
-
-        fetch(form.action, {
-            method: 'POST', // All form submissions will use POST
-            body: formData,
-        })
-        .then(response => {
+    
+        // Manually add the submit button's name and value
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+            formData.append(submitButton.name, submitButton.value);
+        }
+    
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST', // All form submissions will use POST
+                body: formData,
+            });
+    
             // Check if the response is OK (status in the range 200-299)
             if (!response.ok) {
-                return response.text().then(text => { throw new Error(text) });
+                const errorText = await response.text();
+                throw new Error(errorText);
             }
-            return response.json(); // Parse JSON directly since response is valid
-        })
-        .then(data => {
+    
+            const data = await response.json(); // Parse JSON directly since response is valid
+    
             // Handle the JSON response from the server
             if (!data.success) {
                 // Handle errors returned from the server
@@ -175,13 +189,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                     }
                 }
-            } else {
-                // Success, no further actions needed
             }
-        })
-        .catch(error => {
+            
+        } catch (error) {
             // Enhanced error handling
             showErrorMessage(form, "Server Error: " + error.message);
-        });
-    }
+        }
+    }    
 });

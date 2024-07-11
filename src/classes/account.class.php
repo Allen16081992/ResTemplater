@@ -35,20 +35,17 @@
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 $stmt = null;
-                // Push the server error
-                $serverMsg = 'Request to database has failed.';
-                header('Content-Type: application/json; charset=utf-8');
-                echo json_encode($serverMsg);
-                exit();
+                header('Content-Type: application/json'); 
+                $response['errors']['email'] = 'Request to database has failed.';
+                echo json_encode($response);
             }
 
             // If we got nothing from the database, do this.
             if($stmt->rowCount() == 0 ) {
                 $stmt = null;
-                $serverMsg = 'Unable to find User.';
-                header('Content-Type: application/json; charset=utf-8');
-                echo json_encode($serverMsg);
-                exit();
+                header('Content-Type: application/json'); 
+                $response['errors']['email'] = 'Unable to find User.';
+                echo json_encode($response);
             }
 
             // Extract the hashed password from the fetched array.

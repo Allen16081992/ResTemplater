@@ -1,7 +1,8 @@
 <?php
+    require_once 'controller/req_verify.control.php';
     require_once 'controller/validator.control.php';
 
-    class FormHandler {
+    class FormHandler extends Separator {
         use Validators;
 
         // Properties
@@ -24,8 +25,10 @@
         public function getResponse() {
             if (empty($this->response['errors'])) {
                 //$this->response['success'] = true;
+                $this->verifyForm($this->formFields);
             } else {
                 $this->response['success'] = false;
+                unset($_POST, $postData, $this->formFields);
             }
             return $this->response;
         }

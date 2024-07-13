@@ -1,0 +1,14 @@
+# Enable the rewrite engine
+RewriteEngine On
+
+# Ensure the .htaccess file is applied
+Options +FollowSymLinks
+
+# Rewrite rule to change .html to .php internally
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)\.html$ $1.php [L,QSA]
+
+# Optional: Redirect .php requests to .html
+RewriteCond %{THE_REQUEST} \s([^.]+)\.php[\s?] [NC]
+RewriteRule ^ %1.html [R=301,L]

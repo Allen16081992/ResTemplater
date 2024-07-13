@@ -1,31 +1,68 @@
 <?php
     // Load Database connection
-    require_once '../database/singleton.db.php';
+
+    // For some unknown strange reason, any 'require_once' placed outside the class, (which is normal practice),
+    // causes Javascript to break and presistently report 'not valid JSON'. 
+    // So now our db file is moved into the functions which seems to solve the issue.
 
     // Code Convention: PascalCase
     class Account {
 
         // Register
         protected function signupUser($formFields) {
+            // Load Database connection
+            require_once '../database/singleton.db.php';       
 
+            // Get the singleton database connection.
+            $db = Database::getInstance();
+
+            // Verify if the user already exists
+            $stmt = $db->connect()->prepare('SELECT COUNT(*) FROM members WHERE username = :username OR email = :email;');
+
+            // Bind values to prepared statements
+            if (isset($formFields['username'])) {
+                $stmt->bindParam(":username", $formFields['username']);
+            } 
+            $stmt->bindParam(":email", $formFields['email']);
+
+            // If this fails, kick back to homepage.
+            if (!$stmt->execute()) {
+                $stmt = null;
+                header('Content-Type: application/json'); 
+                $response['errors']['email'] = 'Request to database has failed.';
+                return $response;
+            }
+            
+            // Extract the submitted values from the formFields array.
+            if (isset($formFields['country'])) {
+                $stmt->bindParam(":country", $formFields['country']);
+            }
+
+            $email = $formFields['email'];
         }
 
         // Fetch Info
         protected function Read_User($formFields) {
-
+            // Load Database connection
+            require_once '../database/singleton.db.php';
         } 
         
         protected function Update_User($formFields) {
-
+            // Load Database connection
+            require_once '../database/singleton.db.php';
         } 
         
         protected function Delete_User($formFields) {
-
+            // Load Database connection
+            require_once '../database/singleton.db.php';
         } 
 
         // Login
         protected function loginUser($formFields) {
-            // Get the singleton instance of the Database class to establish a database connection.
+             // Load Database connection
+            require_once '../database/singleton.db.php';
+            
+            // Get the singleton database connection.
             $db = Database::getInstance();
 
             $stmt = $db->connect()->prepare("SELECT userID, username, 'password' FROM accounts WHERE email = :email;");
@@ -37,7 +74,7 @@
                 $stmt = null;
                 header('Content-Type: application/json'); 
                 $response['errors']['email'] = 'Request to database has failed.';
-                echo json_encode($response);
+                return $response;
             }
 
             // If we got nothing from the database, do this.
@@ -45,7 +82,7 @@
                 $stmt = null;
                 header('Content-Type: application/json'); 
                 $response['errors']['email'] = 'Unable to find User.';
-                echo json_encode($response);
+                return $response;
             }
 
             // Extract the hashed password from the fetched array.
@@ -53,10 +90,9 @@
 
             // Verify passwords
             if (!password_verify($formFields['password'], $userData['password'])) {
-                $serverMsg = 'Het wachtwoord is fout.';
-                header('Content-Type: application/json; charset=utf-8');
-                echo json_encode($serverMsg);
-                exit();
+                header('Content-Type: application/json');
+                $response['errors']['email'] = 'Incorrect wachtwoord.';
+                return $response;
             }
 
             $_SESSION['user_id'] = $userData['userID'];

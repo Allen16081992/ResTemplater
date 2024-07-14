@@ -1,4 +1,5 @@
 <?php
+    require_once 'classes/account.class.php';
     require_once 'controller/req_verify.control.php';
     require_once 'controller/validator.control.php';
 
@@ -7,33 +8,34 @@
 
         // Properties
         private $formFields = [];
-        private $response = [
-            'success' => false,
-            'errors' => []
-        ];
+        // private $response = [
+        //     'success' => false,
+        //     'errors' => []
+        // ];
 
-        public function __construct(array $postData) {
+        protected function __construct(array $postData) {
             $this->formFields = $postData;
-            $this->validateForm();
+            //$this->validateForm();
         }
 
-        private function validateForm() {
+        public function validateForm() {
             $this->emptyInput();
-            $this->invalidInput();
+            if (!$this->invalidInput()) {
+                $this->verifyForm($this->formFields);
+            }
         }
 
-        public function getResponse() {
-            if (empty($this->response['errors'])) {
-                //$this->response['success'] = true;
-                $this->verifyForm($this->formFields);
-            } else {
-                $this->response['success'] = false;
-                unset($_POST, $postData, $this->formFields);
-            }
-            return $this->response;
-        }
+        // public function getResponse() {
+        //     if (empty($this->response['errors'])) {
+        //         $this->response['success'] = true;
+        //     } else {
+        //         $this->response['success'] = false;
+        //         unset($_POST, $postData, $this->formFields);
+        //     }
+        //     return $this->response;
+        // }
     }
 
     $formHandler = new FormHandler($_POST);
-    $response = $formHandler->getResponse();
-    echo json_encode($response);
+    $response = $formHandler->validateForm();
+    //echo json_encode($response);

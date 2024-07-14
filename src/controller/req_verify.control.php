@@ -3,10 +3,10 @@
 
       protected function verifyForm($formFields) {
           switch ($formFields) {
-              case 'login':
+              case $formFields['login']:
                 $this->loginUser($formFields);
                 break;
-              case 'sign_up':
+              case $formFields['sign_up']:
                 $this->signupUser($formFields);
                 break;
               default:

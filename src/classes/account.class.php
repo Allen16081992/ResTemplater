@@ -1,5 +1,6 @@
 <?php
     // Load Database connection
+    require_once '../database/singleton.db.php';   
 
     // For some unknown strange reason, any 'require_once' placed outside the class, (which is normal practice),
     // causes Javascript to break and presistently report 'not valid JSON'. 
@@ -11,7 +12,7 @@
         // Register
         protected function signupUser($formFields) {
             // Load Database connection
-            require_once '../database/singleton.db.php';       
+            //require_once '../database/singleton.db.php';       
 
             // Get the singleton database connection.
             $db = Database::getInstance();
@@ -28,9 +29,9 @@
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 $stmt = null;
-                header('Content-Type: application/json'); 
+                //header('Content-Type: application/json'); 
                 $response['errors']['email'] = 'Request to database has failed.';
-                return $response;
+                //return $response;
             }
             
             // Extract the submitted values from the formFields array.
@@ -72,17 +73,17 @@
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 $stmt = null;
-                header('Content-Type: application/json'); 
+                //header('Content-Type: application/json'); 
                 $response['errors']['email'] = 'Request to database has failed.';
-                return $response;
+                //return $response;
             }
 
             // If we got nothing from the database, do this.
             if($stmt->rowCount() == 0 ) {
                 $stmt = null;
-                header('Content-Type: application/json'); 
+                //header('Content-Type: application/json'); 
                 $response['errors']['email'] = 'Unable to find User.';
-                return $response;
+                //return $response;
             }
 
             // Extract the hashed password from the fetched array.
@@ -90,9 +91,9 @@
 
             // Verify passwords
             if (!password_verify($formFields['password'], $userData['password'])) {
-                header('Content-Type: application/json');
+                //header('Content-Type: application/json');
                 $response['errors']['email'] = 'Incorrect wachtwoord.';
-                return $response;
+                //return $response;
             }
 
             $_SESSION['user_id'] = $userData['userID'];

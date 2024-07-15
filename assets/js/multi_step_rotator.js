@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             // Submit the signup form via AJAX
-            submitFormAjax(document.getElementById("signup_form"));
+            //submitFormAjax(document.getElementById("signup_form"));
             return;
         }
         showTab(currentTab);

@@ -8,8 +8,6 @@
     if (isset($_POST['logout'])) {
         // Wipe everything session related.
         session_unset(); session_destroy();
-
-        // Push back to homepage.
         header('location: ./index.html');
         exit();
     }
@@ -17,7 +15,7 @@
     function Unauthorized_Access() {
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['error'] = '401: Toegang geweigerd.';
-            header('Location: ../index.html');
+            header('Location: ../login.php');
             exit;
         } else {
             // Regenerate the session ID

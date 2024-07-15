@@ -20,161 +20,26 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
+    <!-- Mobile Sheets -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>Jouw Mobiele CV Editor | CV Templater</title>
+    <title>Account maken | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/3d_dummy_lines.js"></script>
     <script defer src="assets/js/multi_step_rotator.js"></script>
 </head>
 <body>
     <header>
         <div class="logo">
-            <a href="index.html" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
+            <a href="index.html"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="author">Tips</a>
-            <a href="#" data-section="policy">Privacy</a>
-            <a href="#" data-section="contact">Contact</a>
-            <a href="#" data-section="login">Log in</a>
+            <a href="index.html" style="border: 2px solid #f3f3f3;">Terug</a>
         </nav>
     </header>
     <div class="skew"></div>
 
     <main>
         <section id="home" class="current">
-            <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1>
-            <div class="resume-container">
-                <div class="shape paper">
-                    <div class="paper-edge-top"></div>
-                    <div class="paper-edge-side"></div>
-                </div>
-                <div class="shape circle"></div>
-                <div class="shape skills"></div>
-                <!-- Lines will be dynamically generated here -->
-            </div>
-            <div class="grid-container">
-                <div class="box"></div>
-                <div class="box">
-                    <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te laten zien als werknemer. 
-                        Daarom bieden wij een eenvoudige en efficiënte manier om je cv te maken, aan te passen en te delen.</p>
-                    
-                    <!-- <p>Met onze intuïtieve interface kan iedereen, ongeacht technische vaardigheden, een indrukwekkend cv maken.</p> -->
-                </div>
-                <div class="box">
-                    <h2>Hoe werkt het?</h2>
-                    <span>Log in of <a href="#" data-section="sign_up">Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</span>
-                </div>
-                <div class="box"></div>
-            </div>
-        </section>
-
-        <section id="author" class="hidden"></section>
-
-        <section id="policy" class="hidden">
-            <div class="sheet">
-                <h2>Privacybeleid en veiligheid</h2>
-                <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
-                    gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
-                    Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
-                </p>
-
-                <div class="box">
-                    <h2>Algemene Voorwaarden</h2>
-                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
-                    <strong>Uw Gebruikersaccount</strong>
-                    <p>Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
-                       u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
-
-                    <h2>Privacybeleid</h2>
-                    <h3>1. Informatie die we verzamelen</h3>
-                    <p>Wij verzamelen de volgende persoonlijke gegevens via onze website wanneer u zich registreert.</p>
-                    <ul>
-                        <li>Voornaam</li>
-                        <li>Achternaam</li>
-                        <li>Nationaliteit</li>
-                        <li>Geboortedatum</li>
-                        <li>Telefoonnummer</li>
-                        <li>Postcode en Woonplaats</li>
-                        <li>Emailadres</li>
-                    </ul>
-        
-                    <h3>2. Hoe we deze informatie gebruiken</h3>
-                    <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
-                    <ul>
-                        <li>Om onze dienst (CV Templater) aan u beschikbaar te stellen</li>
-                        <li>Om uw account te kunnen laten beheren door uzelf</li>
-                        <li>Om uw account te voorzien van de juiste rechten</li>
-                        <li>Om onze website functionaliteit te verbeteren</li>
-                    </ul>
-
-                    <h3>3. Juridische Grondslag voor Verwerking</h3>
-                    <p>We verwerken uw persoonlijke gegevens op basis van de volgende juridische gronden.</p>
-                    <ul>
-                        <li>Door deze te verstrekken, stemt u in met de verwerking comform onze doeleinden.</li>
-                        <li>Verwerking is noodzakelijk voor onze gerechtvaardigde belangen, zoals het verbeteren van onze diensten en het waarborgen van de veiligheid van onze website.</li>
-                    </ul>
-
-                    <h3>4. Gegevensbeveiliging</h3>
-                    <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
-                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerd toegang, 
-                        het wijzigen, vernietigen of diefstal door kwaadwillenden. Deze maatregelen omvatten:
-                    </p>
-                    <ul>
-                        <li>Beveiligde servers bij onze webhosting aanbieder</li>
-                        <li>Versleutelde verbindingen (HTTPS/SSL)</li>
-                        <li>Periodieke beveiligingsaudits</li>
-                        <li>Encryptie van wachtwoorden</li>
-                        <li>Sterk wachtwoordbeleid</li>
-                    </ul>
-
-                    <h3>5. Gegevensbewaring</h3>
-                    <p>We bewaren uw persoonlijke gegevens zo lang als nodig is om onze in deze privacybeleid beschreven doeleinden te vervullen, 
-                        of zoals wettelijk vereist. Wanneer deze gegevens niet langer nodig zijn, bijvoorbeeld wanneer u besluit uw account te sluiten,
-                        zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
-                    </p>
-
-                    <h3>6. Wijzigingen in dit Privacybeleid</h3>
-                    <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
-                        We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
-                        Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
-                    </p>
-                    <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="hidden">
-            <div class="sheet">
-                <h2>Contact Opnemen</h2>
-                <p><strong>Let op!</strong> Om spam en bots tegen te gaan, gebruiken wij geen contact formulier.</p>
-                <div class="box">
-                    <strong>Email</strong>
-                    <p>info@donkereheiligdom en vergeet niet .nl erbij te zetten.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="login" class="hidden">
-            <div class="grid-container">
-                <div class="form-window">
-                    <h2>Aanmelden</h2>
-                    <form id="login_form" action="src/req_handler.src.php" method="post">
-                        <label for="email">E-mailadres</label>
-                        <input type="email" id="email" name="email" placeholder="Email" required>
-                        <label for="pwd">Wachtwoord</label>
-                        <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
-                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                        <input type="hidden" name="login">
-                        <button type="submit" id="loginBtn">Log in</button>
-                        <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
-                    </form>
-                </div>
-                <div class="art-window"></div>
-            </div>
-        </section>
-
-        <section id="sign_up" class="hidden">
             <div class="form-window">
                 <h2>Registreren</h2>
                 <form id="signup_form">

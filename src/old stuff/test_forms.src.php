@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
 // Initialize response array
 $response = [
@@ -49,6 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Return JSON response
-echo json_encode($response);
+//echo json_encode($response);
 exit();
 ?>

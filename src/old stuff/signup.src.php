@@ -26,8 +26,8 @@
         } else {
             // Push the server error
             $serverMsg = 'Geboortedatum is verplicht.';
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode($serverMsg);
+            //header('Content-Type: application/json; charset=utf-8');
+            //echo json_encode($serverMsg);
             exit();
         }
 

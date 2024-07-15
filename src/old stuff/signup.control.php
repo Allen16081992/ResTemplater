@@ -15,8 +15,8 @@
             // Activate security validations
             if ($this->emptyInput()) {
                 $serverMsg = $this->emptyInput().' is required.';
-                header('Content-Type: application/json; charset=utf-8');
-                echo json_encode($serverMsg);
+                //header('Content-Type: application/json; charset=utf-8');
+                //echo json_encode($serverMsg);
                 exit();
             }
             // Verder aanvullen

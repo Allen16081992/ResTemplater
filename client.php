@@ -1,8 +1,8 @@
 <?php 
   // Start a session for handling data and error messages.
   require_once 'src/session_manager.src.php'; 
-  Unauthorized_Access(); // Verify access
-  sessionRegenTimer(); // Regenerate the session periodically
+  //Unauthorized_Access(); // Verify access
+  //sessionRegenTimer(); // Regenerate the session periodically
   // Load PHP files to retrieve data
   //require_once "config/ViewResumes.config.php";
   //require_once "config/FetchResumeTables.config.php";
@@ -40,9 +40,9 @@
             <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
+            <a href="#" data-section="home">Mijn CV</a><!-- Mobile only -->
             <a href="#" data-section="user"><?= isset($_SESSION['user_name']) ? $_SESSION['user_name'] : $_SESSION['firstname']; ?></a>
-            <a href="#" data-section="home">Mijn CV</a>
-            <a href="#" data-section="guide">Onze Gids</a>
+            <a href="#" data-section="guide">Onze gids</a>
             <a href="#" data-section="logout">Uitloggen</a>
         </nav>
     </header>
@@ -50,7 +50,31 @@
 
     <main>
         <section id="home" class="current">
-
+            <h2>Mijn CV</h2>
+            <button class="accordion">Document</button>
+            <div class="panel">
+                <p>Content for Section 1.</p>
+            </div>
+            <button class="accordion">Profiel</button>
+            <div class="panel">
+                <p>Content for Section 2.</p>
+            </div>
+            <button class="accordion">Werkervaring en Stage</button>
+            <div class="panel">
+                <p>Content for Section 3.</p>
+            </div>
+            <button class="accordion">Opleiding en Cursussen</button>
+            <div class="panel">
+                <p>Content for Section 4.</p>
+            </div>
+            <button class="accordion">Vaardigheden</button>
+            <div class="panel">
+                <p>Content for Section 5.</p>
+            </div>
+            <button class="accordion">Motivatie</button>
+            <div class="panel">
+                <p>Content for Section 6.</p>
+            </div>
         </section>
         
         <section id="user" class="hidden">
@@ -58,7 +82,14 @@
         </section>
 
         <section id="guide" class="hidden">
-
+            <h2>Onze gids</h2>
+            <div class="sheet">
+                <img src="assets/images/tutorials/tutorial1.png" style="height:100px;" alt="Resume Name">
+                <div class="text-field">
+                    <h3></h3>
+                    <p></p>
+                </div>
+            </div>
         </section>
 
         <section id="logout" class="hidden">

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sections = document.querySelectorAll('main section');
     const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section]');
     let activeLink = null; // keep track of the currently active link
-    let setPage = null; // page parser
 
     // Password visibility toggle
     const eye = document.querySelector('.toggle-eye i');
@@ -16,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const daySelect = document.getElementById('day-select');
     const monthSelect = document.getElementById('month-select');
     const yearSelect = document.getElementById('year-select');
+
+    // Resume
+    const cvTab = document.querySelectorAll('#home .accordion');
 
     // Toggle visibility of sections based on the selected sectionId
     function paintSection(sectionId) {
@@ -77,16 +79,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Password show/hide icon
-    eye.addEventListener('click', () => {
-        // Toggle the type attribute
-        if (pwdID.type === "password") {
-            pwdID.type = "text";
-            eye.classList.replace('bx-low-vision', 'bx-show');
-        } else {
-            pwdID.type = 'password';
-            eye.classList.replace('bx-show', 'bx-low-vision');
-        }
-    });
+    if (eye) {
+        eye.addEventListener('click', () => {
+            // Toggle the type attribute
+            if (pwdID.type === "password") {
+                pwdID.type = "text";
+                eye.classList.replace('bx-low-vision', 'bx-show');
+            } else {
+                pwdID.type = 'password';
+                eye.classList.replace('bx-show', 'bx-low-vision');
+            }
+        });
+    }
 
     // Date Selector
     if (daySelect && monthSelect && yearSelect) {
@@ -111,20 +115,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Display the 'home' section when the page loads
-    // We call the first section of pages 'home' to indicate the main or most important content.
-    switch (setPage) {
-        case 1:
-            paintSection('login');
-            break;
-        case 2:
-            paintSection('sign_up');
-            break;
-        case 3:
-            paintSection('user');
-            break;
-        default:
-            paintSection('home');
+    function toggleAccordion() {
+        var panel = this.nextElementSibling;
+        var isOpen = panel.style.maxHeight;
+    
+        // Close all panels within the "home" section
+        Array.from(cvTab).forEach(function(accordion) {
+            accordion.classList.remove("active");
+            accordion.nextElementSibling.style.maxHeight = null;
+        });
+    
+        // Open this panel if it was previously closed
+        if (!isOpen) {
+            this.classList.add("active");
+            panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+    }
+
+    // Add click event listener to each accordion button in the "home" section
+    if (cvTab) {
+        cvTab.forEach(function(accordion) {
+            accordion.addEventListener('click', toggleAccordion);
+        });
     }
 });
 

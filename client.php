@@ -54,6 +54,11 @@
             <button class="accordion">Document</button>
             <div class="panel">
                 <p>Content for Section 1.</p>
+                <form action="">
+                    <div class="tab">
+
+                    </div>
+                </form>
             </div>
             <button class="accordion">Profiel</button>
             <div class="panel">

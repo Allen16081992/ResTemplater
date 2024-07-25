@@ -39,7 +39,7 @@ a[data-section="home"] {display:none;}
 .skew {
     width:0;
     height:0;
-    border-right: 100vw solid #333;
+    border-right: 98.8vw solid #333;
     border-bottom: 3.9vw solid transparent;
 }
 .divider {

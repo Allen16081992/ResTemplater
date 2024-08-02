@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Select the navigation elements
     const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main section');
-    const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section]');
+    const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section], button[data-section]');
     let activeLink = null; // keep track of the currently active link
 
     // Password visibility toggle

@@ -121,7 +121,7 @@ input.invalid {
     margin-bottom: 4px; 
     text-align: left;  
 }
-.form-window input[type="text"], input[type="email"], input[type="password"], button[type="submit"] {
+.form-window input[type="text"], input[type="email"], input[type="password"], button[type="submit"], select {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;

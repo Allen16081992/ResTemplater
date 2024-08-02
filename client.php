@@ -29,7 +29,7 @@
     <link rel="manifest" href="assets/images/favicon/site.webmanifest">
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/3d_illustration.css">
+    <!-- <link rel="stylesheet" href="assets/css/3d_illustration.css"> -->
     <title>Client | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -49,36 +49,83 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="current">
-            <h2>Mijn CV</h2>
-            <button class="accordion">Document</button>
-            <div class="panel">
-                <p>Content for Section 1.</p>
-                <form action="">
-                    <div class="tab">
+        <section id="create-res" class="hidden">
+            <div class="grid-container">
+                <div class="form-window">
+                    <button style="display:flex; position:absolute; margin-top:1.4rem;" data-section="home">Terug</button>
+                    <h2>Nieuw CV Maken</h2>
+                    <form id="login_form" action="src/req_handler.src.php" method="post">
+                        <label for="cvname">Titel</label>
+                        <input type="text" id="cvname" name="cvname" placeholder="Geef jouw cv een naam" required>
+                        <button type="submit" name="creResume">Maak mijn cv</button>
 
+                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                        <input type="hidden" name="creResume">
+                        <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
+                    </form>
+                </div>
+                <!-- <div class="art-window"></div> -->
+            </div>
+        </section>
+
+        <section id="delete-res" class="hidden">
+            <div class="grid-container">
+                <div class="form-window">
+                    <button style="display:flex; position:absolute; margin-top:1.4rem;" data-section="home">Terug</button>
+                    <h2>Verwijderen</h2>
+                    <form id="login_form" action="src/req_handler.src.php" method="post">
+                        <p>Welk cv wil je verwijderen?</p>
+                        <label for="selectCv">Kies een cv</label>
+                        <select name="selectCv">
+                            <option value="">(None selected)</option><!-- the value="" is needed for javascript -->
+                            <?php if (!empty($resumeData)) { ?>
+                            <?php foreach ($resumeData as $resume): ?>
+                            <option><?php echo htmlspecialchars($resume['resumetitle']); ?></option>
+                            <?php endforeach; ?> <?php } ?>
+                        </select>
+                        <button class="Del" type="submit" name="delResume">Delete</button>
+
+                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                        <input type="hidden" name="delResume">
+                        <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
+                    </form>
+                </div>
+                <!-- <div class="art-window"></div> -->
+            </div>
+        </section>
+
+        <section id="home" class="current">
+            <div class="sheet">
+                <h2>Mijn CV</h2>
+                <div class="box">
+                    <button class="accordion">Document</button>
+                    <div class="panel">
+                        <p>Content for Section 1.</p>
+                        <button data-section="create-res">Nieuw CV</button>
+                        <button data-section="delete-res">Verwijderen</button>
                     </div>
-                </form>
-            </div>
-            <button class="accordion">Profiel</button>
-            <div class="panel">
-                <p>Content for Section 2.</p>
-            </div>
-            <button class="accordion">Werkervaring en Stage</button>
-            <div class="panel">
-                <p>Content for Section 3.</p>
-            </div>
-            <button class="accordion">Opleiding en Cursussen</button>
-            <div class="panel">
-                <p>Content for Section 4.</p>
-            </div>
-            <button class="accordion">Vaardigheden</button>
-            <div class="panel">
-                <p>Content for Section 5.</p>
-            </div>
-            <button class="accordion">Motivatie</button>
-            <div class="panel">
-                <p>Content for Section 6.</p>
+                    <button class="accordion">Profiel</button>
+                    <div class="panel">
+                        <p>Content for Section 2.</p>
+                    </div>
+                    <button class="accordion">Werkervaring en Stage</button>
+                    <div class="panel">
+                        <p>Content for Section 3.</p>
+                    </div>
+                    <button class="accordion">Opleiding en Cursussen</button>
+                    <div class="panel">
+                        <p>Content for Section 4.</p>
+                    </div>
+                    <button class="accordion">Vaardigheden</button>
+                    <div class="panel">
+                        <p>Content for Section 5.</p>
+                    </div>
+                    <button class="accordion">Motivatie</button>
+                    <div class="panel">
+                        <p>Content for Section 6.</p>
+                    </div>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </div>
             </div>
         </section>
         

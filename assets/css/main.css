@@ -33,7 +33,7 @@ nav a {
 nav a:hover, nav a.current {background-color: #555;}
 nav a.current { cursor: default; }
 a[data-section="login"] {border: 2px solid #f3f3f3;} /* #44d884 */
-a[data-section="home"] {display:none;}
+/* a[data-section="home"] {display:none;} */
 
 .hidden { display: none; }
 .skew {
@@ -55,11 +55,8 @@ section {
     text-align: center;
     padding:10px;
 }
-.form-window {
-    position:relative;
-    padding:20px;
-    max-width:30em; 
-}
+
+/* Sign up Wizard */
 .wizard-info {
     margin-bottom:20px;
     padding:10px;
@@ -113,6 +110,18 @@ input.invalid {
         box-shadow: inset 0 0 10px 2px rgba(0, 255, 182, 0.5), 0 0 15px 2px rgba(0, 255, 135, 1);
     }
 }
+
+/* Login Window */
+.form-window {
+    position:relative;
+    padding:20px;
+    max-width:30em; 
+
+    /* Account Page */
+    display: flex; /* Make form-window a flex container */
+    flex-direction: column; /* Arrange items vertically */
+    align-items: center; /* Center children vertically */
+}
 .form-window h2 {
     text-align: center;
 }
@@ -121,7 +130,7 @@ input.invalid {
     margin-bottom: 4px; 
     text-align: left;  
 }
-.form-window input[type="text"], input[type="email"], input[type="password"], button[type="submit"], select {
+.form-window input[type="text"], input[type="email"], input[type="password"], button[type="submit"] {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;
@@ -191,6 +200,40 @@ select {
     transition: max-height 0.2s ease-out;
 }
 
+/* Account Screen */
+.account-section-divider {
+    margin:20px 0 20px 0;
+    border-top: 2px solid rgba(0, 0, 0, 0.495); /* Adjust color and thickness as needed */
+}
+input[type="file"]::file-selector-button {
+    /* display: none; */
+    opacity:0;
+    width:0;
+    margin-top:4rem;
+}
+.avatar {
+    width: 150px;
+    height: 150px;
+    background-color: gray; /* Placeholder color */
+    border-radius: 50%; /* Creates a round shape */
+    border:none;
+}
+.avatar:hover {
+    background-color: #04AA6D;
+    box-shadow: inset 0 0 10px 2px rgba(0, 255, 182, 0.5), 0 0 10px 2px rgba(0, 255, 135, 1);
+    cursor:pointer;
+    /* animation: pulse 1s alternate infinite; */
+}
+.profile {
+    /* display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    text-align: left; */
+    background:#f3f3f3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* Mobile Devices */
 @media only screen and (max-width: 400px) {
     .skew { display:none; }
@@ -224,5 +267,5 @@ select {
     }
     nav a:focus {background-color: #367885;}
     a[data-section="login"] {border:none;}
-    a[data-section="home"] {display:block;}
+    /* a[data-section="home"] {display:block;} */
 }

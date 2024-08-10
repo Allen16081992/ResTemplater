@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             accordion.addEventListener('click', toggleAccordion);
         });
     }
+    
 });
 
 // Remove messages after a certain duration

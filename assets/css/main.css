@@ -74,6 +74,7 @@ section {
     justify-content: space-around; 
     align-items: center;
     flex-wrap: wrap; 
+    margin:10px 0 10px 0;
     gap: 10px; 
 }
 .input-group {
@@ -122,6 +123,9 @@ input.invalid {
     flex-direction: column; /* Arrange items vertically */
     align-items: center; /* Center children vertically */
 }
+.form-window form {
+    width:100%;
+}
 .form-window h2 {
     text-align: center;
 }
@@ -139,6 +143,30 @@ input.invalid {
 .form-window input[type="checkbox"] {
     margin: 0 0 20px; 
     cursor: pointer;
+}
+.form-window .back {
+    display:flex; 
+    position:absolute; 
+    margin: 1.4rem 25rem 0 0; 
+    padding: 0.3em;
+    font-size: 0.8em;
+}
+textarea {
+    width:100%; 
+    margin-bottom:10px;
+}
+.button-wrapper {
+    display:flex;
+    width: 100%; /* Ensure the div takes up the full width available */
+    margin: 0 0 10px;
+    gap: 10px; 
+}
+
+.button-wrapper button {
+    width: 100%; /* Make the button fill the width of its container */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+    padding: 0.6em; /* Ensure consistent padding with inputs */
+    font-size:1em;
 }
 .art-window {
     margin: 0;
@@ -163,7 +191,7 @@ select {
     font-size: 1em;          
     cursor: pointer;   
 }
-.date-options {margin-bottom:20px;}
+.date-options {margin-bottom:10px;}
 .error-msg { 
     position:absolute;
     display:none;
@@ -184,7 +212,7 @@ select {
     padding: 18px;
     width: 100%;
     border: none;
-    text-align: left;
+    text-align: center;
     outline: none;
     font-size: 15px;
     transition: background-color 0.6s ease;
@@ -202,8 +230,11 @@ select {
 
 /* Account Screen */
 .account-section-divider {
-    margin:20px 0 20px 0;
+    margin:20px 0 10px 0;
     border-top: 2px solid rgba(0, 0, 0, 0.495); /* Adjust color and thickness as needed */
+}
+input[type="file"] {
+    margin-bottom:20px;
 }
 input[type="file"]::file-selector-button {
     /* display: none; */
@@ -250,6 +281,7 @@ input[type="file"]::file-selector-button {
         justify-content: space-around;
         background-color: #333;
         padding: 10px 0;
+        z-index:1;
     }
     nav a {
         padding: 15px 20px;
@@ -268,4 +300,7 @@ input[type="file"]::file-selector-button {
     nav a:focus {background-color: #367885;}
     a[data-section="login"] {border:none;}
     /* a[data-section="home"] {display:block;} */
+    footer {
+        margin-bottom:9em;
+    }
 }

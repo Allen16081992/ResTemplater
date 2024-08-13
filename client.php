@@ -30,7 +30,7 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <!-- <link rel="stylesheet" href="assets/css/3d_illustration.css"> -->
-    <title>Client | CV Templater</title>
+    <title>Mijn Templater | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
 </head>
@@ -52,60 +52,182 @@
         <section id="home" class="current">
             <div class="profile">
                 <div class="form-window">
-                    <h2>Mijn CV</h2>
-                    <form action="">
-                        <div class="tab"> 
-                            <div>
-                            <label for="cvname">CV Ophalen:</label>
-                            <select name="cvname" id="">
-                                <option value="default">---------</option>
-                            </select>
-                            </div>           
+                    <h2>CV Templater</h2>
+                    <!-- <button class="avatar">Profiel Foto</button> -->
+                    <form>
+                        <h3>Mijn Curriculum Vitae</h3>
+                        <button type="submit" data-section="create-res">Nieuwe CV</button> 
 
-                            <button data-section="create-res">Nieuwe CV</button>
-                            <button data-section="delete-res">Verwijder CV</button>
+                        <label for="cvname">CV Ophalen:</label>
+                        <select name="cvname" style="width:100%; margin-bottom:10px;">
+                            <option value="default">---------</option>
+                        </select> 
+
+                        <div class="tab">
+                            <div class="button-wrapper">
+                                <button type="button" data-section="style-res" >Downloaden</button>
+                                <button type="button" data-section="delete-res" >Verwijderen</button>
+                            </div>
                         </div>
+                        <div class="account-section-divider"></div>
                     </form>
                 </div>
+                
                 <div id="accordion">
+                    <!-- Curriculum Vitae -->
                     <button class="accordion">Curriculum Vitae</button>
-                    <div class="panel">
-                        <div class="form-window">
-                            <form action="">   
-                                <input type="hidden" value="resid">   
-                                <label for="cvname">Naam CV</label>
-                                <input type="text" name="cvname" placeholder="Welke naam geef je het?" value="">
-                            
-                                <label for="intro">Intro</label>
-                                <textarea style="width:100%;" name="intro" id="intro" placeholder="Korte beschrijving over jezelf..."></textarea>
-                                
-                                <button type="submit" name="saveResume">Opslaan</button>
-                            </form>
-                        </div>
+                    <div class="panel form-window">
+                        <form>
+                            <div class="tab">
+                                <div>
+                                    <label for="cvid">CV ID</label>
+                                    <input type="text" id="cvid" placeholder="*ID is Protected." disabled>
+                                </div>
+                                <div>
+                                    <label for="title">Titel</label>
+                                    <input type="text" id="title" placeholder="Professional Dredger" disabled>
+                                </div>
+                                <input type="hidden" name="editInfo"> 
+                                <button type="submit" name="edit">Wijzigen</button>
+                            </div>
+                        </form>
                     </div>
-                    <button class="accordion">Contactgegevens</button>
-                    <div class="panel">
-                        <p>Content for Section 2.</p>
-                    </div>
+                    <!-- Werkervaring / Stages -->
                     <button class="accordion">Werkervaring / Stages</button>
-                    <div class="panel">
-                        <p>Content for Section 3.</p>
+                    <div class="panel form-window">
+                        <form>
+                            <div class="tab">
+                                <div>
+                                    <label for="job">Functie</label>
+                                    <input type="text" id="job" placeholder="Mijn functie" disabled>
+                                </div>
+                                <div>
+                                    <label for="company">Bedrijf</label>
+                                    <input type="text" id="company" placeholder="Mijn werkgever" disabled>
+                                </div>
+                                <div class="date-options">
+                                    <label for="day-select">In dienst</label>
+                                    <select id="day-select" name="day" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="month-select" name="month" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="year-select" name="year" required style="width:5rem;">
+                                        <option value="" selected disabled>----</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                </div> 
+                                <div class="date-options">
+                                    <label for="day-select">Uit dienst</label>
+                                    <select id="day-select" name="day" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="month-select" name="month" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="year-select" name="year" required style="width:5rem;">
+                                        <option value="" selected disabled>----</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                </div> 
+                                <label for="workdesc">Beschrijving</label>
+                                <textarea id="workdesc" rows="3" placeholder="Write your job description here..."></textarea>
+                            </div>
+                            <div class="button-wrapper">
+                                <button type="button">Wijzigen</button>
+                                <button type="button">Verwijderen</button>
+                            </div>
+                            <div class="account-section-divider"></div>
+                        </form>
                     </div>
+                    <!-- Opleiding / Cursussen -->
                     <button class="accordion">Opleiding / Cursussen</button>
-                    <div class="panel">
-                        <p>Content for Section 4.</p>
+                    <div class="panel form-window">
+                        <form>
+                            <div class="tab">
+                                <div>
+                                    <label for="course">Studie</label>
+                                    <input type="text" id="course" placeholder="Mijn studie" disabled>
+                                </div>
+                                <div>
+                                    <label for="college">Instituut</label>
+                                    <input type="text" id="college" placeholder="Mijn Instituut" disabled>
+                                </div>
+                                <div class="date-options">
+                                    <label for="day-select">Van</label>
+                                    <select id="day-select" name="day" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="month-select" name="month" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="year-select" name="year" required style="width:5rem;">
+                                        <option value="" selected disabled>----</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                </div> 
+                                <div class="date-options">
+                                    <label for="day-select">Tot</label>
+                                    <select id="day-select" name="day" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="month-select" name="month" required style="width:4rem;">
+                                        <option value="" selected disabled>--</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                    <select id="year-select" name="year" required style="width:5rem;">
+                                        <option value="" selected disabled>----</option>
+                                        <!-- Populated with JS -->
+                                    </select>
+                                </div>
+                                <label for="workdesc">Beschrijving</label>
+                                <textarea id="workdesc" rows="3" style="width:100%; margin-bottom:10px;" placeholder="Write your job description here..."></textarea> 
+                            </div>
+                            <div class="button-wrapper">
+                                <button type="button">Wijzigen</button>
+                                <button type="button">Verwijderen</button>
+                            </div>
+                            <div class="account-section-divider"></div>
+                        </form>
                     </div>
+                    <!-- Vaardigheden -->
                     <button class="accordion">Vaardigheden</button>
-                    <div class="panel">
-                        <p>Content for Section 5.</p>
+                    <div class="panel form-window">
+                        <form>
+                            <div class="tab">        
+                                <label for="technical">Technische</label>
+                                <input type="text" name="technical" placeholder="Office 365" disabled>
+
+                                <label for="language">Talen</label>
+                                <input type="text" name="language" placeholder="Swedish" disabled>
+                                
+                                <label for="interest">Interesses</label>
+                                <input type="text" name="interest" placeholder="Theatre" disabled>
+                            </div>
+                            <div class="button-wrapper">
+                                <button type="button">Wijzigen</button>
+                                <button type="button">Verwijderen</button>
+                            </div>
+                            <div class="account-section-divider"></div>
+                        </form>
                     </div>
+                    <!-- Overige -->
                     <button class="accordion">Overige</button>
                     <div class="panel">
                         <h2>Foto</h2>
                         <form action="">
                             <label for="file-upload"></label>
                             <input type="file" class="avatar" name="file-upload">
-                            <div>
+                            <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
+                            <div class="button-wrapper">
                                 <button>Wijzigen</button>
                                 <button>Verwijderen</button>
                             </div>
@@ -113,24 +235,22 @@
                         
                         <div class="account-section-divider"></div>
                         <p>Motivatiebrief</p>
+                        <form action="">
+                            <textarea name="letter" rows="4" placeholder="Write your summary"></textarea>
+                            <div class="button-wrapper">
+                                <button type="button">Wijzigen</button>
+                                <button type="button">Verwijderen</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="form-window">
-                    <strong style="margin-bottom:1rem;">Downloaden</strong>
-                    <form action="">
-                        <button>Standaard</button>
-                        <button>Professioneel</button>
-                        <button>Carrièretijger</button>
-                    </form>
-                </div>
             </div>
-
         </section>
         
         <section id="user" class="hidden">
             <div class="profile">
                 <div class="form-window">
-                    <h2>Mijn Account</h2>
+                    <h2>Account</h2>
                     <!-- <button class="avatar">Profiel Foto</button> -->
                     <form>
                         <h3>Mijn gegevens</h3>
@@ -165,7 +285,7 @@
                         <div class="account-section-divider"></div>
                     </form>
                     <form>
-                        <h3>Account</h3>
+                        <h3>Mijn Account</h3>
                         <div class="tab">
                             <div>
                                 <label for="username">Gebruikersnaam</label>
@@ -201,7 +321,7 @@
                         <button type="submit" name="edit">Wijzigen</button>
                         <div class="account-section-divider"></div>
                     </form>
-                    <p>Deze acties kunnen niet ongedaan worden.</p>
+                    <p>Deze actie kan niet ongedaan worden gemaakt.</p>
                     <button type="submit" data-section="close">Account Sluiten</button>     
                 </div>
             </div>
@@ -209,13 +329,7 @@
 
         <section id="guide" class="hidden">
             <h2>Onze gids</h2>
-            <div class="sheet">
-                <img src="assets/images/tutorials/tutorial1.png" style="height:100px;" alt="Resume Name">
-                <div class="text-field">
-                    <h3></h3>
-                    <p></p>
-                </div>
-            </div>
+
         </section>
 
         <section id="logout" class="hidden">
@@ -226,9 +340,8 @@
         </section>
 
         <section id="create-res" class="hidden">
-
             <div class="form-window">
-                <button style="display:flex; position:absolute; margin-top:1.4rem; margin-right:25rem;" data-section="home">Terug</button>
+                <button class="back" data-section="home">Terug</button>
                 <h2>Nieuw CV Maken</h2>
                 <form id="login_form" action="src/req_handler.src.php" method="post">
                     <label for="cvname">Titel</label>
@@ -240,15 +353,30 @@
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
+        </section>
 
+        <section id="style-res" class="hidden">
+            <div class="form-window">
+                <button class="back" data-section="home">Terug</button>
+                <h2>Downloaden</h2>
+                <form>
+                    <p>Kies een template</p>
+                    <button type="submit">Standaard</button>
+                    <button type="submit">Professioneel</button>
+                    <button type="submit">Carrièretijger</button>
+
+                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </form>
+            </div>
         </section>
 
         <section id="delete-res" class="hidden">
 
             <div class="form-window">
-                <button style="display:flex; position:absolute; margin-top:1.4rem; margin-right:25rem;" data-section="home">Terug</button>
+                <button class="back" data-section="home">Terug</button>
                 <h2>Verwijderen</h2>
-                <form id="login_form" action="src/req_handler.src.php" method="post">
+                <form>
                     <label for="selectCv">Welk cv wil je verwijderen?</label>
                     <select style="width:100%;" name="selectCv">
                         <option value="">(None selected)</option><!-- the value="" is needed for javascript -->
@@ -261,26 +389,28 @@
 
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                     <input type="hidden" name="delResume">
-                    <button class="Del" type="submit" name="delResume">Delete</button>
+                    <button class="Del" type="submit" name="delResume">Verwijderen</button>
                 </form>
             </div>
 
         </section>
         
         <section id="close" class="hidden">
+
             <div class="form-window">
-                <button style="display:flex; position:absolute; margin-top:1.4rem; margin-right:21rem;" data-section="home">Terug</button>
-                <h2>Wat jammer dat je gaat...</h2>
-                <form id="login_form" action="src/req_handler.src.php" method="post">
+                <button class="back" data-section="home">Terug</button>
+                <h2>Wat jammer dat je vertrekt.</h2>
+                <form>
                     <p>Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>
                     <label for="pwd">Wachtwoord</label>
                     <input type="password" id="pwd" name="pwd" placeholder="Vul nog 1 keer je wachtwoord in" required>
-                    <button type="submit" class="Del" name="deleteMe">Verwijder mij</button>
 
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                     <input type="hidden" name="username" value=""> 
                     <input type="hidden" name="uid" value=""> 
                     <input type="hidden" name="deleteMe">
+                    <button type="submit" name="deleteMe">Verwijder mij</button>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
         </section>

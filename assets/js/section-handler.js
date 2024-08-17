@@ -11,10 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const eye = document.querySelector('.toggle-eye i');
     const pwdID = document.getElementById('pwdField');
 
-    // Date Selecter
-    const daySelect = document.getElementById('day-select');
-    const monthSelect = document.getElementById('month-select');
-    const yearSelect = document.getElementById('year-select');
+    // Date Selector
+    const dateOptions = document.querySelectorAll('.date-options');
 
     // Resume
     const cvTab = document.querySelectorAll('#home .accordion');
@@ -92,28 +90,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Date Selector
-    if (daySelect && monthSelect && yearSelect) {
-        // Populate days
-        for (let day = 1; day <= 31; day++) {
-            const formatDay = ('0' + day).slice(-2); // Ensure two digits
-            const dayOption = new Option(formatDay, formatDay);
-            daySelect.add(dayOption);
-        }
-        // Populate months
-        for (let month = 1; month <= 12; month++) {
-            const formatMonth = ('0' + month).slice(-2); // Ensure two digits
-            const monthOption = new Option(formatMonth, formatMonth);
-            monthSelect.add(monthOption);
-        }
-        // Populate years
-        const currentYear = new Date().getFullYear();
-        const targetYear = 1954;
-        for (let year = currentYear - 15; year >= targetYear; year--) {
-            const yearOption = new Option(year, year);
-            yearSelect.add(yearOption);
-        }
+    // Date Selector, Iterate through each group
+    if (dateOptions) {
+        dateOptions.forEach(group => {
+            const daySelect = group.querySelector('#day-select');
+            const monthSelect = group.querySelector('#month-select');
+            const yearSelect = group.querySelector('#year-select');
+
+            // Check if all select elements exist in the current group
+            if (daySelect && monthSelect && yearSelect) {
+                // Populate days
+                for (let day = 1; day <= 31; day++) {
+                    const formatDay = ('0' + day).slice(-2); // Ensure two digits
+                    const dayOption = new Option(formatDay, formatDay);
+                    daySelect.add(dayOption);
+                }
+                
+                // Populate months
+                for (let month = 1; month <= 12; month++) {
+                    const formatMonth = ('0' + month).slice(-2); // Ensure two digits
+                    const monthOption = new Option(formatMonth, formatMonth);
+                    monthSelect.add(monthOption);
+                }
+                
+                // Populate years
+                const currentYear = new Date().getFullYear();
+                const targetYear = 1954;
+                for (let year = currentYear; year >= targetYear; year--) {
+                    const yearOption = new Option(year, year);
+                    yearSelect.add(yearOption);
+                }
+            }
+        });
     }
+
 
     function toggleAccordion() {
         var panel = this.nextElementSibling;

@@ -47,8 +47,8 @@
                         <label for="pwd">Wachtwoord</label>
                         <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
                         <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                        <input type="hidden" name="login">
-                        <button type="submit" id="loginBtn">Log in</button>
+                        <!-- <input type="hidden" name="login"> -->
+                        <button type="submit" id="loginBtn" name="login">Log in</button>
                         <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                     </form>
                 </div>

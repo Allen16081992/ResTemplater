@@ -1,6 +1,5 @@
 <?php
     require_once __DIR__ . '../../src/account.class.php';
-    require_once __DIR__ . '../../src/controller/validator.control.php';
 
     class FormHandler extends Account {
         use Validators;

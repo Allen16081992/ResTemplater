@@ -42,7 +42,7 @@
         <section id="home" class="current">
             <div class="form-window">
                 <h2>Registreren</h2>
-                <form id="signup_form">
+                <form id="signup_form" action="src/req_handler.src.php" method="post">
                     <div class="wizard-info">
                         <span class="step">Algemeen</span>
                         <span class="step">Contact</span>
@@ -111,7 +111,7 @@
                     
                     <div class="rotator">
                         <button type="submit" id="prevBtn">Terug</button>
-                        <button type="submit" name="sign_up" id="nextBtn">Verder</button>                        
+                        <button type="submit" id="nextBtn" name="sign_up">Verder</button>                        
                     </div>
                 </form>
                 <!-- <form id="signup_form">

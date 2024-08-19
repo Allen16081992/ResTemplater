@@ -59,7 +59,7 @@
                         <button type="submit" data-section="create-res">Nieuwe CV</button> 
 
                         <label for="cvname">CV Ophalen:</label>
-                        <select name="cvname" style="width:100%; margin-bottom:10px;">
+                        <select name="cvname">
                             <option value="default">---------</option>
                         </select> 
 
@@ -107,36 +107,36 @@
                                 </div>
                                 <div class="date-options">
                                     <label for="day-select">In dienst</label>
-                                    <select id="day-select" name="day" required style="width:4rem;">
+                                    <select id="day-select" name="day" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="month-select" name="month" required style="width:4rem;">
+                                    <select id="month-select" name="month" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="year-select" name="year" required style="width:5rem;">
+                                    <select id="year-select" name="year" required>
                                         <option value="" selected disabled>----</option>
                                         <!-- Populated with JS -->
                                     </select>
                                 </div> 
                                 <div class="date-options">
                                     <label for="day-select">Uit dienst</label>
-                                    <select id="day-select" name="day" required style="width:4rem;">
+                                    <select id="day-select" name="day" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="month-select" name="month" required style="width:4rem;">
+                                    <select id="month-select" name="month" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="year-select" name="year" required style="width:5rem;">
+                                    <select id="year-select" name="year" required>
                                         <option value="" selected disabled>----</option>
                                         <!-- Populated with JS -->
                                     </select>
                                 </div> 
                                 <label for="workdesc">Beschrijving</label>
-                                <textarea id="workdesc" rows="3" placeholder="Write your job description here..."></textarea>
+                                <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
                             </div>
                             <div class="button-wrapper">
                                 <button type="button">Wijzigen</button>
@@ -160,36 +160,36 @@
                                 </div>
                                 <div class="date-options">
                                     <label for="day-select">Van</label>
-                                    <select id="day-select" name="day" required style="width:4rem;">
+                                    <select id="day-select" name="day" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="month-select" name="month" required style="width:4rem;">
+                                    <select id="month-select" name="month" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="year-select" name="year" required style="width:5rem;">
+                                    <select id="year-select" name="year" required>
                                         <option value="" selected disabled>----</option>
                                         <!-- Populated with JS -->
                                     </select>
                                 </div> 
                                 <div class="date-options">
                                     <label for="day-select">Tot</label>
-                                    <select id="day-select" name="day" required style="width:4rem;">
+                                    <select id="day-select" name="day" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="month-select" name="month" required style="width:4rem;">
+                                    <select id="month-select" name="month" required>
                                         <option value="" selected disabled>--</option>
                                         <!-- Populated with JS -->
                                     </select>
-                                    <select id="year-select" name="year" required style="width:5rem;">
+                                    <select id="year-select" name="year" required>
                                         <option value="" selected disabled>----</option>
                                         <!-- Populated with JS -->
                                     </select>
                                 </div>
-                                <label for="workdesc">Beschrijving</label>
-                                <textarea id="workdesc" rows="3" style="width:100%; margin-bottom:10px;" placeholder="Write your job description here..."></textarea> 
+                                <label for="edudesc">Beschrijving</label>
+                                <textarea id="edudesc" rows="4" placeholder="Write your course description here..."></textarea> 
                             </div>
                             <div class="button-wrapper">
                                 <button type="button">Wijzigen</button>
@@ -204,13 +204,13 @@
                         <form>
                             <div class="tab">        
                                 <label for="technical">Technische</label>
-                                <input type="text" name="technical" placeholder="Office 365" disabled>
+                                <input type="text" name="technical" placeholder="Office 365">
 
                                 <label for="language">Talen</label>
-                                <input type="text" name="language" placeholder="Swedish" disabled>
+                                <input type="text" name="language" placeholder="Swedish">
                                 
                                 <label for="interest">Interesses</label>
-                                <input type="text" name="interest" placeholder="Theatre" disabled>
+                                <input type="text" name="interest" placeholder="Theatre">
                             </div>
                             <div class="button-wrapper">
                                 <button type="button">Wijzigen</button>
@@ -301,15 +301,15 @@
                             </div>
                             <div class="date-options">
                                 <label for="day-select">Geboortedatum</label>
-                                <select id="day-select" name="day" required style="width:4rem;">
+                                <select id="day-select" name="day" required>
                                     <option value="" selected disabled>--</option>
                                     <!-- Populated with JS -->
                                 </select>
-                                <select id="month-select" name="month" required style="width:4rem;">
+                                <select id="month-select" name="month" required>
                                     <option value="" selected disabled>--</option>
                                     <!-- Populated with JS -->
                                 </select>
-                                <select id="year-select" name="year" required style="width:5rem;">
+                                <select id="year-select" name="year" required>
                                     <option value="" selected disabled>----</option>
                                     <!-- Populated with JS -->
                                 </select>
@@ -343,7 +343,7 @@
             <div class="form-window">
                 <button class="back" data-section="home">Terug</button>
                 <h2>Nieuw CV Maken</h2>
-                <form id="login_form" action="src/req_handler.src.php" method="post">
+                <form>
                     <label for="cvname">Titel</label>
                     <input type="text" id="cvname" name="cvname" placeholder="Geef het een naam." required>
                     <button type="submit" name="creResume">Maak mijn cv</button>
@@ -378,7 +378,7 @@
                 <h2>Verwijderen</h2>
                 <form>
                     <label for="selectCv">Welk cv wil je verwijderen?</label>
-                    <select style="width:100%;" name="selectCv">
+                    <select name="cvname">
                         <option value="">(None selected)</option><!-- the value="" is needed for javascript -->
                         <?php if (!empty($resumeData)) { ?>
                         <?php foreach ($resumeData as $resume): ?>

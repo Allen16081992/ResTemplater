@@ -1,10 +1,12 @@
 <?php
     // Load Database connection
     require_once __DIR__ . '../../database/singleton.db.php'; 
-    require_once __DIR__ . '../../session_manager.src.php';   
+    require_once __DIR__ . '../../session_manager.src.php';
+    require_once __DIR__ . '../../controller/validator.control.php';
 
     // Code Convention: PascalCase
     class Account {
+        use Rebound;
 
         protected function signupUser($formFields) {   
             // Get the singleton database connection.
@@ -12,26 +14,19 @@
 
             // Verify if the user already exists
             $stmt = $db->connect()->prepare('SELECT COUNT(*) FROM members WHERE email = :email;');
-
-            // Bind values to prepared statements
             $stmt->bindParam(":email", $formFields['email']); 
 
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Request to database has failed.';
-                header('location: ../signup.php'); 
-                exit();
+                $this->handleError('Database aanvraag mislukt.', '../signup.php');
             }
 
             // If the user already exists.
-            if(!$stmt->rowCount() == 0 ) {
+            if($stmt->fetchColumn() > 0) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Gebruiker bestaat al';
-                header('location: ../login.php');
-                exit();
+                $this->handleError('Gebruiker bestaat al.', '../signup.php');
             }
-            $stmt = null;
             
             // Prepare the Argon2 Hashing Algorithm, Password Hashing Competition (PHC) 2015 winner
             $options = [
@@ -42,37 +37,30 @@
             
             $hashThis = password_hash($formFields['pwd'], PASSWORD_ARGON2I, $options);
 
-            // Prepare SQL statement and bind parameters
-            $stmt = $db->connect()->prepare("INSERT INTO accounts (username, password, email) VALUES (?, ?, ?);");
+            // Verify if a username was submitted
+            $username = isset($formFields['username']) ? $formFields['username'] : null;
 
-            // Verify if they submitted a username
-            if (isset($formFields['username'])) {
-                $stmt->bindParam(":username", $formFields['username']);
-            } else {
-                $name = "";
-                $stmt->bindParam(":username", $name);
-            }
-            $stmt->bindParam(":hashThis", $hashThis);
-            $stmt->bindParam(":email", $formFields['email']);
+            // Prepare SQL statement and bind parameters
+            $stmt = null;
+            $stmt = $db->connect()->prepare("INSERT INTO accounts (username, password, email) VALUES (:username, :password, :email);");
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':password', $hashThis);
+            $stmt->bindParam(':email', $formFields['email']);
 
             // If this fails, kick back to homepage.
             if(!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Aanmelden mislukt.';
-                header('location: ../signup.php'); 
-                exit();
+                $this->handleError('Gebruiker aanmaken mislukt.', '../signup.php');
             }
-            $stmt = null;
 
             // Immediately grab the newly generated userID
+            $stmt = null;
             $stmt = $db->connect()->prepare('SELECT userID FROM accounts WHERE email = :email;');
             $stmt->bindParam(":email", $formFields['email']);
 
             if (!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Request to database has failed.';
-                header('location: ../signup.php'); 
-                exit();
+                $this->handleError('Database aanvraag mislukt.', '../signup.php');
             }
 
             $userID = $stmt->fetchColumn();
@@ -80,34 +68,26 @@
             // Handle the case where userID is not found
             if (!$userID) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Failed to retrieve userID.';
-                header('location: ../index.php');
-                exit();
+                $this->handleError('Nieuwe Gebruiker niet gevonden.', '../signup.php');
             }
 
+            // Verify if a username was submitted
+            $country = isset($formFields['country']) ? $formFields['country'] : null;
+
             // Insert contact information into the contact table
-            $stmt = $db->connect()->prepare('INSERT INTO contact (phone, firstname, lastname, birth, nationality, postalcode, city, userID) VALUES (?, ?, ?, ?, ?, ?, ?, ?);');
+            $stmt = $db->connect()->prepare('INSERT INTO contact (phone, firstname, lastname, birth, nationality, postalcode, city, userID) VALUES (:phone, :firstname, :lastname, :birth, :country, :postalcode, :city, :userID);');
             $stmt->bindParam(":phone", $formFields['phone']);
             $stmt->bindParam(":firstname", $formFields['firstname']);
             $stmt->bindParam(":lastname", $formFields['lastname']);
             $stmt->bindParam(":birth", $formFields['birth']);
-            
-            if (isset($formFields['country'])) {
-                $stmt->bindParam(":country", $formFields['country']);
-            } else {
-                $country = "";
-                $stmt->bindParam(":country", $country);
-            }
-            
-            $stmt->bindParam(":postal", $formFields['postal']);
+            $stmt->bindParam(":country", $country);
+            $stmt->bindParam(":postalcode", $formFields['postal']);
             $stmt->bindParam(":city", $formFields['city']);
-            $stmt->bindParam(":uid", $userID);
+            $stmt->bindParam(":userID", $userID);
             
             if (!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Request to database has failed.';
-                header('location: ../signup.php'); 
-                exit();
+                $this->handleError('Database aanvraag mislukt.', '../signup.php');
             }
 
             // Clean up variables from memory
@@ -118,8 +98,22 @@
         }
 
         // Fetch Info
-        protected function Read_User($formFields) {
+        protected function readUser() {
+            // Get the singleton database connection.
+            $db = Database::getInstance();
 
+            // Prepare SQL statement.
+            $stmt = $db->connect()->prepare('SELECT username, email FROM accounts WHERE userID = :userID');
+            $stmt->bindParam(":userID", $_SESSION['user_id']);
+
+            if (!$stmt->execute()) {
+                unset($stmt);
+                $this->handleError('Database aanvraag mislukt.', '../client.php');
+            }
+
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $account = array_map('htmlspecialchars', $user);
+            return ['account' => $account];
         } 
         
         protected function Update_User($formFields) {
@@ -139,22 +133,17 @@
 
             // Bind the parameters
             $stmt->bindParam(":email", $formFields['email']);
-            //$stmt->bindParam(":password", $formFields['password']);
 
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Request to database has failed.';
-                header('location: ../login.php'); 
-                exit();
+                $this->handleError('Database aanvraag mislukt.', '../login.php');
             }
 
             // If we got nothing from the database, do this.
-            if(!$stmt->rowCount() == 0 ) {
+            if($stmt->fetchColumn() == 0) {
                 unset($stmt, $formFields);
-                $_SESSION['error'] = 'Gebruiker niet gevonden';
-                header('location: ../login.php');
-                exit();
+                $this->handleError('Gebruiker niet gevonden.', '../login.php');
             }
 
             // Extract the hashed password from the fetched array.
@@ -162,28 +151,21 @@
 
             // If there was no match from the database, do this.
             if(!$userData) {
-                $_SESSION['error'] = 'Gebruiker laden mislukt';
-                header('location: ../login.php');
-                exit();
+                unset($stmt, $userData, $formFields);
+                $this->handleError('Gebruiker ophalen mislukt.', '../login.php');
             }
 
             // Verify passwords
             if (!password_verify($formFields['password'], $userData['password'])) {
                 unset($stmt, $formFields, $userData);
-                $_SESSION['error'] = "Incorrect wachtwoord.";
-                header('location: ../login.php');
-                exit();
+                $this->handleError('Wachtwoord is fout.', '../login.php');
             }
 
             $_SESSION['user_id'] = $userData['userID'];
             $_SESSION['success'] = "Hallo, ".htmlspecialchars($userData['firstname']);
 
             // Verify if the user made a username
-            if (isset($userData['username'])) { 
-                $_SESSION['user_name'] = htmlspecialchars($userData['username']);
-            } else { 
-                $_SESSION['user_name'] = htmlspecialchars($userData['firstname']);         
-            }
+            $_SESSION['user_name'] = isset($userData['username']) ? htmlspecialchars($userData['username']) : htmlspecialchars($userData['firstname']);
 
             // Clean up variables from memory
             unset($stmt, $formFields, $userData);

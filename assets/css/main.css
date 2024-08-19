@@ -183,6 +183,8 @@ textarea {
     font-size:1.5em;
     cursor:pointer;
 }
+
+.date-options {margin-bottom:20px;}
 select {
     padding: 0.6em;   
     border: 1px solid #ccc; 
@@ -191,7 +193,16 @@ select {
     font-size: 1em;          
     cursor: pointer;   
 }
-.date-options {margin-bottom:10px;}
+select[name="day"], select[name="month"] {
+    width:4rem;
+}
+select[name="year"] {
+    width:5rem;
+}
+select[name="cvname"] {
+    width:100%;
+}
+
 .error-msg { 
     position:absolute;
     display:none;

@@ -108,12 +108,12 @@
 
             if (!$stmt->execute()) {
                 unset($stmt);
-                $this->handleError('Database aanvraag mislukt.', '../client.php');
+                $this->handleError('Gegevens ophalen mislukt.', '../client.php');
             }
 
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $account = array_map('htmlspecialchars', $user);
-            return ['account' => $account];
+            $userData = array_map('htmlspecialchars', $user);
+            return ['account' => $userData];
         } 
         
         protected function Update_User($formFields) {

@@ -40,8 +40,8 @@
             <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="user"><?= isset($_SESSION['user_name']) ? $_SESSION['user_name'] : (isset($_SESSION['firstname']) ? $_SESSION['firstname'] : "Gebruiker"); ?></a>
-            <a href="#" data-section="home">Mijn CV</a><!-- Mobile only -->
+            <a href="#" data-section="user"><?= addUsername(); ?></a>
+            <a href="#" data-section="home">Mijn CV</a>
             <a href="#" data-section="guide">Onze gids</a>
             <a href="#" data-section="logout">Uitloggen</a>
         </nav>
@@ -49,35 +49,38 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="current">
-            <div class="profile">
-                <div class="form-window">
+        <section id="home" class="<?= serverHome(); ?>">
+            <div class="grid-ad-container">
+                <div class="ads"></div>
+                <div class="sheet">
                     <h2>CV Templater</h2>
-                    <!-- <button class="avatar">Profiel Foto</button> -->
-                    <form>
+                    <form action="src/req_handler.src.php" method="post">
                         <h3>Mijn Curriculum Vitae</h3>
-                        <button type="submit" data-section="create-res">Nieuwe CV</button> 
-
-                        <label for="cvname">CV Ophalen:</label>
-                        <select name="cvname">
-                            <option value="default">---------</option>
-                        </select> 
-
-                        <div class="tab">
-                            <div class="button-wrapper">
-                                <button type="button" data-section="style-res" >Downloaden</button>
-                                <button type="button" data-section="delete-res" >Verwijderen</button>
-                            </div>
+                        <div class="button-wrapper">
+                            <button type="button" data-section="create-res">Nieuwe CV</button> 
+                            <button type="button" data-section="delete-res">Verwijder CV</button>
                         </div>
+
+                        <label for="selectCv">CV Ophalen:</label>
+                        <select id="selectCv" name="cvname">
+                            <option selected disabled hidden>---------</option>
+                            <?php if (!empty($resumeData)) { ?>
+                            <?php foreach ($resumeData as $resume): ?>
+                                <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
+                            <?php endforeach; ?> <?php } ?>
+                        </select>
+                        
+                        <div class="tab">
+                            <button type="submit" data-section="select-res">Downloaden</button>   
+                        </div>
+                        
                         <div class="account-section-divider"></div>
-                    </form>
-                </div>
+                    </form>     
                 
-                <div id="accordion">
                     <!-- Curriculum Vitae -->
-                    <button class="accordion">Curriculum Vitae</button>
-                    <div class="panel form-window">
-                        <form>
+                    <button class="accordion">Curriculum Vitae / Foto</button>
+                    <div class="panel">    
+                        <form action="src/req_handler.src.php" method="post">
                             <div class="tab">
                                 <div>
                                     <label for="cvid">CV ID</label>
@@ -85,123 +88,82 @@
                                 </div>
                                 <div>
                                     <label for="title">Titel</label>
-                                    <input type="text" id="title" placeholder="Professional Dredger" disabled>
+                                    <input type="text" id="title" name="resumetitle" placeholder="Professional Dredger" disabled>
                                 </div>
-                                <input type="hidden" name="editInfo"> 
-                                <button type="submit" name="edit">Wijzigen</button>
+                                <input type="hidden" name="resumeID" value=""> 
+                                <input type="hidden" name="userID" value=""> 
+                                <button type="submit" name="editCv">Wijzigen</button>
+                            </div>
+                        </form>
+                        <div class="account-section-divider"></div>
+                        <h2>Foto</h2>
+                        <form action="src/req_handler.src.php" method="post">
+                            <label for="file-upload"></label>
+                            <input type="file" class="avatar" name="file-upload">
+                            <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
+                            <div class="button-wrapper">
+                                <button name="upAvat">Wijzigen</button>
+                                <button name="delAvat">Verwijderen</button>
                             </div>
                         </form>
                     </div>
+
                     <!-- Werkervaring / Stages -->
                     <button class="accordion">Werkervaring / Stages</button>
-                    <div class="panel form-window">
-                        <form>
-                            <div class="tab">
-                                <div>
-                                    <label for="job">Functie</label>
-                                    <input type="text" id="job" placeholder="Mijn functie" disabled>
-                                </div>
-                                <div>
-                                    <label for="company">Bedrijf</label>
-                                    <input type="text" id="company" placeholder="Mijn werkgever" disabled>
-                                </div>
-                                <div class="date-options">
-                                    <label for="day-select">In dienst</label>
-                                    <select id="day-select" name="day" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="month-select" name="month" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="year-select" name="year" required>
-                                        <option value="" selected disabled>----</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                </div> 
-                                <div class="date-options">
-                                    <label for="day-select">Uit dienst</label>
-                                    <select id="day-select" name="day" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="month-select" name="month" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="year-select" name="year" required>
-                                        <option value="" selected disabled>----</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                </div> 
-                                <label for="workdesc">Beschrijving</label>
-                                <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
-                            </div>
+                    <div class="panel">
+                        <form class="workinfo" action="" method="post"> 
+                            <!-- Functie --> 
+                            <strong>Cabin Attendant</strong>
+                            <!-- Bedrijf -->
+                            <strong>KLM</strong>
+                            <!-- In dienst -->
+                            <p>06/12/2016</p>
+                            <!-- Uit dienst -->
+                            <p>21/06/2024</p> 
+                            <!-- Beschrijving -->
+                            <p style="margin-top:-5px;max-width:40.7em;">
+                                Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                            </p>
+
                             <div class="button-wrapper">
-                                <button type="button">Wijzigen</button>
-                                <button type="button">Verwijderen</button>
+                                <input type="hidden" name="workid" value="">
+                                <button type="button" data-section="edit-work">Wijzigen</button>
+                                <button type="button" data-section="trash-work">Verwijderen</button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
                     </div>
+
                     <!-- Opleiding / Cursussen -->
                     <button class="accordion">Opleiding / Cursussen</button>
-                    <div class="panel form-window">
-                        <form>
-                            <div class="tab">
-                                <div>
-                                    <label for="course">Studie</label>
-                                    <input type="text" id="course" placeholder="Mijn studie" disabled>
-                                </div>
-                                <div>
-                                    <label for="college">Instituut</label>
-                                    <input type="text" id="college" placeholder="Mijn Instituut" disabled>
-                                </div>
-                                <div class="date-options">
-                                    <label for="day-select">Van</label>
-                                    <select id="day-select" name="day" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="month-select" name="month" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="year-select" name="year" required>
-                                        <option value="" selected disabled>----</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                </div> 
-                                <div class="date-options">
-                                    <label for="day-select">Tot</label>
-                                    <select id="day-select" name="day" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="month-select" name="month" required>
-                                        <option value="" selected disabled>--</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                    <select id="year-select" name="year" required>
-                                        <option value="" selected disabled>----</option>
-                                        <!-- Populated with JS -->
-                                    </select>
-                                </div>
-                                <label for="edudesc">Beschrijving</label>
-                                <textarea id="edudesc" rows="4" placeholder="Write your course description here..."></textarea> 
-                            </div>
+                    <div class="panel">
+                        <form class="workinfo" action="" method="post"> 
+                            <!-- Functie --> 
+                            <strong>Mediavormgever</strong>
+                            <!-- Bedrijf -->
+                            <strong>Grafisch Lyceum</strong>
+                            <!-- In dienst -->
+                            <p>06/12/2016</p>
+                            <!-- Uit dienst -->
+                            <p>21/06/2024</p> 
+                            <!-- Beschrijving -->
+                            <p style="margin-top:-5px;max-width:40.7em;">
+                                Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                            </p>
+
                             <div class="button-wrapper">
-                                <button type="button">Wijzigen</button>
-                                <button type="button">Verwijderen</button>
+                                <input type="hidden" name="eduid" value="">
+                                <button type="button" data-section="edit-work">Wijzigen</button>
+                                <button type="button" data-section="trash-work">Verwijderen</button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
                     </div>
+
                     <!-- Vaardigheden -->
                     <button class="accordion">Vaardigheden</button>
-                    <div class="panel form-window">
-                        <form>
+                    <div class="panel">
+                        <form action="src/req_handler.src.php" method="post">
                             <div class="tab">        
                                 <label for="technical">Technische</label>
                                 <input type="text" name="technical" placeholder="Office 365">
@@ -213,46 +175,40 @@
                                 <input type="text" name="interest" placeholder="Theatre">
                             </div>
                             <div class="button-wrapper">
-                                <button type="button">Wijzigen</button>
+                                <input type="hidden" name="techid" value="">
+                                <input type="hidden" name="langid" value="">
+                                <input type="hidden" name="intid" value="">
+                                <button type="button" name="editSkill">Wijzigen</button>
                                 <button type="button">Verwijderen</button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
                     </div>
+
                     <!-- Overige -->
-                    <button class="accordion">Overige</button>
+                    <button class="accordion">Motivatiebrief</button>
                     <div class="panel">
-                        <h2>Foto</h2>
-                        <form action="">
-                            <label for="file-upload"></label>
-                            <input type="file" class="avatar" name="file-upload">
-                            <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
+                        <p>Motivatie</p>
+                        <form action="src/req_handler.src.php" method="post">
+                            <textarea name="letter" rows="4" placeholder="Schrijf hier jouw motivatie..."></textarea>
                             <div class="button-wrapper">
-                                <button>Wijzigen</button>
-                                <button>Verwijderen</button>
-                            </div>
-                        </form>
-                        
-                        <div class="account-section-divider"></div>
-                        <p>Motivatiebrief</p>
-                        <form action="">
-                            <textarea name="letter" rows="4" placeholder="Write your summary"></textarea>
-                            <div class="button-wrapper">
-                                <button type="button">Wijzigen</button>
-                                <button type="button">Verwijderen</button>
+                                <input type="hidden" name="motid" value="">
+                                <button name="editMot">Wijzigen</button>
+                                <button name="delMot">Verwijderen</button>
                             </div>
                         </form>
                     </div>
                 </div>
+                <div class="ads"></div>
             </div>
         </section>
         
         <section id="user" class="hidden">
-            <div class="profile">
+            <div>
                 <div class="form-window">
                     <h2>Account</h2>
                     <!-- <button class="avatar">Profiel Foto</button> -->
-                    <form>
+                    <form action="src/req_handler.src.php" method="post">
                         <h3>Mijn gegevens</h3>
                         <div class="tab">
                             <div>
@@ -272,19 +228,19 @@
                                 <input type="text" name="city" placeholder="Woonplaats" disabled>          
                             </div> 
                             <div>
-                                <label for="nationality">Nationaliteit</label>
-                                <input type="text" name="nationality" placeholder="Nationaliteit" disabled> 
+                                <label for="country">Nationaliteit</label>
+                                <input type="text" name="country" placeholder="Nationaliteit" disabled> 
                             </div>
                             <div>
                                 <label for="phone">Telefoon</label>
                                 <input type="text" name="phone" placeholder="Mobile Number" disabled> 
                             </div>
-                            <input type="hidden" name="editInfo"> 
-                            <button type="submit" name="edit">Wijzigen</button>
+                            <input type="hidden" name="uid"> 
+                            <button type="submit" name="editUser">Wijzigen</button>
                         </div>
                         <div class="account-section-divider"></div>
                     </form>
-                    <form>
+                    <form action="src/req_handler.src.php" method="post">
                         <h3>Mijn Account</h3>
                         <div class="tab">
                             <div>
@@ -301,15 +257,15 @@
                             </div>
                             <div class="date-options">
                                 <label for="day-select">Geboortedatum</label>
-                                <select id="day-select" name="day" required>
+                                <select class="day-select" name="day" required>
                                     <option value="" selected disabled>--</option>
                                     <!-- Populated with JS -->
                                 </select>
-                                <select id="month-select" name="month" required>
+                                <select class="month-select" name="month" required>
                                     <option value="" selected disabled>--</option>
                                     <!-- Populated with JS -->
                                 </select>
-                                <select id="year-select" name="year" required>
+                                <select class="year-select" name="year" required>
                                     <option value="" selected disabled>----</option>
                                     <!-- Populated with JS -->
                                 </select>
@@ -317,8 +273,8 @@
                         </div>
 
                         <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                        <input type="hidden" name="account">
-                        <button type="submit" name="edit">Wijzigen</button>
+                        <input type="hidden" name="uid">
+                        <button type="submit" name="editUser">Wijzigen</button>
                         <div class="account-section-divider"></div>
                     </form>
                     <p>Deze actie kan niet ongedaan worden gemaakt.</p>
@@ -329,10 +285,9 @@
 
         <section id="guide" class="hidden">
             <h2>Onze gids</h2>
-
         </section>
 
-        <section id="logout" class="hidden">
+        <section id="logout" class="<?= logoutRequest(); ?>">
             <h2>Weet je zeker dat je wilt uitloggen?</h2>
             <form action="" method="post">
                 <button type="submit" name="logout">Uitloggen</button>
@@ -341,66 +296,145 @@
 
         <section id="create-res" class="hidden">
             <div class="form-window">
-                <button class="back" data-section="home">Terug</button>
-                <h2>Nieuw CV Maken</h2>
-                <form>
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Nieuw CV Maken</h2>
                     <label for="cvname">Titel</label>
                     <input type="text" id="cvname" name="cvname" placeholder="Geef het een naam." required>
-                    <button type="submit" name="creResume">Maak mijn cv</button>
-
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <input type="hidden" name="creResume">
+                    <button type="submit" name="creResume">Opslaan</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
         </section>
 
-        <section id="style-res" class="hidden">
+        <section id="select-res" class="hidden">
             <div class="form-window">
-                <button class="back" data-section="home">Terug</button>
-                <h2>Downloaden</h2>
-                <form>
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Downloaden</h2>
                     <p>Kies een template</p>
-                    <button type="submit">Standaard</button>
-                    <button type="submit">Professioneel</button>
-                    <button type="submit">Carrièretijger</button>
-
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                    <button type="submit" name="default">Standaard</button>
+                    <button type="submit" name="business">Professioneel</button>
+                    <button type="submit" name="careertiger">Carrièretijger</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
         </section>
 
         <section id="delete-res" class="hidden">
-
             <div class="form-window">
-                <button class="back" data-section="home">Terug</button>
-                <h2>Verwijderen</h2>
-                <form>
-                    <label for="selectCv">Welk cv wil je verwijderen?</label>
-                    <select name="cvname">
-                        <option value="">(None selected)</option><!-- the value="" is needed for javascript -->
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Verwijderen</h2>
+                    <label for="cvname">Welk cv wil je verwijderen?</label>
+                    <select id="cvname" name="cvname">
+                        <option selected disabled hidden>(None selected)</option>
                         <?php if (!empty($resumeData)) { ?>
                         <?php foreach ($resumeData as $resume): ?>
-                        <option><?php echo htmlspecialchars($resume['resumetitle']); ?></option>
+                            <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
                         <?php endforeach; ?> <?php } ?>
                     </select>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
 
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <input type="hidden" name="delResume">
+                    <input type="hidden" name="resid">
                     <button class="Del" type="submit" name="delResume">Verwijderen</button>
                 </form>
             </div>
+        </section>
 
+        <section id="edit-work" class="hidden">
+            <div class="form-window">
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Werkervaring Wijzigen</h2>
+                    <div class="workinfo">
+                        <div>
+                            <label for="worktitle">Functie</label>
+                            <input type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" required>
+                        </div>
+                        <div>
+                            <label for="company">Bedrijf</label>
+                            <input type="text" id="company" name="company" placeholder="Mijn werkgever" required>
+                        </div>
+                        <div class="date-options">
+                            <label for="day-select">In dienst</label>
+                            <select class="day-select" name="join_day" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="month-select" name="join_month" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="year-select" name="join_year" required>
+                                <option value="" selected disabled>----</option>
+                                <!-- Populated with JS -->
+                            </select>
+                        </div> 
+                        <div class="date-options">
+                            <label for="day-select">Uit dienst</label>
+                            <select class="day-select" name="leave_day" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="month-select" name="leave_month" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="year-select" name="leave_year" required>
+                                <option value="" selected disabled>----</option>
+                                <!-- Populated with JS -->
+                            </select>
+                        </div> 
+                        <label for="workdesc">Beschrijving</label>
+                        <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
+                    </div>
+                    <input type="hidden" name="workid" value="">
+                    <button type="submit" name="saveExperience">Opslaan</button>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </form>
+            </div>
+        </section>
+
+
+        <section id="trash-work" class="hidden">
+            <div class="form-window">
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Weet je het zeker?</h2>
+                    <div class="workinfo">
+                        <div>
+                            <label for="worktitle">Functie</label>
+                            <input type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" disabled>
+                        </div>
+                        <div>
+                            <label for="company">Bedrijf</label>
+                            <input type="text" id="company" name="company" placeholder="Mijn werkgever" disabled>
+                        </div>
+                                    <div>
+                            <label for="joined">In dienst</label>
+                            <input type="text" id="joined" value="06/12/2016" disabled>
+                        </div>
+                        <div>
+                            <label for="left">Uit dienst</label>
+                            <input type="text" id="left" value="06/12/2016" disabled>
+                        </div> 
+                        <label for="workdesc">Beschrijving</label>
+                        <textarea id="workdesc" rows="4" placeholder="Write your job description here..." disabled></textarea>
+                    </div>
+                    <input type="hidden" name="workid" value="">
+                    <button type="submit" name="trashExperience">Verwijderen</button>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </form>
+            </div>
         </section>
         
         <section id="close" class="hidden">
-
             <div class="form-window">
-                <button class="back" data-section="home">Terug</button>
-                <h2>Wat jammer dat je vertrekt.</h2>
-                <form>
+                <form action="src/req_handler.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Wat jammer dat je vertrekt.</h2>
                     <p>Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>
                     <label for="pwd">Wachtwoord</label>
                     <input type="password" id="pwd" name="pwd" placeholder="Vul nog 1 keer je wachtwoord in" required>
@@ -408,8 +442,7 @@
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                     <input type="hidden" name="username" value=""> 
                     <input type="hidden" name="uid" value=""> 
-                    <input type="hidden" name="deleteMe">
-                    <button type="submit" name="deleteMe">Verwijder mij</button>
+                    <button type="submit" name="delUser">Verwijder mij</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>

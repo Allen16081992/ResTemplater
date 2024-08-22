@@ -37,6 +37,7 @@
     <div class="skew"></div>
 
     <main>
+        <?php include_once "./assets/auxillaries.php"; ?>
         <section id="login" class="current">
             <div class="grid-container">
                 <div class="form-window">

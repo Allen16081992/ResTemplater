@@ -1,6 +1,14 @@
 *, *::before, *::after {
     box-sizing: border-box;
 }
+:root {
+    --default:#007bff;
+    --edit:rgb(25,162,181);
+    --edit-hover:rgb(62,149,163);
+    --trash:rgb(147, 38, 38);
+    --trash-hover:rgb(169, 47, 59);
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -77,6 +85,13 @@ section {
     margin:10px 0 10px 0;
     gap: 10px; 
 }
+.workinfo {
+    display: flex;
+    justify-content: space-around; 
+    align-items: center;
+    flex-wrap: wrap;
+    text-align:left; 
+}
 .input-group {
     flex: 1 0 60px; 
     max-width: 100%; 
@@ -119,36 +134,35 @@ input.invalid {
     max-width:30em; 
 
     /* Account Page */
-    display: flex; /* Make form-window a flex container */
-    flex-direction: column; /* Arrange items vertically */
-    align-items: center; /* Center children vertically */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 .form-window form {
     width:100%;
 }
-.form-window h2 {
+form h2 {
     text-align: center;
 }
-.form-window label {
+form label {
     display: block;
     margin-bottom: 4px; 
     text-align: left;  
 }
-.form-window input[type="text"], input[type="email"], input[type="password"], button[type="submit"] {
+form input[type="text"], input[type="email"], input[type="password"], button[type="submit"] {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;
     width: 100%;
 }
-.form-window input[type="checkbox"] {
+form input[type="checkbox"] {
     margin: 0 0 20px; 
     cursor: pointer;
 }
-.form-window .back {
+.return {
     display:flex; 
-    position:absolute; 
-    margin: 1.4rem 25rem 0 0; 
-    padding: 0.3em;
+    margin-bottom:-20px;
+    padding:0.4em;
     font-size: 0.8em;
 }
 textarea {
@@ -161,13 +175,47 @@ textarea {
     margin: 0 0 10px;
     gap: 10px; 
 }
-
 .button-wrapper button {
     width: 100%; /* Make the button fill the width of its container */
     box-sizing: border-box; /* Include padding and border in the width calculation */
     padding: 0.6em; /* Ensure consistent padding with inputs */
     font-size:1em;
 }
+button[name="business"] {
+    border-bottom: 1px solid rgb(176, 174, 174);
+    background:var(--default);
+    border-radius:4px;
+    border:none;
+    cursor:pointer;
+}
+button[name="careertiger"] {
+    border-bottom: 1px solid rgb(176, 174, 174);
+    background:rgb(25,162,181);
+    border-radius:4px;
+    border:none;
+    cursor:pointer;
+}
+button[data-section="create-res"],button[data-section="delete-res"] {
+    border-bottom: 1px solid rgb(176, 174, 174);
+    border-radius:4px;
+    border:none;
+    cursor:pointer;
+    background:#333;
+} 
+button[data-section="create-res"] {
+    color:rgb(255, 232, 103);
+}
+button[data-section="create-res"]:hover {
+    background:#454545;
+}
+button[data-section="delete-res"] {
+    background:var(--trash);
+    color:#f3f3f3;
+}
+button[data-section="delete-res"]:hover {
+    background:var(--trash-hover);
+}
+
 .art-window {
     margin: 0;
     width: 100%;
@@ -193,12 +241,8 @@ select {
     font-size: 1em;          
     cursor: pointer;   
 }
-select[name="day"], select[name="month"] {
-    width:4rem;
-}
-select[name="year"] {
-    width:5rem;
-}
+.day-select, .month-select {width:4rem;}
+.year-select {width:4rem;}
 select[name="cvname"] {
     width:100%;
 }
@@ -217,8 +261,8 @@ select[name="cvname"] {
 
 /* User Interface */
 .accordion {
-    background-color: #eee;
-    color: #444;
+    background-color: #333;
+    color:rgb(255, 232, 103);
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -229,7 +273,7 @@ select[name="cvname"] {
     transition: background-color 0.6s ease;
 }
 .accordion:hover, .active {
-    background-color: #ccc;
+    background-color: #4e4e4e;
 }
 .panel {
     padding: 0 18px;
@@ -266,14 +310,25 @@ input[type="file"]::file-selector-button {
     cursor:pointer;
     /* animation: pulse 1s alternate infinite; */
 }
-.profile {
-    /* display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: center;
-    text-align: left; */
-    background:#f3f3f3;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+.sheet { 
+    max-width:50em; 
+}
+.sheet .box {border-radius: 8px;}
+.grid-ad-container > .ads {
+    min-height:90px;
+}
+.ads { border: 2px solid rgba(0,0,0,0.3); }
+/* Desktop */
+@media (min-width: 800px) {
+    .grid-ad-container {
+        display: grid;
+        grid-template-columns: auto 1fr auto; /* repeat(1fr auto 1fr); sets ads above and below content */
+        gap: 10px;   
+    }
+    .grid-ad-container > .ads {
+        width:160px;
+    }
 }
 
 /* Mobile Devices */

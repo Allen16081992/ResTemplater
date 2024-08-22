@@ -1,3 +1,7 @@
+<?php 
+    include_once "./src/session_manager.src.php"; 
+    logoutRequest();
+?>
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -43,7 +47,7 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="current">
+        <section id="home" class="<?= serverHome(); ?>">
             <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1>
             <div class="resume-container">
                 <div class="shape paper">
@@ -57,10 +61,9 @@
             <div class="grid-container">
                 <div class="box"></div>
                 <div class="box">
-                    <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te laten zien als werknemer. 
+                    <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te belichten. 
                         Daarom bieden wij een eenvoudige en efficiënte manier om je cv te maken, aan te passen en te delen.
                     </p>
-                    <!-- <p>Met onze intuïtieve interface kan iedereen, ongeacht technische vaardigheden, een indrukwekkend cv maken.</p> -->
                 </div>
                 <div class="box">
                     <h2>Hoe werkt het?</h2>
@@ -74,9 +77,7 @@
 
         <section id="policy" class="hidden">
             <div class="grid-ad-container">
-                <div class="ads">
-
-                </div>
+                <div class="ads"></div>
                 <div class="sheet">
                     <h2>Privacybeleid en veiligheid</h2>
                     <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
@@ -147,9 +148,7 @@
                         <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
                     </div>
                 </div>
-                <div class="ads">
-
-                </div>
+                <div class="ads"></div>
             </div>
         </section>
 
@@ -164,7 +163,7 @@
             </div>
         </section>
 
-        <section id="login" class="hidden">
+        <section id="login" class="<?= serverLogin(); ?>">
             <div class="grid-container">
                 <div class="form-window">
                     <h2>Aanmelden</h2>
@@ -183,7 +182,7 @@
             </div>
         </section>
 
-        <section id="sign_up" class="hidden">
+        <section id="sign_up" class="<?= serverSignup(); ?>">
             <div class="form-window">
                 <h2>Registreren</h2>
                 <form id="signup_form" action="src/req_handler.src.php" method="post">
@@ -215,15 +214,15 @@
                     <div class="tab">
                         <div class="date-options">
                             <label for="day-select">Geboortedatum</label>
-                            <select id="day-select" name="day" required>
+                            <select class="day-select" name="day" required>
                                 <option value="" selected disabled>--</option>
                                 <!-- Populated with JS -->
                             </select>
-                            <select id="month-select" name="month" required>
+                            <select class="month-select" name="month" required>
                                 <option value="" selected disabled>--</option>
                                 <!-- Populated with JS -->
                             </select>
-                            <select id="year-select" name="year" required>
+                            <select class="year-select" name="year" required>
                                 <option value="" selected disabled>----</option>
                                 <!-- Populated with JS -->
                             </select>
@@ -301,3 +300,4 @@
     </footer>
 </body>
 </html>
+<?php session_unset(); session_destroy(); ?>

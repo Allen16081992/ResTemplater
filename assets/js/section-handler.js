@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Resume
     const cvTab = document.querySelectorAll('#home .accordion');
+    const selectCv = document.getElementById('selectCv');
 
     // Toggle visibility of sections based on the selected sectionId
     function paintSection(sectionId) {
@@ -93,9 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Date Selector, Iterate through each group
     if (dateOptions) {
         dateOptions.forEach(group => {
-            const daySelect = group.querySelector('#day-select');
-            const monthSelect = group.querySelector('#month-select');
-            const yearSelect = group.querySelector('#year-select');
+            const daySelect = group.querySelector('.day-select');
+            const monthSelect = group.querySelector('.month-select');
+            const yearSelect = group.querySelector('.year-select');
 
             // Check if all select elements exist in the current group
             if (daySelect && monthSelect && yearSelect) {
@@ -148,7 +149,13 @@ document.addEventListener('DOMContentLoaded', function () {
             accordion.addEventListener('click', toggleAccordion);
         });
     }
-    
+
+    // Add click event listener to the resume selector
+    if (selectCv) {
+        selectCv.addEventListener('change', function() {
+            this.form.submit(); // Submit the form that this select belongs to
+        });
+    }
 });
 
 // Remove messages after a certain duration

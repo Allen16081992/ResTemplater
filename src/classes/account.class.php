@@ -1,12 +1,112 @@
 <?php
     // Load Database connection
-    require_once __DIR__ . '../../database/singleton.db.php'; 
-    require_once __DIR__ . '../../session_manager.src.php';
-    require_once __DIR__ . '../../controller/validator.control.php';
+    require_once './src/database/singleton.db.php';
 
     // Code Convention: PascalCase
     class Account {
-        use Rebound;
+        use ErrorHandler;
+        
+        protected function setAccount($formFields) {
+
+            if (isset($_SESSION['session_data']['user_id'])) {
+                // Get the singleton database connection.
+                $db = Database::getInstance();
+        
+                if (!empty($formFields['pwd'])) {
+                    // New password provided, update it. 
+                    $HashThisNOW = password_hash($formFields['pwd'], PASSWORD_BCRYPT); //(PASSWORD_DEFAULT replaced.)
+                    $stmt = $db->connect()->prepare("UPDATE accounts SET username = :username, email = :email, `password` = :passw WHERE userID = :userID;");
+                    $stmt->bindParam(":username", $formFields['username']); 
+                    $stmt->bindParam(":email", $formFields['email']); 
+                    $stmt->bindParam(":passw", $HashThisNOW); 
+                    $stmt->bindParam(":userID", $formFields['uid']); 
+                } else {
+                    // No new password provided, skip the password update.
+                    $stmt = $db->connect()->prepare("UPDATE accounts SET username = :username, email = :email WHERE userID = :userID;");
+                    $stmt->bindParam(":username", $formFields['username']); 
+                    $stmt->bindParam(":email", $formFields['email']); 
+                    $stmt->bindParam(":userID", $formFields['uid']); 
+                }
+
+                // If this fails, kick back to homepage.
+                if (!$stmt->execute()) {
+                    unset($stmt, $formFields);
+                    $this->handleError('Gegevens bijwerken mislukt.', '../client.php');
+                }
+
+                // Clean up variables from memory
+                unset($stmt, $formFields);
+                $_SESSION['account'] = true;
+                $_SESSION['success'] = 'Account Information saved';
+                header('location: ../client.php');
+                exit();
+            }
+        } 
+        
+        protected function setAddress($formFields) {
+
+            if(isset($_SESSION['session_data']['user_id'])) {
+                // Get the singleton database connection.
+                $db = Database::getInstance();
+
+                // Prepare the SQL statement
+                if (!empty($formFields['country'])) {
+                    $stmt = $db->connect()->prepare("UPDATE contact SET postalcode = :postal, city = :city, country = :country WHERE userID = :userID;");  
+                    $stmt->bindParam(":postal", $formFields['postal']); 
+                    $stmt->bindParam(":city", $formFields['city']); 
+                    $stmt->bindParam(":country", $formFields['country']);
+                    $stmt->bindParam(":userID", $formFields['uid']); 
+                } else {
+                    $stmt = $db->connect()->prepare("UPDATE contact SET postalcode = :postal, city = :city WHERE userID = :userID;");  
+                    $stmt->bindParam(":postal", $formFields['postal']); 
+                    $stmt->bindParam(":city", $formFields['city']); 
+                    $stmt->bindParam(":userID", $formFields['uid']); 
+                }
+
+                // If this fails, kick back to homepage.
+                if (!$stmt->execute()) {
+                    unset($stmt, $formFields);
+                    $this->handleError('Gegevens bijwerken mislukt.', '../client.php');
+                }
+
+                // Clean up variables from memory
+                unset($stmt, $formFields);
+                $_SESSION['account'] = true;
+                $_SESSION['success'] = 'Address Information saved';
+                header('location: ../client.php');
+                exit();
+            }
+        } 
+
+        protected function setPersonal($formFields) {
+            
+            if(isset($_SESSION['session_data']['user_id'])) {
+
+                // Get the singleton database connection.
+                $db = Database::getInstance();
+
+                // Prepare the SQL statement
+                $stmt = $db->connect()->prepare("UPDATE contact SET firstname = :firstname, lastname = :lastname, phone = :phone, birth = :birth WHERE userID = :userID;");  
+                $stmt->bindParam(":firstname", $formFields['firstname']); 
+                $stmt->bindParam(":lastname", $formFields['lastname']); 
+                $stmt->bindParam(":phone", $formFields['phone']);
+                $stmt->bindParam(":birth", $formFields['birth']);
+                $stmt->bindParam(":userID", $formFields['uid']);
+
+                // If this fails, kick back to homepage.
+                if (!$stmt->execute()) {
+                    unset($stmt, $formFields);
+                    $this->handleError('Gegevens bijwerken mislukt.', '../client.php');
+                }
+
+                // Clean up variables from memory
+                unset($stmt, $formFields);
+                $_SESSION['account'] = true;
+                $_SESSION['success'] = 'Address Information saved';
+                header('location: ../client.php');
+                exit();
+            }
+        } 
 
         protected function signupUser($formFields) {   
             // Get the singleton database connection.
@@ -97,33 +197,6 @@
             exit();
         }
 
-        // Fetch Info
-        protected function readUser() {
-            // Get the singleton database connection.
-            $db = Database::getInstance();
-
-            // Prepare SQL statement.
-            $stmt = $db->connect()->prepare('SELECT username, email FROM accounts WHERE userID = :userID');
-            $stmt->bindParam(":userID", $_SESSION['user_id']);
-
-            if (!$stmt->execute()) {
-                unset($stmt);
-                $this->handleError('Gegevens ophalen mislukt.', '../client.php');
-            }
-
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $userData = array_map('htmlspecialchars', $user);
-            return ['account' => $userData];
-        } 
-        
-        protected function Update_User($formFields) {
-
-        } 
-        
-        protected function Delete_User($formFields) {
-
-        } 
-
         protected function loginUser($formFields) {
             // Get the singleton database connection.
             $db = Database::getInstance();
@@ -137,13 +210,15 @@
             // If this fails, kick back to homepage.
             if (!$stmt->execute()) {
                 unset($stmt, $formFields);
-                $this->handleError('Database aanvraag mislukt.', '../login.php');
+                $_SESSION['login'] = true;
+                $this->handleError('Database aanvraag mislukt.', '../index.php');
             }
 
             // If we got nothing from the database, do this.
             if($stmt->fetchColumn() == 0) {
                 unset($stmt, $formFields);
-                $this->handleError('Gebruiker niet gevonden.', '../login.php');
+                $_SESSION['login'] = true;
+                $this->handleError('Gebruiker niet gevonden.', '../index.php');
             }
 
             // Extract the hashed password from the fetched array.
@@ -161,11 +236,11 @@
                 $this->handleError('Wachtwoord is fout.', '../login.php');
             }
 
-            $_SESSION['user_id'] = $userData['userID'];
-            $_SESSION['success'] = "Hallo, ".htmlspecialchars($userData['firstname']);
-
-            // Verify if the user made a username
-            $_SESSION['user_name'] = isset($userData['username']) ? htmlspecialchars($userData['username']) : htmlspecialchars($userData['firstname']);
+            $_SESSION['success'] = 'Hallo, '.htmlspecialchars($userData['firstname']);
+            $_SESSION['session_data'] = [
+                'user_id' => $userData['userID'],
+                'user_name' => isset($userData['username']) ? htmlspecialchars($userData['username']) : htmlspecialchars($userData['firstname'])
+            ];
 
             // Clean up variables from memory
             unset($stmt, $formFields, $userData);

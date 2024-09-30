@@ -1,11 +1,12 @@
 <?php 
-  // Start a session for handling data and error messages.
-  require_once 'src/session_manager.src.php'; 
+  // Load PHP files
+  require_once './src/session_manager.src.php'; 
+  require_once './src/data_loader.src.php';
+  //require_once './src/data_filter.src.php';
+
+  // Start session prerequisites
   //Unauthorized_Access(); // Verify access
   //sessionRegenTimer(); // Regenerate the session periodically
-  // Load PHP files to retrieve data
-  //require_once "config/ViewResumes.config.php";
-  //require_once "config/FetchResumeTables.config.php";
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -53,21 +54,24 @@
             <div class="grid-ad-container">
                 <div class="ads"></div>
                 <div class="sheet">
-                    <h2>CV Templater</h2>
+                    <h2>Mijn Curriculum Vitae</h2>
+                    <div class="button-wrapper">
+                        <button type="button" data-section="create-res">Nieuwe CV</button> 
+                        <button type="button" data-section="delete-res">Verwijder CV</button>
+                    </div>
                     <form action="src/req_handler.src.php" method="post">
-                        <h3>Mijn Curriculum Vitae</h3>
-                        <div class="button-wrapper">
-                            <button type="button" data-section="create-res">Nieuwe CV</button> 
-                            <button type="button" data-section="delete-res">Verwijder CV</button>
-                        </div>
-
                         <label for="selectCv">CV Ophalen:</label>
                         <select id="selectCv" name="cvname">
                             <option selected disabled hidden>---------</option>
-                            <?php if (!empty($resumeData)) { ?>
-                            <?php foreach ($resumeData as $resume): ?>
-                                <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
-                            <?php endforeach; ?> <?php } ?>
+                            <?php // Check if there is resume data to display
+                            if (!empty($resumeData['resume'])): 
+                                // Loop through each resume and create an option element
+                                foreach ($resumeData['resume'] as $resume): ?>
+                                    <option value="<?= htmlspecialchars($resume['resumeID']) ?>">
+                                        <?= htmlspecialchars($resume['resumetitle']) ?>
+                                    </option>
+                                <?php endforeach; 
+                            endif; ?>
                         </select>
                         
                         <div class="tab">
@@ -84,7 +88,7 @@
                             <div class="tab">
                                 <div>
                                     <label for="cvid">CV ID</label>
-                                    <input type="text" id="cvid" placeholder="*ID is Protected." disabled>
+                                    <input type="text" id="resid" placeholder="*ID is Protected." disabled>
                                 </div>
                                 <div>
                                     <label for="title">Titel</label>
@@ -92,7 +96,7 @@
                                 </div>
                                 <input type="hidden" name="resumeID" value=""> 
                                 <input type="hidden" name="userID" value=""> 
-                                <button type="submit" name="editCv">Wijzigen</button>
+                                <button type="submit" name="saveCv">Wijzigen</button>
                             </div>
                         </form>
                         <div class="account-section-divider"></div>
@@ -101,9 +105,11 @@
                             <label for="file-upload"></label>
                             <input type="file" class="avatar" name="file-upload">
                             <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
+                            <input type="hidden" name="resumeID" value=""> 
+                            <input type="hidden" name="userID" value=""> 
                             <div class="button-wrapper">
-                                <button name="upAvat">Wijzigen</button>
-                                <button name="delAvat">Verwijderen</button>
+                                <button name="saveAv">Wijzigen</button>
+                                <button name="delAv">Verwijderen</button>
                             </div>
                         </form>
                     </div>
@@ -203,7 +209,7 @@
             </div>
         </section>
         
-        <section id="user" class="hidden">
+        <section id="user" class="<?= serverAccount() ?>">
             <div>
                 <div class="form-window">
                     <h2>Account</h2>
@@ -235,8 +241,23 @@
                                 <label for="phone">Telefoon</label>
                                 <input type="text" name="phone" placeholder="Mobile Number" disabled> 
                             </div>
+                            <div class="date-options">
+                                <label for="day-select">Geboortedatum</label>
+                                <select class="day-select" name="day" required>
+                                    <option value="" selected disabled>--</option>
+                                    <!-- Populated with JS -->
+                                </select>
+                                <select class="month-select" name="month" required>
+                                    <option value="" selected disabled>--</option>
+                                    <!-- Populated with JS -->
+                                </select>
+                                <select class="year-select" name="year" required>
+                                    <option value="" selected disabled>----</option>
+                                    <!-- Populated with JS -->
+                                </select>
+                            </div>
                             <input type="hidden" name="uid"> 
-                            <button type="submit" name="editUser">Wijzigen</button>
+                            <button type="submit" name="saveInfo">Wijzigen</button>
                         </div>
                         <div class="account-section-divider"></div>
                     </form>
@@ -255,26 +276,15 @@
                                 <label for="pwd">Wachtwoord</label>
                                 <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" disabled>
                             </div>
-                            <div class="date-options">
-                                <label for="day-select">Geboortedatum</label>
-                                <select class="day-select" name="day" required>
-                                    <option value="" selected disabled>--</option>
-                                    <!-- Populated with JS -->
-                                </select>
-                                <select class="month-select" name="month" required>
-                                    <option value="" selected disabled>--</option>
-                                    <!-- Populated with JS -->
-                                </select>
-                                <select class="year-select" name="year" required>
-                                    <option value="" selected disabled>----</option>
-                                    <!-- Populated with JS -->
-                                </select>
-                            </div> 
+                            <div>
+                                <label for="pwdR">Herhaal Wachtwoord</label>
+                                <input type="password" id="pwdR" name="pwdR" placeholder="Wachtwoord" disabled>
+                            </div>
                         </div>
 
                         <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                         <input type="hidden" name="uid">
-                        <button type="submit" name="editUser">Wijzigen</button>
+                        <button type="submit" name="saveAccount">Wijzigen</button>
                         <div class="account-section-divider"></div>
                     </form>
                     <p>Deze actie kan niet ongedaan worden gemaakt.</p>

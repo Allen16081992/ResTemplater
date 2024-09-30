@@ -1,4 +1,5 @@
 <?php 
+    // Load PHP files
     include_once "./src/session_manager.src.php"; 
     logoutRequest();
 ?>
@@ -167,14 +168,14 @@
             <div class="grid-container">
                 <div class="form-window">
                     <h2>Aanmelden</h2>
-                    <form id="login_form" action="src/req_handler.src.php" method="post">
+                    <form id="login_form" action="src/data_filter.src.php" method="post">
                         <label for="email">E-mailadres</label>
                         <input type="email" id="email" name="email" placeholder="Email" required>
                         <label for="pwd">Wachtwoord</label>
                         <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
                         <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                         <!-- <input type="hidden" name="login"> -->
-                        <button type="submit" id="loginBtn" name="login">Log in</button>
+                        <button type="submit" id="loginBtn" name="loginBtn">Log in</button>
                         <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
                     </form>
                 </div>
@@ -185,7 +186,7 @@
         <section id="sign_up" class="<?= serverSignup(); ?>">
             <div class="form-window">
                 <h2>Registreren</h2>
-                <form id="signup_form" action="src/req_handler.src.php" method="post">
+                <form id="signup_form" action="src/data_filter.src.php" method="post">
                     <div class="wizard-info">
                         <span class="step">Algemeen</span>
                         <span class="step">Contact</span>
@@ -254,7 +255,7 @@
                     
                     <div class="rotator">
                         <button type="submit" id="prevBtn">Terug</button>
-                        <button type="submit" id="nextBtn" name="sign_up">Verder</button>                        
+                        <button type="submit" id="nextBtn" name="signupBtn">Verder</button>                        
                     </div>
                 </form>
                 <!-- <form id="signup_form">

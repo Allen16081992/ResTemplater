@@ -1,5 +1,5 @@
 <?php
-    require_once __DIR__ . "/../../config/define.db.php";
+    require_once "./config/define.db.php";
 
     class Database {
         private static $instance;

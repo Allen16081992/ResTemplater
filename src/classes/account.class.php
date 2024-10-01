@@ -247,4 +247,9 @@
             header('location: ../client.php');
             exit();
         }
+
+        protected function unsetAccount($formFields) {
+            // Get the singleton database connection.
+            $db = Database::getInstance();
+        }
     }

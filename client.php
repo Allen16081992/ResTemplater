@@ -2,7 +2,6 @@
   // Load PHP files
   require_once './src/session_manager.src.php'; 
   require_once './src/data_loader.src.php';
-  //require_once './src/data_filter.src.php';
 
   // Start session prerequisites
   //Unauthorized_Access(); // Verify access
@@ -59,7 +58,7 @@
                         <button type="button" data-section="create-res">Nieuwe CV</button> 
                         <button type="button" data-section="delete-res">Verwijder CV</button>
                     </div>
-                    <form action="src/req_handler.src.php" method="post">
+                    <form action="src/resume.src.php" method="post">
                         <label for="selectCv">CV Ophalen:</label>
                         <select id="selectCv" name="cvname">
                             <option selected disabled hidden>---------</option>
@@ -84,7 +83,7 @@
                     <!-- Curriculum Vitae -->
                     <button class="accordion">Curriculum Vitae / Foto</button>
                     <div class="panel">    
-                        <form action="src/req_handler.src.php" method="post">
+                        <form action="src/resume.src.php" method="post">
                             <div class="tab">
                                 <div>
                                     <label for="cvid">CV ID</label>
@@ -96,20 +95,20 @@
                                 </div>
                                 <input type="hidden" name="resumeID" value=""> 
                                 <input type="hidden" name="userID" value=""> 
-                                <button type="submit" name="saveCv">Wijzigen</button>
+                                <button type="submit" name="saveResume">Wijzigen</button>
                             </div>
                         </form>
                         <div class="account-section-divider"></div>
                         <h2>Foto</h2>
-                        <form action="src/req_handler.src.php" method="post">
+                        <form action="src/resume.src.php" method="post">
                             <label for="file-upload"></label>
                             <input type="file" class="avatar" name="file-upload">
                             <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
                             <input type="hidden" name="resumeID" value=""> 
                             <input type="hidden" name="userID" value=""> 
                             <div class="button-wrapper">
-                                <button name="saveAv">Wijzigen</button>
-                                <button name="delAv">Verwijderen</button>
+                                <button name="saveImg">Wijzigen</button>
+                                <button name="delImg">Verwijderen</button>
                             </div>
                         </form>
                     </div>
@@ -117,7 +116,7 @@
                     <!-- Werkervaring / Stages -->
                     <button class="accordion">Werkervaring / Stages</button>
                     <div class="panel">
-                        <form class="workinfo" action="" method="post"> 
+                        <form class="workinfo"> 
                             <!-- Functie --> 
                             <strong>Cabin Attendant</strong>
                             <!-- Bedrijf -->
@@ -143,7 +142,7 @@
                     <!-- Opleiding / Cursussen -->
                     <button class="accordion">Opleiding / Cursussen</button>
                     <div class="panel">
-                        <form class="workinfo" action="" method="post"> 
+                        <form class="workinfo"> 
                             <!-- Functie --> 
                             <strong>Mediavormgever</strong>
                             <!-- Bedrijf -->
@@ -159,8 +158,8 @@
 
                             <div class="button-wrapper">
                                 <input type="hidden" name="eduid" value="">
-                                <button type="button" data-section="edit-work">Wijzigen</button>
-                                <button type="button" data-section="trash-work">Verwijderen</button>
+                                <button type="button" data-section="edit-study">Wijzigen</button>
+                                <button type="button" data-section="trash-study">Verwijderen</button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
@@ -169,7 +168,7 @@
                     <!-- Vaardigheden -->
                     <button class="accordion">Vaardigheden</button>
                     <div class="panel">
-                        <form action="src/req_handler.src.php" method="post">
+                        <form action="src/resume.src.php" method="post">
                             <div class="tab">        
                                 <label for="technical">Technische</label>
                                 <input type="text" name="technical" placeholder="Office 365">
@@ -195,7 +194,7 @@
                     <button class="accordion">Motivatiebrief</button>
                     <div class="panel">
                         <p>Motivatie</p>
-                        <form action="src/req_handler.src.php" method="post">
+                        <form action="src/resume.src.php" method="post">
                             <textarea name="letter" rows="4" placeholder="Schrijf hier jouw motivatie..."></textarea>
                             <div class="button-wrapper">
                                 <input type="hidden" name="motid" value="">
@@ -214,7 +213,7 @@
                 <div class="form-window">
                     <h2>Account</h2>
                     <!-- <button class="avatar">Profiel Foto</button> -->
-                    <form action="src/req_handler.src.php" method="post">
+                    <form action="src/account.src.php" method="post">
                         <h3>Mijn gegevens</h3>
                         <div class="tab">
                             <div>
@@ -261,7 +260,7 @@
                         </div>
                         <div class="account-section-divider"></div>
                     </form>
-                    <form action="src/req_handler.src.php" method="post">
+                    <form action="src/account.src.php" method="post">
                         <h3>Mijn Account</h3>
                         <div class="tab">
                             <div>
@@ -306,7 +305,7 @@
 
         <section id="create-res" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Nieuw CV Maken</h2>
                     <label for="cvname">Titel</label>
@@ -319,7 +318,7 @@
 
         <section id="select-res" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Downloaden</h2>
                     <p>Kies een template</p>
@@ -333,7 +332,7 @@
 
         <section id="delete-res" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Verwijderen</h2>
                     <label for="cvname">Welk cv wil je verwijderen?</label>
@@ -355,7 +354,7 @@
 
         <section id="edit-work" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Werkervaring Wijzigen</h2>
                     <div class="workinfo">
@@ -410,7 +409,7 @@
 
         <section id="trash-work" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Weet je het zeker?</h2>
                     <div class="workinfo">
@@ -439,10 +438,96 @@
                 </form>
             </div>
         </section>
+
+        <section id="edit-study" class="hidden">
+            <div class="form-window">
+                <form action="src/resume.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Werkervaring Wijzigen</h2>
+                    <div class="workinfo">
+                        <div>
+                            <label for="edutitle">Functie</label>
+                            <input type="text" id="edutitle" name="edutitle" placeholder="Mijn Opleiding" required>
+                        </div>
+                        <div>
+                            <label for="company">Bedrijf</label>
+                            <input type="text" id="company" name="company" placeholder="Mijn School" required>
+                        </div>
+                        <div class="date-options">
+                            <label for="day-select">Start</label>
+                            <select class="day-select" name="join_day" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="month-select" name="join_month" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="year-select" name="join_year" required>
+                                <option value="" selected disabled>----</option>
+                                <!-- Populated with JS -->
+                            </select>
+                        </div> 
+                        <div class="date-options">
+                            <label for="day-select">Uitschrijving</label>
+                            <select class="day-select" name="leave_day" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="month-select" name="leave_month" required>
+                                <option value="" selected disabled>--</option>
+                                <!-- Populated with JS -->
+                            </select>
+                            <select class="year-select" name="leave_year" required>
+                                <option value="" selected disabled>----</option>
+                                <!-- Populated with JS -->
+                            </select>
+                        </div> 
+                        <label for="edudesc">Beschrijving</label>
+                        <textarea id="edudesc" rows="4" placeholder="Write your study description here..."></textarea>
+                    </div>
+                    <input type="hidden" name="eduid" value="">
+                    <button type="submit" name="saveEducation">Opslaan</button>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </form>
+            </div>
+        </section>
+
+        <section id="trash-study" class="hidden">
+            <div class="form-window">
+                <form action="src/resume.src.php" method="post">
+                    <button class="return" data-section="home">Terug</button>
+                    <h2>Weet je het zeker?</h2>
+                    <div class="workinfo">
+                        <div>
+                            <label for="edutitle">Functie</label>
+                            <input type="text" id="edutitle" name="edutitle" placeholder="Mijn Opleiding" disabled>
+                        </div>
+                        <div>
+                            <label for="company">Bedrijf</label>
+                            <input type="text" id="company" name="company" placeholder="Mijn School" disabled>
+                        </div>
+                                    <div>
+                            <label for="joined">Start</label>
+                            <input type="text" id="joined" value="06/12/2016" disabled>
+                        </div>
+                        <div>
+                            <label for="left">Uitschrijving</label>
+                            <input type="text" id="left" value="06/12/2016" disabled>
+                        </div> 
+                        <label for="edudesc">Beschrijving</label>
+                        <textarea id="edudesc" rows="4" placeholder="Write your job description here..." disabled></textarea>
+                    </div>
+                    <input type="hidden" name="eduid" value="">
+                    <button type="submit" name="trashEducation">Verwijderen</button>
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                </form>
+            </div>
+        </section>
         
         <section id="close" class="hidden">
             <div class="form-window">
-                <form action="src/req_handler.src.php" method="post">
+                <form action="src/account.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
                     <h2>Wat jammer dat je vertrekt.</h2>
                     <p>Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>

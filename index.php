@@ -168,7 +168,7 @@
             <div class="grid-container">
                 <div class="form-window">
                     <h2>Aanmelden</h2>
-                    <form id="login_form" action="src/data_filter.src.php" method="post">
+                    <form id="login_form" action="src/account.src.php" method="post">
                         <label for="email">E-mailadres</label>
                         <input type="email" id="email" name="email" placeholder="Email" required>
                         <label for="pwd">Wachtwoord</label>
@@ -186,7 +186,7 @@
         <section id="sign_up" class="<?= serverSignup(); ?>">
             <div class="form-window">
                 <h2>Registreren</h2>
-                <form id="signup_form" action="src/data_filter.src.php" method="post">
+                <form id="signup_form" action="src/account.src.php" method="post">
                     <div class="wizard-info">
                         <span class="step">Algemeen</span>
                         <span class="step">Contact</span>

@@ -32,6 +32,7 @@
                 exit();
             }
 
+            // Continue processing
             if (isset($formFields['loginBtn'])) {
                 $this->loginUser($this->formFields);
             } elseif (isset($formFields['signupBtn'])) {
@@ -43,7 +44,7 @@
             } elseif (isset($formFields['saveAccount'])) {
                 $this->setPersonal($this->formFields);
             } elseif (isset($formFields['trashAccount'])) {
-                //$this->deleteUser($this->formFields);
+                $this->unsetAccount($this->formFields);
             }
         }
     }

@@ -256,7 +256,7 @@
                                 </select>
                             </div>
                             <input type="hidden" name="uid"> 
-                            <button type="submit" name="saveInfo">Wijzigen</button>
+                            <button type="submit" name="savePersonal">Wijzigen</button>
                         </div>
                         <div class="account-section-divider"></div>
                     </form>

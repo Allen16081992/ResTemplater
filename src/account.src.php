@@ -30,7 +30,7 @@
                 $formFields['username'] = $_POST['username'];
             }
 
-        } elseif (isset($_POST['saveInfo'])) {
+        } elseif (isset($_POST['savePersonal'])) {
             $formFields = [
                 'firstname' => $_POST['firstname'],
                 'lastname' => $_POST['lastname'],
@@ -39,7 +39,7 @@
                 'country' => $_POST['country'],
                 'phone' => $_POST['phone'],
                 'uid' => $_POST['uid'],
-                'saveInfo' => $_POST['saveInfo']
+                'savePersonal' => $_POST['savePersonal']
             ];
 
         } elseif (isset($_POST['saveAccount'])) { 

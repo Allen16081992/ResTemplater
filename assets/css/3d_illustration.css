@@ -14,10 +14,6 @@
     width: 300px;
     height: 400px;
 }
-#login .grid-container, #sign_up .form-window {
-    background:#f3f3f3;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
 .grid-container { 
     display: grid; 
     grid-template-columns: repeat(2, 1fr);   
@@ -139,7 +135,7 @@
         display: grid;
         grid-template-columns: auto 1fr auto; /* repeat(1fr auto 1fr); sets ads above and below content */
         gap: 10px;   
-    }
+    } 
     .grid-ad-container > .ads {
         width:160px;
     }

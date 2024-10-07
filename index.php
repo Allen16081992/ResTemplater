@@ -165,21 +165,18 @@
         </section>
 
         <section id="login" class="<?= serverLogin(); ?>">
-            <div class="grid-container">
-                <div class="form-window">
-                    <h2>Aanmelden</h2>
-                    <form id="login_form" action="src/account.src.php" method="post">
-                        <label for="email">E-mailadres</label>
-                        <input type="email" id="email" name="email" placeholder="Email" required>
-                        <label for="pwd">Wachtwoord</label>
-                        <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
-                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                        <!-- <input type="hidden" name="login"> -->
-                        <button type="submit" id="loginBtn" name="loginBtn">Log in</button>
-                        <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
-                    </form>
-                </div>
-                <div class="art-window"></div>
+            <div class="form-window">
+                <h2>Aanmelden</h2>
+                <form id="login_form" action="src/account.src.php" method="post">
+                    <label for="email">E-mailadres</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                    <label for="pwd">Wachtwoord</label>
+                    <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
+                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                    <!-- <input type="hidden" name="login"> -->
+                    <button type="submit" id="loginBtn" name="loginBtn">Log in</button>
+                    <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
+                </form>
             </div>
         </section>
 
@@ -217,15 +214,12 @@
                             <label for="day-select">Geboortedatum</label>
                             <select class="day-select" name="day" required>
                                 <option value="" selected disabled>--</option>
-                                <!-- Populated with JS -->
                             </select>
                             <select class="month-select" name="month" required>
                                 <option value="" selected disabled>--</option>
-                                <!-- Populated with JS -->
                             </select>
                             <select class="year-select" name="year" required>
                                 <option value="" selected disabled>----</option>
-                                <!-- Populated with JS -->
                             </select>
                         </div>
                         <div>

@@ -53,23 +53,26 @@
             ];
             
         } elseif(isset($_POST['default'])) { 
+            $template = 'default';
             unset($_POST['default']);
-            header('location: ./download.src.php');
+            header('location: ./pdf_templates/'.$template.'.src.php');
             exit();
         } elseif(isset($_POST['business'])) {
+            $template = 'business';
             unset($_POST['business']);
-            header('location: ./download2.src.php');
+            header('location: ./pdf_templates/'.$template.'.src.php');
             exit();
         } elseif(isset($_POST['careertiger'])) {
+            $template = 'careertiger';
             unset($_POST['careertiger']);
-            header('location: ./download3.src.php');
+            header('location: ./pdf_templates/'.$template.'.src.php');
             exit();
         }
 
         // Load PHP files
-        require_once 'session_manager.src.php';
+        require_once './session_manager.src.php';
         //require_once 'classes/resume.class.php';
-        require_once 'controller/resume.control.php';
+        require_once './controller/resume.control.php';
 
         // Initialise classes
         $rs = new ResumeControl($formFields);

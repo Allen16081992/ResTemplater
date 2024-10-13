@@ -53,7 +53,7 @@
     }
 
     // Handle page (section) visibility
-    function serverHome() {
+    function Homepage() {
         $class = "current";
         if (isset($_SESSION['login']) || isset($_SESSION['signup'])) {
             $class = "hidden";
@@ -77,7 +77,7 @@
         return $class;
     }
 
-    function serverAccount() {
+    function AccountPage() {
         $class = "hidden";
         if (isset($_SESSION['account'])) {
             $class = "current"; unset($_SESSION['account']);

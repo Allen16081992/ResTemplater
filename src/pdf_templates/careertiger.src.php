@@ -1,11 +1,11 @@
-<?php // Dhr. Allen Pieter
+<?php 
 // Start a session for handling data and error messages.
-require_once 'peripherals/session_management.config.php';
-sessionRegen(); // Call the periodic session regeneration
+require_once '../session_manager.src.php';
+sessionRegenTimer(); // Call the periodic session regeneration
 
 // Invoke the (improved) database connection and FPDF library.
-require_once 'idb.config.php';
-require_once 'fpdf185/fpdf.php';
+//require_once 'idb.config.php';
+require_once '../fpdf185/fpdf.php';
 
 class ResumePDF extends FPDF {
     private $pdo;
@@ -563,7 +563,12 @@ if (isset($_SESSION['resumeID'])) {
     $resumePDF->generatePDF();
 } else {
     // No resume selected.
-    $_SESSION['error'] = 'Select a resume to view as PDF.';
-    header('location: ../client.php');          
-    exit();
+    // $_SESSION['error'] = 'Select a resume to view as PDF.';
+    // header('location: ../client.php');          
+    // exit();
+    echo "Template C-Tiger reached. Congratulations!
+        <form action='../../client.php' method='post'>
+        <button class='return' data-section='home'>Terug</button>
+        </form>
+    ";
 }

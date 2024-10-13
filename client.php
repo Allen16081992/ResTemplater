@@ -29,8 +29,9 @@
     <link rel="manifest" href="assets/images/favicon/site.webmanifest">
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="assets/css/main.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- <link rel="stylesheet" href="assets/css/3d_illustration.css"> -->
-    <title>Mijn Templater | CV Templater</title>
+    <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
 </head>
@@ -49,19 +50,17 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="<?= serverHome(); ?>">
+        <section id="home" class="<?= Homepage(); ?>">
             <div class="grid-ad-container">
                 <div class="ads"></div>
+
                 <div class="sheet">
                     <h2>Mijn Curriculum Vitae</h2>
-                    <div class="button-wrapper">
-                        <button type="button" data-section="create-res">Nieuwe CV</button> 
-                        <button type="button" data-section="delete-res">Verwijder CV</button>
-                    </div>
+                    
                     <form action="src/resume.src.php" method="post">
-                        <label for="selectCv">CV Ophalen:</label>
+                        <label for="selectCv"></label>
                         <select id="selectCv" name="cvname">
-                            <option selected disabled hidden>---------</option>
+                            <option selected disabled hidden>--Select--</option>
                             <?php // Check if there is resume data to display
                             if (!empty($resumeData['resume'])): 
                                 // Loop through each resume and create an option element
@@ -72,10 +71,7 @@
                                 <?php endforeach; 
                             endif; ?>
                         </select>
-                        
-                        <div class="tab">
-                            <button type="submit" data-section="select-res">Downloaden</button>   
-                        </div>
+                        <button type="button" data-section="create-res">Nieuw</button> 
                         
                         <div class="account-section-divider"></div>
                     </form>     
@@ -95,7 +91,9 @@
                                 </div>
                                 <input type="hidden" name="resumeID" value=""> 
                                 <input type="hidden" name="userID" value=""> 
-                                <button type="submit" name="saveResume">Wijzigen</button>
+                                <button type="button" class="trash" data-section="trash-cv"><i class='bx bxs-trash-alt'></i></button>
+                                <button type="button" class="edit" data-section="edit-cv"><i class='bx bxs-pencil'></i></button>
+                                <button type="button" data-section="save-res">Save to PDF</button> 
                             </div>
                         </form>
                         <div class="account-section-divider"></div>
@@ -107,8 +105,8 @@
                             <input type="hidden" name="resumeID" value=""> 
                             <input type="hidden" name="userID" value=""> 
                             <div class="button-wrapper">
-                                <button name="saveImg">Wijzigen</button>
-                                <button name="delImg">Verwijderen</button>
+                                <button name="delImg" class="trash"><i class='bx bxs-trash-alt'></i></button>
+                                <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
                     </div>
@@ -132,8 +130,8 @@
 
                             <div class="button-wrapper">
                                 <input type="hidden" name="workid" value="">
-                                <button type="button" data-section="edit-work">Wijzigen</button>
-                                <button type="button" data-section="trash-work">Verwijderen</button>
+                                <button type="button" class="trash" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
+                                <button type="button" class="edit" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
@@ -158,8 +156,8 @@
 
                             <div class="button-wrapper">
                                 <input type="hidden" name="eduid" value="">
-                                <button type="button" data-section="edit-study">Wijzigen</button>
-                                <button type="button" data-section="trash-study">Verwijderen</button>
+                                <button type="button" class="trash" data-section="trash-study"><i class='bx bxs-trash-alt'></i></button>
+                                <button type="button" class="edit" data-section="edit-study"><i class='bx bxs-pencil'></i></button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
@@ -169,22 +167,31 @@
                     <button class="accordion">Vaardigheden</button>
                     <div class="panel">
                         <form action="src/resume.src.php" method="post">
-                            <div class="tab">        
-                                <label for="technical">Technische</label>
-                                <input type="text" name="technical" placeholder="Office 365">
+                            <div class="tab">  
+                                <div>
+                                    <!-- Technisch -->
+                                    <strong>Proficiencies</strong>      
+                                    <p>Office 365</p>
+                                </div>
 
-                                <label for="language">Talen</label>
-                                <input type="text" name="language" placeholder="Swedish">
-                                
-                                <label for="interest">Interesses</label>
-                                <input type="text" name="interest" placeholder="Theatre">
+                                <div>
+                                    <!-- Language -->
+                                    <strong>Language</strong> 
+                                    <p>Swedish</p>
+                                </div>
+
+                                <div>
+                                    <!-- Interessen -->
+                                    <strong>Interests</strong> 
+                                    <p>Theatre</p>
+                                </div>
                             </div>
                             <div class="button-wrapper">
                                 <input type="hidden" name="techid" value="">
                                 <input type="hidden" name="langid" value="">
                                 <input type="hidden" name="intid" value="">
-                                <button type="button" name="editSkill">Wijzigen</button>
-                                <button type="button">Verwijderen</button>
+                                <button type="button" class="trash" data-section="trash-skill"><i class='bx bxs-trash-alt'></i></button>
+                                <button type="button" class="edit" data-section="edit-skill"><i class='bx bxs-pencil'></i></button>
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
@@ -198,23 +205,25 @@
                             <textarea name="letter" rows="4" placeholder="Schrijf hier jouw motivatie..."></textarea>
                             <div class="button-wrapper">
                                 <input type="hidden" name="motid" value="">
-                                <button name="editMot">Wijzigen</button>
-                                <button name="delMot">Verwijderen</button>
+                                <button type="button" class="trash" data-section="trash-mot"><i class='bx bxs-trash-alt'></i></button>
+                                <button type="button" class="edit" data-section="edit-mot"><i class='bx bxs-pencil'></i></button>
                             </div>
+                            <div class="account-section-divider"></div>
                         </form>
                     </div>
                 </div>
+
                 <div class="ads"></div>
             </div>
         </section>
         
-        <section id="user" class="<?= serverAccount() ?>">
+        <section id="user" class="<?= AccountPage() ?>">
             <div>
                 <div class="form-window">
-                    <h2>Account</h2>
+                    
                     <!-- <button class="avatar">Profiel Foto</button> -->
                     <form action="src/account.src.php" method="post">
-                        <h3>Mijn gegevens</h3>
+                        <h3>Persoonlijk</h3>
                         <div class="tab">
                             <div>
                                 <label for="firstname">Voornaam</label>
@@ -261,7 +270,7 @@
                         <div class="account-section-divider"></div>
                     </form>
                     <form action="src/account.src.php" method="post">
-                        <h3>Mijn Account</h3>
+                        <h3>Account</h3>
                         <div class="tab">
                             <div>
                                 <label for="username">Gebruikersnaam</label>
@@ -286,7 +295,7 @@
                         <button type="submit" name="saveAccount">Wijzigen</button>
                         <div class="account-section-divider"></div>
                     </form>
-                    <p>Deze actie kan niet ongedaan worden gemaakt.</p>
+                    <p>Deze actie kan niet worden teruggedraaid.</p>
                     <button type="submit" data-section="close">Account Sluiten</button>     
                 </div>
             </div>
@@ -316,7 +325,7 @@
             </div>
         </section>
 
-        <section id="select-res" class="hidden">
+        <section id="save-res" class="hidden">
             <div class="form-window">
                 <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
@@ -330,7 +339,7 @@
             </div>
         </section>
 
-        <section id="delete-res" class="hidden">
+        <section id="trash-cv" class="hidden">
             <div class="form-window">
                 <form action="src/resume.src.php" method="post">
                     <button class="return" data-section="home">Terug</button>
@@ -507,7 +516,7 @@
                             <label for="company">Bedrijf</label>
                             <input type="text" id="company" name="company" placeholder="Mijn School" disabled>
                         </div>
-                                    <div>
+                        <div>
                             <label for="joined">Start</label>
                             <input type="text" id="joined" value="06/12/2016" disabled>
                         </div>

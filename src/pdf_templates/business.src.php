@@ -1,11 +1,11 @@
-<?php // Dhr. Allen Pieter
+<?php 
 // Start a session for handling data and error messages.
-require_once 'peripherals/session_management.config.php';
-sessionRegen(); // Call the periodic session regeneration
+require_once '../session_manager.src.php';
+sessionRegenTimer(); // Call the periodic session regeneration
 
 // Invoke the (improved) database connection and FPDF library.
-require_once 'idb.config.php';
-require_once 'fpdf185/fpdf.php';
+//require_once 'idb.config.php';
+require_once '../fpdf185/fpdf.php';
 
 class ResumePDF extends FPDF {
     private $pdo;
@@ -49,18 +49,6 @@ class ResumePDF extends FPDF {
         $this->data = $result; 
     }
     
-    function Header() {
-        if ($this->PageNo() == 1) {
-            //Cell( width, height, text, border, end line, align)
-            // Set the font and size
-            $this->SetFont('Arial', 'B', 16);
-            // Add Custom header
-            $this->Cell(0, 10, 'Curriculum Vitae', 0, 0, 'C');
-            // Add a line break
-            $this->Ln(10);
-        }
-    }
-    
     function Footer() {
         // Check if more than one page exists
         if ($this->PageNo() > 1) {
@@ -78,29 +66,17 @@ class ResumePDF extends FPDF {
         $this->AddPage();
         $this->SetFont('Arial', '', 12);
         
-        //////////////////// TRADEMARK ///////////////////
-        $imagePath = '../img/CV-headed-eagle.png';
-        $building = '../img/icons/buildings-24.png'; 
-        $envelope = '../img/icons/envelope-24.png';
-        $mobile = '../img/icons/phone-24.png'; 
-        $world = '../img/icons/world-24.png';
-
-        // Set Trademark
-        $this->Image($imagePath, 10, 10, 30); // Adjust positioning and dimensions
-
-        // Set font
-        $this->SetFont('Arial', '', 10);
-
         // Sanitize data using htmlspecialchars
         // Resume title becomes Filename
         if (isset($this->data['resume'][0]['resumetitle'])) {
             $doc = htmlspecialchars($this->data['resume'][0]['resumetitle']); 
-            $this->SetTitle('My '.$doc.' DT');
+            $this->SetTitle('My '.$doc.' BT');
         }
         // Name and Contact
         if (isset($this->data['contact'][0])) {
             $firstname = htmlspecialchars($this->data['contact'][0]['firstname']);
             $surname = htmlspecialchars($this->data['contact'][0]['lastname']);
+            $initials = substr($firstname, 0, 1) . substr($surname, 0, 1);
             $city = htmlspecialchars($this->data['contact'][0]['city']);
             $country = htmlspecialchars($this->data['contact'][0]['country']);
             $phone = htmlspecialchars($this->data['contact'][0]['phone']);
@@ -151,48 +127,72 @@ class ResumePDF extends FPDF {
             $motivation = array_map('htmlspecialchars', $motivation);
         }
 
+        //////////////////// TRADEMARK ///////////////////
+        $imagePath = '../img/MyInitials.png';
+        $building = '../img/icons/buildings-24.png'; 
+        $envelope = '../img/icons/envelope-24.png';
+        $mobile = '../img/icons/phone-24.png'; 
+        //$world = '../img/icons/world-24.png';
+
         //////////////////// HEADER ///////////////////
 
-        // Add name and surname
-        $this->SetXY(110, 10); // Set the position for text
-        $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 10, $firstname.' '.$surname, 0, 1, 'R');
+        // Set Trademark
+        $this->Image($imagePath, 10, 10, 30); // Adjust positioning and dimensions
 
-        // Add city, phone and email
+        // Set Initials
+        $this->SetXY(14, 24); // Set the position for text
+        $this->SetFont('Arial', 'I', 14);
+        $this->SetFontSize(41); // Set the font size to 16
+        $this->SetTextColor(255,255,255); // Set font color to red (RGB values)
+        $this->Cell(0, 10, $initials, 0, 0, 'L');
+
+        // Set Name
+        $this->SetXY(75, 25); // Set the position for text
+        $this->SetTextColor(0,0,0); // Set font color to red (RGB values)
+        $this->Cell(0, 10, $firstname.' '.$surname, 0, 1, '');
+
+        // Set font
         $this->SetFont('Arial', '', 10);
-        $this->SetX($this->GetPageWidth() - 10); //add an offset margin
-        $this->Cell(-5, 5, $city, 0, 1, 'R'); 
-        $this->Image($building, 195, 20, 5); //add icon
+        $this->SetTextColor(0,0,0); // Set font color to red (RGB values)
 
-        $this->SetX($this->GetPageWidth() - 10); 
-        $this->Cell(-5, 5, $country, 0, 1, 'R'); 
-        $this->Image($world, 195, 25, 5); 
-        $this->Ln(4); // add a line break
-
-        //$this->SetX(110); // Set the position for the email
-        $this->SetX($this->GetPageWidth() - 10); 
-        $this->Cell(-5, 5, $phone, 0, 1, 'R'); 
-        $this->Image($mobile, 195, 34, 5); 
-
-        $this->SetX($this->GetPageWidth() - 10); 
-        $this->Cell(-5, 5, $email, 0, 1, 'R'); 
-        $this->Image($envelope, 195, 39, 5); 
-
-        $this->Ln(10);
-        $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 5, 'Profiel', 0, 1, 'L'); 
-        $this->Ln(1);
-        $this->SetFont('Arial', '', 10);
-        if (isset($this->data['profile'][0]['profiledesc'])) {
-            $profiledesc = $this->data['profile'][0]['profiledesc'];
-            $this->MultiCell(0, 5, html_entity_decode($profiledesc), 0, 0, '');
-        }
-        
         // Add a line break
-        $this->Ln(10);
+        $this->Ln(15);
+
+        //////////////////// Contact ///////////////////
+
+        // Set contact information
+        $this->SetFont('Arial', '', 12);
+        $this->SetDrawColor(0,80,180); //0,155,119 Emerald Green //0,80,180 Baltic Blue
+        $this->Image($mobile, 10, 50, 5); $this->Cell(50, 5, $phone, 1, 0, 'C'); 
+        $this->Image($envelope, 61, 50, 5);  $this->Cell(90, 5, $email, 1, 0, 'C'); 
+        $this->Image($building, 150, 50, 5); $this->Cell(50, 5, $city, 1, 0, 'C');
+
+        // Add a line break
+        $this->Ln(15);
+
+        //$this->SetX($this->GetPageWidth() - 10); 
+        //$this->Cell(-5, 5, $country, 0, 1, 'R'); 
+        //$this->Image($world, 195, 25, 5); 
+        //$this->Ln(4); // add a line break
+
+        //////////////////// Profile ///////////////////
+
+        if (isset($this->data['profile'][0]['profiledesc'])) {
+            // Set Profile
+            $this->SetFont('Arial', '', 10);
+            //$this->Cell(0, 5, 'Profiel', 0, 1, 'C'); 
+            $this->SetFont('Arial', 'B', 14);
+            // Set description
+            $profiledesc = $this->data['profile'][0]['profiledesc'];
+            $this->SetFont('Arial', 'I', 10);
+            $this->SetFillColor(230,230,0);
+            $this->MultiCell(0, 5, html_entity_decode($profiledesc), 0, 'C', 0);
+            // Add a line break
+            $this->Ln(5);
+        }
 
         /////////////////////// WORK EXPERIENCE ////////////////////////
-        $this->SetFont('Arial', 'B', 14);
+        $this->SetFont('Arial', '', 14);
         $this->Cell(0, 10, 'Werkervaring', 1, 1, 'C');
         $this->Ln(2);
 
@@ -258,7 +258,7 @@ class ResumePDF extends FPDF {
         }
 
         /////////////////////// EDUCATION ////////////////////////
-        $this->SetFont('Arial', 'B', 14);
+        $this->SetFont('Arial', '', 14);
         $this->Cell(0, 10, 'Opleiding', 1, 1, 'C');
         $this->Ln(2);
 
@@ -277,7 +277,7 @@ class ResumePDF extends FPDF {
                 $this->Cell(60, 10, $eduTitles[0], 0, 0, 'L');
                 $this->Cell(50, 10, $eduCompany[0], 0, 1, '');
             }
-            $this->SetFont('Arial', '', 10);
+            $this->SetFont('Arial', 'I', 10);
             if (isset($eduSummary[0])) {
                 $this->SetFontSize(10);
                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[0]));
@@ -296,7 +296,7 @@ class ResumePDF extends FPDF {
                 $this->Cell(60, 10, $eduTitles[1], 0, 0, 'L');
                 $this->Cell(50, 10, $eduCompany[1], 0, 1, '');
             }
-            $this->SetFont('Arial', '', 10);
+            $this->SetFont('Arial', 'I', 10);
             if (isset($eduSummary[1])) {
                 $this->SetFontSize(10);
                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[1]));
@@ -315,29 +315,31 @@ class ResumePDF extends FPDF {
                 $this->Cell(60, 10, $eduTitles[2], 0, 0, 'L');
                 $this->Cell(50, 10, $eduCompany[2], 0, 1, '');
             }
-            $this->SetFont('Arial', '', 10);
+            $this->SetFont('Arial', 'I', 10);
             if (isset($eduSummary[2])) {
                 $this->SetFontSize(10);
                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[2]));
                 $this->Ln(5);
             }
         }
+        
+        /////////////////////// HARD & SOFT SKILLS ////////////////////////
 
-        /////////////////////// SKILLS ////////////////////////
-        $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 10, 'Vaardigheden', 1, 1, 'C');
-        $this->Ln(3);
-
+        $this->SetLineWidth(1);
         $this->SetFont('Arial', '', 10);
-        $this->Cell(63, 5, 'Vaardigheden', 1, 0, 'C');
-        $this->Cell(63, 5, 'Talen', 1, 0, 'C');
-        $this->Cell(63, 5, 'Interessen', 1, 1, 'C');
+        $this->Cell(63, 6, 'Vaardigheden', 1, 0, 'C');
+        $this->Cell(64, 6, 'Talen', 1, 0, 'C');
+        $this->Cell(63, 6, 'Interessen', 1, 0, 'C');
 
-        $this->SetFont('Arial', 'B', 14);
-        $this->Ln(2);
+        // Add a line break
+        $this->Ln(8);
 
+        if (isset($this->data['techskill'][0]['techtitle']) || isset($this->data['techskill'][0]['language']) || isset($this->data['techskill'][0]['interest'])) {
+            $this->SetFont('Arial', 'B', 12);
+        }
+        
         // Show values from array position specifically. Limit - 3 jobs.
-        // Determine the maximum number of entries to display
+        // Determine the maximum number of entries to display    
         $maxEntries = max(count($techTitle), count($language), count($interest));
 
         // Loop through the entries
@@ -380,7 +382,12 @@ if (isset($_SESSION['resumeID'])) {
     $resumePDF->generatePDF();
 } else {
     // No resume selected.
-    $_SESSION['error'] = 'Select a resume to view as PDF.';
-    header('location: ../client.php');          
-    exit();
+    // $_SESSION['error'] = 'Select a resume to view as PDF.';
+    // header('location: ../client.php');          
+    // exit();
+    echo "Business Template reached. Congratulations!
+        <form action='../../client.php' method='post'>
+        <button class='return' data-section='home'>Terug</button>
+        </form>
+    ";
 }

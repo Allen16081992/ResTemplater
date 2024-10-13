@@ -48,7 +48,7 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="<?= serverHome(); ?>">
+        <section id="home" class="<?= Homepage(); ?>">
             <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1>
             <div class="resume-container">
                 <div class="shape paper">

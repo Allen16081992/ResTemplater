@@ -3,7 +3,7 @@
 }
 :root {
     --default:#007bff;
-    --edit:rgb(25,162,181);
+    --edit:rgb(181, 129, 25);
     --edit-hover:rgb(62,149,163);
     --trash:rgb(147, 38, 38);
     --trash-hover:rgb(169, 47, 59);
@@ -41,8 +41,8 @@ nav a {
 nav a:hover, nav a.current {background-color: #555;}
 nav a.current { cursor: default; }
 a[data-section="login"] {border: 2px solid #f3f3f3;} /* #44d884 */
-/* a[data-section="home"] {display:none;} */
 
+main button {cursor: pointer; border:none;}
 .hidden { display: none; }
 .skew {
     width:0;
@@ -64,10 +64,27 @@ section {
     padding:10px;
 }
 
+/* Login Window */
+.form-window {
+    position:relative;
+    padding:20px;
+
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    max-width: 30rem;
+    background: rgba(0, 0, 0, 0.237);
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
 /* Sign up Wizard */
 .wizard-info {
     margin-bottom:20px;
-    padding:10px;
+    padding:5px;
     display:flex;
     align-items:center;
     justify-content: space-between;
@@ -76,6 +93,7 @@ section {
 .wizard-info .step {
     width:100%;
     cursor:default;
+    padding:5px;
 }
 .tab {
     display: flex;
@@ -127,37 +145,25 @@ input.invalid {
     }
 }
 
-/* Login Window */
-.form-window {
-    position:relative;
-    padding:20px;
-
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-
-    background: rgba( 255, 255, 255, 0.15 );
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 4px );
-    -webkit-backdrop-filter: blur( 4px );
-    border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
-    transform: skewX(-02deg);
-}
-
-form h2 {
-    text-align: center;
+/* Default Style */
+form {
+    margin-top:10px; 
+    text-align: center; 
 }
 form label {
     display: block;
     margin-bottom: 4px; 
     text-align: left;  
 }
-form input[type="text"], input[type="email"], input[type="password"], button[type="submit"] {
+form input[type="text"], input[type="email"], input[type="password"], button[type="submit"], textarea {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;
     width: 100%;
+}
+form select {
+    padding: 0.6em;
+    font-size: 0.8em;
 }
 form input[type="checkbox"] {
     margin: 0 0 20px; 
@@ -169,10 +175,15 @@ form input[type="checkbox"] {
     padding:0.4em;
     font-size: 0.8em;
 }
-/* textarea {
-    width:100%; 
-    margin-bottom:10px;
+button[data-section], button[name] {
+    padding: 0.6em; margin: 0 0 20px; border-radius: 5px;
 }
+button[data-section="save-res"] {
+    border: 1px solid purple;
+}
+.edit { background: var(--default); color: #fff; }
+.trash { background: var(--trash); color: #fff; }
+/* 
 .button-wrapper {
     display:flex;
     width: 100%; 
@@ -186,37 +197,22 @@ form input[type="checkbox"] {
     font-size:1em;
 } */
 /* button[name="business"] {
-    border-bottom: 1px solid rgb(176, 174, 174);
     background:var(--default);
-    border-radius:4px;
-    border:none;
-    cursor:pointer;
 }
 button[name="careertiger"] {
-    border-bottom: 1px solid rgb(176, 174, 174);
     background:rgb(25,162,181);
-    border-radius:4px;
-    border:none;
-    cursor:pointer;
 }
-button[data-section="create-res"],button[data-section="delete-res"] {
-    border-bottom: 1px solid rgb(176, 174, 174);
-    border-radius:4px;
-    border:none;
-    cursor:pointer;
-    background:#333;
-} 
 button[data-section="create-res"] {
     color:rgb(255, 232, 103);
 }
 button[data-section="create-res"]:hover {
     background:#454545;
 }
-button[data-section="delete-res"] {
+button[data-section="trash-cv"] {
     background:var(--trash);
     color:#f3f3f3;
 }
-button[data-section="delete-res"]:hover {
+button[data-section="trash-cv"]:hover {
     background:var(--trash-hover);
 } */
 
@@ -265,7 +261,7 @@ select[name="cvname"] {
 
 /* User Interface */
 .accordion {
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.527);
     color:rgb(255, 232, 103);
     cursor: pointer;
     padding: 18px;
@@ -277,15 +273,16 @@ select[name="cvname"] {
     transition: background-color 0.6s ease;
 }
 .accordion:hover, .active {
-    background-color: #4e4e4e;
+    background-color: #232323;
 }
 .panel {
     padding: 0 18px;
-    background-color: white;
+    background-color: #f3f3f3;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
 }
+button[data-section="create-res"] { color: #fff; background: rgb(42, 170, 42); }
 
 /* Account Screen */
 .account-section-divider {

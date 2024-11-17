@@ -63,7 +63,7 @@
                 <div class="box"></div>
                 <div class="box">
                     <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te belichten. 
-                        Daarom bieden wij een eenvoudige en efficiënte manier om je cv te maken, aan te passen en te delen.
+                        Daarom bieden wij een eenvoudige en efficiënte manier om een cv te maken, aan te passen en te delen.
                     </p>
                 </div>
                 <div class="box">

@@ -3,7 +3,6 @@
     require_once 'database/singleton.db.php';
 
     class LoadUserData {
-
         // Properties
         private $db;
 
@@ -180,6 +179,66 @@
         }
     }
 
+    class LoadEntryData {
+        // Properties
+        private $db;
+
+        // Methods
+        public function __construct() {
+            // Get the singleton database connection.
+            $this->db = Database::getInstance();
+        }
+
+        // Centralized method to verify if a query executes successfully
+        private function verifyQuery($stmt) {
+            if (!$stmt->execute()) {
+                $_SESSION['error']['503'] = '503: Querry failed.';
+                header('location: client.php');
+                exit();
+            }
+        }
+
+        public function getEntryData($resID, $userID) {
+            try {
+                // Prepare SQL statements
+                if (isset($_POST['saveExperience'])) {
+                    $stmt = $this->db->connect()->prepare('SELECT * FROM `experience` WHERE resumeID = :resumeID AND userID = :userID');
+                    $stmt->bindParam(":workID", $entID); 
+                }
+                if (isset($_POST['saveEducation'])) {
+                    $stmt = $this->db->connect()->prepare('SELECT * FROM `education` WHERE resumeID = :resumeID AND userID = :userID');
+                    $stmt->bindParam(":eduID", $entID); 
+                }
+                if (isset($_POST['saveSkill'])) {
+                    $stmt = $this->db->connect()->prepare('SELECT * FROM `techskill` WHERE resumeID = :resumeID AND userID = :userID');
+                    $stmt->bindParam(":techID", $entID); 
+                }
+
+                // Bind parameters
+                $stmt->bindParam(":resumeID", $resID);
+                $stmt->bindParam(":userID", $userID);  
+                
+                // Verify query execution
+                $this->verifyQuery($stmt);
+
+                // Fetch resume data and check for errors
+                $entry = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // Cleanup after successful fetch
+                unset($stmt);
+
+                /////... to be continued
+
+            } catch (PDOException $e) {
+                // Handle unexpected PDO exceptions
+                error_log('Database error during LoadEntryData: ' . $e->getMessage());
+                $_SESSION['error']['503'] = '503: Service unavailable.';
+                header('location: client.php');
+                exit();
+            }
+        }
+    }
+
     // Instantiate LoadUserData if no session error 503 exists
     if (!isset($_SESSION['error']['503'])) {
         $user = new LoadUserData();
@@ -194,5 +253,15 @@
             $resume = new LoadResumeData();
             $resumeData = $resume->LoadResumeData($resid, $userID);
             $data = array_merge($data, $resumeData);
+        }
+        elseif (isset($_POST['saveExperience'])) {
+            // Absorb form data
+            $resID = $_POST['cvname'];
+            $entID = $_POST['eid'];
+            $userID = $_SESSION['session_data']['user_id'];
+
+            unset($data);
+            $entryData = new LoadEntryData();
+            $data = $entryData->getEntryData($resID, $userID);
         }
     }

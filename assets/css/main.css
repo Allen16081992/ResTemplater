@@ -103,13 +103,13 @@ section {
     margin:10px 0 10px 0;
     gap: 10px; 
 }
-/* .workinfo {
+.workinfo {
     display: flex;
     justify-content: space-around; 
     align-items: center;
     flex-wrap: wrap;
     text-align:left; 
-} */
+}
 /* .input-group {
     flex: 1 0 60px; 
     max-width: 100%; 
@@ -148,7 +148,7 @@ input.invalid {
 /* Default Style */
 form {
     margin-top:10px; 
-    text-align: center; 
+    text-align: center;
 }
 form label {
     display: block;
@@ -176,20 +176,17 @@ form input[type="checkbox"] {
     font-size: 0.8em;
 }
 button[data-section], button[name] {
-    padding: 0.6em; margin: 0 0 20px; border-radius: 5px;
+    padding: 0.6em; border-radius: 5px;
 }
 button[data-section="save-res"] {
     border: 1px solid purple;
 }
 .edit { background: var(--default); color: #fff; }
 .trash { background: var(--trash); color: #fff; }
-/* 
+
 .button-wrapper {
-    display:flex;
-    width: 100%; 
-    margin: 0 0 10px;
-    gap: 10px; 
-} */
+    margin-bottom: 15px;
+}
 /* .button-wrapper button {
     width: 100%; 
     box-sizing: border-box; 
@@ -232,7 +229,7 @@ button[data-section="trash-cv"]:hover {
     cursor:pointer;
 }
 
-/* .date-options {margin-bottom:20px;}
+.date-options {margin-bottom:20px;}
 select {
     padding: 0.6em;   
     border: 1px solid #ccc; 
@@ -243,9 +240,9 @@ select {
 }
 .day-select, .month-select {width:4rem;}
 .year-select {width:4rem;}
-select[name="cvname"] {
+ select[name="cvname"] {
     width:100%;
-} */
+}
 
 .error-msg { 
     position:absolute;
@@ -260,6 +257,13 @@ select[name="cvname"] {
 }
 
 /* User Interface */
+.accordion-head {
+    background-color: rgba(0, 0, 0, 0.527);
+    color:rgb(255, 232, 103);
+    padding: 18px;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.527);
+}
 .accordion {
     background-color: rgba(0, 0, 0, 0.527);
     color:rgb(255, 232, 103);
@@ -277,7 +281,7 @@ select[name="cvname"] {
 }
 .panel {
     padding: 0 18px;
-    background-color: #f3f3f3;
+    background-color: rgba(0, 0, 0, 0.027);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;

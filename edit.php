@@ -51,16 +51,26 @@
                     <h2>Wijzigen</h2>
                     <div class="workinfo">
                         <?php if (isset($_POST['skill'])) { ?>
+                            <label for="skill">Proficiency</label>
+                            <input type="text" id="skill" name="skill" value="Mijn Opleiding">
 
+                            <label for="language">Language</label>
+                            <input type="text" id="language" name="language" value="Mijn School">
+
+                            <label for="interest">Interests</label>
+                            <input type="text" id="interest" name="interest" value="06/12/2016">
+                            
+                            <input type="hidden" name="entryid" value="<?= $_POST['entry_id']; ?>"> 
+                            <input type="hidden" name="form" value="<?= $_POST['entry_form']; ?>"> 
+                            <button type="submit" name="saveEntry">Opslaan</button>
                         <?php } else { ?> 
-                            <input type="hidden" name="eid" value="<?= $_POST['entry_id']; ?>"> 
                             <div>
                                 <label for="title">Functie</label>
                                 <input type="text" id="title" name="title" placeholder="Mijn functie" required>
                             </div>
                             <div>
                                 <label for="company">Bedrijf</label>
-                                <input type="text" id="company" name="company" placeholder="Mijn werkgever" required>
+                                <input type="text" id="company" name="company" placeholder="Mijn werk" required>
                             </div>
                             <div class="date-options">
                                 <label for="day-select">In dienst</label>
@@ -88,7 +98,9 @@
                             </div> 
                             <label for="desc">Beschrijving</label>
                             <textarea id="desc" rows="4" placeholder="Write your description here..."></textarea>
-                            <button type="submit" name="saveExperience">Opslaan</button>
+                            <input type="hidden" name="entryid" value="<?= $_POST['entry_id']; ?>"> 
+                            <input type="hidden" name="form" value="<?= $_POST['entry_form']; ?>"> 
+                            <button type="submit" name="saveEntry">Opslaan</button>
                         <?php } ?>   
                     </div>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>

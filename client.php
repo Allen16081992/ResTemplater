@@ -52,17 +52,17 @@
     <main>
         <section id="home" class="<?= Homepage(); ?>">
             <div class="grid-ad-container">
-                <div class="ads"></div>
+             
 
-                <div class="sheet">
-                    <h2>Mijn Curriculum Vitae</h2>
-                    <div class="accordion-head">
+                <!-- <div class="sheet"> -->
+                    <!-- <h2>Mijn Curriculum Vitae</h2> -->
+                    <!-- <div class="accordion-head">
                     <form action="src/resume.src.php" method="post">
                         <button type="submit" data-section="create-res">New Resume</button> 
                         <button type="submit" style="background:#4f46e5; color:#fff;" data-section="trash-cv">Delete Resume</button> 
 
                         <label for="selectCv"></label>
-                        <select id="selectCv" name="cvname" style="border: 2px solid rgba(0, 0, 0, 0.227); background-color:#333; color:#fff;">
+                        <select id="selectCv" name="cvname">
                             <option selected disabled hidden>Select Resume:</option>
                             <?php // Check if there is resume data to display
                             if (!empty($resumeData['resume'])): 
@@ -75,10 +75,10 @@
                             endif; ?>
                         </select>
                     </form>   
-                    </div>  
+                    </div>   -->
                 
                     <!-- Curriculum Vitae -->
-                    <button class="accordion">Curriculum Vitae / Foto</button>
+                    <!-- <button class="accordion">Curriculum Vitae / Foto</button>
                     <div class="panel">    
                         <form class="workinfo">
                             <div class="tab">
@@ -106,22 +106,22 @@
                                 <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Werkervaring / Stages -->
-                    <button class="accordion">Werkervaring / Stages</button>
+                    <!-- <button class="accordion">Werkervaring / Stages</button>
                     <div class="panel">
-                        <form class="workinfo" action="edit.php" method="post"> 
+                        <form class="workinfo" action="edit.php" method="post">  -->
                             <!-- Functie --> 
-                            <strong>Cabin Attendant</strong>
+                            <!-- <strong>Cabin Attendant</strong> -->
                             <!-- Bedrijf -->
-                            <strong>Turkish Airlines</strong>
+                            <!-- <strong>Turkish Airlines</strong> -->
                             <!-- In dienst -->
-                            <span>06/12/2016</span>
+                            <!-- <span>06/12/2016</span> -->
                             <!-- Uit dienst -->
-                            <span>21/06/2024</span> 
+                            <!-- <span>21/06/2024</span>  -->
                             <!-- Beschrijving -->
-                            <p>
+                            <!-- <p>
                                 Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
                             </p>
                             <div class="button-wrapper">
@@ -130,22 +130,22 @@
                                 <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Opleiding / Cursussen -->
-                    <button class="accordion">Opleiding / Cursussen</button>
+                    <!-- <button class="accordion">Opleiding / Cursussen</button>
                     <div class="panel">
-                        <form class="workinfo" action="edit.php" method="post"> 
+                        <form class="workinfo" action="edit.php" method="post">  -->
                             <!-- Functie --> 
-                            <strong>Mediavormgever</strong>
+                            <!-- <strong>Mediavormgever</strong> -->
                             <!-- Bedrijf -->
-                            <strong>Grafisch Lyceum</strong>
+                            <!-- <strong>Grafisch Lyceum</strong> -->
                             <!-- In dienst -->
-                            <span>06/12/2016</span>
+                            <!-- <span>06/12/2016</span> -->
                             <!-- Uit dienst -->
-                            <span>21/06/2024</span> 
+                            <!-- <span>21/06/2024</span>  -->
                             <!-- Beschrijving -->
-                            <p>
+                            <!-- <p>
                                 Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
                             </p> 
                             <div class="button-wrapper">
@@ -154,28 +154,28 @@
                                 <button type="button" class="edit" data-section="edit-study"><i class='bx bxs-pencil'></i></button>
                             </div>  
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Vaardigheden -->
-                    <button class="accordion">Vaardigheden</button>
+                    <!-- <button class="accordion">Vaardigheden</button>
                     <div class="panel">
                         <form action="edit.php" method="post">
                             <div class="tab">  
-                                <div>
+                                <div> -->
                                     <!-- Technisch -->
-                                    <strong>Proficiencies</strong>      
+                                    <!-- <strong>Proficiencies</strong>      
                                     <p>Office 365</p>
                                 </div>
 
-                                <div>
+                                <div> -->
                                     <!-- Language -->
-                                    <strong>Language</strong> 
+                                    <!-- <strong>Language</strong> 
                                     <p>Swedish</p>
                                 </div>
 
-                                <div>
+                                <div> -->
                                     <!-- Interessen -->
-                                    <strong>Interests</strong> 
+                                    <!-- <strong>Interests</strong> 
                                     <p>Theatre</p>
                                 </div>
                             </div>
@@ -187,10 +187,10 @@
                                 <button type="button" class="edit" data-section="edit-skill"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Overige -->
-                    <button class="accordion">Motivatiebrief</button>
+                    <!-- <button class="accordion">Motivatiebrief</button>
                     <div class="panel">
                         <form action="src/resume.src.php" method="post">
                             <p>Schrijf hier jouw motivatie...</p>
@@ -201,10 +201,9 @@
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
 
-                <div class="ads"></div>
             </div>
         </section>
         

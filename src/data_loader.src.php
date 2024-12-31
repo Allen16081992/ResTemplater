@@ -198,20 +198,20 @@
             }
         }
 
-        public function getEntryData($resID, $userID) {
+        public function getEntryData($resID, $entryID, $userID) {
             try {
                 // Prepare SQL statements
                 if (isset($_POST['saveExperience'])) {
                     $stmt = $this->db->connect()->prepare('SELECT * FROM `experience` WHERE resumeID = :resumeID AND userID = :userID');
-                    $stmt->bindParam(":workID", $entID); 
+                    $stmt->bindParam(":workID", $entryID); 
                 }
                 if (isset($_POST['saveEducation'])) {
                     $stmt = $this->db->connect()->prepare('SELECT * FROM `education` WHERE resumeID = :resumeID AND userID = :userID');
-                    $stmt->bindParam(":eduID", $entID); 
+                    $stmt->bindParam(":eduID", $entryID); 
                 }
                 if (isset($_POST['saveSkill'])) {
                     $stmt = $this->db->connect()->prepare('SELECT * FROM `techskill` WHERE resumeID = :resumeID AND userID = :userID');
-                    $stmt->bindParam(":techID", $entID); 
+                    $stmt->bindParam(":techID", $entryID); 
                 }
 
                 // Bind parameters
@@ -257,11 +257,11 @@
         elseif (isset($_POST['saveExperience'])) {
             // Absorb form data
             $resID = $_POST['cvname'];
-            $entID = $_POST['eid'];
+            $entryID = $_POST['entryid'];
             $userID = $_SESSION['session_data']['user_id'];
 
             unset($data);
             $entryData = new LoadEntryData();
-            $data = $entryData->getEntryData($resID, $userID);
+            $data = $entryData->getEntryData($resID, $entryID, $userID);
         }
     }

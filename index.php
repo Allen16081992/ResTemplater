@@ -59,19 +59,7 @@
                 <div class="shape skills"></div>
                 <!-- Lines will be dynamically generated here -->
             </div>
-            <div class="grid-container">
-                <div class="box"></div>
-                <div class="box">
-                    <p>Wij geloven dat iedereen een kans verdient om zijn of haar talenten te belichten. 
-                        Daarom bieden wij een eenvoudige en efficiënte manier om een cv te maken, aan te passen en te delen.
-                    </p>
-                </div>
-                <div class="box">
-                    <h2>Hoe werkt het?</h2>
-                    <span>Log in of <a href="#" data-section="sign_up">Maak een account aan</a>, voeg je ervaringen toe, kies een sjabloon, en download je cv. Zo simpel is het!</span>
-                </div>
-                <div class="box"></div>
-            </div>
+
         </section>
 
         <section id="author" class="hidden"></section>

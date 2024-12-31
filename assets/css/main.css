@@ -257,7 +257,7 @@ select {
 }
 
 /* User Interface */
-.accordion-head {
+/* .accordion-head {
     background-color: rgba(0, 0, 0, 0.527);
     color:rgb(255, 232, 103);
     padding: 18px;
@@ -285,7 +285,7 @@ select {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
-}
+} */
 button[data-section="create-res"] { color: #fff; background: rgb(42, 170, 42); }
 
 /* Account Screen */

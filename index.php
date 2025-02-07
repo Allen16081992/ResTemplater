@@ -23,10 +23,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="assets/images/favicon/site.webmanifest">
     <!-- Styling Sheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>Jouw Mobiele CV Editor | CV Templater</title>
+    <!-- <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'> -->
+    <title>Jouw Mobiele CV Editor | PaperTiger</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
@@ -35,46 +36,83 @@
 <body>
     <header>
         <div class="logo">
-            <a href="index.html" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
+            <a href="index.html" id="logo"><img src="assets/images/falcon250x.webp" alt="Brand logo"></a>
         </div>
-        <nav>
+        <nav role="navigation" aria-label="main navigation">
             <a href="#" data-section="home">Home</a><!-- Mobile only -->
-            <a href="#" data-section="author">Tips</a>
+            <!-- <a href="#" data-section="author">Tips</a> -->
             <a href="#" data-section="policy">Privacy</a>
-            <a href="#" data-section="contact">Contact</a>
+            <!-- <a href="#" data-section="contact">Contact</a> -->
             <a href="#" data-section="login">Log in</a>
+            <a href="#" data-section="sign_up">Sign Up</a>
         </nav>
     </header>
     <div class="skew"></div>
-
+    
     <main>
-        <section id="home" class="<?= Homepage(); ?>">
-            <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1>
-            <div class="resume-container">
-                <div class="shape paper">
-                    <div class="paper-edge-top"></div>
-                    <div class="paper-edge-side"></div>
+        <section id="home" class="<?= Homepage(); ?> hero is-fullheight has-text-centered" style="background:black;">
+            <!-- <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1> -->
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title is-size-2 has-text-white">PaperWitch</h1>
+                    <p class="subtitle is-size-4 has-text-light">Resumes with attitude.</p>
+                    <a href="#features" class="button is-medium is-danger is-outlined">🔮 Unleash Your Resume</a>
                 </div>
-                <div class="shape circle"></div>
-                <div class="shape skills"></div>
-                <!-- Lines will be dynamically generated here -->
+            </div>
+            
+            <div class="full-width-wrapper" style="background:black; display:flex; justify-content:center; align-items:center;">
+                <div class="resume-container" style="margin-top:2.5rem; margin-left: 3rem;">
+                    <div class="shape paper">
+                        <div class="paper-edge-top"></div>
+                        <div class="paper-edge-side"></div>
+                    </div>
+                    <div class="shape circle"></div>
+                    <div class="shape skills"></div>
+                    <!-- Lines will be dynamically generated here -->
+                </div>
             </div>
 
+            <div class="section is-medium has-text-centered"">
+                <div class="container">
+                    <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2>
+                    <div class="columns is-multiline mt-6">
+                        <div class="column is-4">
+                            <div class="box has-background-grey-dark has-text-white">
+                                <h3 class="title is-size-4">🔥 Bold Templates</h3>
+                                <p>Break the mold with unique resume styles.</p>
+                            </div>
+                        </div>
+                        <div class="column is-4">
+                            <div class="box has-background-grey-dark has-text-white">
+                                <h3 class="title is-size-4">🎭 Express Yourself</h3>
+                                <p>Customization that lets your personality shine.</p>
+                            </div>
+                        </div>
+                        <div class="column is-4">
+                            <div class="box has-background-grey-dark has-text-white">
+                                <h3 class="title is-size-4">🧙‍♂️ No Login Needed</h3>
+                                <p>Instantly craft your resume—no accounts, no hassle.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+        
 
         <section id="author" class="hidden"></section>
 
         <section id="policy" class="hidden">
             <div class="grid-ad-container">
                 <div class="ads"></div>
-                <div class="sheet">
+                <div>
                     <h2>Privacybeleid en veiligheid</h2>
                     <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
                         gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
                         Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
                     </p>
     
-                    <div class="box">
+                    <div>
                         <h2>Algemene Voorwaarden</h2>
                         <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
                         <strong>Uw Gebruikersaccount</strong>

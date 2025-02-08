@@ -31,13 +31,11 @@
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
-    <script defer src="assets/js/multi_step_rotator.js"></script>
+    <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="index.html" id="logo"><img src="assets/images/falcon250x.webp" alt="Brand logo"></a>
-        </div>
+    <header> 
+        <a href="index.php" id="logo"><img src="assets/images/falcon250x.webp" alt="Brand logo"></a>
         <nav role="navigation" aria-label="main navigation">
             <a href="#" data-section="home">Home</a><!-- Mobile only -->
             <!-- <a href="#" data-section="author">Tips</a> -->
@@ -50,7 +48,7 @@
     <div class="skew"></div>
     
     <main>
-        <section id="home" class="<?= Homepage(); ?> hero is-fullheight has-text-centered" style="background:black;">
+        <section id="home" class="<?= Homepage(); ?> hero is-fullheight has-text-centered">
             <!-- <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1> -->
             <div class="hero-body">
                 <div class="container">
@@ -60,7 +58,7 @@
                 </div>
             </div>
             
-            <div class="full-width-wrapper" style="background:black; display:flex; justify-content:center; align-items:center;">
+            <div class="full-width-wrapper" style="display:flex; justify-content:center; align-items:center;">
                 <div class="resume-container" style="margin-top:2.5rem; margin-left: 3rem;">
                     <div class="shape paper">
                         <div class="paper-edge-top"></div>
@@ -72,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="section is-medium has-text-centered"">
+            <div class="section is-medium has-text-centered">
                 <div class="container">
                     <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2>
                     <div class="columns is-multiline mt-6">
@@ -316,7 +314,7 @@
         <p>Het lijkt erop dat JavaScript is uitgeschakeld in uw browser. Hierdoor werkt de site niet meer.</p>
     </noscript>
 
-    <footer>
+    <footer style="background:black;">
         <p>CV Templater © 2023 - 2024</p>
     </footer>
 </body>

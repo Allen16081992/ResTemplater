@@ -70,25 +70,25 @@
                 </div>
             </div>
 
-            <div class="section is-medium has-text-centered">
+            <div class="has-text-centered">
                 <div class="container">
                     <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2>
                     <div class="columns is-multiline mt-6">
                         <div class="column is-4">
                             <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">🔥 Bold Templates</h3>
+                                <h3 class="title is-size-4">Bold Templates</h3>
                                 <p>Break the mold with unique resume styles.</p>
                             </div>
                         </div>
                         <div class="column is-4">
                             <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">🎭 Express Yourself</h3>
+                                <h3 class="title is-size-4">Express Yourself</h3>
                                 <p>Customization that lets your personality shine.</p>
                             </div>
                         </div>
                         <div class="column is-4">
                             <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">🧙‍♂️ No Login Needed</h3>
+                                <h3 class="title is-size-4">🧙No Login Needed</h3>
                                 <p>Instantly craft your resume—no accounts, no hassle.</p>
                             </div>
                         </div>
@@ -191,15 +191,27 @@
         <section id="login" class="<?= serverLogin(); ?>">
             <div class="form-window">
                 <h2>Aanmelden</h2>
-                <form id="login_form" action="src/account.src.php" method="post">
+                <form class="field" id="login_form" action="src/account.src.php" method="post">
+                
                     <label for="email">E-mailadres</label>
-                    <input type="email" id="email" name="email" placeholder="Email" required>
+                    <div class="control">
+                        <input class="input" type="email" id="email" name="email" placeholder="Email" required/>
+                    </div>
+                    <p class="help">This is a help text</p>
+                    
                     <label for="pwd">Wachtwoord</label>
-                    <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" required>
+                    <div class="control">
+                        <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
+                    </div>
+                    <p class="help">This is a help text</p>
+
+                    <div class="control">
+                        <button class="button is-link">Login</button>
+                    </div>
+                
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                     <!-- <input type="hidden" name="login"> -->
-                    <button type="submit" id="loginBtn" name="loginBtn">Log in</button>
-                    <span>Nog geen account? <a href="#" data-section="sign_up">Maak hier een nieuwe</a></span>
+                    <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
                 </form>
             </div>
         </section>
@@ -216,7 +228,7 @@
  
                     <div class="tab">
                         <div>   
-                            <label for="firstname">Voornaam</label>
+                            <label for="firstname">Voornaam</label>\
                             <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
                         </div>
                         <div>

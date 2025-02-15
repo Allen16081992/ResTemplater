@@ -31,7 +31,7 @@
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/3d_dummy_lines.js"></script>
-    <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
+    <script defer src="assets/js/multi_step_rotator.js"></script>
 </head>
 <body>
     <header> 
@@ -96,7 +96,6 @@
                 </div>
             </div>
         </section>
-        
 
         <section id="author" class="hidden"></section>
 
@@ -190,28 +189,32 @@
 
         <section id="login" class="<?= serverLogin(); ?>">
             <div class="form-window">
-                <h2>Aanmelden</h2>
-                <form class="field" id="login_form" action="src/account.src.php" method="post">
-                
-                    <label for="email">E-mailadres</label>
-                    <div class="control">
-                        <input class="input" type="email" id="email" name="email" placeholder="Email" required/>
+                <h2>Login</h2>
+                <form action="src/account.src.php" method="post">
+                    <div class="field">
+                        <label for="email">E-mailadres</label>
+                        <div class="control">
+                            <input class="input" type="email" id="email" name="email" placeholder="Email" required/>
+                        </div>
+                        <!-- <p class="help is-danger">This is a help text</p> -->
                     </div>
-                    <p class="help">This is a help text</p>
-                    
-                    <label for="pwd">Wachtwoord</label>
-                    <div class="control">
-                        <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
-                    </div>
-                    <p class="help">This is a help text</p>
 
-                    <div class="control">
-                        <button class="button is-link">Login</button>
+                    <div class="field">
+                        <label for="pwd">Wachtwoord</label>
+                        <div class="control">
+                            <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
+                        </div>
+                        <!-- <p class="help is-danger">This is a help text</p> -->
                     </div>
-                
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <!-- <input type="hidden" name="login"> -->
-                    <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
+
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-link is-fullwidth" id="loginBtn" type="submit">Inloggen</button>
+                        </div> 
+                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
+                        <!-- <input type="hidden" name="login"> -->
+                        <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
+                    </div>
                 </form>
             </div>
         </section>
@@ -228,21 +231,21 @@
  
                     <div class="tab">
                         <div>   
-                            <label for="firstname">Voornaam</label>\
-                            <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
+                            <label for="firstname">Voornaam</label>
+                            <input class="input" type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
                         </div>
                         <div>
                             <label for="lastname">Achteraam</label>
-                            <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
+                            <input class="input" type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
                         </div>
-                        <div class="input-group">
+                        <!-- <div>
                             <label for="country">Nationaliteit</label>
-                            <input type="text" id="country" name="country" placeholder="(Optioneel)">
+                            <input class="input" type="text" id="country" name="country" placeholder="(Optioneel)">
                         </div>
-                        <div class="input-group">
+                        <div>
                             <label for="username">Gebruikersnaam</label>
-                            <input type="text" id="username" name="username" placeholder="(Optioneel)">
-                        </div>
+                            <input class="input" type="text" id="username" name="username" placeholder="(Optioneel)">
+                        </div> -->
                     </div>
 
                     <div class="tab">

@@ -1,24 +1,12 @@
 "use strict";
-// Single Page Application
 document.addEventListener('DOMContentLoaded', function () {
-    // Select the navigation elements
+    // Navigation elements
+    let activeLink = null;
     const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main section');
     const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section], button[data-section]');
-    let activeLink = null; // keep track of the currently active link
 
-    // Password visibility toggle
-    const eye = document.querySelector('.toggle-eye i');
-    const pwdID = document.getElementById('pwdField');
-
-    // Date Selector
-    const dateOptions = document.querySelectorAll('.date-options');
-
-    // Resume
-    const cvTab = document.querySelectorAll('#home .accordion');
-    const selectCv = document.getElementById('selectCv');
-
-    // Toggle visibility of sections based on the selected sectionId
+    // Section visibility
     function paintSection(sectionId) {
         sections.forEach(section => {
             if (section.id === sectionId) {
@@ -27,9 +15,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 section.classList.replace('current', 'hidden');
             }
         });
-    }   
+    }
 
-    // Event listener for navigation bar
+    // Logo Homepage
+    logoLink.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        // Reset active link and show the home section
+        if (activeLink) {
+            activeLink.classList.remove('current');
+            activeLink = null; // Ensure no link is marked as active
+        }
+        
+        paintSection('home'); // Assume 'home' is the default section to show
+    });
+
+    // Navigation Bar
     navLinks.forEach(link => {
         link.addEventListener('click', function(event) {
             event.preventDefault(); // Prevent the default link action
@@ -44,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function updateActiveLink(sectionId) {
-        // Remove 'current' class from all links
         navLinks.forEach(link => {
             if (link.getAttribute('data-section') === sectionId) {
                 link.classList.add('current');
@@ -53,32 +53,50 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Find the active navigation link and set it as the active link
+        // Find the active nav link and set it as the active link
         const activeNavLink = document.querySelector(`nav a[data-section='${sectionId}']`);
         if (activeNavLink) {
             if (activeLink) {
                 activeLink.classList.remove('current');
             }
             activeNavLink.classList.add('current');
-            activeLink = activeNavLink; // Update the globally active link
+            activeLink = activeNavLink; 
         }
     }
 
-    // Event listener for company logo
-    logoLink.addEventListener('click', function(event) {
-        event.preventDefault();
+    ////////////////// Accordions /////////////////////
+    const tab = document.querySelectorAll('#home .accordion');
+    const pwdID = document.getElementById('pwdField');
 
-        // Reset active link and show the home section
-        if (activeLink) {
-            activeLink.classList.remove('current');
-            activeLink = null; // Ensure no link is marked as active
+    function toggleAccordion() {
+        var panel = this.nextElementSibling;
+        var isOpen = panel.style.maxHeight;
+    
+        // Close all panels within the "home" section
+        Array.from(tab).forEach(function(accordion) {
+            accordion.classList.remove("active");
+            accordion.nextElementSibling.style.maxHeight = null;
+        });
+    
+        // Open this panel if it was previously closed
+        if (!isOpen) {
+            this.classList.add("active");
+            panel.style.maxHeight = panel.scrollHeight + "px";
         }
+    }
+    
+    if (tab) { // Accordion Tabs
+        tab.forEach(function(accordion) {
+            accordion.addEventListener('click', toggleAccordion);
+        });
+    }
 
-        paintSection('home'); // Assume 'home' is the default section to show
-    });
+    ///////////////// Miscellaneous Effects ////////////////////
+    const eye = document.querySelector('.toggle-eye i');
+    const selectCv = document.getElementById('selectCv');
+    const dateOptions = document.querySelectorAll('.date-options');
 
-    // Password show/hide icon
-    if (eye) {
+    if (eye) { // Password Eye
         eye.addEventListener('click', () => {
             // Toggle the type attribute
             if (pwdID.type === "password") {
@@ -90,15 +108,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
-    // Date Selector, Iterate through each group
-    if (dateOptions) {
+    
+    if (selectCv) { // Resume Selector
+        selectCv.addEventListener('change', function() {
+            this.form.submit(); // Submit the form that this select belongs to
+        });
+    }
+    
+    if (dateOptions) { // Date Options
         dateOptions.forEach(group => {
             const daySelect = group.querySelector('.day-select');
             const monthSelect = group.querySelector('.month-select');
             const yearSelect = group.querySelector('.year-select');
 
-            // Check if all select elements exist in the current group
+            // Check if all date elements exist in the current group
             if (daySelect && monthSelect && yearSelect) {
                 // Populate days
                 for (let day = 1; day <= 31; day++) {
@@ -122,38 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     yearSelect.add(yearOption);
                 }
             }
-        });
-    }
-
-
-    function toggleAccordion() {
-        var panel = this.nextElementSibling;
-        var isOpen = panel.style.maxHeight;
-    
-        // Close all panels within the "home" section
-        Array.from(cvTab).forEach(function(accordion) {
-            accordion.classList.remove("active");
-            accordion.nextElementSibling.style.maxHeight = null;
-        });
-    
-        // Open this panel if it was previously closed
-        if (!isOpen) {
-            this.classList.add("active");
-            panel.style.maxHeight = panel.scrollHeight + "px";
-        }
-    }
-
-    // Add click event listener to each accordion button in the "home" section
-    if (cvTab) {
-        cvTab.forEach(function(accordion) {
-            accordion.addEventListener('click', toggleAccordion);
-        });
-    }
-
-    // Add click event listener to the resume selector
-    if (selectCv) {
-        selectCv.addEventListener('change', function() {
-            this.form.submit(); // Submit the form that this select belongs to
         });
     }
 });

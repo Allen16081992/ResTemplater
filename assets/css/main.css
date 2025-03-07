@@ -16,8 +16,16 @@ html, body {
     --edit-hover:rgb(62,149,163);
     --trash:rgb(147, 38, 38);
     --trash-hover:rgb(169, 47, 59);
+    --bg-window:rgba(0,0,0,0.8);
 }
-.hero-body {background: linear-gradient(to bottom, #333 0%, #222 100%); margin-top:3rem; transform: skewY(-2deg);}
+.hero-body {
+    background: linear-gradient(to bottom, #333 0%, #222 100%); 
+    margin-top:3rem; 
+    transform: skewY(-2deg);
+}
+input::placeholder {
+    color:var(--def-style) !important;
+}
 
 /* Default Style */
 /* h1 { font-size:32px;} */
@@ -53,7 +61,7 @@ nav {
     flex-wrap: wrap;
 }
 nav a {
-    color: white;
+    color: azure;
     text-decoration: none;
     padding: 10px 20px;
     margin: 0 10px;
@@ -65,7 +73,6 @@ nav a.current { cursor: default; }
 a[data-section="sign_up"] { background:#04AA6D; }
 a[data-section="login"] {border: 2px solid #dfdfdf;} /* #44d884 */
 #logo img {height: 7rem;}
-
 
 /* Diagonal Styles */
 .skew {
@@ -92,16 +99,18 @@ a[data-section="login"] {border: 2px solid #dfdfdf;} /* #44d884 */
 .form-window {
     position:relative;
     padding:20px;
-    color:#141414;
+    color:azure;
     display: flex; 
     flex-direction: column; 
     max-width: 30rem;
-    /* background: rgba(0, 0, 0, 0.237); */
+    min-width:21rem;
+    margin:10px;
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
+    background-color:var(--bg-window);
 }
 
 /* Sign up Wizard */
@@ -111,7 +120,7 @@ a[data-section="login"] {border: 2px solid #dfdfdf;} /* #44d884 */
     display:flex;
     align-items:center;
     justify-content: space-between;
-    background:#ababab;
+    background:#334155;
 }
 .wizard-info .step {
     width:100%;
@@ -134,16 +143,16 @@ a[data-section="login"] {border: 2px solid #dfdfdf;} /* #44d884 */
     flex-wrap: wrap;
     text-align:left; 
 } */
-/* #prevBtn, #nextBtn { width:100%;}
-#nextBtn { float:right; } */
-/* .rotator {
+
+#prevBtn { float:right; margin-right:10px;}
+#nextBtn { color:azure;}
+.rotator {
   width:100%;
   display: flex;
   justify-content: space-between;
-  margin-top:5px;
 }
 input.invalid {
-    background-color: #ffdddd;
+    border: 2px solid red;
 }
 .step.active {
     opacity: 1;
@@ -152,7 +161,7 @@ input.invalid {
     background-color: #04AA6D;
     box-shadow: inset 0 0 10px 2px rgba(0, 255, 182, 0.5), 0 0 10px 2px rgba(0, 255, 135, 1);
     animation: pulse 1s alternate infinite;
-} */
+}
 /* @keyframes pulse {
     0% {
         background-color: rgba(255, 255, 255, 0.3);
@@ -175,15 +184,18 @@ form label {
     margin-bottom: 4px; 
     text-align: left; 
 } 
-form input[type="text"], input[type="email"], input[type="password"], button[type="submit"], textarea {
+form input[type="text"], input[type="email"], input[type="password"], textarea {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;
     width: 100%;
+    background:rgb(235, 235, 235);
+    color:black;
+    border-radius: 1px solid black;
 }
 form select {
     padding: 0.6em;
-    font-size: 0.8em;
+    /* font-size: 0.9em; */
 }
 form input[type="checkbox"] {
     margin: 0 0 20px; 
@@ -196,29 +208,27 @@ form input[type="checkbox"] {
     padding:0.4em;
     font-size: 0.8em;
 } */
-/* .toggle-eye > i {
+.toggle-eye > i {
     position:absolute;
     margin-top:8px;
     margin-left:-35px;
-    font-size:1.5em;
+    font-size:1.4em;
     cursor:pointer;
-} */
-
-/* .date-options {margin-bottom:20px;}
-select {
-    padding: 0.6em;   
-    border: 1px solid #ccc; 
-    border-radius: 4px;   
-    background-color: white;
-    font-size: 1em;          
-    cursor: pointer;   
+    color:black;
 }
-.day-select, .month-select {width:4rem;}
-.year-select {width:4rem;}
- select[name="cvname"] {
-    width:100%;
-} */
 
+select {
+    /* padding: 0.6em;    */
+    /* border: 1px solid #ccc;  */
+    /* border-radius: 4px;    */
+    /* background-color: white; */
+    /* font-size: 1em;           */
+    margin-bottom:20px;
+    cursor: pointer;   
+} 
+.day-select, .month-select, .year-select {
+    width:4.3rem;height:2.5rem;
+}
 .error-msg { 
     position:absolute;
     display:none;

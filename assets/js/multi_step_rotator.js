@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
     var nextBtn = document.getElementById("nextBtn");
     var loginBtn = document.getElementById("loginBtn");
 
+    /* ───────────────────────────────────── */
+    /*              NAVIGATION               */
+    /* ───────────────────────────────────── */
+
     // Display the current tab
     showTab(currentTab);
 
@@ -20,6 +24,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // Configure the buttons
         prevBtn.style.display = (n === 0) ? "none" : "inline";
         nextBtn.innerHTML = (n === tabs.length - 1) ? "Account Maken" : "Verder";
+
+        // Toggle button classes
+        if (n === tabs.length - 1) {
+            nextBtn.classList.remove("is-link");
+            nextBtn.classList.add("is-success", "is-outlined");
+        } else {
+            nextBtn.classList.remove("is-success", "is-outlined");
+            nextBtn.classList.add("is-link");
+        } 
+
         fixStepIndicator(n);
     }
 
@@ -30,52 +44,22 @@ document.addEventListener("DOMContentLoaded", function() {
         steps[n].classList.add("finish");
     }
 
-    // Setup event listeners for navigation buttons
-    prevBtn.addEventListener('click', function() {
-        nextPrev(-1);
-    });
-    nextBtn.addEventListener('click', function() {
-        nextPrev(1);
-    });
-    // document.getElementById('login_form').addEventListener('submit', function(event) {
-    //     event.preventDefault(); // Prevent default form submission
-    //     // Remove existing error messages at the beginning of validation
-    //     var existingErrors = document.getElementsByClassName("error-msg");
-    //     while (existingErrors.length > 0) {
-    //         existingErrors[0].parentNode.removeChild(existingErrors[0]);
-    //     }
-    //     submitFormAjax(this); // Call the AJAX function
-    // });
-    loginBtn.addEventListener('click', function(event) {
-        event.preventDefault();
+    /* ───────────────────────────────────── */
+    /*      SIGNUP WIZARD BUTTON EVENTS      */
+    /* ───────────────────────────────────── */
 
-        // Remove existing error messages
-        var existingErrors = document.getElementsByClassName("error-msg");
-        while (existingErrors.length > 0) {
-            existingErrors[0].parentNode.removeChild(existingErrors[0]);
-        }
-
-        var inputs = document.querySelectorAll("#login_form input[required]");
-        var valid = true;
-
-        inputs.forEach(function(input) {
-            if (input.value.trim() === "") {
-                input.classList.add("invalid");
-                showErrorMessage(input, "Dit veld is verplicht.");
-                valid = false;
-            } else if (input.type === "email" && !validateEmail(input.value)) {
-                input.classList.add("invalid");
-                showErrorMessage(input, "Vul een geldig e-mailadres in.");
-                valid = false;
-            } else {
-                input.classList.remove("invalid");
-            }
+    if (prevBtn || nextBtn) {
+        prevBtn.addEventListener('click', function() {
+            nextPrev(-1);
         });
+        nextBtn.addEventListener('click', function() {
+            nextPrev(1);
+        });
+    }
 
-        if (valid) {
-            document.getElementById("login_form").submit();
-        }
-    });
+    /* ───────────────────────────────────── */
+    /*         MULTI-STEP FORM LOGIC         */
+    /* ───────────────────────────────────── */
 
     function nextPrev(direction) {
         if (direction == 1 && !validateForm()) return; // Stop if form is not valid
@@ -95,17 +79,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 return false;
             }
 
-            // Submit the signup form via AJAX
-            //submitFormAjax(document.getElementById("signup_form"));
             return;
         }
         showTab(currentTab);
     };
 
-    // Validation Logic
+    /* ──────────────────────────────────────── */
+    /*          SIGNUP FORM VALIDATION          */
+    /* ──────────────────────────────────────── */
+
     function validateForm() {
         var valid = true;
         var inputs = tabs[currentTab].getElementsByTagName("input");
+        var selects = tabs[currentTab].getElementsByTagName("select");
 
         // Remove existing error messages at the beginning of validation
         var existingErrors = tabs[currentTab].getElementsByClassName("error-msg");
@@ -133,14 +119,64 @@ document.addEventListener("DOMContentLoaded", function() {
                     showErrorMessage(inputs[i], passwordErrors[0]);
                     valid = false;
                 }
-            }
-            else {
+            } else {
                 inputs[i].classList.remove("invalid");
             }
         }
+
+        let invalidSelect = Array.from(selects).some(select => 
+            select.selectedIndex === 0 || select.options[select.selectedIndex].disabled
+        );
+    
+        if (invalidSelect) {
+            showErrorMessage(selects[0], "Selecteer een geldige optie."); // Shows message under first <select>
+            valid = false;
+        }
+
         return valid;
     }
 
+    /* ───────────────────────────────────── */
+    /*          LOGIN FORM VALIDATION        */
+    /* ───────────────────────────────────── */
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+    
+            // Remove existing error messages
+            var existingErrors = document.getElementsByClassName("error-msg");
+            while (existingErrors.length > 0) {
+                existingErrors[0].parentNode.removeChild(existingErrors[0]);
+            }
+    
+            var inputs = document.querySelectorAll("#login_form input[required]");
+            var valid = true;
+    
+            inputs.forEach(function(input) {
+                if (input.value.trim() === "") {
+                    input.classList.add("invalid");
+                    showErrorMessage(input, "Dit veld is verplicht.");
+                    valid = false;
+                } else if (input.type === "email" && !validateEmail(input.value)) {
+                    input.classList.add("invalid");
+                    showErrorMessage(input, "Vul een geldig e-mailadres in.");
+                    valid = false;
+                } else {
+                    input.classList.remove("invalid");
+                }
+            });
+    
+            if (valid) {
+                document.getElementById("login_form").submit();
+            }
+        });
+    }
+
+    /* ───────────────────────────────────── */
+    /*          UTILITY FUNCTIONS            */
+    /* ───────────────────────────────────── */
+    
     function showErrorMessage(inputElement, message) {
         var errorMsg = document.createElement("span");
         errorMsg.className = "error-msg";
@@ -174,65 +210,5 @@ document.addEventListener("DOMContentLoaded", function() {
         } 
         return errors;
     }
-
-    // Ajax Form Submission (async looks more like php)
-    // async function submitFormAjax(form) {
-    //     const formData = new FormData(form);
-    //     const submitButton = form.querySelector('button[type="submit"]');
-    //     if (submitButton) {
-    //         formData.append(submitButton.name, submitButton.value);
-    //     }
     
-    //     try {
-    //         const response = await fetch(form.action, {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    
-    //         if (response.redirected) {
-    //             // If the response is a redirect, follow it
-    //             window.location.href = response.url;
-    //             return;
-    //         }
-    
-    //         const contentType = response.headers.get("content-type");
-    //         const responseText = await response.text(); // Get raw text for debugging
-    
-    //         if (contentType && contentType.includes("application/json")) {
-    //             try {
-    //                 const data = JSON.parse(responseText); // Attempt to parse JSON
-    
-    //                 // Handle the JSON response from the server
-    //                 if (!data.success) {
-    //                     for (const key in data.errors) {
-    //                         if (data.errors.hasOwnProperty(key)) {
-    //                             const inputElement = form.querySelector(`[name="${key}"]`);
-    //                             if (inputElement) {
-    //                                 showErrorMessage(inputElement, data.errors[key]);
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             } catch (jsonError) {
-    //                 // If JSON parsing fails, handle the non-JSON response gracefully
-    //                 console.error("Invalid JSON response:", responseText);
-    //                 showErrorMessage(form, "Invalid JSON response from server.");
-    //             }
-    //         } else {
-    //             // Handle non-JSON response
-    //             if (response.ok) {
-    //                 // If response is ok but not JSON, handle accordingly
-    //                 console.log("Non-JSON response received:", responseText);
-    //                 showErrorMessage(form, "Received unexpected response from server.");
-    //             } else {
-    //                 // Handle server errors that are not JSON
-    //                 showErrorMessage(form, "Server Error: " + response.statusText);
-    //             }
-    //         }
-    
-    //     } catch (error) {
-    //         // Enhanced error handling
-    //         showErrorMessage(form, "Server Error: " + error.message);
-    //     }
-    // }       
 });

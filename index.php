@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
-    <!-- <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'> -->
+    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <title>Jouw Mobiele CV Editor | PaperTiger</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -102,7 +102,7 @@
         <section id="policy" class="hidden">
             <div class="grid-ad-container">
                 <div class="ads"></div>
-                <div>
+                <div style="background-color:var(--bg-window); margin:20px; text-align:left; ">
                     <h2>Privacybeleid en veiligheid</h2>
                     <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
                         gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
@@ -189,32 +189,18 @@
 
         <section id="login" class="<?= serverLogin(); ?>">
             <div class="form-window">
-                <h2>Login</h2>
-                <form action="src/account.src.php" method="post">
-                    <div class="field">
-                        <label for="email">E-mailadres</label>
-                        <div class="control">
-                            <input class="input" type="email" id="email" name="email" placeholder="Email" required/>
-                        </div>
+                <h2 class="title is-size-3">Login</h2>
+                <form id="login_form" action="src/account.src.php" method="post">    
+                    <label for="email">E-mailadres</label>
+                    <input class="input" type="email" id="email" name="email" placeholder="Email" required/>     
                         <!-- <p class="help is-danger">This is a help text</p> -->
-                    </div>
-
-                    <div class="field">
-                        <label for="pwd">Wachtwoord</label>
-                        <div class="control">
-                            <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
-                        </div>
+                    <label for="pwd">Wachtwoord</label>
+                    <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
                         <!-- <p class="help is-danger">This is a help text</p> -->
-                    </div>
-
-                    <div class="field">
-                        <div class="control">
-                            <button class="button is-link is-fullwidth" id="loginBtn" type="submit">Inloggen</button>
-                        </div> 
+                    <button id="loginBtn" class="button is-success is-fullwidth" style="margin-top:10px;">Inloggen</button>
                         <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                         <!-- <input type="hidden" name="login"> -->
-                        <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span>
-                    </div>
+                    <!-- <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span> -->
                 </form>
             </div>
         </section>
@@ -222,10 +208,10 @@
         <section id="sign_up" class="<?= serverSignup(); ?>">
             <div class="form-window">
                 <h2>Registreren</h2>
-                <form id="signup_form" action="src/account.src.php" method="post">
+                <form id="login_form" action="src/account.src.php" method="post">
                     <div class="wizard-info">
-                        <span class="step">Algemeen</span>
-                        <span class="step">Contact</span>
+                        <span class="step">Personal</span>
+                        <!-- <span class="step">Contact</span> -->
                         <span class="step">Account</span>
                     </div>
  
@@ -237,58 +223,42 @@
                         <div>
                             <label for="lastname">Achteraam</label>
                             <input class="input" type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
+                            <!-- <span class="error-msg" style="display:block;">Dit veld is verplicht.</span> -->
                         </div>
-                        <!-- <div>
-                            <label for="country">Nationaliteit</label>
-                            <input class="input" type="text" id="country" name="country" placeholder="(Optioneel)">
+                        <div class="date-options">
+                            <label for="date">Geboortedatum</label>
+                            <select class="day-select" name="day" required>
+                                <option value="" selected disabled>Day</option>
+                            </select>
+                            <select class="month-select" name="month" required>
+                                <option value="" selected disabled>Month</option>
+                            </select>
+                            <select class="year-select" name="year" required>
+                                <option value="" selected disabled>Year</option>
+                            </select>
+                            <!-- <span class="error-msg" style="display:block;">Dit veld is verplicht.</span> -->
                         </div>
+                        
                         <div>
                             <label for="username">Gebruikersnaam</label>
                             <input class="input" type="text" id="username" name="username" placeholder="(Optioneel)">
-                        </div> -->
-                    </div>
-
-                    <div class="tab">
-                        <div class="date-options">
-                            <label for="day-select">Geboortedatum</label>
-                            <select class="day-select" name="day" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="month-select" name="month" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="year-select" name="year" required>
-                                <option value="" selected disabled>----</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="phone">Telefoonnummer</label>
-                            <input type="text" id="phone" name="phone" placeholder="Telefoonnummer" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="city">Woonplaats</label>
-                            <input type="text" id="city" name="city" placeholder="Woonplaats" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="postal">Postcode</label>
-                            <input type="text" id="postal" name="postal" placeholder="Postcode" required>
                         </div>
                     </div>
 
                     <div class="tab">
                         <div class="toggle-eye">
                             <label for="email">E-mailadres</label> 
-                            <input type="email" id="email" name="email" placeholder="E-mailadres" required>
+                            <input class="input" type="email" id="email" name="email" placeholder="E-mailadres" required>
                             <label for="pwdField">Wachtwoord</label>
-                            <input type="password" id="pwdField" name="pwd" aria-describedby="passwordError" placeholder="Wachtwoord" required>
-                            <i class='bx bx-low-vision'></i>
+                            <input class="input" type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
+                            <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
                             <label for="terms">Ik heb de <a href="#" data-section="policy">privacyverklaring</a> en <a href="#" data-section="policy">algemene voorwaarden</a> gelezen en ga hiermee akkoord. <input type="checkbox" id="terms" name="terms" required></label>                    
                         </div>
                     </div>
                     
                     <div class="rotator">
-                        <button type="submit" id="prevBtn">Terug</button>
-                        <button type="submit" id="nextBtn" name="signupBtn">Verder</button>                        
+                        <button class="button is-link is-fullwidth" type="submit" id="prevBtn">Terug</button>
+                        <button class="button is-link is-fullwidth" type="submit" id="nextBtn" name="signupBtn">Verder</button>                        
                     </div>
                 </form>
                 <!-- <form id="signup_form">

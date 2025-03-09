@@ -78,7 +78,7 @@
                     </div>   -->
                 
                     <!-- Curriculum Vitae -->
-                    <!-- <button class="accordion">Curriculum Vitae / Foto</button>
+                    <button class="accordion">Curriculum Vitae / Foto</button>
                     <div class="panel">    
                         <form class="workinfo">
                             <div class="tab">
@@ -106,7 +106,7 @@
                                 <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div> -->
+                    </div>
 
                     <!-- Werkervaring / Stages -->
                     <!-- <button class="accordion">Werkervaring / Stages</button>

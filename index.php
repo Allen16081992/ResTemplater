@@ -54,7 +54,7 @@
                 <div class="container">
                     <h1 class="title is-size-2 has-text-white">PaperWitch</h1>
                     <p class="subtitle is-size-4 has-text-light">Resumes with attitude.</p>
-                    <a href="#features" class="button is-medium is-danger is-outlined">🔮 Unleash Your Resume</a>
+                    <a href="client.php" class="button is-medium is-danger is-outlined">🔮 Unleash Your Resume</a>
                 </div>
             </div>
             
@@ -100,20 +100,18 @@
         <section id="author" class="hidden"></section>
 
         <section id="policy" class="hidden">
-            <div class="grid-ad-container">
-                <div class="ads"></div>
-                <div style="background-color:var(--bg-window); margin:20px; text-align:left; ">
-                    <h2>Privacybeleid en veiligheid</h2>
+
+                <div class="content is-normal" style="color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
+                    <h1>Privacybeleid en veiligheid</h1>
                     <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
                         gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
                         Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
                     </p>
     
                     <div>
-                        <h2>Algemene Voorwaarden</h2>
-                        <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.</p>
-                        <strong>Uw Gebruikersaccount</strong>
-                        <p>Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
+                        <h3>Algemene Voorwaarden</h3>
+                        <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.
+                           Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
                            u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
     
                         <h2>Privacybeleid</h2>
@@ -172,8 +170,7 @@
                         <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
                     </div>
                 </div>
-                <div class="ads"></div>
-            </div>
+
         </section>
 
         <section id="contact" class="hidden">
@@ -223,7 +220,7 @@
                         <div>
                             <label for="lastname">Achteraam</label>
                             <input class="input" type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
-                            <!-- <span class="error-msg" style="display:block;">Dit veld is verplicht.</span> -->
+                            
                         </div>
                         <div class="date-options">
                             <label for="date">Geboortedatum</label>
@@ -236,7 +233,7 @@
                             <select class="year-select" name="year" required>
                                 <option value="" selected disabled>Year</option>
                             </select>
-                            <!-- <span class="error-msg" style="display:block;">Dit veld is verplicht.</span> -->
+                           
                         </div>
                         
                         <div>

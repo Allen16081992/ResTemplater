@@ -101,7 +101,7 @@
 
         <section id="policy" class="hidden">
 
-                <div class="content is-normal" style="color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
+                <div class="content is-normal" style="border-radius:10px; padding:2rem; background:rgba(31, 38, 135, 0.27); color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
                     <h1>Privacybeleid en veiligheid</h1>
                     <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
                         gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
@@ -296,7 +296,7 @@
         <p>Het lijkt erop dat JavaScript is uitgeschakeld in uw browser. Hierdoor werkt de site niet meer.</p>
     </noscript>
 
-    <footer style="background:black;">
+    <footer style="background:black; margin-top:6rem;">
         <p>CV Templater © 2023 - 2024</p>
     </footer>
 </body>

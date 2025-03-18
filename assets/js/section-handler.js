@@ -91,6 +91,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    ////////////////////// 🆕 Tabs Interface (For Resume Builder) 🆕 //////////////////////
+    const tabButtons = document.querySelectorAll('.tab-buttons button');
+    const tabSections = document.querySelectorAll('.tab-content .tab-section');
+
+    // function switchTab(tabId) {
+    //     tabSections.forEach(section => {
+    //         section.classList.toggle('current', section.id === tabId);
+    //         section.classList.toggle('hidden', section.id !== tabId);
+    //     });
+    // }
+    function switchTab(tabId) {
+        tabSections.forEach(section => {
+            if (section.id === tabId) {
+                section.classList.add('fade-in');
+                section.classList.remove('hidden');
+            } else {
+                section.classList.remove('fade-in');
+                section.classList.add('hidden');
+            }
+        });
+    }
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const tabId = this.getAttribute('data-tab');
+            switchTab(tabId);
+        });
+    });
+
+    // Set default active tab (First tab is shown by default)
+    switchTab('contact');
+
     ///////////////// Miscellaneous Effects ////////////////////
     const eye = document.querySelector('.toggle-eye i');
     const selectCv = document.getElementById('selectCv');

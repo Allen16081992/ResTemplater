@@ -28,6 +28,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
     <link rel="manifest" href="assets/images/favicon/site.webmanifest">
     <!-- Styling Sheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- <link rel="stylesheet" href="assets/css/3d_illustration.css"> -->
@@ -44,15 +45,86 @@
             <a href="#" data-section="user"><?= addUsername(); ?></a>
             <a href="#" data-section="home">Mijn CV</a>
             <a href="#" data-section="guide">Onze gids</a>
-            <a href="#" data-section="logout">Uitloggen</a>
+            <a href="#" data-section="logout">Logout</a>
         </nav>
     </header>
     <div class="skew"></div>
 
     <main>
         <section id="home" class="<?= Homepage(); ?>">
-            <div class="grid-ad-container">
-             
+            <div class="tabination">
+                <!-- Tab Navigation -->
+                <div class="tab-buttons">
+                    <button data-tab="profile" class="active">Profile</button>
+                    <button data-tab="experience">Experience</button>
+                    <button data-tab="education">Education</button>
+                    <button data-tab="skills">Skills</button>
+                    <button data-tab="preview">Preview</button>
+                </div>
+
+                <!-- Tabs Content (Inside Resume Builder) -->
+                <div class="tab-content">
+                    <div id="profile" class="tab-section current">
+                        <h2>Profile</h2>
+                        <p>Profile Info Content</p>
+                    </div>
+
+                    <div id="experience" class="tab-section hidden">
+                        <h2 class="title is-size-4 has-text-dark">Experience</h2>
+                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
+                            foreach ($data['experience'] as $experience): 
+                                echo '<form class="form-window" action="edit.php" method="post">
+                                        <div class="items">
+                                            <h3 class="has-text-weight-bold">'.htmlspecialchars($experience['worktitle']).'</h3>
+                                            <h3 class="has-text-info">'.htmlspecialchars($experience['company']).'</h3>
+                                            <span>'.htmlspecialchars($experience['firstDate']).'-'.htmlspecialchars($experience['lastDate']).'</span> 
+                                            <p class="subtitle is-size-6">'.htmlspecialchars($experience['workdesc']).'</p>
+                                        </div>
+                                        <div class="button-wrapper">
+                                            <input type="hidden" name="entryid" value="">
+                                            <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class="bx bxs-trash-alt"></i></button>
+                                            <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class="bx bxs-pencil"></i></button>
+                                        </div>
+                                    </form>';
+                            endforeach; ?>
+                        <?php } else { ?>
+                            <form class="form-window" action="edit.php" method="post">
+                                <div class="items">
+                                    <h3 class="has-text-weight-bold"><?= "Cabin Attendant"; ?></h3>
+                                    <h3 class="has-text-info">Turkish Airlines</h3>
+                                    <span>06.12.2016 - 21.06.2024</span> 
+                                    <p class="subtitle is-size-6">
+                                        Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                                    </p>
+                                </div> 
+
+                                <div class="button-wrapper">
+                                    <input type="hidden" name="entryid" value="">
+                                    <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
+                                    <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
+                                </div>
+                            </form>
+                            <button class="button is-primary is-dark">Add</button>
+                        <?php } ?>
+                    </div>
+                    <div id="education" class="tab-section hidden">
+                        <h2>Education</h2>
+                        <p>Education Content</p>
+                        <div class="button-wrapper">
+                            <input type="hidden" name="entryid" value="">
+                            <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
+                        </div>
+                    </div>
+                    <div id="skills" class="tab-section hidden">
+                        <h2>Skills</h2>
+                        Technical Skill Content
+                    </div>
+                    <div id="preview" class="tab-section hidden">
+                        <h2>Preview</h2>
+                        Resume Preview
+                    </div>
+                </div>
 
                 <!-- <div class="sheet"> -->
                     <!-- <h2>Mijn Curriculum Vitae</h2> -->
@@ -76,9 +148,9 @@
                         </select>
                     </form>   
                     </div>   -->
-                
+
                     <!-- Curriculum Vitae -->
-                    <button class="accordion">Curriculum Profiel</button>
+                    <!-- <button class="accordion">Curriculum Profiel</button>
                     <div class="panel">    
                         <form class="workinfo">
                             <div class="tab">
@@ -106,21 +178,21 @@
                                 <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Werkervaring / Stages -->
-                    <button class="accordion">Werkervaring / Stages</button>
+                    <!-- <button class="accordion">Werkervaring / Stages</button>
                     <div class="panel">
                         <form class="workinfo" action="edit.php" method="post">
-                            <!-- Functie --> 
+                 
                             <strong>Cabin Attendant</strong>
-                            <!-- Bedrijf -->
+                      
                             <strong>Turkish Airlines</strong>
-                            <!-- In dienst -->
+                 
                             <span>06/12/2016</span>
-                            <!-- Uit dienst -->
+                     
                             <span>21/06/2024</span> 
-                            <!-- Beschrijving -->
+                    
                             <p>
                                 Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
                             </p>
@@ -130,21 +202,21 @@
                                 <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Opleiding / Cursussen -->
-                    <button class="accordion">Opleiding / Cursussen</button>
+                    <!-- <button class="accordion">Opleiding / Cursussen</button>
                     <div class="panel">
                         <form class="workinfo" action="edit.php" method="post">
-                            <!-- Functie --> 
+                
                             <strong>Mediavormgever</strong>
-                            <!-- Bedrijf -->
+                 
                             <strong>Grafisch Lyceum</strong>
-                            <!-- In dienst -->
+                   
                             <span>06/12/2016</span>
-                            <!-- Uit dienst -->
+                       
                             <span>21/06/2024</span> 
-                            <!-- Beschrijving -->
+                      
                             <p>
                                 Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
                             </p> 
@@ -154,27 +226,24 @@
                                 <button type="button" class="edit" data-section="edit-study"><i class='bx bxs-pencil'></i></button>
                             </div>  
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Vaardigheden -->
-                    <button class="accordion">Vaardigheden</button>
+                    <!-- <button class="accordion">Vaardigheden</button>
                     <div class="panel">
                         <form action="edit.php" method="post">
                             <div class="tab">  
                                 <div>
-                                    <!-- Technisch -->
                                     <strong>Proficiencies</strong>      
                                     <p>Office 365</p>
                                 </div>
 
                                 <div> 
-                                    <!-- Language -->
                                     <strong>Language</strong> 
                                     <p>Swedish</p>
                                 </div>
 
                                 <div> 
-                                    <!-- Interessen -->
                                     <strong>Interests</strong> 
                                     <p>Theatre</p>
                                 </div>
@@ -187,10 +256,10 @@
                                 <button type="button" class="edit" data-section="edit-skill"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
 
                     <!-- Overige -->
-                    <button class="accordion">Motivatiebrief</button>
+                    <!-- <button class="accordion">Motivatiebrief</button>
                     <div class="panel">
                         <form action="src/resume.src.php" method="post">
                             <p>Schrijf hier jouw motivatie...</p>
@@ -201,7 +270,7 @@
                             </div>
                             <div class="account-section-divider"></div>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>

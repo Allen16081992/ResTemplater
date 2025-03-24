@@ -39,7 +39,7 @@
             <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="client.php">Terug</a>
+            <a href="client.php">Back</a>
         </nav>
     </header>
     <div class="skew"></div>

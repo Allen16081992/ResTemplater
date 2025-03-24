@@ -45,97 +45,23 @@
             <a href="#" data-section="user"><?= addUsername(); ?></a>
             <a href="#" data-section="home">Mijn CV</a>
             <a href="#" data-section="guide">Onze gids</a>
-            <a href="#" data-section="logout">Logout</a>
+            <a href="#" data-section="logout">Log out</a>
         </nav>
     </header>
     <div class="skew"></div>
 
     <main>
         <section id="home" class="<?= Homepage(); ?>">
-            <div class="tabination">
-                <!-- Tab Navigation -->
-                <div class="tab-buttons">
-                    <button data-tab="profile" class="active">Profile</button>
-                    <button data-tab="experience">Experience</button>
-                    <button data-tab="education">Education</button>
-                    <button data-tab="skills">Skills</button>
-                    <button data-tab="preview">Preview</button>
-                </div>
-
-                <!-- Tabs Content (Inside Resume Builder) -->
-                <div class="tab-content">
-                    <div id="profile" class="tab-section current">
-                        <h2>Profile</h2>
-                        <p>Profile Info Content</p>
-                    </div>
-
-                    <div id="experience" class="tab-section hidden">
-                        <h2 class="title is-size-4 has-text-dark">Experience</h2>
-                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
-                            foreach ($data['experience'] as $experience): 
-                                echo '<form class="form-window" action="edit.php" method="post">
-                                        <div class="items">
-                                            <h3 class="has-text-weight-bold">'.htmlspecialchars($experience['worktitle']).'</h3>
-                                            <h3 class="has-text-info">'.htmlspecialchars($experience['company']).'</h3>
-                                            <span>'.htmlspecialchars($experience['firstDate']).'-'.htmlspecialchars($experience['lastDate']).'</span> 
-                                            <p class="subtitle is-size-6">'.htmlspecialchars($experience['workdesc']).'</p>
-                                        </div>
-                                        <div class="button-wrapper">
-                                            <input type="hidden" name="entryid" value="">
-                                            <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class="bx bxs-trash-alt"></i></button>
-                                            <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class="bx bxs-pencil"></i></button>
-                                        </div>
-                                    </form>';
-                            endforeach; ?>
-                        <?php } else { ?>
-                            <form class="form-window" action="edit.php" method="post">
-                                <div class="items">
-                                    <h3 class="has-text-weight-bold"><?= "Cabin Attendant"; ?></h3>
-                                    <h3 class="has-text-info">Turkish Airlines</h3>
-                                    <span>06.12.2016 - 21.06.2024</span> 
-                                    <p class="subtitle is-size-6">
-                                        Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
-                                    </p>
-                                </div> 
-
-                                <div class="button-wrapper">
-                                    <input type="hidden" name="entryid" value="">
-                                    <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
-                                    <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
-                                </div>
-                            </form>
-                            <button class="button is-primary is-dark">Add</button>
-                        <?php } ?>
-                    </div>
-                    <div id="education" class="tab-section hidden">
-                        <h2>Education</h2>
-                        <p>Education Content</p>
-                        <div class="button-wrapper">
-                            <input type="hidden" name="entryid" value="">
-                            <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
-                            <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
-                        </div>
-                    </div>
-                    <div id="skills" class="tab-section hidden">
-                        <h2>Skills</h2>
-                        Technical Skill Content
-                    </div>
-                    <div id="preview" class="tab-section hidden">
-                        <h2>Preview</h2>
-                        Resume Preview
-                    </div>
-                </div>
-
-                <!-- <div class="sheet"> -->
-                    <!-- <h2>Mijn Curriculum Vitae</h2> -->
-                    <!-- <div class="accordion-head">
-                    <form action="src/resume.src.php" method="post">
-                        <button type="submit" data-section="create-res">New Resume</button> 
-                        <button type="submit" style="background:#4f46e5; color:#fff;" data-section="trash-cv">Delete Resume</button> 
-
-                        <label for="selectCv"></label>
+            <div class="resume-board">
+                <h2 class="title is-size-4">Resume Builder</h2>
+                <form action="src/resume.src.php" method="post">
+                    <button class="button is-success" type="submit" data-section="create-res">New Resume</button> 
+                    <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
+                    <button class="button" data-section="save-res">Download</button> 
+                    <label for="selectCv"></label>
+                    <div class="select is-link is-fullwidth" style="margin-bottom:10px;">
                         <select id="selectCv" name="cvname">
-                            <option selected disabled hidden>Select Resume:</option>
+                            <option selected disabled hidden>Select a resume</option>
                             <?php // Check if there is resume data to display
                             if (!empty($resumeData['resume'])): 
                                 // Loop through each resume and create an option element
@@ -146,134 +72,247 @@
                                 <?php endforeach; 
                             endif; ?>
                         </select>
-                    </form>   
-                    </div>   -->
+                    </div>
+                </form> 
 
-                    <!-- Curriculum Vitae -->
-                    <!-- <button class="accordion">Curriculum Profiel</button>
-                    <div class="panel">    
-                        <form class="workinfo">
-                            <div class="tab">
-                                <div>
-                                    <label for="title">Titel</label>
-                                    <input type="text" id="title" name="resumetitle" placeholder="Professional Dredger" disabled>
-                                </div>
-                                <input type="hidden" name="resumeID" value=""> 
-                                <input type="hidden" name="userID" value=""> 
-                                <button type="button" class="trash" data-section="trash-cv"><i class='bx bxs-trash-alt'></i></button>
-                                <button type="button" class="edit" data-section="edit-cv"><i class='bx bxs-pencil'></i></button>
-                                <button type="button" data-section="save-res">Save to PDF</button> 
-                            </div>
-                        </form>
-                        <div class="account-section-divider"></div>
-                        <h2>Foto</h2>
-                        <form>
+                <!-- Tab Navigation -->
+                <div class="tab-buttons">
+                    <button data-tab="profile" class="active">Profile</button>
+                    <button data-tab="experience">Work</button>
+                    <button data-tab="education">Education</button>
+                    <button data-tab="skills">Skills</button>
+                    <button data-tab="letter">Motivation</button>
+                    <button data-tab="preview">Preview</button>
+                </div>
+            </div>
+            
+            <!-- Tabs Content (Inside Resume Builder) -->
+            <div class="tab-content">
+                <div id="profile" class="tab-section current">
+                    <h2 class="title is-size-4 has-text-dark">Profile</h2>
+                    <form class="form-window">
+                        <div style="width:100%; display:flex; justify-content:center;">
                             <label for="file-upload"></label>
                             <input type="file" class="avatar" name="file-upload">
-                            <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
-                            <input type="hidden" name="resumeID" value=""> 
-                            <input type="hidden" name="userID" value=""> 
-                            <div class="button-wrapper">
-                                <button name="delImg" class="trash"><i class='bx bxs-trash-alt'></i></button>
-                                <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
-                            </div>
-                        </form>
-                    </div> -->
+                        </div>
+                        <label for="title">Titel</label>
+                        <input class="input" type="text" id="title" name="resumetitle" placeholder="Professional Dredger">
+                        <div class="button-wrapper">
+                            <button class="button" name="delAV">No Image</button>
+                            <button class="button is-link">Save</button>
+                        </div>
+                        <!-- <input type="hidden" name="resumeID" value=""> 
+                        <input type="hidden" name="userID" value="">  -->
+                    </form>
+                </div>
 
-                    <!-- Werkervaring / Stages -->
-                    <!-- <button class="accordion">Werkervaring / Stages</button>
-                    <div class="panel">
-                        <form class="workinfo" action="edit.php" method="post">
-                 
-                            <strong>Cabin Attendant</strong>
-                      
-                            <strong>Turkish Airlines</strong>
-                 
-                            <span>06/12/2016</span>
-                     
-                            <span>21/06/2024</span> 
-                    
-                            <p>
-                                Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
-                            </p>
+                <div id="experience" class="tab-section hidden">
+                    <h2 class="title is-size-4 has-text-dark">Experience</h2>
+                    <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
+                        foreach ($data['experience'] as $experience): 
+                            echo '<form class="form-window" action="edit.php" method="post">
+                                    <div class="items">
+                                        <h3 class="has-text-info">'.htmlspecialchars($experience['worktitle']).'</h3>
+                                        <h3>'.htmlspecialchars($experience['company']).'</h3>
+                                        <span>'.htmlspecialchars($experience['firstDate']).'-'.htmlspecialchars($experience['lastDate']).'</span> 
+                                        <p class="subtitle is-size-6">'.htmlspecialchars($experience['workdesc']).'</p>
+                                    </div>
+                                    <div class="button-wrapper">
+                                        <input type="hidden" name="entryid" value="">
+                                        <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class="bx bxs-trash-alt"></i></button>
+                                        <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class="bx bxs-pencil"></i></button>
+                                    </div>
+                                </form>';
+                        endforeach; ?>
+                    <?php } else { ?>
+                        <form class="form-window" action="edit.php" method="post">
+                            <div class="items">
+                                <h3 class="has-text-info"><?= "Cabin Attendant"; ?></h3>
+                                <h3>Turkish Airlines</h3>
+                                <span>06.12.2016 - 21.06.2024</span> 
+                                <p class="subtitle is-size-6">
+                                    Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                                </p>
+                            </div> 
+
                             <div class="button-wrapper">
                                 <input type="hidden" name="entryid" value="">
                                 <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
                                 <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
                             </div>
                         </form>
-                    </div> -->
-
-                    <!-- Opleiding / Cursussen -->
-                    <!-- <button class="accordion">Opleiding / Cursussen</button>
-                    <div class="panel">
-                        <form class="workinfo" action="edit.php" method="post">
-                
-                            <strong>Mediavormgever</strong>
-                 
-                            <strong>Grafisch Lyceum</strong>
-                   
-                            <span>06/12/2016</span>
-                       
-                            <span>21/06/2024</span> 
-                      
-                            <p>
-                                Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
-                            </p> 
-                            <div class="button-wrapper">
-                                <input type="hidden" name="eduid" value="">
-                                <button type="button" class="trash" data-section="trash-study"><i class='bx bxs-trash-alt'></i></button>
-                                <button type="button" class="edit" data-section="edit-study"><i class='bx bxs-pencil'></i></button>
-                            </div>  
-                        </form>
-                    </div> -->
-
-                    <!-- Vaardigheden -->
-                    <!-- <button class="accordion">Vaardigheden</button>
-                    <div class="panel">
-                        <form action="edit.php" method="post">
-                            <div class="tab">  
-                                <div>
-                                    <strong>Proficiencies</strong>      
-                                    <p>Office 365</p>
-                                </div>
-
-                                <div> 
-                                    <strong>Language</strong> 
-                                    <p>Swedish</p>
-                                </div>
-
-                                <div> 
-                                    <strong>Interests</strong> 
-                                    <p>Theatre</p>
-                                </div>
-                            </div>
-                            <div class="button-wrapper">
-                                <input type="hidden" name="techid" value="">
-                                <input type="hidden" name="langid" value="">
-                                <input type="hidden" name="intid" value="">
-                                <button type="button" class="trash" data-section="trash-skill"><i class='bx bxs-trash-alt'></i></button>
-                                <button type="button" class="edit" data-section="edit-skill"><i class='bx bxs-pencil'></i></button>
-                            </div>
-                        </form>
-                    </div> -->
-
-                    <!-- Overige -->
-                    <!-- <button class="accordion">Motivatiebrief</button>
-                    <div class="panel">
-                        <form action="src/resume.src.php" method="post">
-                            <p>Schrijf hier jouw motivatie...</p>
-                            <div class="button-wrapper">
-                                <input type="hidden" name="motid" value="">
-                                <button type="button" class="trash" data-section="trash-mot"><i class='bx bxs-trash-alt'></i></button>
-                                <button type="button" class="edit" data-section="edit-mot"><i class='bx bxs-pencil'></i></button>
-                            </div>
-                            <div class="account-section-divider"></div>
-                        </form>
-                    </div> -->
+                        <button class="button is-primary is-dark">Add</button>
+                    <?php } ?>
                 </div>
-
+                <div id="education" class="tab-section hidden">
+                    <h2>Education</h2>
+                    <p>Education Content</p>
+                    <div class="button-wrapper">
+                        <input type="hidden" name="entryid" value="">
+                        <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
+                        <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
+                    </div>
+                </div>
+                <div id="skills" class="tab-section hidden">
+                    <h2>Skills</h2>
+                    Technical Skill Content
+                </div>
+                <div id="letter" class="tab-section hidden">
+                    <h2>Motivation</h2>
+                    Technical Skill Content
+                </div>
+                <div id="preview" class="tab-section hidden">
+                    <h2>Preview</h2>
+                    Resume Preview
+                </div>
             </div>
+
+            <!-- <div class="sheet"> -->
+                <!-- <h2>Mijn Curriculum Vitae</h2> -->
+                <!-- <div class="accordion-head">
+                <form action="src/resume.src.php" method="post">
+                    <button type="submit" data-section="create-res">New Resume</button> 
+                    <button type="submit" style="background:#4f46e5; color:#fff;" data-section="trash-res">Delete Resume</button> 
+
+                    <label for="selectCv"></label>
+                    <select id="selectCv" name="cvname">
+                        <option selected disabled hidden>Select Resume:</option>
+                        <?php // Check if there is resume data to display
+                        if (!empty($resumeData['resume'])): 
+                            // Loop through each resume and create an option element
+                            foreach ($resumeData['resume'] as $resume): ?>
+                                <option value="<?= htmlspecialchars($resume['resumeID']) ?>">
+                                    <?= htmlspecialchars($resume['resumetitle']) ?>
+                                </option>
+                            <?php endforeach; 
+                        endif; ?>
+                    </select>
+                </form>   
+                </div>   -->
+
+                <!-- Curriculum Vitae -->
+                <!-- <button class="accordion">Curriculum Profiel</button>
+                <div class="panel">    
+                    <form class="workinfo">
+                        <div class="tab">
+                            <div>
+                                <label for="title">Titel</label>
+                                <input type="text" id="title" name="resumetitle" placeholder="Professional Dredger" disabled>
+                            </div>
+                            <input type="hidden" name="resumeID" value=""> 
+                            <input type="hidden" name="userID" value=""> 
+                            <button type="button" class="trash" data-section="trash-res"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" data-section="edit-cv"><i class='bx bxs-pencil'></i></button>
+                            <button type="button" data-section="save-res">Save to PDF</button> 
+                        </div>
+                    </form>
+                    <div class="account-section-divider"></div>
+                    <h2>Foto</h2>
+                    <form>
+                        <label for="file-upload"></label>
+                        <input type="file" class="avatar" name="file-upload">
+                        <p>Tip: Gebruik geen foto, dan zetten wij jouw initialen erin.</p>
+                        <input type="hidden" name="resumeID" value=""> 
+                        <input type="hidden" name="userID" value=""> 
+                        <div class="button-wrapper">
+                            <button name="delImg" class="trash"><i class='bx bxs-trash-alt'></i></button>
+                            <button name="saveImg" class="edit"><i class='bx bxs-pencil'></i></button>
+                        </div>
+                    </form>
+                </div> -->
+
+                <!-- Werkervaring / Stages -->
+                <!-- <button class="accordion">Werkervaring / Stages</button>
+                <div class="panel">
+                    <form class="workinfo" action="edit.php" method="post">
+                
+                        <strong>Cabin Attendant</strong>
+                    
+                        <strong>Turkish Airlines</strong>
+                
+                        <span>06/12/2016</span>
+                    
+                        <span>21/06/2024</span> 
+                
+                        <p>
+                            Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                        </p>
+                        <div class="button-wrapper">
+                            <input type="hidden" name="entryid" value="">
+                            <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
+                        </div>
+                    </form>
+                </div> -->
+
+                <!-- Opleiding / Cursussen -->
+                <!-- <button class="accordion">Opleiding / Cursussen</button>
+                <div class="panel">
+                    <form class="workinfo" action="edit.php" method="post">
+            
+                        <strong>Mediavormgever</strong>
+                
+                        <strong>Grafisch Lyceum</strong>
+                
+                        <span>06/12/2016</span>
+                    
+                        <span>21/06/2024</span> 
+                    
+                        <p>
+                            Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
+                        </p> 
+                        <div class="button-wrapper">
+                            <input type="hidden" name="eduid" value="">
+                            <button type="button" class="trash" data-section="trash-study"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" data-section="edit-study"><i class='bx bxs-pencil'></i></button>
+                        </div>  
+                    </form>
+                </div> -->
+
+                <!-- Vaardigheden -->
+                <!-- <button class="accordion">Vaardigheden</button>
+                <div class="panel">
+                    <form action="edit.php" method="post">
+                        <div class="tab">  
+                            <div>
+                                <strong>Proficiencies</strong>      
+                                <p>Office 365</p>
+                            </div>
+
+                            <div> 
+                                <strong>Language</strong> 
+                                <p>Swedish</p>
+                            </div>
+
+                            <div> 
+                                <strong>Interests</strong> 
+                                <p>Theatre</p>
+                            </div>
+                        </div>
+                        <div class="button-wrapper">
+                            <input type="hidden" name="techid" value="">
+                            <input type="hidden" name="langid" value="">
+                            <input type="hidden" name="intid" value="">
+                            <button type="button" class="trash" data-section="trash-skill"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" data-section="edit-skill"><i class='bx bxs-pencil'></i></button>
+                        </div>
+                    </form>
+                </div> -->
+
+                <!-- Overige -->
+                <!-- <button class="accordion">Motivatiebrief</button>
+                <div class="panel">
+                    <form action="src/resume.src.php" method="post">
+                        <p>Schrijf hier jouw motivatie...</p>
+                        <div class="button-wrapper">
+                            <input type="hidden" name="motid" value="">
+                            <button type="button" class="trash" data-section="trash-mot"><i class='bx bxs-trash-alt'></i></button>
+                            <button type="button" class="edit" data-section="edit-mot"><i class='bx bxs-pencil'></i></button>
+                        </div>
+                        <div class="account-section-divider"></div>
+                    </form>
+                </div> -->
+            </div> 
         </section>
         
         <section id="user" class="<?= AccountPage() ?>">
@@ -363,20 +402,22 @@
         </section>
 
         <section id="logout" class="<?= logoutRequest(); ?>">
-            <h2>Weet je zeker dat je wilt uitloggen?</h2>
+            <div class="form-window">
+            <h2 class="title is-size-5">Until next time!</h2>
             <form action="" method="post">
-                <button type="submit" name="logout">Uitloggen</button>
+                <button class="button is-fullwidth" type="submit" name="logout">Log out</button>
             </form> 
+            </div>
         </section>
 
         <section id="create-res" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Nieuw CV Maken</h2>
-                    <label for="cvname">Titel</label>
-                    <input type="text" id="cvname" name="cvname" placeholder="Geef het een naam." required>
-                    <button type="submit" name="creResume">Opslaan</button>
+                    <h2 class="title is-size-4">New Resume</h2>
+                    <label for="cvname">Title</label>
+                    <input class="input" type="text" id="cvname" name="cvname" placeholder="Let's give it a name" required>
+                    <button class="button is-link" type="submit" name="creResume">Save</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -384,114 +425,97 @@
 
         <section id="save-res" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Downloaden</h2>
-                    <p>Kies een template</p>
-                    <button type="submit" name="default">Standaard</button>
-                    <button type="submit" name="business">Professioneel</button>
-                    <button type="submit" name="careertiger">Carrièretijger</button>
+                    <h2 class="title is-size-4">Download as PDF</h2>
+                    <p>Choose your preferred layout</p>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
+                    <div class="buttons">
+                        <button class="button" type="submit" name="default">Default</button>
+                        <button class="button is-info is-inverted" type="submit" name="business">Corporate</button>
+                        <button class="button is-success is-inverted" type="submit" name="careertiger">Careertiger</button>
+                    </div>
                 </form>
             </div>
         </section>
 
-        <section id="trash-cv" class="hidden">
+        <section id="trash-res" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Verwijderen</h2>
-                    <label for="cvname">Welk cv wil je verwijderen?</label>
-                    <select id="cvname" name="cvname">
-                        <option selected disabled hidden>(None selected)</option>
-                        <?php if (!empty($resumeData)) { ?>
-                        <?php foreach ($resumeData as $resume): ?>
-                            <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
-                        <?php endforeach; ?> <?php } ?>
-                    </select>
+                    <h2 class="title is-size-4">Delete a resume</h2>
+                    <label for="cvname">Which resume do you like to discard?</label>
+                    <div class="select is-link is-fullwidth">
+                        <select id="cvname" name="cvname">
+                            <option selected disabled hidden>Select a resume</option>
+                            <?php if (!empty($resumeData)) { ?>
+                            <?php foreach ($resumeData as $resume): ?>
+                                <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
+                            <?php endforeach; ?> <?php } ?>
+                        </select>
+                    </div>
+                    
+                    <button class="button is-danger is-dark" style="margin-top:20px;" type="submit" name="delResume">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
 
                     <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                     <input type="hidden" name="resid">
-                    <button class="Del" type="submit" name="delResume">Verwijderen</button>
                 </form>
             </div>
         </section>
 
         <section id="edit-work" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Wijzigen</h2>
-                    <div class="workinfo">
-                        <input type="hidden" name="workid" value="">
-                        <div>
-                            <label for="worktitle">Functie</label>
-                            <input type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" required>
-                        </div>
-                        <div>
-                            <label for="company">Bedrijf</label>
-                            <input type="text" id="company" name="company" placeholder="Mijn werkgever" required>
-                        </div>
-                        <div class="date-options">
-                            <label for="day-select">In dienst</label>
-                            <select class="day-select" name="join_day" required>
-                                <option selected disabled>--</option>
-                            </select>
-                            <select class="month-select" name="join_month" required>
-                                <option selected disabled>--</option>
-                            </select>
-                            <select class="year-select" name="join_year" required>
-                                <option selected disabled>----</option>
-                            </select>
-                        </div> 
-                        <div class="date-options">
-                            <label for="day-select">Uit dienst</label>
-                            <select class="day-select" name="leave_day" required>
-                                <option selected disabled>--</option>
-                            </select>
-                            <select class="month-select" name="leave_month" required>
-                                <option selected disabled>--</option>
-                            </select>
-                            <select class="year-select" name="leave_year" required>
-                                <option selected disabled>----</option>
-                            </select>
-                        </div> 
-                        <label for="workdesc">Beschrijving</label>
-                        <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
-                        <button type="submit" name="saveExperience">Opslaan</button>
-                    </div>
+                    <h2 class="title is-size-5">Edit Item</h2>        
+                    <label for="worktitle">Functie</label>
+                    <input class="input" type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" required>
+
+                    <label for="company">Bedrijf</label>
+                    <input class="input" type="text" id="company" name="company" placeholder="Mijn werkgever" required>
+                    
+                    <div class="date-options">
+                        <label for="day-select">In dienst</label>
+                        <select class="day-select" name="join_day" required>
+                            <option selected disabled>--</option>
+                        </select>
+                        <select class="month-select" name="join_month" required>
+                            <option selected disabled>--</option>
+                        </select>
+                        <select class="year-select" name="join_year" required>
+                            <option selected disabled>----</option>
+                        </select>
+                    </div> 
+                    <div class="date-options">
+                        <label for="day-select">Uit dienst</label>
+                        <select class="day-select" name="leave_day" required>
+                            <option selected disabled>--</option>
+                        </select>
+                        <select class="month-select" name="leave_month" required>
+                            <option selected disabled>--</option>
+                        </select>
+                        <select class="year-select" name="leave_year" required>
+                            <option selected disabled>----</option>
+                        </select>
+                    </div> 
+                    <label for="workdesc">Beschrijving</label>
+                    <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
+                    <input type="hidden" name="workid" value="">
+                    <button class="button is-link" type="submit" name="saveExp">Save</button>  
                 </form>
             </div>
         </section>
 
         <section id="trash-work" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Weet je het zeker?</h2>
-                    <div class="workinfo">
-                        <div>
-                            <label for="worktitle">Functie</label>
-                            <input type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" disabled>
-                        </div>
-                        <div>
-                            <label for="company">Bedrijf</label>
-                            <input type="text" id="company" name="company" placeholder="Mijn werkgever" disabled>
-                        </div>
-                        <div>
-                            <label for="joined">In dienst</label>
-                            <input type="text" id="joined" value="06/12/2016" disabled>
-                        </div>
-                        <div>
-                            <label for="left">Uit dienst</label>
-                            <input type="text" id="left" value="06/12/2016" disabled>
-                        </div> 
-                        <label for="workdesc">Beschrijving</label>
-                        <textarea id="workdesc" rows="4" placeholder="Write your job description here..." disabled></textarea>
-                    </div>
+                    <h2 class="title is-size-5">Delete Item</h2>
+                    <p class="subtitle is-size-6">Are you sure?</p>
+
                     <input type="hidden" name="workid" value="">
-                    <button type="submit" name="trashExperience">Verwijderen</button>
+                    <button class="button is-danger is-inverted" type="submit" name="trashExp">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -499,9 +523,9 @@
 
         <section id="edit-study" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
-                    <h2>Wijzigen</h2>
+                    <h2>Edit</h2>
                     <div class="workinfo">
                         <div>
                             <label for="edutitle">Functie</label>
@@ -547,8 +571,8 @@
 
         <section id="trash-study" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
                     <h2>Weet je het zeker?</h2>
                     <div class="workinfo">
                         <div>
@@ -579,8 +603,8 @@
 
         <section id="edit-skill" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
                     <h2>Wijzigen</h2>
                     
                     <label for="skill">Proficiency</label>
@@ -601,8 +625,8 @@
 
         <section id="trash-skill" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
                     <h2>Weet je het zeker?</h2>
                     
                     <label for="skill">Proficiency</label>
@@ -623,8 +647,8 @@
 
         <section id="edit-mot" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>   
                     <h2>Wijzigen</h2>               
                     
                     <label for="mot">Motivation</label>
@@ -639,8 +663,8 @@
 
         <section id="trash-mot" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
                     <h2>Weet je het zeker?</h2>                
                     
                     <label for="mot">Motivation</label>
@@ -655,8 +679,8 @@
         
         <section id="close-account" class="hidden">
             <div class="form-window">
+                <button class="button is-small" data-section="home">Back</button>
                 <form action="src/account.src.php" method="post">
-                    <button class="return" data-section="home">Terug</button>
                     <h2>Wat jammer dat je vertrekt.</h2>
                     <p>Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>
                     <label for="pwd">Wachtwoord</label>

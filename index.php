@@ -220,7 +220,6 @@
                         <div>
                             <label for="lastname">Achteraam</label>
                             <input class="input" type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
-                            
                         </div>
                         <div class="date-options">
                             <label for="date">Geboortedatum</label>

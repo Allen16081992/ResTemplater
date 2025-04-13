@@ -17,7 +17,7 @@
 
             // Continue processing
             // New Resume
-            if (isset($this->formFields['creResume'])) {
+            if (isset($this->formFields['addResume'])) {
 
             }
             // Update Resume

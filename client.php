@@ -1,11 +1,8 @@
 <?php 
   // Load PHP files
   require_once './src/session_manager.src.php'; 
-  require_once './src/data_loader.src.php';
-
-  // Start session prerequisites
-  //Unauthorized_Access(); // Verify access
-  //sessionRegenTimer(); // Regenerate the session periodically
+  // SessionBook::invokeSession();
+  // SessionBook::intrusionGuard();
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -42,7 +39,7 @@
             <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
         </div>
         <nav>
-            <a href="#" data-section="user"><?= addUsername(); ?></a>
+            <a href="#" data-section="user"><?= SessionBook::addUsername(); ?></a>
             <a href="#" data-section="home">Mijn CV</a>
             <a href="#" data-section="guide">Onze gids</a>
             <a href="#" data-section="logout">Log out</a>
@@ -51,15 +48,15 @@
     <div class="skew"></div>
 
     <main>
-        <section id="home" class="<?= Homepage(); ?>">
+        <section id="home" class="<?= UIBook::Homepage(); ?>">
             <div class="resume-board">
                 <h2 class="title is-size-4">Resume Builder</h2>
                 <form action="src/resume.src.php" method="post">
-                    <button class="button is-success" type="submit" data-section="create-res">New Resume</button> 
+                    <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
                     <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
                     <button class="button" data-section="save-res">Download</button> 
                     <label for="selectCv"></label>
-                    <div class="select is-link is-fullwidth" style="margin-bottom:10px;">
+                    <div class="select is-fullwidth" style="margin-bottom:10px;">
                         <select id="selectCv" name="cvname">
                             <option selected disabled hidden>Select a resume</option>
                             <?php // Check if there is resume data to display
@@ -89,8 +86,8 @@
             <!-- Tabs Content (Inside Resume Builder) -->
             <div class="tab-content">
                 <div id="profile" class="tab-section current">
-                    <h2 class="title is-size-4 has-text-dark">Profile</h2>
-                    <form class="form-window">
+                    <div class="form-window">
+                        <h2 class="title is-size-4">Profile</h2>
                         <div style="width:100%; display:flex; justify-content:center;">
                             <label for="file-upload"></label>
                             <input type="file" class="avatar" name="file-upload">
@@ -99,70 +96,119 @@
                         <input class="input" type="text" id="title" name="resumetitle" placeholder="Professional Dredger">
                         <div class="button-wrapper">
                             <button class="button" name="delAV">No Image</button>
-                            <button class="button is-link">Save</button>
+                            <button class="button is-link" name="addAV">Save</button>
                         </div>
-                        <!-- <input type="hidden" name="resumeID" value=""> 
-                        <input type="hidden" name="userID" value="">  -->
-                    </form>
+                    </div>
                 </div>
 
-                <div id="experience" class="tab-section hidden">
-                    <h2 class="title is-size-4 has-text-dark">Experience</h2>
-                    <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
-                        foreach ($data['experience'] as $experience): 
-                            echo '<form class="form-window" action="edit.php" method="post">
-                                    <div class="items">
-                                        <h3 class="has-text-info">'.htmlspecialchars($experience['worktitle']).'</h3>
-                                        <h3>'.htmlspecialchars($experience['company']).'</h3>
-                                        <span>'.htmlspecialchars($experience['firstDate']).'-'.htmlspecialchars($experience['lastDate']).'</span> 
-                                        <p class="subtitle is-size-6">'.htmlspecialchars($experience['workdesc']).'</p>
-                                    </div>
-                                    <div class="button-wrapper">
-                                        <input type="hidden" name="entryid" value="">
-                                        <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class="bx bxs-trash-alt"></i></button>
-                                        <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class="bx bxs-pencil"></i></button>
-                                    </div>
-                                </form>';
-                        endforeach; ?>
-                    <?php } else { ?>
-                        <form class="form-window" action="edit.php" method="post">
-                            <div class="items">
-                                <h3 class="has-text-info"><?= "Cabin Attendant"; ?></h3>
-                                <h3>Turkish Airlines</h3>
-                                <span>06.12.2016 - 21.06.2024</span> 
-                                <p class="subtitle is-size-6">
-                                    Energieke en klantgerichte cabine-assistente gericht op passagierscomfort en veiligheid aan boord. Vaardig in het omgaan met noodgevallen. Vraag naar mijn ervaringen hiermee.
-                                </p>
-                            </div> 
-
-                            <div class="button-wrapper">
-                                <input type="hidden" name="entryid" value="">
-                                <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
-                                <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
-                            </div>
-                        </form>
-                        <button class="button is-primary is-dark">Add</button>
-                    <?php } ?>
+                <div id="experience" class="tab-section hidden"> 
+                    <div class="form-window">
+                        <h2 class="title is-size-4">Experience</h2>
+                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
+                            foreach ($data['experience'] as $job): 
+                                echo '<form>
+                                        <div class="items">
+                                            <input type="hidden" name="entryid" value="'.htmlspecialchars($job['workID']).'">
+                                            <h3 class="has-text-info">'.htmlspecialchars($job['worktitle']).'</h3>
+                                            <h3>'.htmlspecialchars($job['company']).'</h3>
+                                            <span>'.htmlspecialchars($job['firstDate']).'-'.htmlspecialchars($job['lastDate']).'</span> 
+                                            <p class="subtitle is-size-6">'.htmlspecialchars($job['workdesc']).'</p>
+                                        </div>
+                                        <div class="button-wrapper">
+                                            <input type="hidden" name="entryid" value="">
+                                            <button type="button" name="trash-work" data-section="trash-work"><i class="bx bxs-trash-alt"></i></button>
+                                            <button type="button" name="edit-work" data-section="edit-work"><i class="bx bxs-pencil"></i></button>
+                                        </div>
+                                    </form>';
+                            endforeach; ?>
+                        <?php } else {
+                            echo '<form>
+                                <button class="button is-primary is-small is-fullwidth" data-tab="add-skill">Add</button>
+                            </form>';
+                        } ?>
+                    </div>
                 </div>
                 <div id="education" class="tab-section hidden">
-                    <h2>Education</h2>
-                    <p>Education Content</p>
-                    <div class="button-wrapper">
-                        <input type="hidden" name="entryid" value="">
-                        <button type="button" class="trash" name="trash-work" data-section="trash-work"><i class='bx bxs-trash-alt'></i></button>
-                        <button type="button" class="edit" name="edit-work" data-section="edit-work"><i class='bx bxs-pencil'></i></button>
+                    <div class="form-window">
+                        <h2 class="title is-size-4">Education</h2>
+                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['education'])) { 
+                            foreach ($data['education'] as $study): 
+                                echo '<form>
+                                        <div class="items">
+                                            <h3 class="has-text-info">'.htmlspecialchars($study['edutitle']).'</h3>
+                                            <h3>'.htmlspecialchars($study['company']).'</h3>
+                                            <span>'.htmlspecialchars($study['firstDate']).'-'.htmlspecialchars($study['lastDate']).'</span> 
+                                            <p class="subtitle is-size-6">'.htmlspecialchars($study['edudesc']).'</p>
+                                        </div>
+                                        <div class="button-wrapper">
+                                            <input type="hidden" name="entryid" value="">
+                                            <button type="button" class="trash" data-section="trash-study"><i class="bx bxs-trash-alt"></i></button>
+                                            <button type="button" class="edit" data-section="trash-study"><i class="bx bxs-pencil"></i></button>
+                                        </div>
+                                    </form>';
+                            endforeach; ?>
+                        <?php } else {
+                            echo '<form>
+                                <button class="button is-primary is-small is-fullwidth" data-tab="edit-study">Add</button>
+                            </form>'; 
+                        } ?>
                     </div>
                 </div>
                 <div id="skills" class="tab-section hidden">
-                    <h2>Skills</h2>
-                    Technical Skill Content
+                    <div class="form-window">
+                        <h2 class="title is-size-4">Technical Skills</h2>
+                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['techskill'])) { 
+                            foreach ($data['techskill'] as $skill): 
+                                echo '<form>
+                                        <div class="items">
+                                            <div>
+                                                <h3 class="title is-size-6">Skills</h3>
+                                                <span class="subtitle is-size-6">'.htmlspecialchars($skill['techtitle']).'</span>
+                                            </div>
+                                            <div>
+                                                <h3 class="title is-size-6">Language</h3>
+                                                <span class="subtitle is-size-6">'.htmlspecialchars($skill['language']).'</span>
+                                            </div>
+                                            <div>
+                                                <h3 class="title is-size-6">Free-time</h3>
+                                                <span class="subtitle is-size-6">'.htmlspecialchars($skill['interest']).'</span>
+                                            </div>
+                                        </div>
+                                        <div class="button-wrapper">
+                                            <input type="hidden" name="entryid" value="'.htmlspecialchars($skill['techID']).'">
+                                            <button type="button" class="trash" data-section="trash-study"><i class="bx bxs-trash-alt"></i></button>
+                                            <button type="button" class="edit" data-section="trash-study"><i class="bx bxs-pencil"></i></button>
+                                        </div>
+                                    </form>';
+                            endforeach; ?>
+                        <?php } else {
+                            echo '<form>
+                                <button class="button is-primary is-small is-fullwidth" data-tab="add-skill">Add</button>
+                            </form>';
+                        } ?>
+                    </div>
                 </div>
                 <div id="letter" class="tab-section hidden">
-                    <h2>Motivation</h2>
-                    Technical Skill Content
+                    <div class="form-window">
+                        <h2 class="title is-size-5">Motivation</h2>
+                        <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['techskill'])) { 
+                                echo '<form>
+                                    <p class="subtitle is-size-6">'.htmlspecialchars($data['motivation'][1]).'</p>
+                                </form>                              
+                                <div class="button-wrapper">
+                                    <input type="hidden" name="entryid" value="'.htmlspecialchars($data['motivation'][0]).'">
+                                    <button type="button" data-section="trash-mot"><i class="bx bxs-trash-alt"></i></button>
+                                    <button type="button" data-section="edit-mot"><i class="bx bxs-pencil"></i></button>
+                                </div>
+                                '; ?>
+                        <?php } else {
+                            echo '<form>
+                                <button class="button is-primary  is-small is-fullwidth" data-tab="add-skill">Add</button>
+                            </form>';
+                        } ?>
+                    </div>
                 </div>
                 <div id="preview" class="tab-section hidden">
-                    <h2>Preview</h2>
                     Resume Preview
                 </div>
             </div>
@@ -171,22 +217,8 @@
                 <!-- <h2>Mijn Curriculum Vitae</h2> -->
                 <!-- <div class="accordion-head">
                 <form action="src/resume.src.php" method="post">
-                    <button type="submit" data-section="create-res">New Resume</button> 
+                    <button type="submit" data-section="add-res">New Resume</button> 
                     <button type="submit" style="background:#4f46e5; color:#fff;" data-section="trash-res">Delete Resume</button> 
-
-                    <label for="selectCv"></label>
-                    <select id="selectCv" name="cvname">
-                        <option selected disabled hidden>Select Resume:</option>
-                        <?php // Check if there is resume data to display
-                        if (!empty($resumeData['resume'])): 
-                            // Loop through each resume and create an option element
-                            foreach ($resumeData['resume'] as $resume): ?>
-                                <option value="<?= htmlspecialchars($resume['resumeID']) ?>">
-                                    <?= htmlspecialchars($resume['resumetitle']) ?>
-                                </option>
-                            <?php endforeach; 
-                        endif; ?>
-                    </select>
                 </form>   
                 </div>   -->
 
@@ -224,7 +256,7 @@
                 <!-- Werkervaring / Stages -->
                 <!-- <button class="accordion">Werkervaring / Stages</button>
                 <div class="panel">
-                    <form class="workinfo" action="edit.php" method="post">
+                    <form class="workinfo" method="post">
                 
                         <strong>Cabin Attendant</strong>
                     
@@ -248,7 +280,7 @@
                 <!-- Opleiding / Cursussen -->
                 <!-- <button class="accordion">Opleiding / Cursussen</button>
                 <div class="panel">
-                    <form class="workinfo" action="edit.php" method="post">
+                    <form class="workinfo" method="post">
             
                         <strong>Mediavormgever</strong>
                 
@@ -272,7 +304,7 @@
                 <!-- Vaardigheden -->
                 <!-- <button class="accordion">Vaardigheden</button>
                 <div class="panel">
-                    <form action="edit.php" method="post">
+                    <form method="post">
                         <div class="tab">  
                             <div>
                                 <strong>Proficiencies</strong>      
@@ -315,85 +347,71 @@
             </div> 
         </section>
         
-        <section id="user" class="<?= AccountPage() ?>">
+        <section id="user" class="<?= UIBook::isVisible('account'); ?>">
             <div class="form-window">
                 
                 <!-- <button class="avatar">Profiel Foto</button> -->
                 <form action="src/account.src.php" method="post">
-                    <h3>Persoonlijk</h3>
+                    <h3 class="subtitle">Persoonlijk</h3>
                     <div class="tab">
                         <div>
                             <label for="firstname">Voornaam</label>
-                            <input type="text" name="firstname" placeholder="Zara" disabled>
+                            <input class="input" type="text" name="firstname" placeholder="Zara">
                         </div>
                         <div>
                             <label for="lastname">Achternaam</label>
-                            <input type="text" name="lastname" placeholder="Arkmenedih" disabled> 
+                            <input class="input" type="text" name="lastname" placeholder="Arkmenedih"> 
                         </div>
                         <div > 
                             <label for="postalcode">Postcode</label>
-                            <input type="text" name="postalcode" placeholder="Postcode" disabled>             
+                            <input class="input" type="text" name="postalcode" placeholder="Postcode">             
                         </div> 
                         <div> 
                             <label for="city">Woonplaats</label>
-                            <input type="text" name="city" placeholder="Woonplaats" disabled>          
+                            <input class="input" type="text" name="city" placeholder="Woonplaats">          
                         </div> 
                         <div>
                             <label for="country">Nationaliteit</label>
-                            <input type="text" name="country" placeholder="Nationaliteit" disabled> 
+                            <input class="input" type="text" name="country" placeholder="Nationaliteit"> 
                         </div>
                         <div>
                             <label for="phone">Telefoon</label>
-                            <input type="text" name="phone" placeholder="Mobile Number" disabled> 
+                            <input class="input" type="text" name="phone" placeholder="Mobile Number"> 
                         </div>
-                        <div class="date-options">
-                            <label for="day-select">Geboortedatum</label>
-                            <select class="day-select" name="day" required>
-                                <option value="" selected disabled>--</option>
-                                <!-- Populated with JS -->
-                            </select>
-                            <select class="month-select" name="month" required>
-                                <option value="" selected disabled>--</option>
-                                <!-- Populated with JS -->
-                            </select>
-                            <select class="year-select" name="year" required>
-                                <option value="" selected disabled>----</option>
-                                <!-- Populated with JS -->
-                            </select>
-                        </div>
-                        <input type="hidden" name="uid"> 
-                        <button type="submit" name="savePersonal">Wijzigen</button>
+                        <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                     </div>
+                    <button class="button is-link" type="submit" name="savePersonal">Save</button>
                     <div class="account-section-divider"></div>
                 </form>
                 <form action="src/account.src.php" method="post">
-                    <h3>Account</h3>
+                    <h3 class="subtitle">Account</h3>
                     <div class="tab">
                         <div>
                             <label for="username">Gebruikersnaam</label>
-                            <input type="text" id="username" name="username" placeholder="(Optioneel)" disabled>
+                            <input class="input" type="text" id="username" name="username" placeholder="(Optioneel)">
                         </div>
                         <div>
                             <label for="email">E-mailadres</label>
-                            <input type="email" id="email" name="email" placeholder="Email" disabled>
+                            <input class="input" type="email" id="email" name="email" placeholder="Email">
                         </div>
                         <div>
                             <label for="pwd">Wachtwoord</label>
-                            <input type="password" id="pwd" name="pwd" placeholder="Wachtwoord" disabled>
+                            <input class="input" type="password" id="pwd" name="pwd" placeholder="Wachtwoord">
                         </div>
                         <div>
                             <label for="pwdR">Herhaal Wachtwoord</label>
-                            <input type="password" id="pwdR" name="pwdR" placeholder="Wachtwoord" disabled>
+                            <input class="input" type="password" id="pwdR" name="pwdR" placeholder="Wachtwoord">
                         </div>
                     </div>
 
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <input type="hidden" name="uid">
-                    <button type="submit" name="saveAccount">Wijzigen</button>
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="saveAccount">Save</button>
                     <div class="account-section-divider"></div>
                 </form>
-                <p>Deze actie kan niet worden teruggedraaid.</p>
-                <button type="submit" data-section="close-account">Account Sluiten</button>     
+                <p class="subtitle">Deze actie kan niet worden teruggedraaid.</p>
+                <button class="button is-danger" type="submit" data-section="close-account">Close Account</button>     
             </div>
         </section>
 
@@ -401,7 +419,7 @@
             <h2>Onze gids</h2>
         </section>
 
-        <section id="logout" class="<?= logoutRequest(); ?>">
+        <section id="logout" class="hidden">
             <div class="form-window">
             <h2 class="title is-size-5">Until next time!</h2>
             <form action="" method="post">
@@ -410,14 +428,16 @@
             </div>
         </section>
 
-        <section id="create-res" class="hidden">
+        <section id="add-res" class="hidden">
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
                     <h2 class="title is-size-4">New Resume</h2>
                     <label for="cvname">Title</label>
                     <input class="input" type="text" id="cvname" name="cvname" placeholder="Let's give it a name" required>
-                    <button class="button is-link" type="submit" name="creResume">Save</button>
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="addResume">Save</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -445,21 +465,19 @@
                 <form action="src/resume.src.php" method="post">
                     <h2 class="title is-size-4">Delete a resume</h2>
                     <label for="cvname">Which resume do you like to discard?</label>
-                    <div class="select is-link is-fullwidth">
+                    <div class="select is-fullwidth">
                         <select id="cvname" name="cvname">
                             <option selected disabled hidden>Select a resume</option>
-                            <?php if (!empty($resumeData)) { ?>
-                            <?php foreach ($resumeData as $resume): ?>
+                            <?php if (!empty($resumeData)) { 
+                                foreach ($resumeData as $resume): ?>
                                 <option><?= htmlspecialchars($resume['resumetitle']); ?></option>
-                            <?php endforeach; ?> <?php } ?>
+                            <?php endforeach; } ?>
                         </select>
-                    </div>
-                    
+                    </div>       
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                     <button class="button is-danger is-dark" style="margin-top:20px;" type="submit" name="delResume">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
-
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <input type="hidden" name="resid">
                 </form>
             </div>
         </section>
@@ -468,7 +486,7 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2 class="title is-size-5">Edit Item</h2>        
+                    <h2 class="title is-size-5">Edit Experience</h2>        
                     <label for="worktitle">Functie</label>
                     <input class="input" type="text" id="worktitle" name="worktitle" placeholder="Mijn functie" required>
 
@@ -500,9 +518,13 @@
                         </select>
                     </div> 
                     <label for="workdesc">Beschrijving</label>
-                    <textarea id="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
-                    <input type="hidden" name="workid" value="">
-                    <button class="button is-link" type="submit" name="saveExp">Save</button>  
+                    <textarea id="workdesc" name="workdesc" rows="4" placeholder="Write your job description here..."></textarea>
+
+                    <input type="hidden" name="workid" value="<?= $_SESSION['session_data']['work_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="saveExp">Save</button> 
+                    <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span> 
                 </form>
             </div>
         </section>
@@ -511,10 +533,12 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2 class="title is-size-5">Delete Item</h2>
+                    <h2 class="title is-size-5">Delete Experience</h2>
                     <p class="subtitle is-size-6">Are you sure?</p>
 
-                    <input type="hidden" name="workid" value="">
+                    <input type="hidden" name="workid" value="<?= $_SESSION['session_data']['work_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                     <button class="button is-danger is-inverted" type="submit" name="trashExp">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
@@ -525,45 +549,44 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2>Edit</h2>
-                    <div class="workinfo">
-                        <div>
-                            <label for="edutitle">Functie</label>
-                            <input type="text" id="edutitle" name="edutitle" placeholder="Mijn Opleiding" required>
-                        </div>
-                        <div>
-                            <label for="company">Bedrijf</label>
-                            <input type="text" id="company" name="company" placeholder="Mijn School" required>
-                        </div>
-                        <div class="date-options">
-                            <label for="day-select">Start</label>
-                            <select class="day-select" name="join_day" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="month-select" name="join_month" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="year-select" name="join_year" required>
-                                <option value="" selected disabled>----</option>
-                            </select>
-                        </div> 
-                        <div class="date-options">
-                            <label for="day-select">Uitschrijving</label>
-                            <select class="day-select" name="leave_day" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="month-select" name="leave_month" required>
-                                <option value="" selected disabled>--</option>
-                            </select>
-                            <select class="year-select" name="leave_year" required>
-                                <option value="" selected disabled>----</option>
-                            </select>
-                        </div> 
-                        <label for="edudesc">Beschrijving</label>
-                        <textarea id="edudesc" rows="4" placeholder="Write your study description here..."></textarea>
-                    </div>
-                    <input type="hidden" name="eduid" value="">
-                    <button type="submit" name="saveEducation">Opslaan</button>
+                    <h2 class="title is-size-5">Edit Education</h2>
+                    <label for="edutitle">Course</label>
+                    <input class="input" type="text" id="edutitle" name="edutitle" placeholder="My course" required>
+
+                    <label for="company">College</label>
+                    <input class="input" type="text" id="company" name="company" placeholder="Mijn college" required>
+                    
+                    <div class="date-options">
+                        <label for="day-select">Hired</label>
+                        <select class="day-select" name="join_day" required>
+                            <option value="" selected disabled>--</option>
+                        </select>
+                        <select class="month-select" name="join_month" required>
+                            <option value="" selected disabled>--</option>
+                        </select>
+                        <select class="year-select" name="join_year" required>
+                            <option value="" selected disabled>----</option>
+                        </select>
+                    </div> 
+                    <div class="date-options">
+                        <label for="day-select">Leave</label>
+                        <select class="day-select" name="leave_day" required>
+                            <option value="" selected disabled>--</option>
+                        </select>
+                        <select class="month-select" name="leave_month" required>
+                            <option value="" selected disabled>--</option>
+                        </select>
+                        <select class="year-select" name="leave_year" required>
+                            <option value="" selected disabled>----</option>
+                        </select>
+                    </div> 
+                    <label for="edudesc">Beschrijving</label>
+                    <textarea id="edudesc" rows="4" placeholder="Write your study description here..."></textarea>
+                    
+                    <input type="hidden" name="eduid" value="<?= $_SESSION['session_data']['edu_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="saveEducation">Save</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -573,29 +596,13 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2>Weet je het zeker?</h2>
-                    <div class="workinfo">
-                        <div>
-                            <label for="edutitle">Functie</label>
-                            <input type="text" id="edutitle" name="edutitle" placeholder="Mijn Opleiding" disabled>
-                        </div>
-                        <div>
-                            <label for="company">Bedrijf</label>
-                            <input type="text" id="company" name="company" placeholder="Mijn School" disabled>
-                        </div>
-                        <div>
-                            <label for="joined">Start</label>
-                            <input type="text" id="joined" value="06/12/2016" disabled>
-                        </div>
-                        <div>
-                            <label for="left">Uitschrijving</label>
-                            <input type="text" id="left" value="06/12/2016" disabled>
-                        </div> 
-                        <label for="edudesc">Beschrijving</label>
-                        <textarea id="edudesc" rows="4" placeholder="Write your job description here..." disabled></textarea>
-                    </div>
-                    <input type="hidden" name="eduid" value="">
-                    <button type="submit" name="trashEducation">Verwijderen</button>
+                    <h2 class="title is-size-5">Delete Education</h2>
+                    <p class="subtitle is-size-6">Are you sure?</p>
+
+                    <input type="hidden" name="eduid" value="<?= $_SESSION['session_data']['edu_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-danger is-inverted" type="submit" name="trashEdu">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -605,19 +612,21 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2>Wijzigen</h2>
+                    <h2 class="title is-size-5">Changing Skills</h2>
                     
-                    <label for="skill">Proficiency</label>
-                    <input type="text" id="skill" name="skill" value="Mijn Opleiding">
+                    <label for="skill">Skill</label>
+                    <input class="input" type="text" id="skill" name="skill" value="Writing">
 
                     <label for="language">Language</label>
-                    <input type="text" id="language" name="language" value="Mijn School">
+                    <input class="input" type="text" id="language" name="language" value="British">
 
                     <label for="interest">Interests</label>
-                    <input type="text" id="interest" name="interest" value="06/12/2016">
+                    <input class="input" type="text" id="interest" name="interest" value="Warhammer">
                     
-                    <input type="hidden" name="techid" value="">
-                    <button type="submit" name="saveSkill">Opslaan</button>
+                    <input type="hidden" name="techid" value="<?= $_SESSION['session_data']['tech_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="saveSkill">Save</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -627,19 +636,13 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2>Weet je het zeker?</h2>
+                    <h2 class="title is-size-5">Delete Skills</h2>
+                    <p class="subtitle is-size-6">Are you sure you want to delete this?</p>
                     
-                    <label for="skill">Proficiency</label>
-                    <input type="text" id="skill" name="skill" value="Mijn Opleiding" disabled>
-
-                    <label for="language">Language</label>
-                    <input type="text" id="language" name="language" value="Mijn School" disabled>
-
-                    <label for="interest">Interests</label>
-                    <input type="text" id="interest" name="interest" value="06/12/2016" disabled>
-                    
-                    <input type="hidden" name="techid" value="">
-                    <button type="submit" name="trashSkill">Verwijderen</button>
+                    <input type="hidden" name="techid" value="<?= $_SESSION['session_data']['tech_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-danger is-inverted" type="submit" name="trashSkill">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -649,13 +652,14 @@
             <div class="form-window">
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
-                    <h2>Wijzigen</h2>               
-                    
+                    <h2>Wijzigen</h2>                        
                     <label for="mot">Motivation</label>
-                    <textarea name="letter" rows="4" placeholder="Schrijf hier je motivatie..."></textarea>
-                    <input type="hidden" name="motid" value="">
+                    <textarea id="mot" name="mot" rows="4" placeholder="Schrijf hier je motivatie..."></textarea>
                     
-                    <button type="submit" name="saveMotivation">Opslaan</button>
+                    <input type="hidden" name="motid" value="<?= $_SESSION['session_data']['mot_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-link" type="submit" name="saveMotivation">Opslaan</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -666,12 +670,11 @@
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/resume.src.php" method="post">
                     <h2>Weet je het zeker?</h2>                
-                    
-                    <label for="mot">Motivation</label>
-                    <textarea name="letter" rows="4" placeholder="Schrijf hier je motivatie..." disabled></textarea>
-                    <input type="hidden" name="motid" value="">
-                    
-                    <button type="submit" name="trashMotivation">Verwijderen</button>
+
+                    <input type="hidden" name="motid" value="<?= $_SESSION['session_data']['mot_ID'];; ?>">
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-danger" type="submit" name="trashMotivation">Verwijderen</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>
@@ -682,14 +685,13 @@
                 <button class="button is-small" data-section="home">Back</button>
                 <form action="src/account.src.php" method="post">
                     <h2>Wat jammer dat je vertrekt.</h2>
-                    <p>Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>
-                    <label for="pwd">Wachtwoord</label>
-                    <input type="password" id="pwd" name="pwd" placeholder="Vul nog 1 keer je wachtwoord in" required>
+                    <p class="subtitle is-size-6">Let op: Hiermee worden al jouw gegevens verwijderd. <br>Wil je echt jouw account verwijderen?</p>
+                    <label class="label" for="pwd">Wachtwoord</label>
+                    <input class="input" type="password" id="pwd" placeholder="Vul nog 1 keer je wachtwoord in" required>
 
-                    <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
-                    <input type="hidden" name="username" value=""> 
-                    <input type="hidden" name="uid" value=""> 
-                    <button type="submit" name="delUser">Verwijder mij</button>
+                    <input type="hidden" name="uid" value="<?= $_SESSION['session_data']['user_ID']; ?>"> 
+                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                    <button class="button is-danger" type="submit" name="delUser">Delete</button>
                     <span style="opacity:0;">Nog geen account? Maak hier een nieuwe</span>
                 </form>
             </div>

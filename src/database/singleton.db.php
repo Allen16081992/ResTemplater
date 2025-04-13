@@ -13,6 +13,7 @@
                     // Prevent charset encoding injections.
                     array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")
                 );
+                $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 error_log("Failed to connect to the database: " . $e->getMessage(), 0);
                 throw new Exception("Failed to connect to the database. MySQL may have crashed.");

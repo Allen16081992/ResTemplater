@@ -1,7 +1,8 @@
 <?php 
     // Load PHP files
     include_once "./src/session_manager.src.php"; 
-    logoutRequest();
+    SessionBook::invokeSession();
+    SessionBook::clearUserSession();
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -48,7 +49,7 @@
     <div class="skew"></div>
     
     <main>
-        <section id="home" class="<?= Homepage(); ?> hero is-fullheight has-text-centered">
+        <section id="home" class="<?= UIBook::Homepage(); ?> hero is-fullheight has-text-centered">
             <!-- <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1> -->
             <div class="hero-body">
                 <div class="container">
@@ -100,77 +101,75 @@
         <section id="author" class="hidden"></section>
 
         <section id="policy" class="hidden">
+            <div class="content is-normal" style="border-radius:10px; padding:2rem; background:rgba(31, 38, 135, 0.27); color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
+                <h1>Privacybeleid en veiligheid</h1>
+                <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
+                    gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
+                    Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
+                </p>
 
-                <div class="content is-normal" style="border-radius:10px; padding:2rem; background:rgba(31, 38, 135, 0.27); color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
-                    <h1>Privacybeleid en veiligheid</h1>
-                    <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
-                        gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
-                        Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
+                <div>
+                    <h3>Algemene Voorwaarden</h3>
+                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.
+                        Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
+                        u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
+
+                    <h2>Privacybeleid</h2>
+                    <h3>1. Informatie die we verzamelen</h3>
+                    <p>Wij verzamelen de volgende persoonlijke gegevens via onze website wanneer u zich registreert.</p>
+                    <ul>
+                        <li>Voornaam</li>
+                        <li>Achternaam</li>
+                        <li>Nationaliteit</li>
+                        <li>Geboortedatum</li>
+                        <li>Telefoonnummer</li>
+                        <li>Postcode en Woonplaats</li>
+                        <li>Emailadres</li>
+                    </ul>
+        
+                    <h3>2. Hoe we deze informatie gebruiken</h3>
+                    <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
+                    <ul>
+                        <li>Om onze dienst (CV Templater) aan u beschikbaar te stellen</li>
+                        <li>Om uw account te kunnen laten beheren door uzelf</li>
+                        <li>Om uw account te voorzien van de juiste rechten</li>
+                        <li>Om onze website functionaliteit te verbeteren</li>
+                    </ul>
+
+                    <h3>3. Juridische Grondslag voor Verwerking</h3>
+                    <p>We verwerken uw persoonlijke gegevens op basis van de volgende juridische gronden.</p>
+                    <ul>
+                        <li>Door deze te verstrekken, stemt u in met de verwerking comform onze doeleinden.</li>
+                        <li>Verwerking is noodzakelijk voor onze gerechtvaardigde belangen, zoals het verbeteren van onze diensten en het waarborgen van de veiligheid van onze website.</li>
+                    </ul>
+
+                    <h3>4. Gegevensbeveiliging</h3>
+                    <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
+                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerd toegang, 
+                        het wijzigen, vernietigen of diefstal door kwaadwillenden. Deze maatregelen omvatten:
                     </p>
-    
-                    <div>
-                        <h3>Algemene Voorwaarden</h3>
-                        <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.
-                           Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
-                           u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
-    
-                        <h2>Privacybeleid</h2>
-                        <h3>1. Informatie die we verzamelen</h3>
-                        <p>Wij verzamelen de volgende persoonlijke gegevens via onze website wanneer u zich registreert.</p>
-                        <ul>
-                            <li>Voornaam</li>
-                            <li>Achternaam</li>
-                            <li>Nationaliteit</li>
-                            <li>Geboortedatum</li>
-                            <li>Telefoonnummer</li>
-                            <li>Postcode en Woonplaats</li>
-                            <li>Emailadres</li>
-                        </ul>
-            
-                        <h3>2. Hoe we deze informatie gebruiken</h3>
-                        <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
-                        <ul>
-                            <li>Om onze dienst (CV Templater) aan u beschikbaar te stellen</li>
-                            <li>Om uw account te kunnen laten beheren door uzelf</li>
-                            <li>Om uw account te voorzien van de juiste rechten</li>
-                            <li>Om onze website functionaliteit te verbeteren</li>
-                        </ul>
-    
-                        <h3>3. Juridische Grondslag voor Verwerking</h3>
-                        <p>We verwerken uw persoonlijke gegevens op basis van de volgende juridische gronden.</p>
-                        <ul>
-                            <li>Door deze te verstrekken, stemt u in met de verwerking comform onze doeleinden.</li>
-                            <li>Verwerking is noodzakelijk voor onze gerechtvaardigde belangen, zoals het verbeteren van onze diensten en het waarborgen van de veiligheid van onze website.</li>
-                        </ul>
-    
-                        <h3>4. Gegevensbeveiliging</h3>
-                        <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
-                            passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerd toegang, 
-                            het wijzigen, vernietigen of diefstal door kwaadwillenden. Deze maatregelen omvatten:
-                        </p>
-                        <ul>
-                            <li>Beveiligde servers bij onze webhosting aanbieder</li>
-                            <li>Versleutelde verbindingen (HTTPS/SSL)</li>
-                            <li>Periodieke beveiligingsaudits</li>
-                            <li>Encryptie van wachtwoorden</li>
-                            <li>Sterk wachtwoordbeleid</li>
-                        </ul>
-    
-                        <h3>5. Gegevensbewaring</h3>
-                        <p>We bewaren uw persoonlijke gegevens zo lang als nodig is om onze in deze privacybeleid beschreven doeleinden te vervullen, 
-                            of zoals wettelijk vereist. Wanneer deze gegevens niet langer nodig zijn, bijvoorbeeld wanneer u besluit uw account te sluiten,
-                            zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
-                        </p>
-    
-                        <h3>6. Wijzigingen in dit Privacybeleid</h3>
-                        <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
-                            We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
-                            Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
-                        </p>
-                        <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
-                    </div>
-                </div>
+                    <ul>
+                        <li>Beveiligde servers bij onze webhosting aanbieder</li>
+                        <li>Versleutelde verbindingen (HTTPS/SSL)</li>
+                        <li>Periodieke beveiligingsaudits</li>
+                        <li>Encryptie van wachtwoorden</li>
+                        <li>Sterk wachtwoordbeleid</li>
+                    </ul>
 
+                    <h3>5. Gegevensbewaring</h3>
+                    <p>We bewaren uw persoonlijke gegevens zo lang als nodig is om onze in deze privacybeleid beschreven doeleinden te vervullen, 
+                        of zoals wettelijk vereist. Wanneer deze gegevens niet langer nodig zijn, bijvoorbeeld wanneer u besluit uw account te sluiten,
+                        zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
+                    </p>
+
+                    <h3>6. Wijzigingen in dit Privacybeleid</h3>
+                    <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
+                        We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
+                        Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
+                    </p>
+                    <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
+                </div>
+            </div>
         </section>
 
         <section id="contact" class="hidden">
@@ -184,10 +183,10 @@
             </div>
         </section>
 
-        <section id="login" class="<?= serverLogin(); ?>">
+        <section id="login" class="<?= UIBook::isVisible('login'); ?>">
             <div class="form-window">
                 <h2 class="title is-size-3">Login</h2>
-                <form id="login_form" action="src/account.src.php" method="post">    
+                <form id="login_form" action="src/action_handler.src.php" method="post">    
                     <label for="email">E-mailadres</label>
                     <input class="input" type="email" id="email" name="email" placeholder="Email" required/>     
                         <!-- <p class="help is-danger">This is a help text</p> -->
@@ -195,14 +194,13 @@
                     <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
                         <!-- <p class="help is-danger">This is a help text</p> -->
                     <button id="loginBtn" class="button is-success is-fullwidth" style="margin-top:10px;">Inloggen</button>
-                        <!-- Hidden field is needed since js submit() instantly sends, ignoring form modifications -->
                         <!-- <input type="hidden" name="login"> -->
                     <!-- <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span> -->
                 </form>
             </div>
         </section>
 
-        <section id="sign_up" class="<?= serverSignup(); ?>">
+        <section id="sign_up" class="<?= UIBook::isVisible('signup'); ?>">
             <div class="form-window">
                 <h2>Registreren</h2>
                 <form id="login_form" action="src/account.src.php" method="post">
@@ -248,7 +246,7 @@
                             <label for="pwdField">Wachtwoord</label>
                             <input class="input" type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
                             <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
-                            <label for="terms">Ik heb de <a href="#" data-section="policy">privacyverklaring</a> en <a href="#" data-section="policy">algemene voorwaarden</a> gelezen en ga hiermee akkoord. <input type="checkbox" id="terms" name="terms" required></label>                    
+                            <label for="terms"><input type="checkbox" id="terms" name="terms" required> I have read the <a href="#" data-section="policy">terms</a> and <a href="#" data-section="policy">conditions</a> and accept.</label>                    
                         </div>
                     </div>
                     
@@ -300,4 +298,3 @@
     </footer>
 </body>
 </html>
-<?php session_unset(); session_destroy(); ?>

@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- <link rel="stylesheet" href="assets/css/3d_illustration.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -47,8 +47,16 @@
     </header>
     <div class="skew"></div>
 
+    <?php if ($error = SessionBook::flash('error')): ?>
+        <div class="serV serV-error"><?= $error ?></div>
+    <?php endif; ?>
+
+    <?php if ($success = SessionBook::flash('success')): ?>
+        <div class="serV serV-oke"><?= $success ?></div>
+    <?php endif; ?>
+
     <main>
-        <section id="home" class="<?= UIBook::Homepage(); ?>">
+        <section id="home" class="<?= ViewBook::Homepage(); ?>">
             <div class="resume-board">
                 <h2 class="title is-size-4">Resume Builder</h2>
                 <form action="src/resume.src.php" method="post">
@@ -347,7 +355,7 @@
             </div> 
         </section>
         
-        <section id="user" class="<?= UIBook::isVisible('account'); ?>">
+        <section id="user" class="<?= ViewBook::isVisible('account'); ?>">
             <div class="form-window">
                 
                 <!-- <button class="avatar">Profiel Foto</button> -->

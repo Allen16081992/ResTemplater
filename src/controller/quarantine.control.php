@@ -1,5 +1,8 @@
 <?php
     class Validate {
+        function e(string $value): string {
+            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        }
         public static function emptyAgent($field) {
             // Treat any value as text and trim white-space down
             if (trim((string)$field) === '') {

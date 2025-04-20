@@ -1,6 +1,6 @@
 <?php 
     // Load PHP files
-    include_once "./src/session_manager.src.php"; 
+    require_once "./src/session_manager.src.php"; 
     SessionBook::invokeSession();
     SessionBook::clearUserSession();
 ?>
@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>Jouw Mobiele CV Editor | PaperTiger</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -47,246 +48,19 @@
         </nav>
     </header>
     <div class="skew"></div>
+
+    <?php if ($error = SessionBook::flash('error')): ?>
+        <div class="serV serV-error"><?= $error ?></div>
+    <?php endif; ?>
     
     <main>
-        <section id="home" class="<?= UIBook::Homepage(); ?> hero is-fullheight has-text-centered">
-            <!-- <h1>Eenvoudig en snel je eigen professionele cv samenstellen.</h1> -->
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title is-size-2 has-text-white">PaperWitch</h1>
-                    <p class="subtitle is-size-4 has-text-light">Resumes with attitude.</p>
-                    <a href="client.php" class="button is-medium is-danger is-outlined">🔮 Unleash Your Resume</a>
-                </div>
-            </div>
-            
-            <div class="full-width-wrapper" style="display:flex; justify-content:center; align-items:center;">
-                <div class="resume-container" style="margin-top:2.5rem; margin-left: 3rem;">
-                    <div class="shape paper">
-                        <div class="paper-edge-top"></div>
-                        <div class="paper-edge-side"></div>
-                    </div>
-                    <div class="shape circle"></div>
-                    <div class="shape skills"></div>
-                    <!-- Lines will be dynamically generated here -->
-                </div>
-            </div>
-
-            <div class="has-text-centered">
-                <div class="container">
-                    <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2>
-                    <div class="columns is-multiline mt-6">
-                        <div class="column is-4">
-                            <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">Bold Templates</h3>
-                                <p>Break the mold with unique resume styles.</p>
-                            </div>
-                        </div>
-                        <div class="column is-4">
-                            <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">Express Yourself</h3>
-                                <p>Customization that lets your personality shine.</p>
-                            </div>
-                        </div>
-                        <div class="column is-4">
-                            <div class="box has-background-grey-dark has-text-white">
-                                <h3 class="title is-size-4">🧙No Login Needed</h3>
-                                <p>Instantly craft your resume—no accounts, no hassle.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        <?php ViewBook::render('section_home.php'); ?>
         <section id="author" class="hidden"></section>
-
-        <section id="policy" class="hidden">
-            <div class="content is-normal" style="border-radius:10px; padding:2rem; background:rgba(31, 38, 135, 0.27); color:var(--bg-window); width:50em; text-align:left; margin-bottom:5em;">
-                <h1>Privacybeleid en veiligheid</h1>
-                <p>Dit privacybeleid legt uit hoe we uw persoonlijke gegevens verzamelen, 
-                    gebruiken en beschermen in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
-                    Lees ons privacybeleid en algemene voorwaarden voordat u gebruik maakt van onze service (CV Templater).
-                </p>
-
-                <div>
-                    <h3>Algemene Voorwaarden</h3>
-                    <p>Door gebruik te maken van onze diensten gaat u akkoord met de verwerking van de door u verstrekte gegevens.
-                        Als u onze dienst (CV Templater) wenst te gebruiken, dan heeft u een account en internet verbinding nodig. Ook bent u minimaal 16 jaar, of
-                        u heeft goedkeuring van uw ouders of wettelijke voogd.</p>
-
-                    <h2>Privacybeleid</h2>
-                    <h3>1. Informatie die we verzamelen</h3>
-                    <p>Wij verzamelen de volgende persoonlijke gegevens via onze website wanneer u zich registreert.</p>
-                    <ul>
-                        <li>Voornaam</li>
-                        <li>Achternaam</li>
-                        <li>Nationaliteit</li>
-                        <li>Geboortedatum</li>
-                        <li>Telefoonnummer</li>
-                        <li>Postcode en Woonplaats</li>
-                        <li>Emailadres</li>
-                    </ul>
-        
-                    <h3>2. Hoe we deze informatie gebruiken</h3>
-                    <p>Wij gebruiken uw persoonlijke gegevens voor de volgende doeleinden.</p>
-                    <ul>
-                        <li>Om onze dienst (CV Templater) aan u beschikbaar te stellen</li>
-                        <li>Om uw account te kunnen laten beheren door uzelf</li>
-                        <li>Om uw account te voorzien van de juiste rechten</li>
-                        <li>Om onze website functionaliteit te verbeteren</li>
-                    </ul>
-
-                    <h3>3. Juridische Grondslag voor Verwerking</h3>
-                    <p>We verwerken uw persoonlijke gegevens op basis van de volgende juridische gronden.</p>
-                    <ul>
-                        <li>Door deze te verstrekken, stemt u in met de verwerking comform onze doeleinden.</li>
-                        <li>Verwerking is noodzakelijk voor onze gerechtvaardigde belangen, zoals het verbeteren van onze diensten en het waarborgen van de veiligheid van onze website.</li>
-                    </ul>
-
-                    <h3>4. Gegevensbeveiliging</h3>
-                    <p>We nemen de veiligheid van uw persoonlijke gegevens serieus en implementeren 
-                        passende technische beveiligingsmaatregelen om deze te beschermen tegen ongeautoriseerd toegang, 
-                        het wijzigen, vernietigen of diefstal door kwaadwillenden. Deze maatregelen omvatten:
-                    </p>
-                    <ul>
-                        <li>Beveiligde servers bij onze webhosting aanbieder</li>
-                        <li>Versleutelde verbindingen (HTTPS/SSL)</li>
-                        <li>Periodieke beveiligingsaudits</li>
-                        <li>Encryptie van wachtwoorden</li>
-                        <li>Sterk wachtwoordbeleid</li>
-                    </ul>
-
-                    <h3>5. Gegevensbewaring</h3>
-                    <p>We bewaren uw persoonlijke gegevens zo lang als nodig is om onze in deze privacybeleid beschreven doeleinden te vervullen, 
-                        of zoals wettelijk vereist. Wanneer deze gegevens niet langer nodig zijn, bijvoorbeeld wanneer u besluit uw account te sluiten,
-                        zullen wij deze in hun volledigheid verwijderen uit ons systeem. Deze kunnen dan ook niet meer worden opgevraagd.
-                    </p>
-
-                    <h3>6. Wijzigingen in dit Privacybeleid</h3>
-                    <p>Wij kunnen dit privacybeleid van tijd tot tijd aanpassen. 
-                        We zullen u op de hoogte stellen van eventuele wijzigingen door het nieuwe privacybeleid op onze website te plaatsen. 
-                        Daarom raden wij u ook aan om dit privacybeleid periodiek door te nemen, want het is ook niet lang om te lezen.
-                    </p>
-                    <p>Als u vragen heeft over ons privacybeleid, neem dan contact op via onze contact pagina.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="hidden">
-            <div class="sheet">
-                <h2>Contact Opnemen</h2>
-                <p><strong>Let op!</strong> Om spam en bots tegen te gaan, gebruiken wij geen contact formulier.</p>
-                <div class="box">
-                    <strong>Email</strong>
-                    <p>info@donkereheiligdom en vergeet niet .nl erbij te zetten.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="login" class="<?= UIBook::isVisible('login'); ?>">
-            <div class="form-window">
-                <h2 class="title is-size-3">Login</h2>
-                <form id="login_form" action="src/action_handler.src.php" method="post">    
-                    <label for="email">E-mailadres</label>
-                    <input class="input" type="email" id="email" name="email" placeholder="Email" required/>     
-                        <!-- <p class="help is-danger">This is a help text</p> -->
-                    <label for="pwd">Wachtwoord</label>
-                    <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>
-                        <!-- <p class="help is-danger">This is a help text</p> -->
-                    <button id="loginBtn" class="button is-success is-fullwidth" style="margin-top:10px;">Inloggen</button>
-                        <!-- <input type="hidden" name="login"> -->
-                    <!-- <span>Nog geen account? <a href="#">Maak hier een nieuwe</a></span> -->
-                </form>
-            </div>
-        </section>
-
-        <section id="sign_up" class="<?= UIBook::isVisible('signup'); ?>">
-            <div class="form-window">
-                <h2>Registreren</h2>
-                <form id="login_form" action="src/account.src.php" method="post">
-                    <div class="wizard-info">
-                        <span class="step">Personal</span>
-                        <!-- <span class="step">Contact</span> -->
-                        <span class="step">Account</span>
-                    </div>
- 
-                    <div class="tab">
-                        <div>   
-                            <label for="firstname">Voornaam</label>
-                            <input class="input" type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
-                        </div>
-                        <div>
-                            <label for="lastname">Achteraam</label>
-                            <input class="input" type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
-                        </div>
-                        <div class="date-options">
-                            <label for="date">Geboortedatum</label>
-                            <select class="day-select" name="day" required>
-                                <option value="" selected disabled>Day</option>
-                            </select>
-                            <select class="month-select" name="month" required>
-                                <option value="" selected disabled>Month</option>
-                            </select>
-                            <select class="year-select" name="year" required>
-                                <option value="" selected disabled>Year</option>
-                            </select>
-                           
-                        </div>
-                        
-                        <div>
-                            <label for="username">Gebruikersnaam</label>
-                            <input class="input" type="text" id="username" name="username" placeholder="(Optioneel)">
-                        </div>
-                    </div>
-
-                    <div class="tab">
-                        <div class="toggle-eye">
-                            <label for="email">E-mailadres</label> 
-                            <input class="input" type="email" id="email" name="email" placeholder="E-mailadres" required>
-                            <label for="pwdField">Wachtwoord</label>
-                            <input class="input" type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
-                            <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
-                            <label for="terms"><input type="checkbox" id="terms" name="terms" required> I have read the <a href="#" data-section="policy">terms</a> and <a href="#" data-section="policy">conditions</a> and accept.</label>                    
-                        </div>
-                    </div>
-                    
-                    <div class="rotator">
-                        <button class="button is-link is-fullwidth" type="submit" id="prevBtn">Terug</button>
-                        <button class="button is-link is-fullwidth" type="submit" id="nextBtn" name="signupBtn">Verder</button>                        
-                    </div>
-                </form>
-                <!-- <form id="signup_form">
-                    <strong>Gegevens</strong>
-                    <label for="firstname">Voornaam</label>
-                    <input type="text" id="firstname" name="firstname" placeholder="Voornaam" required>
-                    <label for="lastname">Achteraam</label>
-                    <input type="text" id="lastname" name="lastname" placeholder="Achternaam" required>
-                    <label for="day month year">Geboortedatum</label>
-                    <select id="day-select">
-                        <option selected>--</option>
-                    </select>
-                    <select id="month-select">
-                        <option selected>--</option>
-                    </select>
-                    <select id="year-select">
-                      <option selected>----</option>
-                    </select>
-                    <hr class="divider" />
-                    <strong>Account</strong>
-                    <label for="email">E-mailadres</label> 
-                    <input type="text" id="email" name="email" placeholder="E-mailadres" required>
-
-                    <div class="toggle-eye">
-                        <label for="pwdField">Wachtwoord</label>
-                        <input type="password" id="pwdField" name="pwd" placeholder="Wachtwoord" required>
-                        <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
-                    </div>
-                    
-                    <label for="terms">Ik heb de <a href="#" data-section="policy">privacyverklaring</a> en <a href="#" data-section="policy">algemene voorwaarden</a> gelezen en ga hiermee akkoord. <input type="checkbox" id="terms" name="terms" required></label>                    
-                    <button type="submit" id="nextBtn">Maak mijn Account</button>
-                </form> -->
-            </div>
-        </section>
+        <?php ViewBook::render('section_policy.html'); ?>
+        <section id="contact" class="hidden"></section>
+        <?php ViewBook::render('section_login.php'); ?>
+        <?php ViewBook::render('section_signup.php'); ?>
+        <?php ViewBook::render('section_success.php'); ?>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->

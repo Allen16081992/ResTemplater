@@ -141,8 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
     /* ───────────────────────────────────── */
 
     if (loginBtn) {
-        loginBtn.addEventListener('click', function(event) {
-            event.preventDefault();
+        loginBtn.addEventListener('click', function() {
     
             // Remove existing error messages
             var existingErrors = document.getElementsByClassName("error-msg");

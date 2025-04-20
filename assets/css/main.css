@@ -179,6 +179,7 @@ a[data-section="login"] {border: 2px solid #dfdfdf;} /* #44d884 */
     transition: max-height 0.2s ease-out;
 }
 
+#loginBtn { margin-top:10px; }
 #prevBtn { float:right; margin-right:10px;}
 #nextBtn { color:azure;}
 .rotator {
@@ -316,6 +317,55 @@ select {
 .day-select, .month-select, .year-select {
     width:4.3rem;height:2.5rem;
 }
+/* Base styling for all server messages */
+.serV {
+    position: absolute;
+    margin-top: -1.9rem;
+    width: 100%;
+    border-bottom: 2px solid black;
+    color: #fff;
+    transform: skewY(2.2deg);
+    text-align: center;   
+
+    /* Exit animation */
+    animation-delay: 0s; /* for fadeIn only */
+
+    /* Chain fadeOut with a delay using animation shorthand */
+    animation: fadeInSoft 0.7s ease-out forwards, fadeOutSoft 2s ease-in-out forwards 6s; 
+}
+
+/* Error coloring */
+.serV-error {
+    background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+}
+
+/* Success coloring */
+.serV-oke {
+    background: radial-gradient(circle, rgb(52, 52, 52) 15%, rgba(8, 255, 0, 1) 100%);
+}
+
+/* Fade-in */
+@keyframes fadeInSoft {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) skewY(2.2deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) skewY(2.2deg);
+    }
+}
+
+/* Fade-out */
+@keyframes fadeOutSoft {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 .error-msg { 
     position:absolute;
     display:none;
@@ -324,6 +374,7 @@ select {
     margin: -15px 0 10px ;
     cursor:default;
 }
+/* style="position:absolute; width:100%; margin-top:-1.9rem; background:crimson; color:blue; transform:skewY(2.2deg); text-align:center;" */
 #terms.invalid {
     outline: 2px solid red;  
 }

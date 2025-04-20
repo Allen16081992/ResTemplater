@@ -7,7 +7,7 @@
 
     // Handle logout operations
     if (isset($_POST['logout'])) {
-        session_unset(); session_destroy();
+        SessionBook::revokeSession();
         header('location: ../index.php');
         exit();
     }
@@ -26,9 +26,17 @@
             return hash_equals($_SESSION['csrf_token'] ?? '', $token);
         }
 
-        public static function enforceToken() {
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-                $_SESSION['error'] = 'CSRF token mismatch';
+        public static function enforceToken(): void {
+            if (!isset($_POST['csrf_token'])) {
+                // Token missing
+                $_SESSION['error'] = '403: Forbidden. Request Denied.';
+                header('Location: ../client.php');
+                exit;
+            }
+        
+            if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
+                // Token mismatch
+                $_SESSION['error'] = 'Something went wrong. It might just need a kick. Please try again.';
                 header('Location: ../client.php');
                 exit;
             }
@@ -39,7 +47,11 @@
         //────────────────────────────────────//
         public static function invokeSession(): void {
             if(session_status() === PHP_SESSION_NONE) { session_start(); }
-            self::invokeToken();
+
+            // Only call token when needed
+            if (in_array(basename($_SERVER['PHP_SELF']), ['index.php', 'client.php'])) {
+                self::invokeToken();
+            }
         }
 
         public static function revokeSession(): void {
@@ -59,8 +71,20 @@
                 $_SESSION['last_regen'] = $currentTime;
             }
             unset($lastRegen, $currentTime, $regenInterval);
-        }      
+        }   
 
+        //────────────────────────────────────//
+        //          MESSAGING LOGIC           //
+        //────────────────────────────────────//
+        public static function flash(string $key): ?string {
+            if (isset($_SESSION[$key])) {
+                $msg = $_SESSION[$key];
+                unset($_SESSION[$key]);
+                return $msg;
+            }
+            return null;
+        }
+        
         //────────────────────────────────────//
         //             USER LOGIC             //
         //────────────────────────────────────//
@@ -74,9 +98,9 @@
         }
 
         public static function clearUserSession(): void {
-            if (isset($_SESSION['session_data']['user_id'])) {
-                unset($_SESSION['session_data']['user_id']);
-                unset($_SESSION['session_data']['user_name']);
+            $keys = ['session_data', 'login', 'account', 'signup'];
+            foreach ($keys as $key) {
+                unset($_SESSION[$key]);
             }
         }
 
@@ -103,12 +127,12 @@
     }
 
     // ┌───┐                                                       ┌───┐
-    // └─┬─┘      UIBook organizes visual visibility logic.        └─┬─┘
+    // └─┬─┘     ViewBook organizes visual visibility logic.       └─┬─┘
     //   │    Housing functions that can enforce a specific page.    │
     // ┌─┴─┐                                                       ┌─┴─┐
     // └───┘                                                       └───┘
     
-    class UIBook {
+    class ViewBook {
         //────────────────────────────────────//
         //          VISIBILITY LOGIC          //
         //────────────────────────────────────//
@@ -116,17 +140,23 @@
         // Page (section) visibility enforcers.
         public static function Homepage() {
             $class = "current";
-            if (isset($_SESSION['login']) || isset($_SESSION['signup'])) {
+            if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
                 $class = "hidden";
             } 
             return $class;
         }
     
         public static function isVisible(string $key): string {
+            //return isset($_SESSION[$key]) ? 'current' : 'hidden';
             if (isset($_SESSION[$key])) {
                 unset($_SESSION[$key]);
                 return 'current';
             }
             return 'hidden';
+        }
+   
+        public static function render(string $view, array $data = []): void {
+            extract($data); // all sorts of data
+            require_once './views/'.$view; // file path
         }
     }

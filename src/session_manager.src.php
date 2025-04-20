@@ -1,9 +1,4 @@
 <?php
-    // ┌───┐                                                               ┌───┐
-    // └─┬─┘  SessionBook organizes session integrity and intrusion logic. └─┬─┘
-    //   │      Housing functions that strike down unauthorized access.      │
-    // ┌─┴─┐                                                               ┌─┴─┐
-    // └───┘                                                               └───┘
 
     // Handle logout operations
     if (isset($_POST['logout'])) {
@@ -11,6 +6,12 @@
         header('location: ../index.php');
         exit();
     }
+
+    // ┌───┐                                                                      ┌───┐
+    // └─┬─┘  SessionBook handles sessions, security, and application integrity.  └─┬─┘
+    //   │    Handles CSRF tokens, flash data, throttling, and intrusion control.   │
+    // ┌─┴─┐                                                                      ┌─┴─┐
+    // └───┘                                                                      └───┘
 
     class SessionBook {
         //────────────────────────────────────//
@@ -46,7 +47,18 @@
         //           SESSION LOGIC            //
         //────────────────────────────────────//
         public static function invokeSession(): void {
-            if(session_status() === PHP_SESSION_NONE) { session_start(); }
+            if(session_status() === PHP_SESSION_NONE) { 
+                $flag = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+                session_set_cookie_params([
+                    'lifetime' => 0,
+                    'path' => '/',
+                    'domain' => '',
+                    'secure' => $flag, // Dynamically enforce
+                    'httponly' => true, 
+                    'samesite' => 'Strict', 
+                ]);
+                session_start(); 
+            }
 
             // Only call token when needed
             if (in_array(basename($_SERVER['PHP_SELF']), ['index.php', 'client.php'])) {
@@ -94,14 +106,12 @@
                 return $_SESSION['session_data']['user_name'];
             } elseif (isset($_SESSION['session_data']['firstname'])) {
                 return $_SESSION['session_data']['firstname'];
-            } else { return "My PaperWitch"; }
+            } else { return "Profile"; }
         }
 
         public static function clearUserSession(): void {
             $keys = ['session_data', 'login', 'account', 'signup'];
-            foreach ($keys as $key) {
-                unset($_SESSION[$key]);
-            }
+            foreach ($keys as $key) { unset($_SESSION[$key]); }
         }
 
         // rate limiter against brute-force attacks, bot abuse, spamming form submissions
@@ -125,26 +135,33 @@
             $_SESSION['last_regen'] = time();
         }
     }
-
-    // ┌───┐                                                       ┌───┐
-    // └─┬─┘     ViewBook organizes visual visibility logic.       └─┬─┘
-    //   │    Housing functions that can enforce a specific page.    │
-    // ┌─┴─┐                                                       ┌─┴─┐
-    // └───┘                                                       └───┘
     
+    // ┌───┐                                                            ┌───┐
+    // └─┬─┘   ViewBook handles view rendering and section visibility.  └─┬─┘
+    //   │     Load views and control what the user sees per session.     │
+    // ┌─┴─┐                                                            ┌─┴─┐
+    // └───┘                                                            └───┘
+
     class ViewBook {
         //────────────────────────────────────//
         //          VISIBILITY LOGIC          //
         //────────────────────────────────────//
 
-        // Page (section) visibility enforcers.
-        public static function Homepage() {
-            $class = "current";
-            if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
-                $class = "hidden";
-            } 
-            return $class;
+        public static function e(string $value): string {
+            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
+
+        public static function old(string $key): ?string {
+            $data = SessionBook::flash('form_old');
+            return is_array($data) ? ($data[$key] ?? null) : null;
+        }
+
+        public static function Homepage(): string {
+            if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
+                return 'hidden';
+            }
+            return 'current';
+        }        
     
         public static function isVisible(string $key): string {
             //return isset($_SESSION[$key]) ? 'current' : 'hidden';
@@ -160,3 +177,9 @@
             require_once './views/'.$view; // file path
         }
     }
+
+    // in a controller, just shove data in session.
+    function flashForm(array $formData): void {
+        $_SESSION['form_old'] = $formData;
+    }
+

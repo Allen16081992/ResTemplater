@@ -14,7 +14,7 @@
     //$allowed = ['login', 'signup', 'savePersonal', 'saveAccount', 'addResume', 'saveCv', 'saveWork', 'saveEdu', 'generatePdf'];
     $routes = [
         'signup' => ['Classes/signup.class.php', 'controller/signup.control.php', 'signupControl', 'signupUser'],
-        'login' => ['Classes/login.class.php', 'controller/login.control.php', 'loginControl', 'verifyUser'],
+        'login' => ['Classes/login.class.php', 'controller/login.control.php', 'loginControl', 'loginUser'],
         // ... Add more routes here
     ];
 

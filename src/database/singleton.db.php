@@ -11,7 +11,7 @@
                 // Establish a PDO database connection
                 $this->pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASSWORD,
                     // Prevent charset encoding injections.
-                    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'")
+                    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4")
                 );
                 $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {

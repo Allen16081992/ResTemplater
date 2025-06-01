@@ -9,7 +9,7 @@
             Log in to the circle and make yourself at home. Your parchment awaits ✨
         </p>
 
-        <div class="form-window animate__animated animate__fadeInRightBig animate__delay-1s">
+        <!-- <div class="form-window animate__animated animate__fadeInRightBig animate__delay-1s">
             <h2 class="title is-size-3">Login</h2>
             <form id="login_form" action="src/action_handler.src.php" method="post">    
                 <label for="email">E-mailadres</label>
@@ -21,6 +21,6 @@
                 <button class="button is-success is-fullwidth" type="submit" id="loginBtn">Inloggen</button>
                 <input type="hidden" name="action" value="login">
             </form>
-        </div>
+        </div> -->
     </section>
 <?php } ?>

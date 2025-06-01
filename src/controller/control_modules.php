@@ -1,7 +1,7 @@
 <?php // Load PHP files
 
     // Login Class
-    class loginControl extends ClassMaster {
+    class loginControl extends Account {
         private $formFields;
 
         public function __construct(array $postData) {
@@ -23,23 +23,20 @@
             }
 
             if(isset($_SESSION['error'])) {
-                // Hold onto filled fields
+                // Hold onto filled fields and redirect
                 $_SESSION['form_old'] = $this->formFields;
-
-                // Break-off to homepage
-                $this->breakRide($this->formFields);
+                ViewBook::breakRide(null, $this->formFields);
             }
 
             // Proceed with login the user
             $this->fetchUser($this->formFields);
-            header('location: ../../client.php');
-            exit;
+            ViewBook::breakRide('client', null);
         }
         
     }
 
     // Signup Class
-    class signupControl extends ClassMaster {
+    class signupControl extends Account {
         private $formFields;
 
         public function __construct(array $formFields) {
@@ -72,17 +69,24 @@
                 $_SESSION['error']['pwd'] = $error;
             }
 
-            if(isset($_SESSION['error'])) {
-                // Hold onto filled fields
-                $_SESSION['form_old'] = $this->formFields;
-
-                // Break-off to homepage
-                $this->breakRide($this->formFields);
+            // Handle invalid dates
+            $result = validGrimoire::checkDate($this->formFields['day'], $this->formFields['month'], $this->formFields['year']);
+            if (!$result['valid']) {
+                $_SESSION['error']['birth'] = $result['error'];
             }
 
+            if(isset($_SESSION['error'])) {
+                // Hold onto filled fields and redirect
+                $_SESSION['form_old'] = $this->formFields;
+                ViewBook::breakRide(null, null);
+            }
+
+            // Combine into date format
+            $this->formFields['birth'] = $result['date'];
+            unset($this->formFields['day'], $this->formFields['month'], $this->formFields['year']);
+
             // Proceed with signing up
-            $this->fetchUser($this->formFields);
-            header('location: ../../client.php');
-            exit;
+            $this->verifyUser($this->formFields);
+            ViewBook::breakRide(null, null);
         }
     }

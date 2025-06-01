@@ -1,7 +1,6 @@
 <?php
 
-    class ClassMaster {
-
+    class Account {
         protected function fetchUser($formFields) {
             // Invoke the singleton DB and prepare SQL
             $db = Database::getInstance();
@@ -9,14 +8,16 @@
 
             // If this fails, abort.
             if(!$stmt->execute(array($formFields['email'], $formFields['pwd']))) {
+                $stmt = null;
                 $_SESSION['error'] = 'User verification failed!';
-                $this->breakRide($formFields);
+                ViewBook::breakRide(null, $formFields['action']);
             }
 
             // If we find nothing, abort.
             if($stmt->rowCount() == 0 ) {
+                $stmt = null;
                 $_SESSION['error'] = 'Unable to find User!';
-                $this->breakRide($formFields);
+                ViewBook::breakRide(null, $formFields['action']);
             }
 
             $userData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,7 +25,7 @@
             // If there was no match from the database, do this.
             if(!$userData) {
                 $_SESSION['error'] = 'Unable to find User!';
-                $this->breakRide($formFields);
+                ViewBook::breakRide(null, $formFields['action']);
             }
 
             $passHash = $userData['password'];   
@@ -32,46 +33,24 @@
             // Compare hashed passwords
             if (!password_verify($formFields['pwd'], $passHash)) {
                 $_SESSION['error'] = "Incorrect password.";
-                $this->breakRide($formFields);
+                ViewBook::breakRide(null, $formFields['action']);
             }
 
             $_SESSION['session_data']['user_id'] = $userData['userID'];
             $_SESSION['session_data']['user_name'] = !empty($userData['username']) ? ViewBook::e($userData['username']) : ViewBook::e($userData['firstname']);
-            unset($stmt, $userData, $formFields, $passHash, $_POST);
-        }
+            unset($stmt, $userData, $formFields, $passHash);
+        }  
 
-        protected function breakRide($field) {
-            if ($field['action'] === 'login') {
-                $_SESSION['login'] = true;
-            }
-            if ($field['action'] === 'signup') {
-                $_SESSION['signup'] = true;
-            }
-            unset($stmt, $db, $field, $formFields, $_POST);
-            header('location: ../../index.php');
-            exit;
-        }
-
-        protected function XfetchUser($formFields) {
+        protected function verifyUser($formFields) {
             // Invoke the singleton DB and prepare SQL
             $db = Database::getInstance();
-            $stmt = $db->connect()->prepare('SELECT userID FROM accounts WHERE email = :email;');
+            $stmt = $db->connect()->prepare('SELECT userID FROM accounts WHERE username = :username OR email = :email;');
 
             // If this fails, abort.
-            if(!$stmt->execute(array($formFields['email']))) {
+            if(!$stmt->execute(array($formFields['email'], $formFields['uid']))) {
+                $stmt = null;
                 $_SESSION['error'] = 'User verification failed!';
-                $this->breakRide($formFields);
+                ViewBook::breakRide(null, $formFields['action']);
             }
-
-            $userID = $stmt->fetchColumn();
-
-            // If there was no match from the database, do this.
-            if(!$userID) {
-                $_SESSION['error'] = 'Unable to find User!';
-                $this->breakRide($formFields);
-            }
-
-
         }
-        
     }

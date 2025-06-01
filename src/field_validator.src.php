@@ -31,4 +31,41 @@
             }
             return null; // Password passed all checks
         } 
+        
+        public static function checkDate(string $day, string $month, string $year): array {
+            // Validate that all inputs are numeric
+            if (!ctype_digit($day) || !ctype_digit($month) || !ctype_digit($year)) {
+                return [
+                    'valid' => false,
+                    'error' => 'Date fields must contain digits only.'
+                ];
+            }
+        
+            // Validate converted dates
+            if (!checkdate((int)$month, (int)$day, (int)$year)) {
+                return [
+                    'valid' => false,
+                    'error' => 'The provided date is invalid.'
+                ];
+            }
+        
+            // Calculate age using DateTime for precision
+            $birthDate = new DateTime("$year-$month-$day");
+            $today = new DateTime();
+            $age = $today->diff($birthDate)->y;
+        
+            // Check if age is within the acceptable range
+            if ($age < 16) {
+                return [
+                    'valid' => false,
+                    'error' => 'You must be at least 16 years old.'
+                ];
+            }
+        
+            // Return the date in DD-MM-YYYY format
+            return [
+                'valid' => true,
+                'date' => sprintf('%02d-%02d-%04d', $day, $month, $year)
+            ];
+        }
     }

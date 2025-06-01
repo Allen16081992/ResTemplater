@@ -211,4 +211,19 @@
             extract($data); // all sorts of data
             require_once './views/'.$view; // file path
         }
+
+        public static function breakride(?string $file = null, ?array $field = null): void {
+            if ($field['action'] === 'login') {
+                $_SESSION['login'] = true;
+            } elseif ($field['action'] === 'signup') {
+                $_SESSION['signup'] = true;
+            }
+
+            if ($file) {
+                header('location: ../'.$file.'.php');
+            } else {
+                header('location: ../index.php');
+            }
+            exit;
+        }
     }

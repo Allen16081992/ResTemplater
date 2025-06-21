@@ -21,8 +21,8 @@
 
     <div class="has-text-centered">
         <div class="container">
-            <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2>
-            <div class="columns is-multiline mt-6">
+            <!-- <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2> -->
+            <!-- <div class="columns is-multiline mt-6">
                 <div class="column is-4">
                     <div class="box has-background-grey-dark has-text-white">
                         <h3 class="title is-size-4">Bold Templates</h3>
@@ -38,10 +38,10 @@
                 <div class="column is-4">
                     <div class="box has-background-grey-dark has-text-white">
                         <h3 class="title is-size-4">🧙No Login Needed</h3>
-                        <p>Instantly craft your resume—no accounts, no hassle.</p>
+                        <p>Instantly craft your resume.</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

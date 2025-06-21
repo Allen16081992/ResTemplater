@@ -1,8 +1,8 @@
 <?php 
     // Load PHP files
     require_once "./src/session_manager.src.php"; 
-    SessionBook::invokeSession();
-    SessionBook::clearUserSession();
+    // SessionBook::invokeSession();
+    // SessionBook::clearUserSession();
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -37,15 +37,7 @@
 </head>
 <body>
     <header> 
-        <a href="index.php" id="logo"><img src="assets/images/falcon250x.webp" alt="Brand logo"></a>
-        <nav role="navigation" aria-label="main navigation">
-            <a href="#" data-section="home">Home</a><!-- Mobile only -->
-            <!-- <a href="#" data-section="author">Tips</a> -->
-            <a href="#" data-section="policy">Privacy</a>
-            <!-- <a href="#" data-section="contact">Contact</a> -->
-            <a href="#" data-section="login">Log in</a>
-            <a href="#" data-section="sign_up">Sign Up</a>
-        </nav>
+        <?php ViewBook::render('navbar_flex.php'); ?>
     </header>
     <div class="skew"></div>
 

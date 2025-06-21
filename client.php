@@ -35,15 +35,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <a href="portal.php" id="logo"><img src="assets/images/falcon250x.webp" alt="CV Templater Logo"></a>
-        </div>
-        <nav>
-            <a href="#" data-section="user"><?= SessionBook::addUsername(); ?></a>
-            <a href="#" data-section="home">Mijn CV</a>
-            <a href="#" data-section="guide">Onze gids</a>
-            <a href="#" data-section="logout">Log out</a>
-        </nav>
+        <?php ViewBook::render('navbar_flex.php'); ?>
     </header>
     <div class="skew"></div>
 
@@ -94,7 +86,7 @@
             <!-- Tabs Content (Inside Resume Builder) -->
             <div class="tab-content">
                 <div id="profile" class="tab-section current">
-                    <div class="form-window">
+                    <div >
                         <h2 class="title is-size-4">Profile</h2>
                         <div style="width:100%; display:flex; justify-content:center;">
                             <label for="file-upload"></label>
@@ -110,7 +102,7 @@
                 </div>
 
                 <div id="experience" class="tab-section hidden"> 
-                    <div class="form-window">
+                    <div >
                         <h2 class="title is-size-4">Experience</h2>
                         <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['experience'])) { 
                             foreach ($data['experience'] as $job): 
@@ -137,7 +129,7 @@
                     </div>
                 </div>
                 <div id="education" class="tab-section hidden">
-                    <div class="form-window">
+                    <div >
                         <h2 class="title is-size-4">Education</h2>
                         <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['education'])) { 
                             foreach ($data['education'] as $study): 
@@ -163,7 +155,7 @@
                     </div>
                 </div>
                 <div id="skills" class="tab-section hidden">
-                    <div class="form-window">
+                    <div >
                         <h2 class="title is-size-4">Technical Skills</h2>
                         <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['techskill'])) { 
                             foreach ($data['techskill'] as $skill): 
@@ -197,7 +189,7 @@
                     </div>
                 </div>
                 <div id="letter" class="tab-section hidden">
-                    <div class="form-window">
+                    <div >
                         <h2 class="title is-size-5">Motivation</h2>
                         <?php if (isset($_SESSION['session_data']['user_ID']) && !empty($data['techskill'])) { 
                                 echo '<form>

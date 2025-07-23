@@ -182,14 +182,14 @@
         //          VISIBILITY LOGIC          //
         //────────────────────────────────────//
 
-        public static function e(string $value): string {
-            return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-        }
+        // public static function e(string $value): string {
+        //     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        // }
 
-        public static function old(string $key): ?string {
-            $data = SessionBook::flash('form_old');
-            return is_array($data) ? ($data[$key] ?? null) : null;
-        }
+        // public static function old(string $key): ?string {
+        //     $data = SessionBook::flash('form_old');
+        //     return is_array($data) ? ($data[$key] ?? null) : null;
+        // }
 
         public static function Homepage(): string {
             if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {

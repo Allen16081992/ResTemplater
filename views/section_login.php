@@ -3,7 +3,7 @@
         <h2 class="title is-size-3">Login</h2>
         <form id="login_form" action="src/action_handler.src.php" method="post">    
             <label for="email">E-mailadres</label>
-            <input class="input" type="email" id="email" name="email" value="<?= ViewBook::e(ViewBook::old('email')) ?>" placeholder="Email" required/>     
+            <input class="input" type="email" id="email" name="email" placeholder="Email" required/>     
             
             <label for="pwd">Wachtwoord</label>
             <input class="input" type="password" id="pwd" name="pwd" placeholder="Password" required/>

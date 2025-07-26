@@ -59,7 +59,7 @@
         <p>Het lijkt erop dat JavaScript is uitgeschakeld in uw browser. Hierdoor werkt de site niet meer.</p>
     </noscript>
 
-    <footer style="background:black; margin-top:6rem;">
+    <footer>
         <p>CV Templater © 2023 - 2024</p>
     </footer>
 </body>

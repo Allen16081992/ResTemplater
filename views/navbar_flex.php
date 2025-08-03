@@ -19,9 +19,9 @@
 
     <!-- If in User Environment -->
     <?php } elseif (in_array(basename($_SERVER['PHP_SELF']), ['client.php'])) { ?>
+        <a href="#" data-section="user"><?= SessionBook::addUsername(); ?></a>
         <a href="#" data-section="home">Mijn CV</a>
         <a href="#" data-section="guide">Onze gids</a>
-        <a href="#" data-section="user"><?= SessionBook::addUsername(); ?></a>
         <a href="#" data-section="logout">Log out</a>
     <?php } ?>
 </nav>

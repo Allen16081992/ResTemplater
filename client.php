@@ -49,38 +49,62 @@
 
     <main>
         <section id="home" class="<?= ViewBook::Homepage(); ?>">
+            <div class="flexo">
+                <div class="sidebar">
+                    <button type="submit" class="button is-small is-success" data-section="add-res">New Resume</button>
+                    <button type="submit" class="button is-small is-danger is-outlined" data-section="trash-res">Delete Resume</button>
+                    <form action="">
+                        <label for="selectCv"></label>
+                        <div class="select is-small is-fullwidth" style="margin-bottom:10px;">
+                            <select id="selectCv" name="cvname">
+                                <option selected disabled hidden>Select a resume:</option>
+                                <?php // Check if there is resume data to display
+                                if (!empty($resumeData['resume'])): 
+                                    // Loop through each resume and create an option element
+                                    foreach ($resumeData['resume'] as $resume): ?>
+                                        <option value="<?= htmlspecialchars($resume['resumeID']) ?>">
+                                            <?= htmlspecialchars($resume['resumetitle']) ?>
+                                        </option>
+                                    <?php endforeach; 
+                                endif; ?>
+                            </select>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+
             <div class="resume-board">
                 <h2 class="title is-size-4">Resume Builder</h2>
                 <form action="src/resume.src.php" method="post">
-                    <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
+                    <!-- <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
                     <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
-                    <button class="button" data-section="save-res">Download</button> 
-                    <label for="selectCv"></label>
+                    <button class="button" data-section="save-res">Download</button>  -->
+                    <!-- <label for="selectCv"></label>
                     <div class="select is-fullwidth" style="margin-bottom:10px;">
                         <select id="selectCv" name="cvname">
-                            <option selected disabled hidden>Select a resume</option>
+                            <option selected disabled hidden>Select a resume</option> -->
                             <?php // Check if there is resume data to display
-                            if (!empty($resumeData['resume'])): 
-                                // Loop through each resume and create an option element
-                                foreach ($resumeData['resume'] as $resume): ?>
-                                    <option value="<?= htmlspecialchars($resume['resumeID']) ?>">
-                                        <?= htmlspecialchars($resume['resumetitle']) ?>
-                                    </option>
-                                <?php endforeach; 
-                            endif; ?>
-                        </select>
-                    </div>
+                            // if (!empty($resumeData['resume'])): 
+                            //     // Loop through each resume and create an option element
+                            //     foreach ($resumeData['resume'] as $resume): ?>
+                                     <!-- <option value="< // htmlspecialchars($resume['resumeID']) ?>">
+                                         < // htmlspecialchars($resume['resumetitle']) ?>
+                                     </option> -->
+                                 <?php // endforeach; 
+                            // endif; ?>
+                        <!-- </select>
+                    </div> -->
                 </form> 
 
                 <!-- Tab Navigation -->
-                <div class="tab-buttons">
+                <!-- <div class="tab-buttons">
                     <button data-tab="profile" class="active">Profile</button>
                     <button data-tab="experience">Work</button>
                     <button data-tab="education">Education</button>
                     <button data-tab="skills">Skills</button>
                     <button data-tab="letter">Motivation</button>
                     <button data-tab="preview">Preview</button>
-                </div>
+                </div> -->
             </div>
             
             <!-- Tabs Content (Inside Resume Builder) -->

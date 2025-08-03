@@ -106,6 +106,27 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     background-color: #ccc; 
     margin: 20px 0;    
 } */
+.flexo {
+    display: flex;
+    align-items:left;
+    width:100%;
+}
+.sidebar {
+  position: relative;
+  top:25%;
+  left:0;
+  /* border: 1px solid var(--primary-color-dark); */
+  border-radius:10px;
+  /* background-color:var(--bg-window); */
+  color: var(--text-color);
+  padding: 1rem; 
+  /* width:14rem; */
+
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
 
 /* Login Window */
 .resume-board {

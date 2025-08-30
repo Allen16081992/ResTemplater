@@ -50,9 +50,13 @@
     <main>
         <section id="home" class="<?= ViewBook::Homepage(); ?>">
             <div class="flexo">
-                <div class="sidebar">
+
+            </div>
+
+            <div class="resume-board columns">
+                <div class="column sidebar">
                     <button type="submit" class="button is-small is-success" data-section="add-res">New Resume</button>
-                    <button type="submit" class="button is-small is-danger is-outlined" data-section="trash-res">Delete Resume</button>
+                    <button type="submit" class="button is-small is-danger" data-section="trash-res">Delete Resume</button>
                     <form action="">
                         <label for="selectCv"></label>
                         <div class="select is-small is-fullwidth" style="margin-bottom:10px;">
@@ -70,41 +74,51 @@
                             </select>
                         </div>
                     </form> 
+                    <hr>
+                    <ul>
+                        <li><a href="">Personal</a></li>
+                        <li><a href="">Experience</a></li>
+                        <li><a href="">Education</a></li>
+                        <li><a href="">Skills</a></li>
+                    </ul>
                 </div>
-            </div>
+                
+                <div class="column" style="border:2px dotted red; background:#0f172a; border-radius: 10px;">
+                    <h2 class="title is-size-4">Curriculum Vitae</h2>
+                    <p class="subtitle is-6">Minimal Bulma starter with repeatable sections, client-side validation, and localStorage autosave.</p>
+                    <hr>
+                    
+                        <!-- <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
+                        <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
+                        <button class="button" data-section="save-res">Download</button>  -->
+                        <!-- <label for="selectCv"></label>
+                        <div class="select is-fullwidth" style="margin-bottom:10px;">
+                            <select id="selectCv" name="cvname">
+                                <option selected disabled hidden>Select a resume</option> -->
+                                <?php // Check if there is resume data to display
+                                // if (!empty($resumeData['resume'])): 
+                                //     // Loop through each resume and create an option element
+                                //     foreach ($resumeData['resume'] as $resume): ?>
+                                        <!-- <option value="< // htmlspecialchars($resume['resumeID']) ?>">
+                                            < // htmlspecialchars($resume['resumetitle']) ?>
+                                        </option> -->
+                                    <?php // endforeach; 
+                                // endif; ?>
+                            <!-- </select>
+                        </div> -->
+                    
 
-            <div class="resume-board">
-                <h2 class="title is-size-4">Resume Builder</h2>
-                <form action="src/resume.src.php" method="post">
-                    <!-- <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
-                    <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
-                    <button class="button" data-section="save-res">Download</button>  -->
-                    <!-- <label for="selectCv"></label>
-                    <div class="select is-fullwidth" style="margin-bottom:10px;">
-                        <select id="selectCv" name="cvname">
-                            <option selected disabled hidden>Select a resume</option> -->
-                            <?php // Check if there is resume data to display
-                            // if (!empty($resumeData['resume'])): 
-                            //     // Loop through each resume and create an option element
-                            //     foreach ($resumeData['resume'] as $resume): ?>
-                                     <!-- <option value="< // htmlspecialchars($resume['resumeID']) ?>">
-                                         < // htmlspecialchars($resume['resumetitle']) ?>
-                                     </option> -->
-                                 <?php // endforeach; 
-                            // endif; ?>
-                        <!-- </select>
+                    <!-- Tab Navigation -->
+                    <!-- <div class="tab-buttons">
+                        <button data-tab="profile" class="active">Profile</button>
+                        <button data-tab="experience">Work</button>
+                        <button data-tab="education">Education</button>
+                        <button data-tab="skills">Skills</button>
+                        <button data-tab="letter">Motivation</button>
+                        <button data-tab="preview">Preview</button>
                     </div> -->
-                </form> 
+                </div>
 
-                <!-- Tab Navigation -->
-                <!-- <div class="tab-buttons">
-                    <button data-tab="profile" class="active">Profile</button>
-                    <button data-tab="experience">Work</button>
-                    <button data-tab="education">Education</button>
-                    <button data-tab="skills">Skills</button>
-                    <button data-tab="letter">Motivation</button>
-                    <button data-tab="preview">Preview</button>
-                </div> -->
             </div>
             
             <!-- Tabs Content (Inside Resume Builder) -->
@@ -406,7 +420,7 @@
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                     </div>
                     <button class="button is-link" type="submit" name="savePersonal">Save</button>
-                    <div class="account-section-divider"></div>
+                    <div class="divider"></div>
                 </form>
                 <form action="src/account.src.php" method="post">
                     <h3 class="subtitle">Account</h3>

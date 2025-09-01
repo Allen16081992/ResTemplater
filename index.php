@@ -1,4 +1,8 @@
 <?php 
+    header('Cache-Control: private, no-store, no-cache, must-revalidate'); // per-user, don’t cache
+    header('Pragma: no-cache');   // legacy HTTP/1.0
+    header('Expires: 0');         // expire immediately
+    
     // Load PHP files
     require_once "./src/session_manager.src.php"; 
     // SessionBook::invokeSession();
@@ -32,8 +36,10 @@
     <title>Jouw Mobiele CV Editor | PaperTiger</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/3d_dummy_lines.js"></script>
     <script defer src="assets/js/multi_step_rotator.js"></script>
+    <!-- JS Animations -->
+    <script defer src="assets/js/3d_dummy_lines.js"></script>
+    <script defer src="assets/js/sparks_effect.js"></script>
 </head>
 <body>
     <header> 

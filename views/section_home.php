@@ -3,7 +3,7 @@
         <div class="container">
             <h1 class="title is-size-2 has-text-white">PaperWitch</h1>
             <p class="subtitle is-size-4 has-text-light">Resumes with attitude.</p>
-            <a href="client.php" class="button is-medium is-danger is-outlined">🔮 Unleash Your Resume</a>
+            <a href="client.php" id="cta" class="button is-medium is-danger is-outlined">🔮 Write Your Grimoire Today</a>
         </div>
     </div>
     
@@ -19,29 +19,62 @@
         </div>
     </div>
 
-    <div class="has-text-centered">
-        <div class="container">
-            <!-- <h2 class="title is-size-2 has-text-white">Features that make you stand out</h2> -->
-            <!-- <div class="columns is-multiline mt-6">
-                <div class="column is-4">
-                    <div class="box has-background-grey-dark has-text-white">
-                        <h3 class="title is-size-4">Bold Templates</h3>
-                        <p>Break the mold with unique resume styles.</p>
+    <div style="background: #212121;">
+        <div class="page-wrapper">
+            <div class="section-timeline-heading">
+                <div class="contain-me">
+                    <div class="padding-vertical-xlarge">
+                        <div class="timeline-main-heading-wrapper">
+                            <div class="margin-bottom-medium">
+                                <h2>Rise of Noobs</h2>
+                            </div>
+                            <p class="paragraph-large">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                                Alias qui rerum, ducimus odio quasi veritatis saepe consectetur 
+                                officia debitis? Doloribus facilis commodi obcaecati totam dolorum hic 
+                                voluptates iure quia unde?
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="column is-4">
-                    <div class="box has-background-grey-dark has-text-white">
-                        <h3 class="title is-size-4">Express Yourself</h3>
-                        <p>Customization that lets your personality shine.</p>
-                    </div>
+            </div>
+        </div>
+
+        <div class="pw-timeline" id="features">
+            <div class="pw-line" aria-hidden="true"></div>
+
+            <!-- Item -->
+            <article class="pw-item">
+                <div class="pw-marker"><div class="pw-emitter" aria-hidden="true"></div></div>
+                <div class="pw-card">
+                <h3>Choose a Template</h3>
+                <p>Classic, Modern, or Compact — swap with one click.</p>
                 </div>
-                <div class="column is-4">
-                    <div class="box has-background-grey-dark has-text-white">
-                        <h3 class="title is-size-4">🧙No Login Needed</h3>
-                        <p>Instantly craft your resume.</p>
-                    </div>
+            </article>
+
+            <article class="pw-item">
+                <div class="pw-marker"><div class="pw-emitter" aria-hidden="true"></div></div>
+                <div class="pw-card">
+                <h3>Live Preview</h3>
+                <p>CSS Grid preview updates as you type.</p>
                 </div>
-            </div> -->
+            </article>
+
+            <article class="pw-item">
+                <div class="pw-marker"><div class="pw-emitter" aria-hidden="true"></div></div>
+                <div class="pw-card">
+                <h3>Instant Export</h3>
+                <p>One-click PDF via TCPDF, consistent with the preview.</p>
+                </div>
+            </article>
+
+            <article class="pw-item">
+                <div class="pw-marker"><div class="pw-emitter" aria-hidden="true"></div></div>
+                <div class="pw-card">
+                <h3>Private by Default</h3>
+                <p>Autosave in your browser; sync only when you choose.</p>
+                </div>
+            </article>
         </div>
     </div>
 </section>

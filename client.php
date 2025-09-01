@@ -50,7 +50,8 @@
     <main>
         <section id="home" class="<?= ViewBook::Homepage(); ?>">
             <div class="flexo">
-
+                <!-- Add Timeline to Landing Page to highlight feautures -->
+                <!-- Rotating CTA button text is a good idea -->
             </div>
 
             <div class="resume-board columns">

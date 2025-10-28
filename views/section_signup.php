@@ -1,4 +1,4 @@
-<section id="sign_up" class="<?= ViewBook::isVisible('signup'); ?>">
+<section id="sign_up" class="<?= ViewBook::setView_Error('sign_up'); ?>">
     <div class="form-window">
         <h2>Registreren</h2>
         <form id="signup_form" action="src/account.src.php" method="post">

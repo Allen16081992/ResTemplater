@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PaperWitch – Resumes with Attitude</title>
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/favicon-180x180.png">
+  <style>
+    :root {
+      --accent: #8b5cf6; /* witchy purple */
+      --dark: #0b0b10;
+      --muted: #a7a7b3;
+    }
+
+    html, body { background: #0a0a0f; color: #e8e8ef; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; }
+    h1, h2, h3 { font-family: Unna, Georgia, serif; letter-spacing: .2px; }
+
+    /* =============== Slanted / Diagonal NAVBAR =============== */
+    .pw-nav-wrap { position: sticky; top: 0; z-index: 50; }
+    .pw-nav {
+      position: relative;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 8px 22px rgba(0,0,0,.35);
+      isolation: isolate;
+    }
+    .pw-nav::before {
+      /* faint depth gradient */
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.0) 45%, rgba(0,0,0,.25) 100%);
+      pointer-events: none;
+    }
+
+    .pw-brand { display:flex; align-items:center; gap:.75rem; }
+    .pw-brand img { position:absolute; top:0; height: 10rem; width:auto; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+    /* .pw-brand .brand-title { font-weight:800; letter-spacing:.5px; } */
+
+    /* Right-side skewed buttons */
+    .pw-actions { display:flex; align-items:center; gap: clamp(1rem, 2vw, 2.2rem); /* ~"2cm" feel without hard cm units */ }
+
+    .skew-btn { position:relative; transform: skewX(-14deg); border: 1px solid rgba(255,255,255,.18); padding: .55rem 1rem; background: rgba(255,255,255,.06); color: #f1f1f6; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.25) inset, 0 6px 18px rgba(0,0,0,.25); transition: transform .15s ease, background .2s, box-shadow .2s; }
+    .skew-btn > span { display:inline-block; transform: skewX(14deg); }
+    .skew-btn:hover { background: rgba(255,255,255,.12); transform: skewX(-14deg) translateY(-1px); box-shadow: 0 0 0 1px rgba(255,255,255,.1) inset, 0 10px 26px rgba(0,0,0,.35); color: #a2a2a370;}
+
+    /* Size progression: from RIGHT (smallest) → LEFT (largest) */
+    .pw-actions .skew-btn:nth-last-child(1) { /* Privacy - larger */ 
+      font-size: 1.05rem; padding: .65rem 1.1rem; border-radius: 12px;
+    }
+    .pw-actions .skew-btn:nth-last-child(2) { /* Login */
+      font-size: .95rem;
+    }
+    .pw-actions .skew-btn:nth-last-child(3) { /* Sign In - rightmost, smallest */
+      font-size: .85rem; padding: .45rem .85rem; border-radius: 9px;
+    }
+
+    /* Primary CTA style */
+    .btn-cta { background: linear-gradient(135deg, var(--accent), #4f46e5); border: none; color: #fff; box-shadow: 0 12px 30px rgba(139,92,246,.35); }
+    .btn-cta:hover { filter: brightness(1.05); box-shadow: 0 16px 36px rgba(139,92,246,.45); }
+
+    /* =============== HERO =============== */
+    .hero.is-dark { background: radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.25), rgba(0,0,0,0) 40%), radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.2), rgba(0,0,0,0) 40%), linear-gradient(180deg, rgba(20,18,31,1) 0%, rgba(10,10,16,1) 70%);
+      position: relative; overflow:hidden; }
+    .hero .floating-sheets { position:absolute; inset:0; background: radial-gradient(200px 80px at 70% 40%, rgba(255,255,255,.06), transparent 60%); mix-blend: screen; opacity:.55; pointer-events:none; }
+
+    .hero-title { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.05; }
+    .hero-sub { color: var(--muted); max-width: 56ch; }
+
+    /* Section helpers with diagonal tops */
+    .angled-top { position: relative; }
+    .angled-top::before { content:""; position:absolute; top:-60px; left:0; right:0; height:60px; background: inherit; transform: skewY(-2deg); transform-origin: 100% 100%; }
+
+    /* Showcase carousel (simple placeholder grid) */
+    .template-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:1rem; }
+    @media (max-width: 1024px) { .template-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 540px) { .template-grid { grid-template-columns: 1fr; } }
+    .template-card { background: #11131a; border:1px solid rgba(255,255,255,.08); border-radius: 18px; padding: .75rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+    .template-card:hover { transform: translateY(-4px) rotate(-.25deg); box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+    .template-thumb { aspect-ratio: 3/4; width:100%; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); display:grid; place-items:center; color:#cfcfe6; font-weight:600; }
+
+    /* Features */
+    .feature-card { background: #0f1118; border:1px solid rgba(255,255,255,.08); border-radius: 20px; padding: 1.25rem; height:100%; }
+
+    /* Timeline */
+    .how-steps { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; }
+    @media (max-width: 900px) { .how-steps { grid-template-columns: 1fr; } }
+    .step { background:#0f1118; border:1px solid rgba(255,255,255,.08); border-radius: 18px; padding:1.25rem; position:relative; }
+    .step .num { position:absolute; top:-14px; left:-14px; background:var(--accent); color:#0b0820; font-weight:800; padding:.35rem .6rem; border-radius: 999px; box-shadow:0 8px 20px rgba(139,92,246,.4); }
+
+    /* Testimonials */
+    .testimonial { background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.07); border-radius: 16px; padding:1rem; }
+
+    /* CTA band */
+    .cta-band { background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(79,70,229,.15)); border:1px solid rgba(255,255,255,.08); border-radius: 22px; }
+
+    /* Footer */
+    footer a { color: #c7c7ff; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <div class="pw-nav-wrap">
+    <nav class="pw-nav">
+      <div class="container py-3 pw-nav-inner">
+        <div class="level">
+          <div class="level-left">
+            <a class="pw-brand" href="#">
+              <!-- TODO: replace with your actual transparent PNG logo -->
+              <img src="assets/images/witch_logo2.png" alt="PaperWitch logo" />
+              <!-- <span class="brand-title">PaperWitch</span> -->
+            </a>
+          </div>
+          <div class="level-right">
+            <div class="pw-actions">
+              <!-- Size increases from right→left; all buttons skewed -->
+              <a class="skew-btn" href="#privacy"><span>Privacy</span></a>
+              <a class="skew-btn" href="#login"><span>Login</span></a>
+              <a class="skew-btn" href="#signin"><span>Sign In</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero is-dark is-fullheight-with-navbar">
+    <div class="floating-sheets"></div>
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-vcentered">
+          <div class="column">
+            <h1 class="title hero-title">Resumes with Attitude.</h1>
+            <p class="subtitle hero-sub mt-3">Build a creative, job‑ready resume in minutes. Modern templates, bold styling, and instant PDF export powered by TCPDF.</p>
+            <div class="buttons mt-5">
+              <a href="#start" class="button is-medium btn-cta">Create My Resume</a>
+              <a href="#templates" class="button is-medium is-light">Browse Templates</a>
+            </div>
+          </div>
+          <div class="column is-hidden-touch">
+            <!-- Placeholder device/mockup -->
+            <div class="template-card">
+              <div class="template-thumb">Live Preview Placeholder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE -->
+  <section id="templates" class="section angled-top">
+    <div class="container">
+      <h2 class="title is-3">See the Magic</h2>
+      <p class="subtitle is-6 has-text-grey-light">Pick a vibe. Tweak the colors. Download as PDF.</p>
+      <div class="template-grid mt-4">
+        <div class="template-card"><div class="template-thumb">Modern</div></div>
+        <div class="template-card"><div class="template-thumb">Creative</div></div>
+        <div class="template-card"><div class="template-thumb">Minimal</div></div>
+        <div class="template-card"><div class="template-thumb">Witchy</div></div>
+      </div>
+      <div class="buttons mt-5">
+        <a class="button is-light" href="#start">Try a Demo</a>
+        <a class="button btn-cta" href="#start">Start Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3">Why PaperWitch</h2>
+      <div class="columns is-multiline">
+        <div class="column is-6 is-3-desktop">
+          <div class="feature-card">
+            <h3 class="title is-5">🧙 Stylish Templates</h3>
+            <p class="has-text-grey-light">Curated designs that feel modern, bold, and job‑ready—no corporate boredom.</p>
+          </div>
+        </div>
+        <div class="column is-6 is-3-desktop">
+          <div class="feature-card">
+            <h3 class="title is-5">⚡ Fast & Simple</h3>
+            <p class="has-text-grey-light">Fill your info and export in minutes—no learning curve, no fluff.</p>
+          </div>
+        </div>
+        <div class="column is-6 is-3-desktop">
+          <div class="feature-card">
+            <h3 class="title is-5">🎨 Custom Colors & Fonts</h3>
+            <p class="has-text-grey-light">Make it yours with instant color palettes and clean font pairings.</p>
+          </div>
+        </div>
+        <div class="column is-6 is-3-desktop">
+          <div class="feature-card">
+            <h3 class="title is-5">💾 One‑Click PDF</h3>
+            <p class="has-text-grey-light">TCPDF engine under the hood for crisp, ATS‑friendly exports.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section angled-top">
+    <div class="container">
+      <h2 class="title is-3">How It Works</h2>
+      <div class="how-steps mt-4">
+        <div class="step">
+          <span class="num">1</span>
+          <h3 class="title is-5">Choose a Template</h3>
+          <p class="has-text-grey-light">Pick from Modern, Minimal, Creative, or Witchy collections.</p>
+        </div>
+        <div class="step">
+          <span class="num">2</span>
+          <h3 class="title is-5">Fill Your Details</h3>
+          <p class="has-text-grey-light">Experience, education, skills—live preview as you type.</p>
+        </div>
+        <div class="step">
+          <span class="num">3</span>
+          <h3 class="title is-5">Download PDF</h3>
+          <p class="has-text-grey-light">Export instantly. Ready to send or print.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3">Loved by Job‑Hunters</h2>
+      <div class="columns is-multiline">
+        <div class="column is-4">
+          <div class="testimonial">
+            <p>“Got my interview in 48 hours. The Witchy template slapped.”</p>
+            <p class="has-text-grey-light mt-2">— Lina, Graphic Designer</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="testimonial">
+            <p>“Fast, clean, and not boring. Recruiter replied the same day.”</p>
+            <p class="has-text-grey-light mt-2">— Ahmed, Front‑end Dev</p>
+          </div>
+        </div>
+        <div class="column is-4">
+          <div class="testimonial">
+            <p>“I finally felt confident sending my resume. PDF looked crisp.”</p>
+            <p class="has-text-grey-light mt-2">— Zoe, Marketing</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING / CTA BAND -->
+  <section class="section angled-top">
+    <div class="container">
+      <div class="cta-band p-6">
+        <div class="columns is-vcentered">
+          <div class="column">
+            <h2 class="title is-3">Try PaperWitch for Free</h2>
+            <p class="has-text-grey-light">Start building now. Upgrade anytime for premium templates & palettes.</p>
+          </div>
+          <div class="column has-text-right-desktop">
+            <a class="button is-medium btn-cta" href="#start">Start Creating</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="background: #0a0a10">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <strong>PaperWitch</strong>
+          <p class="has-text-grey">Resumes with Attitude.</p>
+        </div>
+        <div class="column">
+          <p><a href="#privacy">Privacy</a></p>
+          <p><a href="#terms">Terms</a></p>
+          <p><a href="#contact">Contact</a></p>
+        </div>
+        <div class="column">
+          <p><a href="#login">Login</a></p>
+          <p><a href="#signin">Sign In</a></p>
+        </div>
+      </div>
+      <p class="has-text-grey-light">© 2025 PaperWitch</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -62,7 +62,7 @@ footer {
 }
 
 /* Navigation bar */
-#logo img {height:7rem;}
+#logo img {height:12rem;}
 nav {
     display: flex;
     justify-content: center;
@@ -116,7 +116,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 
 
 /* Login Window */
-.resume-board {
+.builder-board {
     position:relative;
     border: 2px dotted rgb(221, 114, 14);
     border-radius: 10px;
@@ -129,6 +129,22 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px ); */
 }
+.profile { 
+    max-width:30rem; 
+    label { 
+        text-align: left; 
+    }
+}
+/* .jobs {
+    width:100%;
+  .day-select,
+  .month-select,
+  .year-select {
+    width: 3rem;
+    height: 2rem;
+  }
+} */
+  
 .form-window {
     position:relative;
     padding:20px;
@@ -288,7 +304,7 @@ form label {
     margin-bottom: 4px; 
     text-align: left; 
 } 
-form input[type="text"], input[type="email"], input[type="password"], textarea {
+form input[type="text"], form input[type="email"], form input[type="password"], form textarea {
     margin: 0 0 20px;
     padding: 0.6em;
     font-size: 1em;
@@ -324,7 +340,7 @@ select {
 /* Base styling for all server messages */
 .serV {
     position: absolute;
-    margin-top: -1.9rem;
+    margin-top: 14.5rem;
     width: 100%;
     border-bottom: 2px solid black;
     color: #fff;
@@ -487,4 +503,54 @@ input[type="file"]::file-selector-button {
     .sidebar hr {margin-top:5px;}
     .sidebar ul {display:none;}
     footer {margin-bottom:6.2rem;}
+}
+
+/* Body background with diagonal vibe */
+
+
+/* Diagonal accent bands */
+/* body::before,
+body::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  width: 120%;
+  height: 200px;
+  transform: skewY(-8deg);
+  background: rgba(96, 165, 250, 0.06);
+  z-index: 0;
+} */
+
+/* one band at the top */
+/* body::before {
+  top: 120px;
+} */
+
+/* one band lower down */
+/* body::after {
+  top: 600px;
+} */
+
+/* Optional: skewed "trash squares" */
+.diag-square {
+  position: fixed;
+  width: 150px; height: 150px;
+  background: rgba(250, 250, 250, 0.425);
+  transform: rotate(15deg) skew(8deg);
+  z-index: 0;
+  pointer-events: none;
+}
+.diag-square:nth-child(1) { top: 200px; left: 5%; }
+.diag-square:nth-child(2) { top: 450px; left: 75%; }
+.diag-square:nth-child(3) { top: 780px; left: 20%; }
+.master-diamond {
+  position: fixed;           /* fixed = doesn’t add page height */
+  top: 60%;
+  left: 50%;
+  width: 60vh;             /* scales with viewport */
+  height: 60vh;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: rgb(255, 255, 255);  /* faint white */
+  pointer-events: none;       /* don’t block clicks */
+  z-index: 0;                 /* behind content */
 }

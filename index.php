@@ -3,10 +3,14 @@
     header('Pragma: no-cache');   // legacy HTTP/1.0
     header('Expires: 0');         // expire immediately
     
-    // Load PHP files
+    // Essential PHP files
     require_once "./src/session_manager.src.php"; 
+
+    // Miscellaneous PHP Files
+    include_once "./src/phrases.src.php"
     // SessionBook::invokeSession();
     // SessionBook::clearUserSession();
+    
 ?>
 <!DOCTYPE html>
 <html lang="nl">
@@ -33,12 +37,12 @@
     <link rel="stylesheet" href="assets/css/3d_illustration.css">
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <title>Jouw Mobiele CV Editor | PaperTiger</title>
+    <title>Your Job Scroll Toolbox</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/multi_step_rotator.js"></script>
+    <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
     <!-- JS Animations -->
-    <script defer src="assets/js/3d_dummy_lines.js"></script>
+    <!-- <script defer src="assets/js/3d_dummy_lines.js"></script> -->
     <script defer src="assets/js/sparks_effect.js"></script>
 </head>
 <body>

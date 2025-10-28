@@ -1,9 +1,9 @@
 <section id="home" class="<?= ViewBook::Homepage(); ?> hero is-fullheight has-text-centered">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title is-size-2 has-text-white">PaperWitch</h1>
-            <p class="subtitle is-size-4 has-text-light">Resumes with attitude.</p>
-            <a href="client.php" id="cta" class="button is-medium is-danger is-outlined">🔮 Write Your Grimoire Today</a>
+            <h1 class="title is-size-2 has-text-white pb-3">PaperWitch</h1>
+            <p class="subtitle is-size-4 has-text-light"><?= htmlspecialchars($slogan = SetPhrase('slogan')); ?></p>
+            <a href="client.php" id="cta" class="button is-medium is-danger is-outlined">🔮 <?= htmlspecialchars($cta = SetPhrase('cta')); ?></a> <!-- Write Your Grimoire Today-->
         </div>
     </div>
     
@@ -19,6 +19,29 @@
         </div>
     </div>
 
+    <div style="background: #212121; margin-top:2rem;">
+        <div class="page-wrapper">
+            <div class="section-timeline-heading">
+                <div class="contain-me">
+                    <div class="padding-vertical-xlarge">
+                        <div class="timeline-main-heading-wrapper">
+                            <div class="margin-bottom-medium">
+                                <h2>Resume Templates</h2> <!-- Rise of Noobs -->
+                            </div>
+                            
+                            <p class="paragraph-large">
+                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
+                                Alias qui rerum, ducimus odio quasi veritatis saepe consectetur 
+                                officia debitis? Doloribus facilis commodi obcaecati totam dolorum hic 
+                                voluptates iure quia unde?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div style="background: #212121;">
         <div class="page-wrapper">
             <div class="section-timeline-heading">
@@ -26,7 +49,8 @@
                     <div class="padding-vertical-xlarge">
                         <div class="timeline-main-heading-wrapper">
                             <div class="margin-bottom-medium">
-                                <h2>Rise of Noobs</h2>
+                                <h2>Rise of Papers</h2> <!-- Rise of Noobs -->
+                                <?= htmlspecialchars($slogan = SetPhrase('tagline')); ?>
                             </div>
                             <p class="paragraph-large">
                                 Lorem ipsum dolor sit, amet consectetur adipisicing elit. 

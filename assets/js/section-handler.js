@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Navigation elements
     let activeLink = null;
     const logoLink = document.getElementById('logo');
-    const sections = document.querySelectorAll('main section');
+    const sections = document.querySelectorAll('main, section');
     const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section], button[data-section]');
 
     // Section visibility

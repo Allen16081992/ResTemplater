@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PaperWitch – Sign Up</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #8b5cf6;
+      --accent-2: #4f46e5;
+      --bg: #0a0a0f;
+      --panel: #0f1118;
+      --muted: #a7a7b3;
+    }
+
+    html, body { height: 100%; margin: 0; }
+    /* body {
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.25), rgba(0,0,0,0) 40%),
+                  radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.2), rgba(0,0,0,0) 40%),
+                  linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
+      color: #e8e8ef;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    } */
+
+    /* .signup-wrap {
+      width: min(1080px, 94vw);
+      padding: clamp(14px, 2vw, 28px);
+    }
+
+    .signup-card {
+      background: rgba(15,17,24, .85);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+      backdrop-filter: blur(8px);
+    }
+
+    .signup-columns {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      min-height: 640px;
+    }
+    @media (max-width: 980px) {
+      .signup-columns { grid-template-columns: 1fr; min-height: unset; }
+      .signup-visual { height: 260px; }
+    }
+
+    .signup-visual {
+      position: relative;
+      background: #11131a;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.8s ease-in-out, filter 0.6s ease-in-out;
+      display: grid; place-items: end start;
+      padding: 1.25rem;
+    }
+
+    .signup-visual::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.4) 60%, rgba(0,0,0,.6));
+      pointer-events: none;
+    }
+
+    .signup-visual .badge {
+      position: relative;
+      z-index: 1;
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #e9e9ff;
+      border-radius: 999px;
+      padding: .5rem .85rem;
+      box-shadow: 0 6px 22px rgba(0,0,0,.35);
+      font-weight: 600;
+    }
+
+    .signup-form {
+      padding: clamp(20px, 4vw, 48px);
+      display: grid; align-content: center;
+      gap: 1.25rem;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+    } */
+
+    /* .signup-title { font-family: Unna, Georgia, serif; font-size: clamp(1.8rem, 2.8vw, 2.4rem); line-height: 1.1; }
+    .signup-sub { color: var(--muted); } */
+
+    /* .field label.label { color: #dcdcf5; font-weight: 700; } */
+    /* .control .input {
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      color: #f5f5ff;
+      border-radius: 12px; height: 2.9em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    } */
+    /* .control .input:focus { border-color: rgba(139,92,246,.8); box-shadow: 0 0 0 3px rgba(139,92,246,.2); } */
+
+    /* hr.divider {
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,.08);
+      margin: 1.25rem 0;
+    } */
+
+    /* .btn-primary.button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(139,92,246,.35);
+      transition: transform .12s ease, filter .2s ease;
+    } */
+    /* .btn-primary.button:hover { filter: brightness(1.06); transform: translateY(-1px); } */
+
+    /* .footnote { color: var(--muted); font-size: .9rem; } */
+  </style>
+</head>
+<body>
+  <section class="auth-wrap">
+    <div class="signup-card">
+      <div class="signup-columns">
+        <!-- Left: IMAGE PANEL -->
+        <aside class="signup-visual" id="signupVisual">
+          <!-- Replace this image with your default witch image -->
+          <!-- background-image: url('images/witch_calm.png'); -->
+          <span class="badge">✨ PaperWitch • Begin the Ritual</span>
+        </aside>
+
+        <!-- Right: SIGNUP FORM -->
+        <div class="signup-form">
+          <header>
+            <h1 class="signup-title">Create your account</h1>
+            <p class="signup-sub">Start your journey to craft the perfect resume.</p>
+          </header>
+
+          <form id="signup_form" action="src/account.src.php" method="post" novalidate>
+
+            <!-- Personal Information -->
+            <h3 class="title is-6 has-text-grey-light">Personal Information</h3>
+
+            <div class="field is-horizontal">
+              <div class="field-body">
+                <div class="field">
+                  <label class="label" for="date">Date of Birth</label>
+                  <div class="control">
+                    <input id="date" name="date" type="date" class="input" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label" for="username">Username (optional)</label>
+                  <div class="control">
+                    <input id="username" name="username" type="text" class="input" placeholder="Choose a username">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Account Information -->
+            <h3 class="title is-6 has-text-grey-light">Account Details</h3>
+
+            <div class="field">
+              <label class="label" for="email">Email address</label>
+              <div class="control">
+                <input id="email" name="email" type="email" class="input" placeholder="you@domain.com" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="password">Password</label>
+              <div class="control has-icons-right">
+                <input id="password" name="password" type="password" class="input" placeholder="••••••••" required>
+                <span class="icon is-small is-right" id="togglePwd">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" id="terms" name="terms" required>
+                I agree to the <a href="#">terms</a> and <a href="#">conditions</a>.
+              </label>
+            </div>
+
+            <div class="field mt-4">
+              <button class="button is-medium btn-primary is-fullwidth" type="submit" id="signupBtn">Sign Up</button>
+            </div>
+
+            <p class="footnote">Already have an account? <a class="has-text-info" href="login.html">Sign in here</a>.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('signup_form');
+    const visual = document.getElementById('signupVisual');
+    const passwordInput = document.getElementById('password');
+    const togglePwd = document.getElementById('togglePwd');
+    const signupBtn = document.getElementById('signupBtn');
+
+    const calmImg = 'url("assets/images/paperwitch_bold.png")';
+    const activeImg = 'url("assets/images/paperwitch_resentful.png")';
+    const burstImg = 'url("assets/images/paperwitch_spilled.png")';
+
+    // initial background
+    visual.style.backgroundImage = calmImg;
+
+    // change image based on form interaction
+    form.addEventListener('input', () => {
+      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
+      if (allFilled) {
+        visual.style.backgroundImage = activeImg;
+      } else {
+        visual.style.backgroundImage = calmImg;
+      }
+    });
+
+    // On hover over Sign Up button (only if all fields valid)
+    signupBtn.addEventListener('mouseenter', () => {
+      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
+      if (allFilled) {
+        visual.style.backgroundImage = burstImg;
+        visual.style.filter = 'brightness(1.2)';
+      }
+    });
+    signupBtn.addEventListener('mouseleave', () => {
+      visual.style.filter = 'brightness(1)';
+      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
+      visual.style.backgroundImage = allFilled ? activeImg : calmImg;
+    });
+
+    // toggle password visibility
+    togglePwd.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+    });
+  </script>
+</body>
+</html>

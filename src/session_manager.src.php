@@ -1,5 +1,4 @@
 <?php
-
     // Handle logout operations
     if (isset($_POST['logout'])) {
         SessionBook::revokeSession();
@@ -68,6 +67,11 @@
             if (in_array(basename($_SERVER['PHP_SELF']), ['index.php', 'client.php'])) {
                 self::invokeToken();
             }
+        }
+
+        public static function clearUserSession(): void {
+            $keys = ['session_data', 'login', 'account', 'signup'];
+            foreach ($keys as $key) { unset($_SESSION[$key]); }
         }
 
         public static function revokeSession(): void {
@@ -144,11 +148,6 @@
             } else { return "Profile"; }
         }
 
-        public static function clearUserSession(): void {
-            $keys = ['session_data', 'login', 'account', 'signup'];
-            foreach ($keys as $key) { unset($_SESSION[$key]); }
-        }
-
         // rate limiter against brute-force attacks, bot abuse, spamming form submissions
         public static function throttleLogin(int $cooldown = 30): void {
             if (isset($_SESSION['last_login_attempt']) && time() - $_SESSION['last_login_attempt'] < $cooldown) {
@@ -189,7 +188,7 @@
             return 'current';
         }        
     
-        public static function isVisible(string $key): string {
+        public static function setView_Error(string $key): string {
             //return isset($_SESSION[$key]) ? 'current' : 'hidden';
             if (isset($_SESSION[$key])) {
                 unset($_SESSION[$key]);

@@ -1,6 +1,7 @@
 <?php 
   // Load PHP files
   require_once './src/session_manager.src.php'; 
+  $_SESSION['error'] = 'Error saving resume';
   // SessionBook::invokeSession();
   // SessionBook::intrusionGuard();
 ?>
@@ -27,7 +28,7 @@
     <!-- Styling Sheets -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
@@ -48,13 +49,19 @@
     <?php endif; ?>
 
     <main>
-        <section id="home" class="<?= ViewBook::Homepage(); ?>">
+        <section id="home" class="<?= ViewBook::Homepage(); ?>" style="background: linear-gradient(135deg, #8297c7 50%, #2f1e3b 100%);">
             <div class="flexo">
                 <!-- Add Timeline to Landing Page to highlight feautures -->
                 <!-- Rotating CTA button text is a good idea -->
             </div>
 
-            <div class="resume-board columns">
+            <!-- <div class="diag-square"></div>
+            <div class="diag-square"></div>
+            <div class="diag-square"></div>
+            <div class="master-diamond"></div> -->
+
+
+            <div class="builder-board columns">
                 <div class="column sidebar">
                     <button type="submit" class="button is-small is-success" data-section="add-res">New Resume</button>
                     <button type="submit" class="button is-small is-danger" data-section="trash-res">Delete Resume</button>
@@ -78,16 +85,177 @@
                     <hr>
                     <ul>
                         <li><a href="">Personal</a></li>
-                        <li><a href="">Experience</a></li>
+                        <li><a href="#job">Experience</a></li>
                         <li><a href="">Education</a></li>
                         <li><a href="">Skills</a></li>
                     </ul>
                 </div>
                 
-                <div class="column" style="border:2px dotted red; background:#0f172a; border-radius: 10px;">
-                    <h2 class="title is-size-4">Curriculum Vitae</h2>
+                <div class="column" style="border:2px dotted red; border-radius: 10px;">
+                    <h2 class="title is-size-4" style="background:black; transform: skewX(-8deg);">Curriculum Vitae</h2>
                     <p class="subtitle is-6">Minimal Bulma starter with repeatable sections, client-side validation, and localStorage autosave.</p>
                     <hr>
+
+                    <article class="profile">
+                        <h3 class="title is-size-5">Personalia</h3>
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label">Name</label>
+                                <input class="input" type="text" placeholder="Jane">
+                            </div>
+                            <div class="field">
+                                <label class="label">Last Name</label>
+                                <input class="input" type="text" placeholder="Spellbinder">
+                            </div>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <label class="label">Postalcode</label>
+                                <input class="input" type="text" placeholder="XV88">
+                            </div>
+                            <div class="field">
+                                <label class="label">City</label>
+                                <input class="input" type="text" placeholder="Jericho">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <label class="label">Phone</label>
+                                <input class="input" type="phone">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <label class="label">Email</label>
+                                <input class="input" type="email" placeholder="jane.spelldo@yahoo.com">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Profile</label>
+                            <div class="control">
+                                <textarea class="textarea" rows="3" placeholder="Textarea"></textarea>
+                            </div>
+                        </div>
+                    </article>
+                    <hr>
+                    <article class="box">
+                        <div >
+                            <div class="input-container">    
+                                <div class="date-options">
+                                    <label class="label">From</label>
+                                    <select class="day-select" name="day" required>
+                                        <option value="" selected disabled>--</option>
+                                    </select>
+                                    <select class="month-select" name="month" required>
+                                        <option value="" selected disabled>--</option>
+                                    </select>
+                                    <select class="year-select" name="year" required>
+                                        <option value="" selected disabled>----</option>
+                                    </select>
+                                </div>
+                                <div class="date-options">
+                                    <label class="label">Until</label>
+                                    <select class="day-select" name="day" required>
+                                        <option value="" selected disabled>--</option>
+                                    </select>
+                                    <select class="month-select" name="month" required>
+                                        <option value="" selected disabled>--</option>
+                                    </select>
+                                    <select class="year-select" name="year" required>
+                                        <option value="" selected disabled>----</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="label">Current</label>
+                                    <input type="checkbox">
+                                </div>
+                                
+                                    <div >
+                                        <label class="label">Profession</label>
+                                        <div >
+                                        <input class="input" type="text" placeholder="DevOps">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Company</label>
+                                        <div class="control">
+                                            <input class="input" type="text" placeholder="ASML">
+                                        </div>
+                                    </div>
+                                    <!-- <div>
+                                        <div >
+                                            <label class="radio">
+                                            <input type="radio" name="question">
+                                            Description
+                                            </label>
+                                            <label class="radio">
+                                            <input type="radio" name="question">
+                                            Bulletpoints
+                                            </label>
+                                        </div>
+                                    </div> -->
+                                
+                            </div>
+                        </div>
+                    </article>
+
+                    <hr>
+                    <strong id="job">Job Experience</strong>
+                    <div class="field is-horizontal">
+                        <div class="field-body">
+                            <label class="label">From</label>
+                            <div class="control">
+                                <div class="date-options">
+                                    <select class="day-select" name="day" required>
+                                        <option value="" selected disabled>Day</option>
+                                    </select>
+                                    <select class="month-select" name="month" required>
+                                        <option value="" selected disabled>Month</option>
+                                    </select>
+                                    <select class="year-select" name="year" required>
+                                        <option value="" selected disabled>Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="label">Until</label>
+                            <div class="control">
+                                <div class="date-options">
+                                    <select class="day-select" name="day" required>
+                                        <option value="" selected disabled>Day</option>
+                                    </select>
+                                    <select class="month-select" name="month" required>
+                                        <option value="" selected disabled>Month</option>
+                                    </select>
+                                    <select class="year-select" name="year" required>
+                                        <option value="" selected disabled>Year</option>
+                                    </select>
+                                </div>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+
+                        <div class="box pw-card">
+                            <div class="field">
+                                <label class="label">Profession</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="DevOps">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label class="radio">
+                                    <input type="radio" name="question">
+                                    Description
+                                    </label>
+                                    <label class="radio">
+                                    <input type="radio" name="question">
+                                    Bulletpoints
+                                    </label>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
                     
                         <!-- <button class="button is-success" type="submit" data-section="add-res">New Resume</button> 
                         <button class="button is-danger is-outlined" type="submit" data-section="trash-res">Delete Resume</button> 
@@ -386,7 +554,7 @@
             </div> 
         </section>
         
-        <section id="user" class="<?= ViewBook::isVisible('account'); ?>">
+        <section id="user" class="<?= ViewBook::setView_Error('account'); ?>">
             <div class="form-window">
                 
                 <!-- <button class="avatar">Profiel Foto</button> -->

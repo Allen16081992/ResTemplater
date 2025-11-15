@@ -22,16 +22,4 @@
       </div>
     </div>
   </article>
-    
-    <article class="full-width-wrapper" style="display:flex; justify-content:center; align-items:center;">
-        <div class="resume-container" style="margin-top:2.5rem; margin-left: 3rem;">
-            <div class="shape paper">
-                <div class="paper-edge-top"></div>
-                <div class="paper-edge-side"></div>
-            </div>
-            <div class="shape circle"></div>
-            <div class="shape skills"></div>
-            <!-- Lines will be dynamically generated here -->
-        </div>
-    </article>
 </section>

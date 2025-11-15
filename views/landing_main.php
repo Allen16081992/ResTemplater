@@ -8,10 +8,10 @@
       <div class="container">
         <div class="columns is-vcentered">
           <div class="column">
-            <h1 class="title hero-title">Resumes with Attitude.</h1>
-            <p class="subtitle hero-sub mt-3">Build a creative, job‑ready resume in minutes. Modern templates, bold styling, and instant PDF export powered by TCPDF.</p>
+            <h1 class="title hero-title"><?= htmlspecialchars($slogan = SetPhrase('slogan')); ?></h1>
+            <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = SetPhrase('tagline')); ?></p>
             <div class="buttons mt-5">
-              <a href="#start" class="button is-medium btn-cta">Create My Resume</a>
+              <a href="#start" id="cta" class="button is-medium btn-cta">Create My Resume</a>
               <a href="#templates" class="button is-medium is-light">Browse Templates</a>
             </div>
           </div>
@@ -34,7 +34,7 @@
       <h2 class="title is-3">See the Magic</h2>
       <p class="subtitle is-6 has-text-grey-light">Pick a vibe. Tweak the colors. Download as PDF.</p>
       <div class="template-grid mt-4">
-        <div class="template-card template-thumb">Modern</div>
+        <div class="template-card"><div class="template-thumb">Modern</div></div>
         <div class="template-card"><div class="template-thumb">Creative</div></div>
         <div class="template-card"><div class="template-thumb">Minimal</div></div>
         <div class="template-card"><div class="template-thumb">Witchy</div></div>
@@ -163,13 +163,12 @@
           <p class="has-text-grey">Resumes with Attitude.</p>
         </div>
         <div class="column">
-          <p><a href="#privacy">Privacy</a></p>
-          <p><a href="#terms">Terms</a></p>
-          <p><a href="#contact">Contact</a></p>
+          <p><a href="#privacy">Privacy Policy</a></p>
+          <p><a href="#terms">Terms of Service</a></p>
         </div>
         <div class="column">
-          <p><a href="#login">Login</a></p>
-          <p><a href="#signin">Sign In</a></p>
+          <p><a href="#terms">Legal Notice</a></p>
+          <p><a href="#contact">Contact</a></p>
         </div>
       </div>
       <p class="has-text-grey-light">© 2025 PaperWitch</p>

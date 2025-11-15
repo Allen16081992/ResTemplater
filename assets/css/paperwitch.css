@@ -1,3 +1,33 @@
+/* ========================================================================== */
+/*  PAPERWITCH CORE STYLESHEET                                                */
+/* -------------------------------------------------------------------------- */
+/*  File:        paperwitch.css                                               */
+/*  Author:      Allen Pieter                                                 */
+/*  Project:     PaperWitch — Resume Creation Tool                            */
+/*  Description: Core layout, navigation, and landing-page styles.            */
+/*               Defines root variables, gradients, navigation bar, hero      */
+/*               section, feature blocks, CTA bands, footer, and sparkles.    */
+/* -------------------------------------------------------------------------- */
+/*  Version:     1.0.0                                                        */
+/*  Created:     2025-10-21                                                   */
+/*  Compatibility: Chrome 112+, Edge 112+, Safari 16.5+, Firefox 117+         */
+/*  License:     © 2025 Allen Pieter. All rights reserved.                    */
+/* -------------------------------------------------------------------------- */
+/*  Notes:                                                                    */
+/*   • Employs global CSS variables for color and typography tokens.          */
+/*   • Fully nesting-ready: all selectors structured for native CSS nesting.  */
+/*   • Supported in Chromium 112+, Firefox 117+, Safari 17+.                  */
+/*   • Uses consistent clamp(), min(), and fluid units for responsiveness.    */
+/*   • Overflow-x hidden prevents minor skew-induced horizontal scroll.       */
+/*   • Sparkle effect styles defined at end for button hover bursts.          */
+/* -------------------------------------------------------------------------- */
+/*  Sections:                                                                 */
+/*   1. ROOT VARIABLES / GLOBALS                                              */
+/*   2. NAVIGATION (Landing)                                                  */
+/*   3. HERO + LANDING SECTIONS                                               */
+/* ========================================================================== */
+
+
 /* ==========================================================
    1. ROOT VARIABLES / GLOBALS
    ========================================================== */
@@ -28,18 +58,21 @@ h1, h2, h3 { font-family: Unna, Georgia, serif; letter-spacing: .2px; }
 /* =============== NAVBAR =============== */
 .pw-nav-wrap { position: sticky; top: 0; z-index: 50; }
 .pw-nav {
-    position: relative;
-    background: rgba(0,0,0,.5);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 8px 22px rgba(0,0,0,.35);
-    isolation: isolate;
-}
-.pw-nav::before { /* faint depth gradient */
+  position: relative;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+  isolation: isolate;
+
+  &::before {
     content: "";
-    position: absolute; inset: 0;
+    position: absolute;
+    inset: 0;
     background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.0) 45%, rgba(0,0,0,.25) 100%);
     pointer-events: none;
+  }
 }
+
 .pw-nav-inner {
   display: flex;
   align-items: center;
@@ -50,20 +83,48 @@ h1, h2, h3 { font-family: Unna, Georgia, serif; letter-spacing: .2px; }
 .pw-brand img { position:absolute; top:0; height: clamp(8rem, 12vw, 10rem); width:auto; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
 
 /* Right-side skewed buttons */
+a[data-section="home"] { display:none;}
 .pw-actions { display:flex; align-items:center; gap: clamp(1rem, 2vw, 2.2rem); /* ~"2cm" feel without hard cm units */ }
+.skew-btn {
+  position: relative;
+  transform: skewX(-14deg);
+  border: 1px solid rgba(255,255,255,.18);
+  padding: .55rem 1rem;
+  background: rgba(255,255,255,.06);
+  color: #f1f1f6;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25) inset, 0 6px 18px rgba(0,0,0,.25);
+  transition: transform .15s ease, background .2s, box-shadow .2s;
 
-.skew-btn { position:relative; transform: skewX(-14deg); border: 1px solid rgba(255,255,255,.18); padding: .55rem 1rem; background: rgba(255,255,255,.06); color: #f1f1f6; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.25) inset, 0 6px 18px rgba(0,0,0,.25); transition: transform .15s ease, background .2s, box-shadow .2s; }
-.skew-btn > span { display:inline-block; transform: skewX(14deg); }
-.skew-btn:hover { background: rgba(255,255,255,.12); transform: skewX(-14deg) translateY(-1px); box-shadow: 0 0 0 1px rgba(255,255,255,.1) inset, 0 10px 26px rgba(0,0,0,.35); color: #a2a2a370;}
+  > span { display:inline-block; transform: skewX(14deg); }
+
+  &:hover {
+    background: rgba(255,255,255,.12);
+    transform: skewX(-14deg) translateY(-1px);
+    box-shadow: 0 0 0 1px rgba(255,255,255,.1) inset, 0 10px 26px rgba(0,0,0,.35);
+    color: #a2a2a370;
+  }
+}
 
 /* ==========================================================
    3. HERO + LANDING SECTIONS
    ========================================================== */
 
 /* =============== HERO =============== */
-.hero.is-dark { background: radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.25), rgba(0,0,0,0) 40%), radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.2), rgba(0,0,0,0) 40%), linear-gradient(180deg, rgba(20,18,31,1) 0%, rgba(10,10,16,1) 70%);
-    position: relative; overflow:hidden; }
-.hero .floating-sheets { position:fixed; inset:0; background: radial-gradient(400px 200px at 60% 50%, rgba(255,255,255,.06), transparent 80%); mix-blend: screen; opacity:0.9; pointer-events:none; }
+.hero.is-dark {
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.25), rgba(0,0,0,0) 40%), radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.2), rgba(0,0,0,0) 40%), linear-gradient(180deg, rgba(20,18,31,1) 0%, rgba(10,10,16,1) 70%);
+  position: relative;
+  overflow: hidden;
+
+  .floating-sheets {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(400px 200px at 60% 50%, rgba(255,255,255,.06), transparent 80%);
+    mix-blend-mode: screen;
+    opacity: .9;
+    pointer-events: none;
+  }
+}
 
 .hero-title { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.05; }
 .hero-sub { color: var(--muted); max-width: 56ch; }
@@ -73,11 +134,28 @@ h1, h2, h3 { font-family: Unna, Georgia, serif; letter-spacing: .2px; }
 .angled-top::before { content:""; position:absolute; top:-60px; left:0; right:0; height:60px; background: inherit; transform: skewY(-2deg); transform-origin: 100% 100%; }
 
 /* Showcase carousel (simple placeholder grid) */
-.template-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:1rem; }
-@media (max-width: 1024px) { .template-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 540px) { .template-grid { grid-template-columns: 1fr; } }
-.template-card { background: #11131a; border:1px solid rgba(255,255,255,.08); border-radius: 18px; padding: .75rem; box-shadow: 0 10px 30px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
-.template-card:hover { transform: translateY(-4px) rotate(-.25deg); box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 1rem;
+
+  @media (max-width: 1024px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 540px) { grid-template-columns: 1fr; }
+}
+
+.template-card {
+  background: #11131a;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: .75rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  transition: transform .25s ease, box-shadow .25s ease;
+
+  &:hover {
+    transform: translateY(-4px) rotate(-.25deg);
+    box-shadow: 0 16px 40px rgba(0,0,0,.35);
+  }
+}
 .template-thumb { aspect-ratio: 3/4; width:100%; border-radius: 12px; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); display:grid; place-items:center; color:#cfcfe6; font-weight:600; }
 
 /* Features */
@@ -94,17 +172,53 @@ h1, h2, h3 { font-family: Unna, Georgia, serif; letter-spacing: .2px; }
 
 /* CTA band */
 .cta-band { background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(79,70,229,.15)); border:1px solid rgba(255,255,255,.08); border-radius: 22px; }
-.btn-cta { background: linear-gradient(135deg, var(--accent), #4f46e5); border: none; color: #fff; box-shadow: 0 12px 30px rgba(139,92,246,.35); }
-.btn-cta:hover { filter: brightness(1.05); box-shadow: 0 16px 36px rgba(139,92,246,.45); }
+.btn-cta {
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border: none;
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(139,92,246,.35);
+
+  &:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 16px 36px rgba(139,92,246,.45);
+  }
+}
 
 /* Footer */
-footer a { color: #c7c7ff; }
+footer { a { color:#c7c7ff; } }
+.hidden {display:none !important;}
 
-a[data-section="home"] { display:none;}
+.toggle-eye > i {
+    position:absolute;
+    font-size:1.4em;
+    cursor:pointer;
+    color:white;
+}
 
 @media only screen and (max-width:450px) {
     .pw-brand {display:none;}
     a[data-section="home"] { display:inline-block;}
 }
 
-.hidden {display:none !important;}
+/* ─────────────────────────────────────────────── */
+/*  ✨ PAPERWITCH SPARKLE EFFECT                   */
+/*  Particle burst for CTA + Sign-up buttons       */
+/* ─────────────────────────────────────────────── */
+
+/* Spark container (auto-injected by JS) */
+.pw-emitter{position:absolute;inset:0;pointer-events:none;}
+.spark-particle{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:1px;background:#fff;box-shadow:0 0 6px rgba(255,255,255,.9);transform:translate(-50%,-50%) rotate(var(--th));opacity:0;animation:spark-burst .6s ease-out forwards;pointer-events:none;}
+.spark-particle:nth-child(3n){background:#9ae6ff;}
+.spark-particle:nth-child(3n+1){background:#60a5fa;}
+.spark-particle:nth-child(3n+2){background:#fda4af;}
+
+@keyframes spark-burst{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--th)) scale(.6);}
+  15%{opacity:1;}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--th)) translateX(var(--dist)) scale(.9);}
+}
+
+/* Accessibility: disable motion effects for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spark-particle { animation: none; opacity: 0; }
+}

@@ -5,7 +5,7 @@
         <a href="#" data-section="policy">Privacy</a>      
         
         <a href="#" data-section="login">Log in</a>
-        <a href="#" id="signIn" data-section="sign_up">Sign Up</a>   
+        <a href="#" id="signUp" data-section="sign_up">Sign Up</a>   
         <!-- <a href="#" data-section="contact">Contact</a> -->   
         <!-- <a href="#" data-section="author">Tips</a> -->  
 </nav>

@@ -43,16 +43,16 @@
             </div>
 
             <div class="field mt-4">
-                <button class="button is-medium btn-primary is-fullwidth" type="submit">Sign In</button>
+                <button type="submit" class="button is-medium btn-primary is-fullwidth">Sign In</button>
             </div>
 
             <div class="divider mt-3 mb-2">or</div>
 
             <div class="buttons">
-                <button class="button is-light is-fullwidth" type="button">Sign in with Google</button>
+                <button type="button" class="button is-light is-fullwidth">Sign in with Google</button>
             </div>
 
-            <p class="footnote">No account? <a class="pw-link" href="#signup">Create one</a>. By continuing, you agree to our <a class="pw-link" href="#privacy">Privacy</a>.</p>
+            <p class="footnote">No account? <a class="pw-link" data-section="sign_up">Create one</a>. By continuing, you agree to our <a class="pw-link" href="#privacy">Privacy</a>.</p>
             </form>
         </div>
         </div>

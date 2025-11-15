@@ -19,8 +19,8 @@
   <meta property="og:type" content="website">
   <!-- <meta property="og:url" content="https://www.paperwitch.com"> -->
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/apple-touch-icon.png">
   <!-- CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
@@ -29,9 +29,11 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
   <link rel="stylesheet" href="assets/css/paperwitch.css">
   <link rel="stylesheet" href="assets/css/auth_windows.css">
+  <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
   <title>Thy Student’s Scroll</title>
   <!-- Javascript -->
   <script defer src="assets/js/section-handler.js"></script>
+  <script defer src="assets/js/sparks_effect.js"></script>
 </head>
 <body>
   <?php 
@@ -43,48 +45,41 @@
   ViewBook::render('section_signupWitch.php'); 
   ?>
   <script>
-    const form = document.getElementById('signup_form');
-    const visual = document.getElementById('signupVisual');
-    const passwordInput = document.getElementById('password');
-    const togglePwd = document.getElementById('togglePwd');
-    const signupBtn = document.getElementById('signupBtn');
+  const form = document.getElementById("signup_form");
+  const visual = document.getElementById("signupVisual");
+  const passwordInput = document.getElementById("password");
+  const signupBtn = document.getElementById("signupBtn");
 
-    const calmImg = 'url("assets/images/paperwitch_bold.png")';
-    const activeImg = 'url("assets/images/paperwitch_resentful.png")';
-    const burstImg = 'url("assets/images/paperwitch_spilled.png")';
+  const idleImg = 'url("assets/images/paperwitch_bold.png")';
+  const burstImg = 'url("assets/images/paperwitch_glow.png")';
 
-    // initial background
-    visual.style.backgroundImage = calmImg;
+  // Preload images (prevents flicker)
+  [idleImg, burstImg].forEach(src => {
+    const img = new Image();
+    img.src = src.replace(/^url\(["']?(.+?)["']?\)$/, "$1");
+  });
 
-    // change image based on form interaction
-    form.addEventListener('input', () => {
-      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
-      if (allFilled) {
-        visual.style.backgroundImage = activeImg;
-      } else {
-        visual.style.backgroundImage = calmImg;
-      }
-    });
+  // Set initial background
+  visual.style.backgroundImage = idleImg;
 
-    // On hover over Sign Up button (only if all fields valid)
-    signupBtn.addEventListener('mouseenter', () => {
-      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
-      if (allFilled) {
-        visual.style.backgroundImage = burstImg;
-        visual.style.filter = 'brightness(1.2)';
-      }
-    });
-    signupBtn.addEventListener('mouseleave', () => {
-      visual.style.filter = 'brightness(1)';
-      const allFilled = [...form.querySelectorAll('input[required]')].every(input => input.value.trim() !== '');
-      visual.style.backgroundImage = allFilled ? activeImg : calmImg;
-    });
+  // Helper: check if all required fields are filled
+  const allFilled = () =>
+    [...form.querySelectorAll("input[required]")].every(
+      input => input.value.trim() !== ""
+    );
 
-    // toggle password visibility
-    togglePwd.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-    });
+  // Only react on hover over the Sign-Up button
+  signupBtn.addEventListener("mouseenter", () => {
+    if (allFilled()) {
+      visual.style.backgroundImage = burstImg;
+      visual.style.filter = "brightness(1.15)";
+    }
+  });
+
+  signupBtn.addEventListener("mouseleave", () => {
+    visual.style.filter = "brightness(1)";
+    visual.style.backgroundImage = idleImg;
+  });
   </script>
 </body>
 </html>

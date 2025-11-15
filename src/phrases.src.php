@@ -3,35 +3,35 @@
         // Array of taglines
         $data = [
             'tagline' => [
-                "Cast Your Paper: Professional Resumes Made Easy",
-                "Apply for Internship with Witchcrafter Papers",
-                "Influence Recruiters with us: Start Witchcrafting!",
-                "Empower Your Journey with an Appealing Resume",
-                "Unlock Opportunities: Create Your Master Resume",
-                "Improve the Chances of your Job Conquest",
-                "A Loaded Resume for Hungry Recruiting Agencies",
-                "Catch a Demotivated Recruiter's Eye: Strike with Visual",
-                "Target 1 Job per Resume to land a Tactical Advantage"
+                "Build a creative, job‑ready resume in minutes. Modern layouts, bold headers, and instant PDF export.",
+                "When corporates decline your application we shall say: Up Yours!",
+                "A Scoped Resume is more effective than a general one",
+                "Write. Enhance. Impress."
             ],
             'slogan' => [
-                "Most Vacancies are written poorly and belong in the Gutter.",
-                "Internship rejections offends us. Papers Will Get Louder!",
-                "The Dark Arts of Standing Out Begins Here",
-                "Your Job Hunting Familiar",
-                "Spells for Success, Cast in Paper",
-                "Resumes with Attitude", 
-                "Give HR Heads... Up!"
+                "Most Vacancies are written for the Gutter.",
+                "Job Rejections Offend us. Papers Will Get Louder!",
+                "When Explicit Moments Meet Credibility.",
+                "The Dark Arts of Standing Out.",
+                "Your Job Hunting Familiar.",
+                "Resumes with Attitude."
             ],
             'cta' => [
-                "Craft a Resume for Internship Here",
-                "Try our Resume Casting Tool",
-                "Write Your Career Grimoire Now",
-                "Witchcrafted Papers Appeal",
-                "Cast a New Resume with Ease" 
+                "Begin Your Grimoire of Experience Here",
+                "Try our Resume Scribing Tool",
+                "Write Your Job Scroll Now",
+                "Cast a New Resume Today" 
+            ],
+            'leave' => [
+                "Fly Back to the Spellbound Nest",
+                "Return to the Enchanted Realm",
+                "Head Back to the Wizard's Den",
+                "Journey to the Magical Home",
+                "Back to the Magical World"
             ]
         ];
 
-        // safety check: fallback to tagline
+        // safety check: fallback to call-to-action
         if (!isset($data[$type])) { 
             $type = 'cta'; 
         } 

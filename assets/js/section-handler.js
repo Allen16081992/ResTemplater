@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let activeLink = null;
     const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main, section');
-    const navLinks = document.querySelectorAll('nav a[data-section], span a[data-section], label a[data-section], button[data-section]');
+    const navLinks = document.querySelectorAll('nav a[data-section], p a[data-section], button[data-section]');
 
     // Section visibility
     function paintSection(sectionId) {
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     ////////////////// Accordions /////////////////////
     const tab = document.querySelectorAll('#home .accordion');
-    const pwdID = document.getElementById('pwdField');
 
     function toggleAccordion() {
         var panel = this.nextElementSibling;
@@ -124,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
     switchTab('contact');
 
     ///////////////// Miscellaneous Effects ////////////////////
+    const pwdID = document.getElementById('pwdField');
     const eye = document.querySelector('.toggle-eye i');
     const selectCv = document.getElementById('selectCv');
     const dateOptions = document.querySelectorAll('.date-options');

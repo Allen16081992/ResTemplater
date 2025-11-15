@@ -50,14 +50,20 @@
             </div>
 
             <div class="field">
-                <label class="label" for="password">Password</label>
-                <div class="control has-icons-right">
-                <input id="password" name="password" type="password" class="input" placeholder="••••••••" required>
-                <span class="icon is-small is-right" id="togglePwd">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"/></svg>
-                </span>
-                </div>
+                <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>
+              <label class="label" for="pwdField">Password</label>
+              <div class="control has-icons-right">
+                    
+                    <input id="pwdField" name="pwd" type="password" class="input" placeholder="••••••••" required>
+              </div>
             </div>
+
+            <!-- <div class="field">
+                <label class="label" for="password_repeat">Confirm Password</label>
+                <div class="control">
+                    <input id="password_repeat" name="password_repeat" type="password" class="input" placeholder="••••••••" required>
+                </div>
+            </div> -->
 
             <div class="field">
                 <label class="checkbox">
@@ -67,10 +73,11 @@
             </div>
 
             <div class="field mt-4">
-                <button class="button is-medium btn-primary is-fullwidth" type="submit" id="signupBtn">Sign Up</button>
+                <!-- 🔒 Used by JS to swap image (do not remove id) -->
+                <button type="submit" id="signupBtn" class="button is-medium btn-primary is-fullwidth">Sign Up</button>
             </div>
 
-            <p class="footnote">Already have an account? <a class="has-text-info" href="login.html">Sign in here</a>.</p>
+            <p class="footnote">Already have an account? <a class="has-text-info" data-section="login">Sign in here</a>.</p>
             </form>
         </div>
         </div>

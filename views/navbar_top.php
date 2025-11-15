@@ -6,7 +6,7 @@
                 <a class="skew-btn" data-section="home"><span>Home</span></a>
                 <a class="skew-btn" data-section="policy"><span>Privacy</span></a>
                 <a class="skew-btn" data-section="login"><span>Login</span></a>
-                <a class="skew-btn" data-section="sign_up"><span>Sign In</span></a>
+                <a class="skew-btn" id="signUp" data-section="sign_up"><span>Sign Up</span></a>
             </div>
         </div>
     </nav>

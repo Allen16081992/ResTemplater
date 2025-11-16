@@ -3,7 +3,7 @@
         // Array of taglines
         $data = [
             'tagline' => [
-                "Build a creative, job‑ready resume in minutes. Modern layouts, bold headers, and instant PDF export.",
+                "Build an event-highlighting resume in minutes. Modern layouts, bold headers, and instant PDF export.",
                 "When corporates decline your application we shall say: Up Yours!",
                 "A Scoped Resume is more effective than a general one",
                 "Write. Enhance. Impress."

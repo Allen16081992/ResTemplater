@@ -39,10 +39,9 @@
     <title>The Job Scroll Cauldron</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
-    <!-- JS Animations -->
-    <!-- <script defer src="assets/js/3d_dummy_lines.js"></script> -->
     <script defer src="assets/js/sparks_effect.js"></script>
+    <script defer src="assets/js/cta-padding-mobile.js"></script>
+    <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
 </head>
 <body>
     <header> 

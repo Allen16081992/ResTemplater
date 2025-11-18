@@ -41,6 +41,7 @@
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/sparks_effect.js"></script>
     <script defer src="assets/js/cta-padding-mobile.js"></script>
+    <script defer src="assets/js/signup_page-handler.js"></script>
     <!-- <script defer src="assets/js/multi_step_rotator.js"></script> -->
 </head>
 <body>

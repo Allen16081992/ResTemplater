@@ -80,7 +80,6 @@ p {
   line-height: 1.5;
   font-size: clamp(1rem, 1.4vw + 0.25rem, 1.1rem);
 }
-
 .hidden {display:none;}
 
 /* ==========================================================
@@ -512,11 +511,6 @@ select {
     cursor:default;
 } */
 
-/* Desktop */
-@media only screen and (min-width:913px) {
-    a[data-section="home"] { display:none;}
-}
-
 /* Tablet */
 /* @media only screen and (min-width:542px) and (max-width:912px) {
 
@@ -528,7 +522,7 @@ select {
         flex-direction: column;
         align-items: flex-start;
     }
-    header > #logo { align-self:center; }
+    #logo { align-self:center; }
     #logo img {height: clamp(9.5rem, 12vw, 10rem); width:auto;}
     nav {
         position: fixed;

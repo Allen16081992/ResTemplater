@@ -35,7 +35,7 @@
                             </div>
                         </div>
 
-                        <hr class="divider">
+                        <hr class="divider mt-3 mb-2">
 
                         <!-- Account Information -->
                         <h3 class="title is-6 has-text-grey-light">Account Details</h3>

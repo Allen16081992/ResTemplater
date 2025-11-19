@@ -105,37 +105,6 @@
             return null;
         }
         
-        public static function flash_AssaultMode(string $key, ?string $field = null): mixed {
-            if (!isset($_SESSION[$key])) {
-                return null;
-            }
-        
-            $value = $_SESSION[$key];
-        
-            // If it's an array (multiple errors), optionally get by key
-            if (is_array($value)) {
-                if ($field !== null && isset($value[$field])) {
-                    $msg = $value[$field];
-                    unset($_SESSION[$key][$field]);
-        
-                    // Clean up if all messages are gone
-                    if (empty($_SESSION[$key])) {
-                        unset($_SESSION[$key]);
-                    }
-        
-                    return $msg;
-                }
-        
-                // Return all messages if no specific field was asked
-                unset($_SESSION[$key]);
-                return $value;
-            }
-        
-            // Fallback for a simple string message
-            unset($_SESSION[$key]);
-            return $value;
-        }
-        
         //────────────────────────────────────//
         //             USER LOGIC             //
         //────────────────────────────────────//
@@ -200,20 +169,5 @@
         public static function render(string $view, array $data = []): void {
             extract($data); // all sorts of data
             require_once './views/'.$view; // file path
-        }
-
-        public static function breakride(?string $file = null, ?array $field = null): void {
-            if ($field['action'] === 'login') {
-                $_SESSION['login'] = true;
-            } elseif ($field['action'] === 'signup') {
-                $_SESSION['signup'] = true;
-            }
-
-            if ($file) {
-                header('location: ../'.$file.'.php');
-            } else {
-                header('location: ../index.php');
-            }
-            exit;
         }
     }

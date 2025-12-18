@@ -49,11 +49,18 @@
     </header>
     
     <main>
-        <?php ViewBook::render('section_home.php'); ?>   
-        <?php ViewBook::render('section_policy.html'); ?>
-        <?php ViewBook::render('section_login.php'); ?>
-        <?php ViewBook::render('section_signup.php'); ?>
+        <?php ViewBook::render('section_home.php'); ?>  
+
+        <section id="login" class="<?= ViewBook::setView_Error('login'); ?>"> 
+            <?php ViewBook::render('section_login.html'); ?>
+        </section>
+
+        <section id="sign_up" class="<?= ViewBook::setView_Error('sign_up'); ?>">
+            <?php ViewBook::render('section_signup.html'); ?>
+        </section>
+        
         <?php ViewBook::render('section_success.php'); ?>
+        <?php ViewBook::render('section_policy.html'); ?>
         <section id="author" class="hidden"></section>
         <section id="contact" class="hidden"></section>
     </main>

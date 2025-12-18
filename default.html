@@ -1,0 +1,866 @@
+<!-- PaperWitch Resume Editor (Best Possible UI) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+
+<style>
+/* ===== PaperWitch Resume Editor (scoped) ===== */
+.pw-editor {
+  --pw-bg: rgba(15,17,24,.92);
+  --pw-panel: rgba(9,9,15,.92);
+  --pw-border: rgba(255,255,255,.08);
+  --pw-muted: #a7a7b3;
+  --pw-accent: var(--accent, #8b5cf6);
+  --pw-accent2: var(--accent-2, #4f46e5);
+
+  max-width: 1180px;
+  margin: 2.25rem auto;
+  padding: 1.25rem;
+  border-radius: 24px;
+  background: var(--pw-bg);
+  border: 1px solid var(--pw-border);
+  box-shadow: 0 18px 60px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(8px);
+}
+
+.pw-topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.pw-title h1 {
+  font-family: Unna, Georgia, serif;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  margin: 0 0 .25rem;
+}
+.pw-title p { margin: 0; color: var(--pw-muted); }
+
+.pw-status {
+  text-align: right;
+  color: var(--pw-muted);
+  font-size: .9rem;
+}
+.pw-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .32rem .75rem;
+  border-radius: 999px;
+  background: rgba(22,163,74,.10);
+  border: 1px solid rgba(22,163,74,.45);
+  color: #bbf7d0;
+  font-weight: 700;
+}
+.pw-status small { display:block; margin-top:.35rem; }
+
+.pw-docbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: .85rem;
+  border-radius: 18px;
+  background: rgba(9,9,15,.70);
+  border: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 1rem;
+}
+
+.pw-docbar-left, .pw-docbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+}
+
+.pw-docbar-meta {
+  color: var(--pw-muted);
+  font-size: .9rem;
+  white-space: nowrap;
+}
+
+.pw-btn-primary {
+  background: linear-gradient(135deg, var(--pw-accent), var(--pw-accent2));
+  border: none;
+  color: #fff;
+}
+
+.pw-layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.pw-nav {
+  padding: .85rem;
+  border-radius: 18px;
+  background: radial-gradient(circle at top left, rgba(139,92,246,.16), rgba(15,17,24,1) 58%);
+  border: 1px solid rgba(255,255,255,.06);
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.pw-nav-title {
+  font-size: .9rem;
+  color: var(--pw-muted);
+  margin-bottom: .25rem;
+}
+
+.pw-tab {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .55rem .75rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #e9e9ff;
+  font-size: .95rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s ease, transform .12s ease, box-shadow .15s ease;
+}
+.pw-tab .icon { width: 1.6rem; display:inline-flex; justify-content:center; }
+.pw-tab:hover { background: rgba(15,23,42,.9); }
+.pw-tab.is-active {
+  background: linear-gradient(135deg, var(--pw-accent), var(--pw-accent2));
+  box-shadow: 0 10px 28px rgba(88,81,219,.55);
+}
+
+.pw-mobile-nav {
+  display: none;
+  margin-bottom: .85rem;
+}
+
+.pw-main {
+  min-height: 480px;
+}
+.pw-panel {
+  display: none;
+  border-radius: 18px;
+  background: var(--pw-panel);
+  border: 1px solid rgba(255,255,255,.06);
+  padding: 1.1rem 1.1rem 1.25rem;
+}
+.pw-panel.is-active { display: block; }
+
+.pw-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+.pw-panel-head h2 { margin: 0; font-size: 1.25rem; }
+.pw-panel-head p { margin: .2rem 0 0; color: var(--pw-muted); font-size: .95rem; }
+
+.pw-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+  margin-top: 1rem;
+}
+.pw-actions .button { min-width: 140px; }
+
+.pw-repeater-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(15,23,42,.95);
+  border: 1px solid rgba(148,163,184,.35);
+}
+.pw-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,.08);
+  margin: .75rem 0;
+}
+
+/* Tiny toast */
+.pw-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background: rgba(10,10,15,.92);
+  border: 1px solid rgba(255,255,255,.12);
+  color: #fff;
+  padding: .6rem .85rem;
+  border-radius: 999px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 9999;
+}
+.pw-toast.is-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+/* Optional “ritual” overlay for delete (tiny, not a preview) */
+.pw-ritual { display:none; position:fixed; inset:0; z-index:9998; }
+.pw-ritual.is-active { display:block; }
+.pw-ritual-backdrop { position:absolute; inset:0; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); }
+.pw-ritual-scene { position:absolute; left:50%; top:50%; transform: translate(-50%,-50%); width:260px; height:220px; }
+.pw-ritual-cauldron {
+  position:absolute; left:50%; bottom:10px; transform: translateX(-50%);
+  width:170px; height:95px; border-radius: 0 0 90px 90px;
+  background: rgba(20,20,30,.95); border:1px solid rgba(255,255,255,.12);
+  box-shadow: 0 18px 45px rgba(0,0,0,.65), inset 0 10px 18px rgba(255,255,255,.06);
+}
+.pw-ritual-cauldron::before {
+  content:""; position:absolute; left:50%; top:-14px; transform: translateX(-50%);
+  width:190px; height:34px; border-radius:999px;
+  background: rgba(35,35,52,.98); border:1px solid rgba(255,255,255,.12);
+}
+.pw-ritual-scroll {
+  position:absolute; left:50%; top:0; transform: translateX(-50%);
+  width:72px; height:92px; border-radius: 12px;
+  background: rgba(245,245,255,.92); box-shadow: 0 14px 30px rgba(0,0,0,.45);
+  opacity: 0;
+}
+.pw-ritual-scroll::before {
+  content:""; position:absolute; left:12px; top:18px;
+  width:48px; height:6px; border-radius:999px;
+  background: rgba(30,30,45,.18);
+  box-shadow: 0 16px 0 rgba(30,30,45,.14), 0 32px 0 rgba(30,30,45,.12);
+}
+.pw-ritual-smoke { position:absolute; left:50%; bottom:80px; transform: translateX(-50%); width:220px; height:120px; opacity:0; filter: blur(1px); }
+.pw-ritual-smoke::before, .pw-ritual-smoke::after {
+  content:""; position:absolute; bottom:0; width:70px; height:70px; border-radius: 50%;
+  background: rgba(200,200,230,.18);
+}
+.pw-ritual-smoke::before { left:35px; }
+.pw-ritual-smoke::after { right:35px; }
+.pw-ritual.is-active .pw-ritual-scroll { animation: pwDrop .6s ease-out forwards; }
+.pw-ritual.is-active .pw-ritual-smoke { animation: pwSmoke .7s ease-out .45s forwards; }
+@keyframes pwDrop {
+  0% { opacity:0; transform: translateX(-50%) translateY(-10px) rotate(-6deg); }
+  10% { opacity:1; }
+  70% { transform: translateX(-50%) translateY(120px) rotate(3deg); }
+  100% { opacity:0; transform: translateX(-50%) translateY(140px) rotate(8deg); }
+}
+@keyframes pwSmoke {
+  0% { opacity:0; transform: translateX(-50%) translateY(10px) scale(.95); }
+  40% { opacity:1; }
+  100% { opacity:0; transform: translateX(-50%) translateY(-18px) scale(1.05); }
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .pw-topbar { grid-template-columns: 1fr; }
+  .pw-status { text-align:left; }
+}
+@media (max-width: 860px) {
+  .pw-editor { margin: 1.25rem; padding: 1rem; border-radius: 18px; }
+  .pw-layout { grid-template-columns: 1fr; }
+  .pw-nav { display:none; }
+  .pw-mobile-nav { display:block; }
+  .pw-docbar-meta { white-space: normal; }
+}
+</style>
+
+<section class="pw-editor" id="pwResumeEditor">
+  <!-- Top header -->
+  <div class="pw-topbar">
+    <div class="pw-title">
+      <h1>Your Job Scroll Cauldron</h1>
+      <p>Brew, tweak and trim your resume sections. Preview happens at Export (PDF).</p>
+    </div>
+    <div class="pw-status">
+      <span class="pw-pill" id="pwSavePill">🧪 Draft saved</span>
+      <small>Template: <strong id="pwTemplateName">Neo-Gothic Internship</strong></small>
+    </div>
+  </div>
+
+  <!-- Document-level bar -->
+  <div class="pw-docbar" aria-label="Resume controls">
+    <div class="pw-docbar-left">
+      <div class="field">
+        <div class="control">
+          <div class="select">
+            <select id="pwResumeSelect" name="resume_id">
+              <option value="1" selected>Neo-Gothic Internship</option>
+              <option value="2">Minimalist Student</option>
+              <option value="3">Tech Apprentice v2</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="button is-dark" id="pwBtnNew">+ New</button>
+      <button type="button" class="button is-danger is-light" id="pwBtnDelete">Delete</button>
+    </div>
+
+    <div class="pw-docbar-right">
+      <span class="pw-docbar-meta">
+        Editing: <strong id="pwActiveResumeName">Neo-Gothic Internship</strong>
+      </span>
+      <button type="button" class="button pw-btn-primary" id="pwBtnExport">
+        Export / Preview PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile nav (replaces sidebar) -->
+  <div class="pw-mobile-nav">
+    <div class="field">
+      <div class="control">
+        <div class="select is-fullwidth">
+          <select id="pwMobileSectionSelect" aria-label="Editor menu">
+            <optgroup label="Resume">
+              <option value="info" selected>Resume Info</option>
+              <option value="rename">Rename Resume</option>
+              <option value="newRes">+ New Resume</option>
+              <option value="delRes">- Delete Resume</option>
+            </optgroup>
+            <optgroup label="Sections">
+              <option value="profile">Profile</option>
+              <option value="contact">Contact</option>
+              <option value="experience">Experience</option>
+              <option value="education">Education</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pw-layout">
+    <!-- Desktop sidebar -->
+    <aside class="pw-nav" aria-label="Resume sections">
+      <div class="pw-nav-title">Resume</div>
+      <button class="pw-tab" data-panel="info"><span class="icon">⚗️</span><span>Resume Info</span></button>
+      <button class="pw-tab" data-panel="profile"><span class="icon">🎭</span><span>Profile</span></button>
+      <button class="pw-tab" data-panel="contact"><span class="icon">📮</span><span>Contact</span></button>
+      <button class="pw-tab" data-panel="experience"><span class="icon">🏹</span><span>Experience</span></button>
+      <button class="pw-tab" data-panel="education"><span class="icon">🎓</span><span>Education</span></button>
+
+      <hr class="pw-divider">
+
+      <div class="pw-nav-title">Actions</div>
+      <button class="pw-tab" data-panel="rename"><span class="icon">✍️</span><span>Rename</span></button>
+      <button class="pw-tab" data-panel="newRes"><span class="icon">➕</span><span>New Resume</span></button>
+      <button class="pw-tab" data-panel="delRes"><span class="icon">🧨</span><span>Delete Resume</span></button>
+    </aside>
+
+    <!-- Main panels -->
+    <main class="pw-main">
+      <!-- INFO -->
+      <section class="pw-panel is-active" id="panel-info">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Resume Info</h2>
+            <p>High-level resume settings (title, headline, summary). Not the PDF preview.</p>
+          </div>
+          <button type="button" class="button is-light pw-edit-btn">Edit</button>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-info">
+          <div class="columns is-multiline">
+            <div class="column is-6">
+              <label class="label">Title</label>
+              <input class="input" name="title" value="Neo-Gothic Internship" disabled>
+            </div>
+            <div class="column is-6">
+              <label class="label">Headline</label>
+              <input class="input" name="info_headline" value="IT student • Junior dev • Curious tinkerer" disabled>
+            </div>
+            <div class="column is-12">
+              <label class="label">Short summary</label>
+              <textarea class="textarea" name="info_summary" rows="3" disabled>Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing.</textarea>
+            </div>
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary pw-save-btn" name="save_info" hidden>Save</button>
+            <button type="button" class="button is-light pw-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="pw-panel" id="panel-profile">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Profile</h2>
+            <p>Who are you on this scroll? Keep it short, sharp, human.</p>
+          </div>
+          <button type="button" class="button is-light pw-edit-btn">Edit</button>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-profile">
+          <div class="columns is-multiline">
+            <div class="column is-6">
+              <label class="label">Full name</label>
+              <input class="input" name="profile_name" value="Allen Pieter" disabled>
+            </div>
+            <div class="column is-6">
+              <label class="label">Role / label</label>
+              <input class="input" name="profile_label" value="Junior IT / Student" disabled>
+            </div>
+            <div class="column is-12">
+              <label class="label">Profile summary</label>
+              <textarea class="textarea" name="profile_summary" rows="4" disabled></textarea>
+            </div>
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary pw-save-btn" name="save_profile" hidden>Save</button>
+            <button type="button" class="button is-light pw-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="pw-panel" id="panel-contact">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Contact</h2>
+            <p>Where should recruiters send emails (or ravens)?</p>
+          </div>
+          <button type="button" class="button is-light pw-edit-btn">Edit</button>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-contact">
+          <div class="columns is-multiline">
+            <div class="column is-6">
+              <label class="label">Email</label>
+              <input class="input" type="email" name="contact_email" value="you@example.com" disabled>
+            </div>
+            <div class="column is-6">
+              <label class="label">Phone</label>
+              <input class="input" type="tel" name="contact_phone" value="+31 6 1234 5678" disabled>
+            </div>
+            <div class="column is-6">
+              <label class="label">City</label>
+              <input class="input" name="contact_city" value="Rotterdam" disabled>
+            </div>
+            <div class="column is-6">
+              <label class="label">Country</label>
+              <input class="input" name="contact_country" value="Netherlands" disabled>
+            </div>
+            <div class="column is-12">
+              <label class="label">Website</label>
+              <input class="input" type="url" name="contact_website" value="https://example.com" disabled>
+            </div>
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary pw-save-btn" name="save_contact" hidden>Save</button>
+            <button type="button" class="button is-light pw-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section class="pw-panel" id="panel-experience">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Experience</h2>
+            <p>Jobs, internships, projects. Make it concrete.</p>
+          </div>
+          <button type="button" class="button is-light pw-edit-btn">Edit</button>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-experience">
+          <div class="pw-repeater" data-repeater="experience">
+            <div class="pw-repeater-item">
+              <div class="columns is-multiline">
+                <div class="column is-6">
+                  <label class="label">Role</label>
+                  <input class="input" name="exp_role[]" value="Junior IT Support (Intern)" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">Company</label>
+                  <input class="input" name="exp_company[]" value="TechCorp" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">Start</label>
+                  <input class="input" type="month" name="exp_start[]" value="2024-01" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">End</label>
+                  <input class="input" type="month" name="exp_end[]" value="2024-06" disabled>
+                </div>
+                <div class="column is-12">
+                  <label class="label">What did you do?</label>
+                  <textarea class="textarea" name="exp_desc[]" rows="3" disabled>Helped maintain workstations, solved ticketed issues and documented fixes.</textarea>
+                </div>
+              </div>
+
+              <button type="button" class="button is-text pw-remove-item" disabled>Remove this experience</button>
+            </div>
+          </div>
+
+          <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="experience" disabled>
+            + Add another experience
+          </button>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary pw-save-btn" name="save_experience" hidden>Save</button>
+            <button type="button" class="button is-light pw-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+
+        <template id="tpl-experience-item">
+          <div class="pw-repeater-item">
+            <div class="columns is-multiline">
+              <div class="column is-6">
+                <label class="label">Role</label>
+                <input class="input" name="exp_role[]" placeholder="Role / Position">
+              </div>
+              <div class="column is-6">
+                <label class="label">Company</label>
+                <input class="input" name="exp_company[]" placeholder="Company / Organization">
+              </div>
+              <div class="column is-6">
+                <label class="label">Start</label>
+                <input class="input" type="month" name="exp_start[]">
+              </div>
+              <div class="column is-6">
+                <label class="label">End</label>
+                <input class="input" type="month" name="exp_end[]">
+              </div>
+              <div class="column is-12">
+                <label class="label">What did you do?</label>
+                <textarea class="textarea" name="exp_desc[]" rows="3" placeholder="Built, fixed, shipped, automated..."></textarea>
+              </div>
+            </div>
+
+            <button type="button" class="button is-text pw-remove-item">Remove this experience</button>
+          </div>
+        </template>
+      </section>
+
+      <!-- EDUCATION -->
+      <section class="pw-panel" id="panel-education">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Education</h2>
+            <p>Schools, courses, certifications, traineeships.</p>
+          </div>
+          <button type="button" class="button is-light pw-edit-btn">Edit</button>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-education">
+          <div class="pw-repeater" data-repeater="education">
+            <div class="pw-repeater-item">
+              <div class="columns is-multiline">
+                <div class="column is-6">
+                  <label class="label">Program / Degree</label>
+                  <input class="input" name="edu_role[]" value="Software Development (Student)" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">Institute</label>
+                  <input class="input" name="edu_company[]" value="Example College" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">Start</label>
+                  <input class="input" type="month" name="edu_start[]" value="2023-09" disabled>
+                </div>
+                <div class="column is-6">
+                  <label class="label">End</label>
+                  <input class="input" type="month" name="edu_end[]" value="2026-06" disabled>
+                </div>
+                <div class="column is-12">
+                  <label class="label">Notes</label>
+                  <textarea class="textarea" name="edu_desc[]" rows="3" disabled></textarea>
+                </div>
+              </div>
+
+              <button type="button" class="button is-text pw-remove-item" disabled>Remove this education</button>
+            </div>
+          </div>
+
+          <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="education" disabled>
+            + Add another education
+          </button>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary pw-save-btn" name="save_education" hidden>Save</button>
+            <button type="button" class="button is-light pw-cancel-btn" hidden>Cancel</button>
+          </div>
+        </form>
+
+        <template id="tpl-education-item">
+          <div class="pw-repeater-item">
+            <div class="columns is-multiline">
+              <div class="column is-6">
+                <label class="label">Program / Degree</label>
+                <input class="input" name="edu_role[]" placeholder="BSc / MBO / Course">
+              </div>
+              <div class="column is-6">
+                <label class="label">Institute</label>
+                <input class="input" name="edu_company[]" placeholder="School / Institute">
+              </div>
+              <div class="column is-6">
+                <label class="label">Start</label>
+                <input class="input" type="month" name="edu_start[]">
+              </div>
+              <div class="column is-6">
+                <label class="label">End</label>
+                <input class="input" type="month" name="edu_end[]">
+              </div>
+              <div class="column is-12">
+                <label class="label">Notes</label>
+                <textarea class="textarea" name="edu_desc[]" rows="3" placeholder="Relevant modules, thesis, projects..."></textarea>
+              </div>
+            </div>
+            <button type="button" class="button is-text pw-remove-item">Remove this education</button>
+          </div>
+        </template>
+      </section>
+
+      <!-- RENAME -->
+      <section class="pw-panel" id="panel-rename">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Rename Resume</h2>
+            <p>Rename the scroll. Sections stay unchanged.</p>
+          </div>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-rename">
+          <div class="field">
+            <label class="label">New title</label>
+            <input class="input" name="new_title" placeholder="e.g. Internship 2026 – Goth Edition">
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary" name="rename_resume">Rename</button>
+            <button type="button" class="button is-light" data-goto="info">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- NEW RESUME -->
+      <section class="pw-panel" id="panel-newRes">
+        <div class="pw-panel-head">
+          <div>
+            <h2>New Resume</h2>
+            <p>Create a fresh scroll. You can pick a template during Export.</p>
+          </div>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-newRes">
+          <div class="field">
+            <label class="label">Title</label>
+            <input class="input" name="title" placeholder="My Internship Resume">
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button pw-btn-primary" name="create_resume">Create</button>
+            <button type="button" class="button is-light" data-goto="info">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- DELETE RESUME -->
+      <section class="pw-panel" id="panel-delRes">
+        <div class="pw-panel-head">
+          <div>
+            <h2>Delete Resume</h2>
+            <p>This cannot be undone. (Consider exporting first.)</p>
+          </div>
+        </div>
+
+        <form method="post" action="client.php#resume_editor" id="form-delRes">
+          <div class="field">
+            <label class="label" for="pwDeleteResumeSelect">Resume</label>
+            <div class="select is-fullwidth">
+              <select id="pwDeleteResumeSelect" name="resume_id">
+                <option value="1" selected>Neo-Gothic Internship</option>
+                <option value="2">Minimalist Student</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pw-actions">
+            <button type="submit" class="button is-danger" id="pwDeleteSubmit" name="delete_resume">
+              Delete
+            </button>
+            <button type="button" class="button is-light" data-goto="info">Cancel</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div class="pw-toast" id="pwToast" role="status" aria-live="polite"></div>
+
+  <!-- optional delete ritual -->
+  <div class="pw-ritual" id="pwRitual" aria-hidden="true">
+    <div class="pw-ritual-backdrop"></div>
+    <div class="pw-ritual-scene">
+      <div class="pw-ritual-scroll"></div>
+      <div class="pw-ritual-cauldron"></div>
+      <div class="pw-ritual-smoke"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(() => {
+  const root = document.getElementById("pwResumeEditor");
+  if (!root) return;
+
+  const tabs = root.querySelectorAll(".pw-tab");
+  const panels = root.querySelectorAll(".pw-panel");
+  const mobileSelect = root.querySelector("#pwMobileSectionSelect");
+
+  const resumeSelect = root.querySelector("#pwResumeSelect");
+  const activeName = root.querySelector("#pwActiveResumeName");
+
+  const btnNew = root.querySelector("#pwBtnNew");
+  const btnDelete = root.querySelector("#pwBtnDelete");
+  const btnExport = root.querySelector("#pwBtnExport");
+
+  const toast = root.querySelector("#pwToast");
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("is-show");
+    window.setTimeout(() => toast.classList.remove("is-show"), 1600);
+  }
+
+  function activatePanel(key) {
+    tabs.forEach(t => t.classList.toggle("is-active", t.dataset.panel === key));
+    panels.forEach(p => p.classList.toggle("is-active", p.id === `panel-${key}`));
+    if (mobileSelect && mobileSelect.value !== key) mobileSelect.value = key;
+  }
+
+  // Default
+  activatePanel("info");
+
+  // Desktop nav
+  tabs.forEach(btn => btn.addEventListener("click", () => activatePanel(btn.dataset.panel)));
+
+  // Mobile nav
+  mobileSelect?.addEventListener("change", () => activatePanel(mobileSelect.value));
+
+  // Docbar buttons route to panels (no modals)
+  btnNew?.addEventListener("click", () => activatePanel("newRes"));
+  btnDelete?.addEventListener("click", () => activatePanel("delRes"));
+  btnExport?.addEventListener("click", () => {
+    showToast("Opening PDF preview…");
+    // Hook: open export/template chooser; show PDF in new window/modal on your side.
+    // window.open("export.php?resume_id=" + encodeURIComponent(resumeSelect.value), "_blank");
+  });
+
+  // Resume select sync
+  function syncResumeName() {
+    if (!resumeSelect || !activeName) return;
+    const opt = resumeSelect.options[resumeSelect.selectedIndex];
+    activeName.textContent = opt ? opt.textContent : "Untitled";
+  }
+  resumeSelect?.addEventListener("change", () => {
+    syncResumeName();
+    showToast("Switched resume");
+    // Hook: load resume data (server reload or AJAX).
+  });
+  syncResumeName();
+
+  // Cancel “route” buttons
+  root.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener("click", () => activatePanel(btn.getAttribute("data-goto")));
+  });
+
+  // Edit / Save / Cancel per section
+  root.querySelectorAll(".pw-panel").forEach(panel => {
+    const editBtn = panel.querySelector(".pw-edit-btn");
+    const saveBtn = panel.querySelector(".pw-save-btn");
+    const cancelBtn = panel.querySelector(".pw-cancel-btn");
+    const form = panel.querySelector("form");
+    if (!editBtn || !saveBtn || !cancelBtn || !form) return;
+
+    const inputs = form.querySelectorAll("input, textarea, select");
+    const removeBtns = form.querySelectorAll(".pw-remove-item");
+    const addBtns = panel.querySelectorAll(".pw-add-item");
+
+    const initial = new Map();
+    inputs.forEach(el => initial.set(el, el.value));
+
+    function setEditing(on) {
+      inputs.forEach(el => on ? el.removeAttribute("disabled") : el.setAttribute("disabled","disabled"));
+      removeBtns.forEach(el => on ? el.removeAttribute("disabled") : el.setAttribute("disabled","disabled"));
+      addBtns.forEach(el => on ? el.removeAttribute("disabled") : el.setAttribute("disabled","disabled"));
+
+      editBtn.hidden = on;
+      saveBtn.hidden = !on;
+      cancelBtn.hidden = !on;
+    }
+
+    setEditing(false);
+
+    editBtn.addEventListener("click", () => {
+      // refresh initial snapshot on entry
+      initial.clear();
+      inputs.forEach(el => initial.set(el, el.value));
+      setEditing(true);
+      showToast("Edit mode");
+    });
+
+    cancelBtn.addEventListener("click", () => {
+      // revert values
+      inputs.forEach(el => {
+        if (initial.has(el)) el.value = initial.get(el);
+      });
+      setEditing(false);
+      showToast("Canceled");
+    });
+
+    form.addEventListener("submit", () => {
+      showToast("Saved");
+      // server will handle; UI stays consistent
+      setEditing(false);
+    });
+  });
+
+  // Repeater add/remove
+  root.querySelectorAll(".pw-add-item").forEach(addBtn => {
+    const target = addBtn.dataset.repeaterTarget;
+    const container = root.querySelector(`.pw-repeater[data-repeater="${target}"]`);
+    const tpl = root.querySelector(`#tpl-${target}-item`);
+    if (!container || !tpl) return;
+
+    addBtn.addEventListener("click", () => {
+      const clone = tpl.content.cloneNode(true);
+      container.appendChild(clone);
+      wireRemove(container);
+      showToast("Added");
+    });
+
+    wireRemove(container);
+  });
+
+  function wireRemove(scope) {
+    scope.querySelectorAll(".pw-remove-item").forEach(btn => {
+      if (btn.dataset.wired === "1") return;
+      btn.dataset.wired = "1";
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".pw-repeater-item");
+        if (item) item.remove();
+        showToast("Removed");
+      });
+    });
+  }
+
+  // Delete confirmation + optional ritual
+  const delInput = root.querySelector("#pwDeleteConfirm");
+  const delForm = root.querySelector("#form-delRes");
+  const ritual = root.querySelector("#pwRitual");
+
+  delInput?.addEventListener("input", syncDeleteConfirm);
+
+  // If you want the ritual: prevent submit, play, then submit.
+  delForm?.addEventListener("submit", (e) => {
+    // Comment out this block if you want immediate submit.
+    e.preventDefault();
+    ritual?.classList.add("is-active");
+    showToast("Casting deletion spell…");
+    setTimeout(() => delForm.submit(), 850);
+  });
+})();
+</script>

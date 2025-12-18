@@ -30,10 +30,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/paperwitch.css">
     <link rel="stylesheet" href="assets/css/profile.css">
+    <link rel="stylesheet" href="assets/css/editor.css">
+    <!-- <link rel="stylesheet" href="assets/css/export.css"> -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
+    <script defer src="assets/js/banal-editor.js"></script>
     <script defer src="assets/js/form-handler.js"></script>
 </head>
 <body>
@@ -41,6 +44,10 @@
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
         <?php ViewBook::render('section_resume.php'); ?>  
+
+        <section id="export" class="<?= ViewBook::setView_Error('export'); ?>"> 
+            <?php ViewBook::render('section_export.html'); ?>
+        </section>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->

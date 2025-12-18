@@ -1,9 +1,10 @@
 <section id="profile" class="<?= ViewBook::setView_Error('profile'); ?>">
     <article class="profile-wrap">
         <header class="profile-header">
-            <div class="profile-avatar">
+            <label for="upload" class="profile-avatar">             
                 <!-- <img src=""> -->
-            </div>
+            </label>
+            <input type="file" id="upload" name="upload"> 
             <div>
                 <h1>Joanna Ross</h1>
                 <p>Your job-hunting familiar</p>
@@ -14,73 +15,71 @@
             </div>
         </header>
 
-        <section class="profile-section">
+        <form id="personal" class="profile-section">
             <h2>Personal Details</h2>
             <div class="field is-grouped">
                 <div class="control">
-                    <label class="label">First Name</label>
-                    <input class="input" type="text" placeholder="..." disabled>
+                    <label for="firstname" class="label">First Name</label>
+                    <input type="text" id="firstname" class="input" placeholder="..." disabled>
                 </div>
                 <div class="control">
-                    <label class="label">Last Name</label>
-                    <input class="input" type="text" placeholder="..." disabled>
+                    <label for="lastname"class="label">Last Name</label>
+                    <input type="text" id="lastname" class="input" placeholder="..." disabled>
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
-                    <label class="label">Phone Number</label>
-                    <input class="input" type="tel" placeholder="+31 6 1234 5678" disabled>
+                    <label for="phone" class="label">Phone Number</label>
+                    <input type="tel" id="phone" class="input" placeholder="+31 6 1234 5678" disabled>
                 </div>
                 <div class="control">
-                    <label class="label">Date of Birth</label>
-                    <input id="dob" class="input" type="date" disabled>
+                    <label for="dateOfBirth" class="label">Date of Birth</label>
+                    <input type="date" id="dateOfBirth" class="input" disabled>
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
-                    <label class="label">City</label>
-                    <input class="input" type="text" placeholder="Rotterdam" disabled>
+                    <label for="city" class="label">City</label>
+                    <input type="text" id="city" class="input" placeholder="Rotterdam" disabled>
                 </div>
                 <div class="control">
-                    <label class="label">Postal Code</label>
-                    <input class="input" type="text" placeholder="1234 AB" disabled>
+                    <label for="postcode" class="label">Postal Code</label>
+                    <input type="text" id="postcode" class="input" placeholder="1234 AB" disabled>
                 </div>
             </div>
             <div class="field">
-                <label class="label">Country</label>
-                <input class="input" type="text" placeholder="Netherlands" disabled>
+                <label for="country" class="label">Country</label>
+                <input type="text" for="country" class="input" placeholder="Netherlands" disabled>
             </div>
             <div class="buttons mt-4">
-                <button class="button is-light edit-btn">Edit</button>
-                <!-- <button class="button btn-cta">Save Changes</button>
-                <button class="button is-light">Cancel</button> -->
+                <button type="button" class="button is-light edit-btn">Edit</button>
+                <!-- Save dynamically added by JS -->
             </div>
-            </section>
+        </form>
 
-            <section class="profile-section">
-            <h2>Account Access</h2>
+        <form id="account" class="profile-section">
+            <h2>Account Details</h2>
             <div class="field">
-                <label class="label">Username (optional)</label>
-                <input class="input" type="text" placeholder="..." disabled>
-            </div>
-
-            <div class="field">
-                <label class="label">Email</label>
-                <input class="input" type="email" placeholder="you@domain.com" disabled>
+                <label for="username" class="label">Username (optional)</label>
+                <input type="text" id="username" class="input" placeholder="..." disabled>
             </div>
 
             <div class="field">
-                <label class="label">Password</label>
-                <input class="input" type="password" placeholder="••••••••" disabled>
+                <label for="email" class="label">Email</label>
+                <input type="email" id="email" class="input" placeholder="you@domain.com" disabled>
+            </div>
+
+            <div class="field">
+                <label for="password" class="label">Password</label>
+                <input type="password" id="password" class="input" placeholder="••••••••" disabled>
             </div>
 
             <div class="buttons mt-4">
-                <button class="button is-light edit-btn">Edit</button>
-                <!-- <button class="button btn-cta">Save Changes</button>
-                <button class="button is-light">Cancel</button> -->
+                <button type="button" class="button is-light edit-btn">Edit</button>
+                <!-- Save dynamically added by JS -->
             </div>
-        </section>
+        </form>
     </article>
 </section>

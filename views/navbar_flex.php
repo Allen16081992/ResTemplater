@@ -7,7 +7,7 @@
 <nav aria-label="main navigation">
     <a href="#" data-section="profile">Profile</a> 
     <a href="#" data-section="home">Resume</a>
-    <a href="#" data-section="logout">Logout</a>    
+    <a href="index.php">Logout</a>    
     <!-- <a href="#" data-section="contact">Contact</a> -->    
 </nav>
 

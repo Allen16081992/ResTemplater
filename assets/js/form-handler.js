@@ -1,60 +1,89 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
-  const sections = document.querySelectorAll(".profile-section");
+  // Any field IDs in here will NEVER be toggled editable
+  const IMMUTABLE_IDS = new Set(["dateOfBirth"]);
 
-  sections.forEach(section => {
+  // ─────────────────────────────────────
+  //  PER-SECTION EDIT / SAVE HANDLING
+  // ─────────────────────────────────────
+  document.querySelectorAll(".profile-section").forEach(section => {
     const editBtn = section.querySelector(".edit-btn");
-    const inputs  = section.querySelectorAll("input");
-
     if (!editBtn) return; // safety
 
-    editBtn.addEventListener("click", () => {
-      const isEditing = editBtn.textContent === "Cancel";
+    const form      = section.closest("form");
+    const inputs    = Array.from(section.querySelectorAll("input"));
+    const btnRow    = section.querySelector(".buttons");
 
-      if (!isEditing) {
-        // ---- ENTER EDIT MODE ----
-        editBtn.textContent = "Cancel";
+    if (!btnRow || !form) return;
 
-        // Create Save button
-        const saveBtn = document.createElement("button");
-        saveBtn.className = "button btn-cta save-btn";
-        saveBtn.textContent = "Save Changes";
+    // Create the Save button once
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "submit";
+    saveBtn.className = "button btn-cta save-btn";
+    saveBtn.textContent = "Save Changes";
 
-        const btnContainer = section.querySelector(".buttons");
-        if (btnContainer) btnContainer.appendChild(saveBtn);
+    // Name the button so PHP can see which section was saved
+    if (form.id === "personal") saveBtn.name = "personal";
+    if (form.id === "account")  saveBtn.name = "account";
 
-        // Enable inputs EXCEPT dob
-        inputs.forEach(input => {
-          if (input.id !== "dob") input.removeAttribute("disabled");
-        });
+    let isEditing = false;
 
-        // Save button logic
-        saveBtn.addEventListener("click", () => {
-          console.log("Saving changes for section:", section.querySelector("h2")?.textContent);
+    function setEditing(on) {
+      isEditing = on;
 
-          inputs.forEach(input => {
-            if (input.id !== "dob") input.setAttribute("disabled", true);
-          });
+      // Toggle button label
+      editBtn.textContent = on ? "Cancel" : "Edit";
 
-          editBtn.textContent = "Edit";
-          editBtn.classList.remove("cancel-btn");
-          editBtn.classList.add("is-light");
+      // Toggle inputs (skip immutable)
+      inputs.forEach(input => {
+        if (IMMUTABLE_IDS.has(input.id)) return;
 
-          saveBtn.remove();
-        });
+        if (on) {
+          input.removeAttribute("disabled");
+        } else {
+          input.setAttribute("disabled", "disabled");
+        }
+      });
 
+      // Toggle Save button
+      if (on) {
+        if (!saveBtn.isConnected) btnRow.appendChild(saveBtn);
       } else {
-        // ---- CANCEL EDIT MODE ----
-        editBtn.textContent = "Edit";
-        editBtn.classList.remove("cancel-btn");
-        editBtn.classList.add("is-light");
-
-        const saveBtn = section.querySelector(".save-btn");
-        if (saveBtn) saveBtn.remove();
-
-        // Disable all inputs again
-        inputs.forEach(input => input.setAttribute("disabled", true));
+        if (saveBtn.isConnected) saveBtn.remove();
       }
+    }
+
+    // Edit / Cancel toggle
+    editBtn.addEventListener("click", (event) => {
+      event.preventDefault(); // in case it's inside <form>
+      setEditing(!isEditing);
+    });
+
+    // Optional: add a tiny bit of pre-submit safety
+    saveBtn.addEventListener("click", () => {
+      // Let the form submit normally.
+      // If you want: temporarily lock fields to avoid double-click spam:
+      inputs.forEach(input => input.setAttribute("disabled", "disabled"));
+      // Do NOT call setEditing(false) here; the page will reload anyway.
     });
   });
+
+  // ─────────────────────────────────────
+  //  AVATAR UPLOAD PREVIEW
+  // ─────────────────────────────────────
+  const fileInput = document.getElementById("upload");
+  const avatar    = document.querySelector(".profile-avatar");
+
+  if (fileInput && avatar) {
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        avatar.style.backgroundImage = `url('${e.target.result}')`;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 });

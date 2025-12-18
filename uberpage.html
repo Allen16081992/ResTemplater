@@ -1,0 +1,1949 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Resume Editor Pro (Outline • Focus • Spellbook)</title>
+  <style>
+    :root{
+      --bg: #0b0d14;
+      --panel: rgba(18,20,30,.92);
+      --panel2: rgba(14,16,24,.92);
+      --border: rgba(255,255,255,.10);
+      --muted: rgba(255,255,255,.62);
+      --text: rgba(255,255,255,.92);
+      --accent: #8b5cf6;
+      --accent2:#4f46e5;
+      --good:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --shadow: 0 18px 60px rgba(0,0,0,.60), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 800px at 10% 0%, rgba(139,92,246,.18), transparent 55%),
+        radial-gradient(900px 600px at 90% 10%, rgba(79,70,229,.18), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      letter-spacing: .2px;
+    }
+
+    /* App shell */
+    .app{
+      max-width: 1320px;
+      margin: 22px auto;
+      padding: 14px;
+    }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(12,14,22,.70);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width: 260px;
+    }
+    .logo{
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 30px rgba(88,81,219,.45);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 16px;
+      line-height: 1.1;
+      font-weight: 800;
+    }
+    .brand p{
+      margin:2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .top-controls{
+      display:flex;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .select{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18,20,30,.70);
+    }
+    .select label{
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    select{
+      background: transparent;
+      color: var(--text);
+      border: none;
+      outline: none;
+      font-weight: 700;
+    }
+    select option{ color:#111; }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18,20,30,.70);
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.05);
+    }
+    .dot.good{ background: var(--good); box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
+    .dot.warn{ background: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,.18); }
+
+    .btn{
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(18,20,30,.70);
+      color: var(--text);
+      padding: 9px 11px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .12s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(22,24,36,.78); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.primary{
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 14px 30px rgba(88,81,219,.45);
+    }
+    .btn.danger{
+      border: 1px solid rgba(239,68,68,.45);
+      background: rgba(239,68,68,.12);
+      color: rgba(255,255,255,.92);
+    }
+    .btn.ghost{
+      background: transparent;
+      border: 1px dashed rgba(255,255,255,.18);
+      color: rgba(255,255,255,.82);
+    }
+    .btn.small{
+      padding: 7px 9px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .btn:disabled{
+      opacity: .5;
+      cursor: not-allowed;
+      transform:none;
+    }
+
+    /* 3-column layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 310px minmax(0, 1fr) 330px;
+      gap: 12px;
+      margin-top: 12px;
+      min-height: calc(100vh - 22px - 14px - 80px);
+    }
+
+    .panel{
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-height: 520px;
+    }
+
+    .panel-head{
+      padding: 12px 14px;
+      background: rgba(10,12,18,.72);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .panel-head h2{
+      margin:0;
+      font-size: 13px;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.78);
+    }
+    .panel-head p{
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .panel-body{ padding: 12px 14px; }
+
+    /* Outline */
+    .search{
+      display:flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .search input{
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,22,.55);
+      color: var(--text);
+      outline:none;
+      font-weight: 650;
+    }
+
+    .outline-actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .tree{ display:flex; flex-direction:column; gap: 10px; }
+
+    .node{
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(12,14,22,.55);
+      border-radius: 14px;
+      overflow:hidden;
+    }
+    .node-head{
+      padding: 10px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .node-head:hover{ background: rgba(255,255,255,.03); }
+    .node-title{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .badge{
+      width: 26px; height: 26px;
+      border-radius: 10px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(139,92,246,.12);
+      border: 1px solid rgba(139,92,246,.22);
+      font-size: 13px;
+      flex: 0 0 auto;
+    }
+    .node-title .text{
+      min-width: 0;
+    }
+    .node-title .text b{
+      display:block;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .node-title .text span{
+      display:block;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .node-tools{ display:flex; gap: 6px; flex: 0 0 auto; }
+    .iconbtn{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18,20,30,.65);
+      color: rgba(255,255,255,.85);
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition: transform .12s ease, background .15s ease;
+    }
+    .iconbtn:hover{ transform: translateY(-1px); background: rgba(24,26,40,.75); }
+    .iconbtn:active{ transform: translateY(0px); }
+    .iconbtn:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+
+    .node-items{
+      padding: 10px 10px 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .item{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(18,20,30,.55);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .item:hover{ background: rgba(255,255,255,.035); }
+    .item.is-active{ outline: 2px solid rgba(139,92,246,.45); }
+    .item .label{
+      min-width:0;
+    }
+    .item .label b{
+      display:block;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .item .label span{
+      display:block;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .draghandle{
+      width: 26px; height: 26px;
+      border-radius: 10px;
+      border: 1px dashed rgba(255,255,255,.20);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(255,255,255,.60);
+      cursor: grab;
+      flex: 0 0 auto;
+    }
+
+    /* Focus editor */
+    .focus-head{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 10px;
+    }
+    .focus-title{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .focus-title h3{
+      margin:0;
+      font-size: 18px;
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
+    }
+    .focus-title p{
+      margin:0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .form{
+      display:grid;
+      gap: 10px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .field label{
+      display:block;
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 6px;
+    }
+    .field input, .field textarea{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,22,.55);
+      color: var(--text);
+      padding: 10px 10px;
+      outline:none;
+      font-weight: 650;
+    }
+    textarea{ min-height: 90px; resize: vertical; }
+
+    .bullets{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,22,.55);
+      padding: 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+    .bullet{
+      display:flex;
+      gap: 8px;
+      align-items:flex-start;
+    }
+    .bullet textarea{
+      min-height: 44px;
+      padding: 8px 10px;
+      font-weight: 650;
+    }
+
+    .help{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .focus-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    /* Spellbook (checks) */
+    .score{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      margin-bottom: 10px;
+    }
+    .ring{
+      width: 58px; height: 58px;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.10), transparent 55%),
+        rgba(12,14,22,.55);
+      border: 1px solid rgba(255,255,255,.10);
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .scoremeta b{ display:block; font-size: 14px; }
+    .scoremeta span{ display:block; font-size: 12px; color: var(--muted); }
+
+    .checklist{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .check{
+      display:flex;
+      gap: 10px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(12,14,22,.55);
+      cursor: pointer;
+    }
+    .check:hover{ background: rgba(255,255,255,.03); }
+    .sev{
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex: 0 0 auto;
+      background: rgba(255,255,255,.25);
+    }
+    .sev.good{ background: var(--good); }
+    .sev.warn{ background: var(--warn); }
+    .sev.bad{ background: var(--bad); }
+
+    .check .txt b{ display:block; font-size: 12px; }
+    .check .txt span{ display:block; font-size: 12px; color: var(--muted); line-height: 1.3; }
+
+    .spell-actions{
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(10,10,15,.92);
+      box-shadow: 0 18px 40px rgba(0,0,0,.55);
+      color: rgba(255,255,255,.9);
+      font-size: 12px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 9999;
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    /* Simple delete ritual overlay */
+    .ritual{ display:none; position:fixed; inset:0; z-index:9998; }
+    .ritual.on{ display:block; }
+    .ritual .bg{ position:absolute; inset:0; background: rgba(0,0,0,.55); backdrop-filter: blur(6px); }
+    .ritual .scene{ position:absolute; left:50%; top:50%; transform: translate(-50%,-50%); width:260px; height:220px; }
+    .ritual .cauldron{
+      position:absolute; left:50%; bottom:10px; transform: translateX(-50%);
+      width:170px; height:95px; border-radius: 0 0 90px 90px;
+      background: rgba(20,20,30,.95); border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 18px 45px rgba(0,0,0,.65), inset 0 10px 18px rgba(255,255,255,.06);
+    }
+    .ritual .cauldron::before{
+      content:""; position:absolute; left:50%; top:-14px; transform: translateX(-50%);
+      width:190px; height:34px; border-radius:999px;
+      background: rgba(35,35,52,.98); border:1px solid rgba(255,255,255,.12);
+    }
+    .ritual .scroll{
+      position:absolute; left:50%; top:0; transform: translateX(-50%);
+      width:72px; height:92px; border-radius: 12px;
+      background: rgba(245,245,255,.92); box-shadow: 0 14px 30px rgba(0,0,0,.45);
+      opacity:0;
+    }
+    .ritual .scroll::before{
+      content:""; position:absolute; left:12px; top:18px;
+      width:48px; height:6px; border-radius:999px;
+      background: rgba(30,30,45,.18);
+      box-shadow: 0 16px 0 rgba(30,30,45,.14), 0 32px 0 rgba(30,30,45,.12);
+    }
+    .ritual .smoke{ position:absolute; left:50%; bottom:80px; transform: translateX(-50%); width:220px; height:120px; opacity:0; filter: blur(1px); }
+    .ritual .smoke::before,.ritual .smoke::after{
+      content:""; position:absolute; bottom:0; width:70px; height:70px; border-radius:50%;
+      background: rgba(200,200,230,.18);
+    }
+    .ritual .smoke::before{ left:35px; }
+    .ritual .smoke::after{ right:35px; }
+    .ritual.on .scroll{ animation: drop .6s ease-out forwards; }
+    .ritual.on .smoke{ animation: smoke .7s ease-out .45s forwards; }
+    @keyframes drop{
+      0%{opacity:0; transform: translateX(-50%) translateY(-10px) rotate(-6deg);}
+      10%{opacity:1;}
+      70%{transform: translateX(-50%) translateY(120px) rotate(3deg);}
+      100%{opacity:0; transform: translateX(-50%) translateY(140px) rotate(8deg);}
+    }
+    @keyframes smoke{
+      0%{opacity:0; transform: translateX(-50%) translateY(10px) scale(.95);}
+      40%{opacity:1;}
+      100%{opacity:0; transform: translateX(-50%) translateY(-18px) scale(1.05);}
+    }
+
+    /* (Optional) responsiveness: stacks on small screens */
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns: 300px minmax(0,1fr); }
+      .panel.spellbook{ display:none; }
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+      .panel{ min-height: unset; }
+      .brand{ min-width: unset; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Resume Editor Pro</h1>
+          <p>Outline navigation • Focus editing • Spellbook checks</p>
+        </div>
+      </div>
+
+      <div class="top-controls">
+        <div class="select">
+          <label for="resumeSelect">Resume</label>
+          <select id="resumeSelect"></select>
+        </div>
+
+        <span class="pill" id="saveState">
+          <span class="dot good" id="saveDot"></span>
+          <span id="saveText">Saved</span>
+        </span>
+
+        <button class="btn" id="undoBtn" title="Undo (Ctrl+Z)">Undo</button>
+        <button class="btn" id="redoBtn" title="Redo (Ctrl+Y)">Redo</button>
+        <button class="btn" id="exportBtn">Export / Preview</button>
+        <button class="btn primary" id="newResumeBtn">New Resume</button>
+        <button class="btn danger" id="deleteResumeBtn">Delete</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- OUTLINE -->
+      <section class="panel outline">
+        <div class="panel-head">
+          <div>
+            <h2>Outline</h2>
+            <p>Sections and items. Drag handles reorder. Click to edit.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="search">
+            <input id="outlineSearch" placeholder="Search: role, company, school, keyword…" />
+            <button class="btn small" id="clearSearchBtn">Clear</button>
+          </div>
+
+          <div class="outline-actions">
+            <button class="btn small" id="addExperienceBtn">+ Experience</button>
+            <button class="btn small" id="addEducationBtn">+ Education</button>
+            <button class="btn small ghost" id="addSectionNoteBtn">+ Note</button>
+          </div>
+
+          <div class="tree" id="tree"></div>
+        </div>
+      </section>
+
+      <!-- FOCUS EDITOR -->
+      <section class="panel focus">
+        <div class="panel-head">
+          <div>
+            <h2>Focus</h2>
+            <p>Edit the selected node. Autosave is simulated here (hook to your backend).</p>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="focus-head">
+            <div class="focus-title">
+              <h3 id="focusTitle">Select something in the outline</h3>
+              <p id="focusSub">Tip: click Profile, or an Experience item.</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="btn small" id="dupBtn" disabled>Duplicate</button>
+              <button class="btn small danger" id="removeBtn" disabled>Remove</button>
+            </div>
+          </div>
+
+          <div id="focusBody" class="help">
+            Your resume is a document tree. The left rail is your map. Pick a node to edit it here.
+          </div>
+        </div>
+      </section>
+
+      <!-- SPELLBOOK -->
+      <section class="panel spellbook">
+        <div class="panel-head">
+          <div>
+            <h2>Spellbook</h2>
+            <p>Quality checks and quick fixes. Click a check to jump.</p>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <div class="score">
+            <div class="ring" id="scoreRing">—</div>
+            <div class="scoremeta">
+              <b id="scoreLabel">No score yet</b>
+              <span id="scoreSub">Add content to improve.</span>
+            </div>
+          </div>
+
+          <div class="spell-actions">
+            <button class="btn small" id="fixBulletsBtn">Auto-bulletify</button>
+            <button class="btn small" id="tenseFixBtn">Tense hints</button>
+            <button class="btn small" id="lengthFixBtn">Trim suggestions</button>
+          </div>
+
+          <div class="checklist" id="checklist"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="ritual" id="ritual" aria-hidden="true">
+    <div class="bg"></div>
+    <div class="scene">
+      <div class="scroll"></div>
+      <div class="cauldron"></div>
+      <div class="smoke"></div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  /* ---------------------------
+     Data model (single resume)
+  ----------------------------*/
+  const uid = () => Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+  const DEFAULT_RESUME = () => ({
+    id: uid(),
+    name: "Neo-Gothic Internship",
+    profile: {
+      fullName: "Allen Pieter",
+      label: "Junior IT / Student",
+      email: "you@example.com",
+      phone: "+31 6 1234 5678",
+      location: "Rotterdam, NL",
+      website: "https://example.com",
+      summary: "Enthusiastic junior techie with a soft spot for clean code, tinkering, and learning-by-doing."
+    },
+    experience: [
+      {
+        id: uid(),
+        role: "Junior IT Support (Intern)",
+        org: "TechCorp",
+        start: "2024-01",
+        end: "2024-06",
+        bullets: [
+          "Resolved ticketed workstation issues and documented fixes clearly.",
+          "Assisted with onboarding and basic device configuration."
+        ]
+      }
+    ],
+    education: [
+      {
+        id: uid(),
+        program: "Software Development (Student)",
+        org: "Example College",
+        start: "2023-09",
+        end: "2026-06",
+        bullets: [
+          "Built small web apps and practiced version control workflows.",
+          "Focused on fundamentals: networking, scripting, and databases."
+        ]
+      }
+    ],
+    notes: [
+      { id: uid(), title: "Target Role", text: "Internship / Junior dev roles. Keep it concise." }
+    ]
+  });
+
+  const store = {
+    resumes: [DEFAULT_RESUME()],
+    activeResumeId: null,
+    selection: { type: "profile", id: "profile" }, // type: profile|experience|education|note
+    dirty: false,
+    undo: [],
+    redo: []
+  };
+  store.activeResumeId = store.resumes[0].id;
+
+  /* ---------------------------
+     Helpers
+  ----------------------------*/
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+  const toastEl = $("#toast");
+  let toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1400);
+  }
+
+  const saveDot = $("#saveDot");
+  const saveText = $("#saveText");
+  let saveTimer = null;
+  function setDirty(on){
+    store.dirty = on;
+    if (on){
+      saveDot.classList.remove("good");
+      saveDot.classList.add("warn");
+      saveText.textContent = "Saving…";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        store.dirty = false;
+        saveDot.classList.remove("warn");
+        saveDot.classList.add("good");
+        saveText.textContent = "Saved";
+      }, 450);
+    }
+    updateUndoRedoButtons();
+  }
+
+  function deepClone(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function pushUndo(){
+    store.undo.push(deepClone({ resumes: store.resumes, activeResumeId: store.activeResumeId, selection: store.selection }));
+    if (store.undo.length > 60) store.undo.shift();
+    store.redo = [];
+    updateUndoRedoButtons();
+  }
+  function undo(){
+    if (!store.undo.length) return;
+    store.redo.push(deepClone({ resumes: store.resumes, activeResumeId: store.activeResumeId, selection: store.selection }));
+    const prev = store.undo.pop();
+    store.resumes = prev.resumes;
+    store.activeResumeId = prev.activeResumeId;
+    store.selection = prev.selection;
+    setDirty(true);
+    renderAll();
+    toast("Undone");
+  }
+  function redo(){
+    if (!store.redo.length) return;
+    store.undo.push(deepClone({ resumes: store.resumes, activeResumeId: store.activeResumeId, selection: store.selection }));
+    const nxt = store.redo.pop();
+    store.resumes = nxt.resumes;
+    store.activeResumeId = nxt.activeResumeId;
+    store.selection = nxt.selection;
+    setDirty(true);
+    renderAll();
+    toast("Redone");
+  }
+  function updateUndoRedoButtons(){
+    $("#undoBtn").disabled = store.undo.length === 0;
+    $("#redoBtn").disabled = store.redo.length === 0;
+  }
+
+  function activeResume(){
+    return store.resumes.find(r => r.id === store.activeResumeId) || store.resumes[0];
+  }
+
+  function setSelection(type, id){
+    store.selection = { type, id };
+    renderOutline(); // highlights
+    renderFocus();
+  }
+
+  /* ---------------------------
+     Rendering: Resume select
+  ----------------------------*/
+  const resumeSelect = $("#resumeSelect");
+  function renderResumeSelect(){
+    const r = activeResume();
+    resumeSelect.innerHTML = store.resumes.map(x => `<option value="${x.id}" ${x.id===r.id?"selected":""}>${escapeHtml(x.name)}</option>`).join("");
+  }
+
+  resumeSelect.addEventListener("change", () => {
+    pushUndo();
+    store.activeResumeId = resumeSelect.value;
+    store.selection = { type: "profile", id: "profile" };
+    setDirty(true);
+    renderAll();
+    toast("Switched resume");
+  });
+
+  /* ---------------------------
+     Rendering: Outline tree
+  ----------------------------*/
+  const treeEl = $("#tree");
+  const searchEl = $("#outlineSearch");
+  $("#clearSearchBtn").addEventListener("click", () => { searchEl.value=""; renderOutline(); });
+
+  function matchesSearch(text){
+    const q = (searchEl.value || "").trim().toLowerCase();
+    if (!q) return true;
+    return (text || "").toLowerCase().includes(q);
+  }
+
+  function nodeOpenByDefault(){ return true; } // keeps it simple; could be per-node toggles
+
+  function renderOutline(){
+    const r = activeResume();
+
+    const sections = [
+      {
+        key: "profile",
+        icon: "🎭",
+        title: "Profile",
+        subtitle: "Identity + headline + summary",
+        items: null
+      },
+      {
+        key: "experience",
+        icon: "🏹",
+        title: "Experience",
+        subtitle: `${r.experience.length} item(s)`,
+        items: r.experience.map((it, idx) => ({
+          type: "experience",
+          id: it.id,
+          title: it.role || `Experience ${idx+1}`,
+          sub: [it.org, it.start && it.end ? `${it.start} → ${it.end}` : ""].filter(Boolean).join(" • ")
+        }))
+      },
+      {
+        key: "education",
+        icon: "🎓",
+        title: "Education",
+        subtitle: `${r.education.length} item(s)`,
+        items: r.education.map((it, idx) => ({
+          type: "education",
+          id: it.id,
+          title: it.program || `Education ${idx+1}`,
+          sub: [it.org, it.start && it.end ? `${it.start} → ${it.end}` : ""].filter(Boolean).join(" • ")
+        }))
+      },
+      {
+        key: "notes",
+        icon: "🗒️",
+        title: "Notes",
+        subtitle: `${r.notes.length} item(s)`,
+        items: r.notes.map((it, idx) => ({
+          type: "note",
+          id: it.id,
+          title: it.title || `Note ${idx+1}`,
+          sub: (it.text || "").slice(0, 40) + ((it.text||"").length>40 ? "…" : "")
+        }))
+      }
+    ];
+
+    // Filter by search (keeps section if any item matches or section meta matches)
+    const filtered = sections.filter(sec => {
+      if (!matchesSearch(sec.title + " " + sec.subtitle)) {
+        if (!sec.items) return false;
+        return sec.items.some(i => matchesSearch(i.title + " " + i.sub));
+      }
+      return true;
+    }).map(sec => {
+      if (!sec.items) return sec;
+      return { ...sec, items: sec.items.filter(i => matchesSearch(i.title + " " + i.sub)) };
+    });
+
+    treeEl.innerHTML = filtered.map(sec => {
+      const isSectionSelected = (store.selection.type === "profile" && sec.key === "profile");
+      const sectionTools = sec.items ? `
+        <div class="node-tools">
+          <button class="iconbtn" title="Add item" data-action="addItem" data-section="${sec.key}">＋</button>
+          <button class="iconbtn" title="Move section up" data-action="moveSection" data-section="${sec.key}" data-dir="-1">↑</button>
+          <button class="iconbtn" title="Move section down" data-action="moveSection" data-section="${sec.key}" data-dir="1">↓</button>
+        </div>
+      ` : `
+        <div class="node-tools">
+          <button class="iconbtn" title="Edit Profile" data-action="selectProfile">✎</button>
+        </div>
+      `;
+
+      const itemsHtml = sec.items ? `
+        <div class="node-items" data-list="${sec.key}">
+          ${sec.items.map((it, iidx) => {
+            const isActive = store.selection.type === it.type && store.selection.id === it.id;
+            return `
+              <div class="item ${isActive ? "is-active" : ""}" draggable="true"
+                   data-type="${it.type}" data-id="${it.id}" data-index="${iidx}" data-section="${sec.key}">
+                <div class="label">
+                  <b>${escapeHtml(it.title)}</b>
+                  <span>${escapeHtml(it.sub || "")}</span>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <div class="draghandle" title="Drag to reorder">⋮⋮</div>
+                  <button class="iconbtn" title="Duplicate" data-action="dupItem" data-type="${it.type}" data-id="${it.id}">⎘</button>
+                  <button class="iconbtn" title="Remove" data-action="rmItem" data-type="${it.type}" data-id="${it.id}">✕</button>
+                </div>
+              </div>
+            `;
+          }).join("")}
+          <button class="btn small ghost" style="width:100%;" data-action="addItem" data-section="${sec.key}">+ Add ${escapeHtml(sec.title)} item</button>
+        </div>
+      ` : "";
+
+      return `
+        <div class="node" data-section="${sec.key}">
+          <div class="node-head" data-action="${sec.key==='profile' ? 'selectProfile' : 'noop'}">
+            <div class="node-title">
+              <div class="badge">${sec.icon}</div>
+              <div class="text">
+                <b>${escapeHtml(sec.title)}</b>
+                <span>${escapeHtml(sec.subtitle)}</span>
+              </div>
+            </div>
+            ${sectionTools}
+          </div>
+          ${sec.items && nodeOpenByDefault() ? itemsHtml : ""}
+        </div>
+      `;
+    }).join("");
+
+    // Outline event wiring (delegation)
+    treeEl.onclick = (e) => {
+      const btn = e.target.closest("[data-action]");
+      if (!btn) {
+        const item = e.target.closest(".item");
+        if (item){
+          setSelection(item.dataset.type, item.dataset.id);
+        }
+        return;
+      }
+
+      const action = btn.dataset.action;
+      if (action === "selectProfile"){
+        setSelection("profile", "profile");
+        return;
+      }
+      if (action === "addItem"){
+        const sec = btn.dataset.section;
+        addItem(sec);
+        return;
+      }
+      if (action === "rmItem"){
+        const type = btn.dataset.type;
+        const id = btn.dataset.id;
+        removeItem(type, id);
+        return;
+      }
+      if (action === "dupItem"){
+        duplicateItem(btn.dataset.type, btn.dataset.id);
+        return;
+      }
+      if (action === "moveSection"){
+        // Cosmetic only in this demo (sections are fixed groups). You can wire real section ordering if you store a sectionOrder array.
+        toast("Section ordering is fixed in this demo");
+        return;
+      }
+      if (action === "noop") return;
+    };
+
+    wireDnD();
+  }
+
+  function wireDnD(){
+    // Drag and drop reorder within a list
+    const draggables = $$(".item", treeEl);
+    let dragMeta = null;
+
+    draggables.forEach(el => {
+      el.addEventListener("dragstart", (e) => {
+        dragMeta = {
+          section: el.dataset.section,
+          type: el.dataset.type,
+          id: el.dataset.id
+        };
+        e.dataTransfer.effectAllowed = "move";
+        try { e.dataTransfer.setData("text/plain", el.dataset.id); } catch {}
+      });
+
+      el.addEventListener("dragover", (e) => {
+        if (!dragMeta) return;
+        if (el.dataset.section !== dragMeta.section) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      });
+
+      el.addEventListener("drop", (e) => {
+        if (!dragMeta) return;
+        if (el.dataset.section !== dragMeta.section) return;
+        e.preventDefault();
+
+        const targetId = el.dataset.id;
+        if (targetId === dragMeta.id) return;
+
+        pushUndo();
+        reorderWithin(dragMeta.section, dragMeta.id, targetId);
+        setDirty(true);
+        renderAll();
+        toast("Reordered");
+      });
+
+      el.addEventListener("dragend", () => { dragMeta = null; });
+    });
+  }
+
+  function reorderWithin(section, fromId, toId){
+    const r = activeResume();
+    const list = section === "experience" ? r.experience
+              : section === "education" ? r.education
+              : section === "notes" ? r.notes
+              : null;
+    if (!list) return;
+
+    const fromIdx = list.findIndex(x => x.id === fromId);
+    const toIdx = list.findIndex(x => x.id === toId);
+    if (fromIdx < 0 || toIdx < 0) return;
+
+    const [moved] = list.splice(fromIdx, 1);
+    list.splice(toIdx, 0, moved);
+  }
+
+  /* ---------------------------
+     Focus editor
+  ----------------------------*/
+  const focusTitle = $("#focusTitle");
+  const focusSub = $("#focusSub");
+  const focusBody = $("#focusBody");
+  const dupBtn = $("#dupBtn");
+  const removeBtn = $("#removeBtn");
+
+  function renderFocus(){
+    const r = activeResume();
+    const sel = store.selection;
+
+    dupBtn.disabled = !(sel.type === "experience" || sel.type === "education" || sel.type === "note");
+    removeBtn.disabled = dupBtn.disabled;
+
+    if (sel.type === "profile"){
+      focusTitle.textContent = "Profile";
+      focusSub.textContent = "Identity and quick intro.";
+      focusBody.innerHTML = profileForm(r);
+      bindProfileForm(r);
+      return;
+    }
+
+    if (sel.type === "experience"){
+      const it = r.experience.find(x => x.id === sel.id);
+      if (!it) return renderEmptyFocus();
+      focusTitle.textContent = it.role || "Experience";
+      focusSub.textContent = "Use bullets. Be concrete. Make it scannable.";
+      focusBody.innerHTML = experienceForm(it);
+      bindExperienceForm(it);
+      return;
+    }
+
+    if (sel.type === "education"){
+      const it = r.education.find(x => x.id === sel.id);
+      if (!it) return renderEmptyFocus();
+      focusTitle.textContent = it.program || "Education";
+      focusSub.textContent = "Include projects/modules if relevant.";
+      focusBody.innerHTML = educationForm(it);
+      bindEducationForm(it);
+      return;
+    }
+
+    if (sel.type === "note"){
+      const it = r.notes.find(x => x.id === sel.id);
+      if (!it) return renderEmptyFocus();
+      focusTitle.textContent = it.title || "Note";
+      focusSub.textContent = "Scratchpad for intent, tailoring, reminders.";
+      focusBody.innerHTML = noteForm(it);
+      bindNoteForm(it);
+      return;
+    }
+
+    renderEmptyFocus();
+  }
+
+  function renderEmptyFocus(){
+    focusTitle.textContent = "Select something in the outline";
+    focusSub.textContent = "Tip: click Profile, or an item under Experience/Education.";
+    focusBody.className = "help";
+    focusBody.textContent = "Your resume is a document tree. The left rail is your map. Pick a node to edit it here.";
+    dupBtn.disabled = true;
+    removeBtn.disabled = true;
+  }
+
+  dupBtn.addEventListener("click", () => {
+    const sel = store.selection;
+    if (!(sel.type === "experience" || sel.type === "education" || sel.type === "note")) return;
+    pushUndo();
+    duplicateItem(sel.type, sel.id, true);
+    setDirty(true);
+    renderAll();
+    toast("Duplicated");
+  });
+
+  removeBtn.addEventListener("click", () => {
+    const sel = store.selection;
+    if (!(sel.type === "experience" || sel.type === "education" || sel.type === "note")) return;
+    removeItem(sel.type, sel.id, true);
+  });
+
+  function profileForm(r){
+    const p = r.profile;
+    return `
+      <div class="form">
+        <div class="row">
+          <div class="field">
+            <label>Full name</label>
+            <input id="p_fullName" value="${escapeAttr(p.fullName)}" />
+          </div>
+          <div class="field">
+            <label>Label</label>
+            <input id="p_label" value="${escapeAttr(p.label)}" placeholder="e.g. Junior Developer" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Email</label>
+            <input id="p_email" value="${escapeAttr(p.email)}" placeholder="name@example.com" />
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input id="p_phone" value="${escapeAttr(p.phone)}" placeholder="+31 ..." />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Location</label>
+            <input id="p_location" value="${escapeAttr(p.location)}" placeholder="City, Country" />
+          </div>
+          <div class="field">
+            <label>Website</label>
+            <input id="p_website" value="${escapeAttr(p.website)}" placeholder="https://…" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Summary</label>
+          <textarea id="p_summary">${escapeHtml(p.summary)}</textarea>
+          <div class="help">Aim for 240–420 characters. Make it recruiter-scannable.</div>
+        </div>
+
+        <div class="focus-actions">
+          <div class="help">Autosave on change (demo). Hook this to your backend save endpoint.</div>
+          <button class="btn primary" id="quickExportBtn">Preview PDF</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindProfileForm(r){
+    $("#quickExportBtn")?.addEventListener("click", (e) => { e.preventDefault(); exportPreview(); });
+    const map = [
+      ["p_fullName","fullName"],["p_label","label"],["p_email","email"],["p_phone","phone"],
+      ["p_location","location"],["p_website","website"],["p_summary","summary"]
+    ];
+    map.forEach(([id,key]) => {
+      const el = $("#"+id);
+      if (!el) return;
+      el.addEventListener("input", () => {
+        pushUndoThrottled();
+        r.profile[key] = el.value;
+        setDirty(true);
+        renderOutline(); // profile summary counts / checks
+        renderSpellbook();
+      });
+    });
+  }
+
+  function experienceForm(it){
+    return `
+      <div class="form">
+        <div class="row">
+          <div class="field">
+            <label>Role</label>
+            <input id="x_role" value="${escapeAttr(it.role)}" placeholder="e.g. IT Support Intern" />
+          </div>
+          <div class="field">
+            <label>Company / Org</label>
+            <input id="x_org" value="${escapeAttr(it.org)}" placeholder="Company" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Start (YYYY-MM)</label>
+            <input id="x_start" value="${escapeAttr(it.start)}" placeholder="2024-01" />
+          </div>
+          <div class="field">
+            <label>End (YYYY-MM)</label>
+            <input id="x_end" value="${escapeAttr(it.end)}" placeholder="2024-06" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Bullets</label>
+          <div class="bullets" id="x_bullets">
+            ${it.bullets.map((b, i) => bulletRow("x", i, b)).join("")}
+            <button class="btn small ghost" id="x_addBullet" type="button">+ Add bullet</button>
+          </div>
+          <div class="help">Enter adds a bullet. Keep each bullet one idea. Start with strong verbs.</div>
+        </div>
+
+        <div class="focus-actions">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" type="button" id="x_moveUp">Move up</button>
+            <button class="btn" type="button" id="x_moveDown">Move down</button>
+          </div>
+          <button class="btn primary" id="quickExportBtn2">Preview PDF</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindExperienceForm(it){
+    $("#quickExportBtn2")?.addEventListener("click", (e) => { e.preventDefault(); exportPreview(); });
+
+    const bind = (id, key) => {
+      const el = $("#"+id);
+      el.addEventListener("input", () => {
+        pushUndoThrottled();
+        it[key] = el.value;
+        setDirty(true);
+        renderOutline();
+        renderSpellbook();
+      });
+    };
+    bind("x_role","role");
+    bind("x_org","org");
+    bind("x_start","start");
+    bind("x_end","end");
+
+    // bullets
+    const bulletsWrap = $("#x_bullets");
+    bulletsWrap.querySelectorAll("textarea[data-bullet]").forEach((ta) => {
+      ta.addEventListener("input", () => {
+        pushUndoThrottled();
+        const idx = Number(ta.dataset.bullet);
+        it.bullets[idx] = ta.value;
+        setDirty(true);
+        renderSpellbook();
+      });
+
+      ta.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey){
+          e.preventDefault();
+          const idx = Number(ta.dataset.bullet);
+          pushUndo();
+          it.bullets.splice(idx+1, 0, "");
+          setDirty(true);
+          renderAll();
+          // focus next
+          setTimeout(() => {
+            const next = document.querySelector('textarea[data-bullet="'+(idx+1)+'"]');
+            next?.focus();
+          }, 0);
+        }
+      });
+    });
+
+    bulletsWrap.querySelectorAll("button[data-rmbullet]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.dataset.rmbullet);
+        pushUndo();
+        it.bullets.splice(idx, 1);
+        if (it.bullets.length === 0) it.bullets.push("");
+        setDirty(true);
+        renderAll();
+        toast("Bullet removed");
+      });
+    });
+
+    $("#x_addBullet").addEventListener("click", () => {
+      pushUndo();
+      it.bullets.push("");
+      setDirty(true);
+      renderAll();
+      setTimeout(() => {
+        const last = document.querySelector('textarea[data-bullet="'+(it.bullets.length-1)+'"]');
+        last?.focus();
+      }, 0);
+    });
+
+    // move within experience list
+    $("#x_moveUp").addEventListener("click", () => moveSelectedWithin("experience", -1));
+    $("#x_moveDown").addEventListener("click", () => moveSelectedWithin("experience", 1));
+  }
+
+  function educationForm(it){
+    return `
+      <div class="form">
+        <div class="row">
+          <div class="field">
+            <label>Program / Degree</label>
+            <input id="e_program" value="${escapeAttr(it.program)}" placeholder="e.g. BSc Computer Science" />
+          </div>
+          <div class="field">
+            <label>Institute</label>
+            <input id="e_org" value="${escapeAttr(it.org)}" placeholder="University / School" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Start (YYYY-MM)</label>
+            <input id="e_start" value="${escapeAttr(it.start)}" placeholder="2023-09" />
+          </div>
+          <div class="field">
+            <label>End (YYYY-MM)</label>
+            <input id="e_end" value="${escapeAttr(it.end)}" placeholder="2026-06" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Bullets</label>
+          <div class="bullets" id="e_bullets">
+            ${it.bullets.map((b, i) => bulletRow("e", i, b)).join("")}
+            <button class="btn small ghost" id="e_addBullet" type="button">+ Add bullet</button>
+          </div>
+          <div class="help">Use bullets for modules, projects, thesis, or achievements.</div>
+        </div>
+
+        <div class="focus-actions">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" type="button" id="e_moveUp">Move up</button>
+            <button class="btn" type="button" id="e_moveDown">Move down</button>
+          </div>
+          <button class="btn primary" id="quickExportBtn3">Preview PDF</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindEducationForm(it){
+    $("#quickExportBtn3")?.addEventListener("click", (e) => { e.preventDefault(); exportPreview(); });
+
+    const bind = (id, key) => {
+      const el = $("#"+id);
+      el.addEventListener("input", () => {
+        pushUndoThrottled();
+        it[key] = el.value;
+        setDirty(true);
+        renderOutline();
+        renderSpellbook();
+      });
+    };
+    bind("e_program","program");
+    bind("e_org","org");
+    bind("e_start","start");
+    bind("e_end","end");
+
+    const bulletsWrap = $("#e_bullets");
+    bulletsWrap.querySelectorAll("textarea[data-bullet]").forEach((ta) => {
+      ta.addEventListener("input", () => {
+        pushUndoThrottled();
+        const idx = Number(ta.dataset.bullet);
+        it.bullets[idx] = ta.value;
+        setDirty(true);
+        renderSpellbook();
+      });
+
+      ta.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey){
+          e.preventDefault();
+          const idx = Number(ta.dataset.bullet);
+          pushUndo();
+          it.bullets.splice(idx+1, 0, "");
+          setDirty(true);
+          renderAll();
+          setTimeout(() => {
+            const next = document.querySelector('textarea[data-bullet="'+(idx+1)+'"]');
+            next?.focus();
+          }, 0);
+        }
+      });
+    });
+
+    bulletsWrap.querySelectorAll("button[data-rmbullet]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.dataset.rmbullet);
+        pushUndo();
+        it.bullets.splice(idx, 1);
+        if (it.bullets.length === 0) it.bullets.push("");
+        setDirty(true);
+        renderAll();
+        toast("Bullet removed");
+      });
+    });
+
+    $("#e_addBullet").addEventListener("click", () => {
+      pushUndo();
+      it.bullets.push("");
+      setDirty(true);
+      renderAll();
+      setTimeout(() => {
+        const last = document.querySelector('textarea[data-bullet="'+(it.bullets.length-1)+'"]');
+        last?.focus();
+      }, 0);
+    });
+
+    $("#e_moveUp").addEventListener("click", () => moveSelectedWithin("education", -1));
+    $("#e_moveDown").addEventListener("click", () => moveSelectedWithin("education", 1));
+  }
+
+  function noteForm(it){
+    return `
+      <div class="form">
+        <div class="field">
+          <label>Title</label>
+          <input id="n_title" value="${escapeAttr(it.title)}" placeholder="Note title" />
+        </div>
+        <div class="field">
+          <label>Text</label>
+          <textarea id="n_text" placeholder="Use this to tailor your resume…">${escapeHtml(it.text)}</textarea>
+        </div>
+        <div class="focus-actions">
+          <div class="help">Notes are not exported by default. (You can change that.)</div>
+          <button class="btn primary" id="quickExportBtn4">Preview PDF</button>
+        </div>
+      </div>
+    `;
+  }
+  function bindNoteForm(it){
+    $("#quickExportBtn4")?.addEventListener("click", (e) => { e.preventDefault(); exportPreview(); });
+
+    $("#n_title").addEventListener("input", (e) => {
+      pushUndoThrottled();
+      it.title = e.target.value;
+      setDirty(true);
+      renderOutline();
+      renderSpellbook();
+    });
+    $("#n_text").addEventListener("input", (e) => {
+      pushUndoThrottled();
+      it.text = e.target.value;
+      setDirty(true);
+      renderOutline();
+      renderSpellbook();
+    });
+  }
+
+  function bulletRow(prefix, idx, value){
+    return `
+      <div class="bullet">
+        <textarea data-bullet="${idx}" placeholder="Bullet…">${escapeHtml(value || "")}</textarea>
+        <button class="iconbtn" type="button" data-rmbullet="${idx}" title="Remove bullet">✕</button>
+      </div>
+    `;
+  }
+
+  /* ---------------------------
+     Actions: add/remove/duplicate
+  ----------------------------*/
+  $("#addExperienceBtn").addEventListener("click", () => addItem("experience", true));
+  $("#addEducationBtn").addEventListener("click", () => addItem("education", true));
+  $("#addSectionNoteBtn").addEventListener("click", () => addItem("notes", true));
+
+  function addItem(sectionKey, jump=false){
+    const r = activeResume();
+    pushUndo();
+
+    if (sectionKey === "experience"){
+      const it = { id: uid(), role:"", org:"", start:"", end:"", bullets:[""] };
+      r.experience.unshift(it);
+      setDirty(true);
+      renderAll();
+      toast("Added experience");
+      if (jump) setSelection("experience", it.id);
+      return;
+    }
+    if (sectionKey === "education"){
+      const it = { id: uid(), program:"", org:"", start:"", end:"", bullets:[""] };
+      r.education.unshift(it);
+      setDirty(true);
+      renderAll();
+      toast("Added education");
+      if (jump) setSelection("education", it.id);
+      return;
+    }
+    if (sectionKey === "notes"){
+      const it = { id: uid(), title:"New note", text:"" };
+      r.notes.unshift(it);
+      setDirty(true);
+      renderAll();
+      toast("Added note");
+      if (jump) setSelection("note", it.id);
+      return;
+    }
+  }
+
+  function findListByType(type){
+    const r = activeResume();
+    if (type === "experience") return r.experience;
+    if (type === "education") return r.education;
+    if (type === "note") return r.notes;
+    return null;
+  }
+
+  function duplicateItem(type, id, jump=false){
+    const list = findListByType(type);
+    if (!list) return;
+    const idx = list.findIndex(x => x.id === id);
+    if (idx < 0) return;
+
+    pushUndo();
+    const copy = deepClone(list[idx]);
+    copy.id = uid();
+
+    // tiny label tweak
+    if (type === "experience") copy.role = (copy.role || "Experience") + " (copy)";
+    if (type === "education") copy.program = (copy.program || "Education") + " (copy)";
+    if (type === "note") copy.title = (copy.title || "Note") + " (copy)";
+
+    list.splice(idx+1, 0, copy);
+    setDirty(true);
+    renderAll();
+    if (jump) setSelection(type, copy.id);
+  }
+
+  function removeItem(type, id, confirmInUI=false){
+    const list = findListByType(type);
+    if (!list) return;
+
+    const idx = list.findIndex(x => x.id === id);
+    if (idx < 0) return;
+
+    // In a real app you’d show a modal. Here we confirm quickly.
+    const ok = confirmInUI ? confirm("Remove this item?") : true;
+    if (!ok) return;
+
+    pushUndo();
+    list.splice(idx, 1);
+    setDirty(true);
+    renderAll();
+    toast("Removed");
+
+    // move selection to something sensible
+    const r = activeResume();
+    if (type === "experience"){
+      if (r.experience[0]) setSelection("experience", r.experience[0].id);
+      else setSelection("profile","profile");
+    } else if (type === "education"){
+      if (r.education[0]) setSelection("education", r.education[0].id);
+      else setSelection("profile","profile");
+    } else if (type === "note"){
+      if (r.notes[0]) setSelection("note", r.notes[0].id);
+      else setSelection("profile","profile");
+    }
+  }
+
+  function moveSelectedWithin(section, dir){
+    const r = activeResume();
+    const sel = store.selection;
+    if (!sel || sel.type !== section) return;
+
+    const list = section === "experience" ? r.experience : r.education;
+    const idx = list.findIndex(x => x.id === sel.id);
+    const j = idx + dir;
+    if (idx < 0 || j < 0 || j >= list.length) return;
+
+    pushUndo();
+    const [m] = list.splice(idx, 1);
+    list.splice(j, 0, m);
+    setDirty(true);
+    renderAll();
+    toast("Moved");
+  }
+
+  /* ---------------------------
+     Spellbook: checks + score
+  ----------------------------*/
+  const checklistEl = $("#checklist");
+  function renderSpellbook(){
+    const r = activeResume();
+    const checks = buildChecks(r);
+
+    // score is simplistic but useful
+    const score = computeScore(checks);
+    $("#scoreRing").textContent = score;
+    $("#scoreLabel").textContent = score >= 85 ? "Strong draft" : score >= 65 ? "Good base" : "Needs polish";
+    $("#scoreSub").textContent = score >= 85 ? "Mostly export-ready." : score >= 65 ? "A few fixes will help." : "Fill gaps and add bullets.";
+
+    checklistEl.innerHTML = checks.map(c => `
+      <div class="check" data-jump="${c.jump?.type || ""}" data-id="${c.jump?.id || ""}">
+        <div class="sev ${c.sev}"></div>
+        <div class="txt">
+          <b>${escapeHtml(c.title)}</b>
+          <span>${escapeHtml(c.detail)}</span>
+        </div>
+      </div>
+    `).join("");
+
+    checklistEl.querySelectorAll(".check").forEach(el => {
+      el.addEventListener("click", () => {
+        const type = el.dataset.jump;
+        const id = el.dataset.id;
+        if (!type) return;
+        setSelection(type, id);
+        toast("Jumped to issue");
+      });
+    });
+  }
+
+  function buildChecks(r){
+    const out = [];
+
+    // profile checks
+    if (!r.profile.fullName?.trim()){
+      out.push({ sev:"bad", title:"Add your name", detail:"Profile needs a full name.", jump:{type:"profile", id:"profile"} });
+    } else {
+      out.push({ sev:"good", title:"Name present", detail:"Good.", jump:{type:"profile", id:"profile"} });
+    }
+
+    if (!r.profile.email?.includes("@")){
+      out.push({ sev:"bad", title:"Fix email", detail:"Add a valid email address.", jump:{type:"profile", id:"profile"} });
+    }
+
+    const summaryLen = (r.profile.summary || "").trim().length;
+    if (summaryLen < 120){
+      out.push({ sev:"warn", title:"Summary is short", detail:"Aim for 240–420 characters for better signal.", jump:{type:"profile", id:"profile"} });
+    } else if (summaryLen > 520){
+      out.push({ sev:"warn", title:"Summary is long", detail:"Consider trimming for scan-readers.", jump:{type:"profile", id:"profile"} });
+    } else {
+      out.push({ sev:"good", title:"Summary length ok", detail:"Nice.", jump:{type:"profile", id:"profile"} });
+    }
+
+    // experience checks
+    if (r.experience.length === 0){
+      out.push({ sev:"bad", title:"Add experience", detail:"At least one project/job helps recruiters scan.", jump:{type:"profile", id:"profile"} });
+    } else {
+      r.experience.forEach((x) => {
+        const hasRole = !!x.role?.trim();
+        const hasOrg  = !!x.org?.trim();
+        const bullets = (x.bullets || []).map(b => (b||"").trim()).filter(Boolean);
+        if (!hasRole || !hasOrg){
+          out.push({ sev:"warn", title:"Experience missing details", detail:"Role/company should be filled.", jump:{type:"experience", id:x.id} });
+        }
+        if (bullets.length < 2){
+          out.push({ sev:"warn", title:"Add more bullets", detail:"Two to five bullets is a good scan range.", jump:{type:"experience", id:x.id} });
+        } else {
+          out.push({ sev:"good", title:"Experience bullets ok", detail:"Good bullet density.", jump:{type:"experience", id:x.id} });
+        }
+      });
+    }
+
+    // education checks
+    if (r.education.length === 0){
+      out.push({ sev:"warn", title:"No education section", detail:"If you're a student/grad, add it.", jump:{type:"profile", id:"profile"} });
+    } else {
+      r.education.forEach((e) => {
+        const bullets = (e.bullets || []).map(b => (b||"").trim()).filter(Boolean);
+        if (bullets.length === 0){
+          out.push({ sev:"warn", title:"Education could use bullets", detail:"Add modules/projects or achievements.", jump:{type:"education", id:e.id} });
+        }
+      });
+    }
+
+    return out;
+  }
+
+  function computeScore(checks){
+    // Simple heuristic: start at 100, subtract
+    let score = 100;
+    checks.forEach(c => {
+      if (c.sev === "bad") score -= 14;
+      if (c.sev === "warn") score -= 6;
+    });
+    score = Math.max(0, Math.min(100, score));
+    return score;
+  }
+
+  // Quick “spells”
+  $("#fixBulletsBtn").addEventListener("click", () => {
+    const r = activeResume();
+    const sel = store.selection;
+
+    // Convert summary sentence splits into bullets for the selected item (if experience/education),
+    // otherwise do nothing. This is intentionally conservative.
+    if (sel.type !== "experience" && sel.type !== "education"){
+      toast("Select an Experience/Education item first");
+      return;
+    }
+    const list = sel.type === "experience" ? r.experience : r.education;
+    const it = list.find(x => x.id === sel.id);
+    if (!it) return;
+
+    pushUndo();
+    const src = (it.bullets || []).join("\n").trim();
+    const parts = src
+      .split(/[\n•\-]+/g)
+      .map(s => s.trim())
+      .filter(Boolean)
+      .map(s => s.replace(/\s+/g," "));
+    it.bullets = parts.length ? parts : [""];
+    setDirty(true);
+    renderAll();
+    toast("Bullets cleaned");
+  });
+
+  $("#tenseFixBtn").addEventListener("click", () => {
+    toast("Hint: past tense for past roles, present tense for current roles.");
+  });
+
+  $("#lengthFixBtn").addEventListener("click", () => {
+    const len = (activeResume().profile.summary || "").trim().length;
+    toast(len > 520 ? "Trim summary: cut filler, keep verbs + outcomes." : "Length looks fine.");
+  });
+
+  /* ---------------------------
+     New / Delete resume + export
+  ----------------------------*/
+  $("#newResumeBtn").addEventListener("click", () => {
+    pushUndo();
+    const r = DEFAULT_RESUME();
+    r.name = "New Resume";
+    // clear example content a bit
+    r.profile.fullName = "";
+    r.profile.email = "";
+    r.profile.summary = "";
+    r.experience = [];
+    r.education = [];
+    r.notes = [{ id: uid(), title:"Tailoring", text:"Paste job keywords here." }];
+
+    store.resumes.unshift(r);
+    store.activeResumeId = r.id;
+    store.selection = { type:"profile", id:"profile" };
+    setDirty(true);
+    renderAll();
+    toast("Created new resume");
+  });
+
+  const ritual = $("#ritual");
+  $("#deleteResumeBtn").addEventListener("click", () => {
+    if (store.resumes.length <= 1){
+      toast("Keep at least one resume");
+      return;
+    }
+    const r = activeResume();
+    if (!confirm(`Delete "${r.name}"? This cannot be undone.`)) return;
+
+    // little ritual animation, then delete
+    ritual.classList.add("on");
+    setTimeout(() => {
+      ritual.classList.remove("on");
+      pushUndo();
+      store.resumes = store.resumes.filter(x => x.id !== r.id);
+      store.activeResumeId = store.resumes[0].id;
+      store.selection = { type:"profile", id:"profile" };
+      setDirty(true);
+      renderAll();
+      toast("Deleted");
+    }, 850);
+  });
+
+  $("#exportBtn").addEventListener("click", exportPreview);
+
+  function exportPreview(){
+    const r = activeResume();
+    const w = window.open("", "_blank");
+    if (!w){ toast("Popup blocked"); return; }
+
+    const doc = renderTextResume(r);
+    w.document.open();
+    w.document.write(`
+      <!doctype html>
+      <html><head><meta charset="utf-8"><title>Preview: ${escapeHtml(r.name)}</title>
+      <style>
+        body{ font-family: ui-serif, Georgia, serif; margin: 28px; color:#111; }
+        h1{ margin: 0 0 8px; font-size: 26px; }
+        .meta{ color:#444; margin-bottom: 16px; }
+        h2{ margin-top: 18px; font-size: 15px; text-transform: uppercase; letter-spacing:.6px; }
+        ul{ margin-top: 6px; }
+        .item{ margin-bottom: 10px; }
+        .muted{ color:#555; }
+        .footer{ margin-top: 24px; color:#777; font-size: 12px; }
+      </style></head>
+      <body>
+        ${doc}
+        <div class="footer">Preview only (not a PDF). Hook your actual PDF export here.</div>
+      </body></html>
+    `);
+    w.document.close();
+    toast("Preview opened");
+  }
+
+  function renderTextResume(r){
+    const p = r.profile;
+    const meta = [p.email, p.phone, p.location, p.website].filter(Boolean).join(" • ");
+
+    const exp = r.experience.map(x => `
+      <div class="item">
+        <div><b>${escapeHtml(x.role || "Role")}</b> <span class="muted">at ${escapeHtml(x.org || "Company")}</span></div>
+        <div class="muted">${escapeHtml([x.start,x.end].filter(Boolean).join(" → "))}</div>
+        <ul>${(x.bullets||[]).map(b => `<li>${escapeHtml(b)}</li>`).join("")}</ul>
+      </div>
+    `).join("");
+
+    const edu = r.education.map(x => `
+      <div class="item">
+        <div><b>${escapeHtml(x.program || "Program")}</b> <span class="muted">• ${escapeHtml(x.org || "Institute")}</span></div>
+        <div class="muted">${escapeHtml([x.start,x.end].filter(Boolean).join(" → "))}</div>
+        <ul>${(x.bullets||[]).map(b => `<li>${escapeHtml(b)}</li>`).join("")}</ul>
+      </div>
+    `).join("");
+
+    return `
+      <h1>${escapeHtml(p.fullName || r.name)}</h1>
+      <div class="meta">${escapeHtml(p.label || "")}${p.label ? "<br/>" : ""}${escapeHtml(meta)}</div>
+      ${p.summary ? `<div>${escapeHtml(p.summary)}</div>` : ""}
+
+      <h2>Experience</h2>
+      ${exp || `<div class="muted">No experience yet.</div>`}
+
+      <h2>Education</h2>
+      ${edu || `<div class="muted">No education yet.</div>`}
+    `;
+  }
+
+  /* ---------------------------
+     Undo/redo + hotkeys
+  ----------------------------*/
+  $("#undoBtn").addEventListener("click", undo);
+  $("#redoBtn").addEventListener("click", redo);
+
+  document.addEventListener("keydown", (e) => {
+    const isMac = navigator.platform.toLowerCase().includes("mac");
+    const mod = isMac ? e.metaKey : e.ctrlKey;
+
+    if (mod && e.key.toLowerCase() === "z" && !e.shiftKey){
+      e.preventDefault(); undo(); return;
+    }
+    if ((mod && e.key.toLowerCase() === "y") || (mod && e.key.toLowerCase() === "z" && e.shiftKey)){
+      e.preventDefault(); redo(); return;
+    }
+  });
+
+  // Throttle undo snapshots during typing (so undo doesn’t become “one character at a time” hell)
+  let undoThrottle = null;
+  function pushUndoThrottled(){
+    if (undoThrottle) return;
+    undoThrottle = setTimeout(() => undoThrottle = null, 420);
+    pushUndo();
+  }
+
+  /* ---------------------------
+     Initial selection + render
+  ----------------------------*/
+  // Selection from checklist/outlines should feel instant:
+  function renderAll(){
+    renderResumeSelect();
+    renderOutline();
+    renderFocus();
+    renderSpellbook();
+    updateUndoRedoButtons();
+  }
+
+  renderAll();
+
+  // Make Profile selected by default
+  setSelection("profile","profile");
+
+  /* ---------------------------
+     Escape helpers
+  ----------------------------*/
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+  function escapeAttr(s){ return escapeHtml(s).replaceAll("\n"," "); }
+})();
+</script>
+</body>
+</html>

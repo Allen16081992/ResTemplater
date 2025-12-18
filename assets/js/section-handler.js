@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Navigation elements
     let activeLink = null;
     const logoLink = document.getElementById('logo');
-    const sections = document.querySelectorAll('main, section');
+    const sections = document.querySelectorAll('main > section, main');
     const navLinks = document.querySelectorAll('nav a[data-section], p a[data-section], button[data-section]');
 
     // Section visibility
@@ -17,18 +17,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Logo Homepage
-    logoLink.addEventListener('click', function(event) {
-        event.preventDefault();
+    if (logoLink) {
+        // Logo Homepage
+        logoLink.addEventListener('click', function(event) {
+            event.preventDefault();
 
-        // Reset active link and show the home section
-        if (activeLink) {
-            activeLink.classList.remove('current');
-            activeLink = null; // Ensure no link is marked as active
-        }
-        
-        paintSection('home'); // Assume 'home' is the default section to show
-    });
+            // Reset active link and show the home section
+            if (activeLink) {
+                activeLink.classList.remove('current');
+                activeLink = null; // Ensure no link is marked as active
+            }
+            
+            paintSection('home'); // Assume 'home' is the default section to show
+        });
+    }
 
     // Navigation Bar
     navLinks.forEach(link => {
@@ -180,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
 // Remove messages after a certain duration
 // window.onload = function() {
 //     var serverMsg = document.getElementById('server-msg');

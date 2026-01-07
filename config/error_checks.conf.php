@@ -2,7 +2,7 @@
 
     class validGrimoire {
         public static function emptyField($field) {
-            return trim((string)$field);
+            return trim((string)$field) === '';
         }
 
         public static function checkEmail(string $email): bool {

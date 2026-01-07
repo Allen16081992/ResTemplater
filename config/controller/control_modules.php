@@ -1,38 +1,39 @@
 <?php // Load PHP files
+    require_once '../error_checks.conf.php';
 
-    // Login Class
-    class loginControl extends Account {
-        private $formFields;
+    final class LoginControl {
+        public function __construct(private PDO $pdo, private array $postData) {}
 
-        public function __construct(array $postData) {
-            $this->formFields = $postData;
+        private function revert(): void {
+            // Hold onto filled fields and redirect
+            $_SESSION['old']['email'] = $email;
+            $_SESSION['login'] = true;
+            header('location: ../index.php');          
+            exit();
         }
 
-        public function loginUser() {
-            // Grimoire of Validators — arcane sequence
-            if (validGrimoire::emptyField($this->formFields['email'])) {
-                $_SESSION['error']['email'] = 'This field is required.';
-            } elseif (validGrimoire::checkEmail($this->formFields['email'])) {
+        public function handle(): void {
+            $email = $this->postData['email'] ?? '';
+            $pwd   = $this->postData['pwd'] ?? '';
+
+            if (validGrimoire::emptyField($email)) {
+                $_SESSION['error']['email'] = 'This field is required.'; 
+                $this->revert();
+            } 
+            if (!validGrimoire::checkEmail($email)) {
                 $_SESSION['error']['email'] = 'Invalid email address';
+                $this->revert();
             }
-        
-            if (validGrimoire::emptyField($this->formFields['pwd'])) {
-                $_SESSION['error']['pwd'] = 'This field is required.';
-            } elseif (($error = validGrimoire::checkPwd($this->formFields['pwd'])) !== null) {
-                $_SESSION['error']['pwd'] = $error;
+            if (validGrimoire::emptyField($pwd)) {
+                $_SESSION['error']['pwd'] = 'This field is required.'; 
+                $this->revert();
+            } 
+            if (validGrimoire::isEmpty($pwd)) {
+                $_SESSION['error']['pwd'] = 'Password is required.';
+                $this->revert();
             }
-
-            if(isset($_SESSION['error'])) {
-                // Hold onto filled fields and redirect
-                $_SESSION['form_old'] = $this->formFields;
-                ViewBook::breakRide(null, $this->formFields);
-            }
-
-            // Proceed with login the user
-            $this->fetchUser($this->formFields);
-            ViewBook::breakRide('client', null);
+            $this->authenticate($email, $pwd);
         }
-        
     }
 
     // Signup Class

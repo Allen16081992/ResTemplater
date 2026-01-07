@@ -22,3 +22,21 @@
 </nav>
 
 <?php } ?>
+
+<?php 
+    //$isLogin = !empty($_SESSION['user_id']);
+    //$logoHref = $isLogin ? 'client.php' : 'index.php';
+?>
+
+<!-- <a href="//htmlspecialchars($logoHref, ENT_QUOTES, 'UTF-8') " id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a> -->
+<!-- <nav aria-label="main navigation"> -->
+    <?php //if ($isLogin): ?>
+        <!-- <a href="#" data-section="profile">Profile</a> 
+        <a href="#" data-section="home">My Resume</a>
+        <a href="logout.php">Logout</a> -->
+    <?php //else: ?>
+        <!-- <a href="#" data-section="policy">Privacy</a>  
+        <a href="#" data-section="login">Log in</a>
+        <a href="#" id="signUp" data-section="sign_up">Sign Up</a>  -->
+    <?php //endif; ?>           
+<!-- </nav> -->

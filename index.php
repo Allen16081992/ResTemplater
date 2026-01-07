@@ -4,10 +4,10 @@
     header('Expires: 0');         // expire immediately
     
     // Essential PHP files
-    require_once "./src/session_manager.src.php"; 
+    require_once "./config/session_manager.conf.php"; 
 
     // Miscellaneous PHP Files
-    include_once "./src/phrases.src.php"
+    include_once "./config/phrases.conf.php"
     // SessionBook::invokeSession();
     // SessionBook::clearUserSession();
     
@@ -40,7 +40,7 @@
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
     <script defer src="assets/js/sparks_effect.js"></script>
-    <script defer src="assets/js/cta-padding-mobile.js"></script>
+    <script defer src="assets/js/cta-padding-mobile.js"></script><!-- CSS refinement for mobile -->
     <script defer src="assets/js/signup_page-handler.js"></script><!-- Control image manipulation -->
 </head>
 <body>

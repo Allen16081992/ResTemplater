@@ -56,7 +56,7 @@
         </section>
 
         <section id="sign_up" class="<?= ViewBook::setView_Error('sign_up'); ?>">
-            <?php ViewBook::render('section_signup.html'); ?>
+            <?php ViewBook::render('section_signup.php'); ?>
         </section>
         
         <?php ViewBook::render('section_success.php'); ?>

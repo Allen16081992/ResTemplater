@@ -309,6 +309,14 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
       border-radius: 12px; height: 2.9em;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
     }
+    input[type="date"] { display:none; }
+    .select-group {
+        display: flex;
+        gap: 0.75rem; /* spacing between dropdowns */
+    }
+    .select-group select {
+        max-width: 3.5rem; /* prevents full-width stacking */
+    }
 
     .btn-primary.button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -556,6 +564,12 @@ select {
     footer {margin-bottom:5.5rem; padding: 0 0 0 5px;}
     section {min-height:100vh;} /* Pushes footer where it should be */
     .auth-title {display:none;}
+}
+@media only screen and (max-width: 340px) and (orientation: portrait) {
+    .control .select-group, .select-group select {
+        display: none;
+    } 
+    input[type="date"] { display:block !important; }
 }
 
 /* -----Keeper cute-------- */

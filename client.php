@@ -4,7 +4,8 @@
   header('Expires: 0');         // expire immediately
 
   // Essential PHP files
-  require_once './src/session_manager.src.php'; 
+  require_once "./config/session_manager.conf.php"; 
+  
   // SessionBook::invokeSession();
   // SessionBook::intrusionGuard();
 ?>

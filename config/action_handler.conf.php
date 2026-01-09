@@ -9,10 +9,10 @@
         exit;
     }
 
-    // Whitelisted Keys/Routes
+    // Whitelisted Keys and Routes
     $routes = [
         'login'  => LoginControl::class,
-        'signup' => SignupAction::class
+        'signup' => signupControl::class
         // ... Add more routes here
     ];
 

@@ -10,7 +10,7 @@
   // SessionBook::intrusionGuard();
 ?>
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +41,10 @@
     <script defer src="assets/js/form-handler.js"></script>
 </head>
 <body>
-    <?php ViewBook::render('navbar_flex.php'); ?>
+    <header> 
+        <?php ViewBook::render('navbar_flex.php'); ?>
+    </header>
+
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
         <?php ViewBook::render('section_resume.php'); ?>  

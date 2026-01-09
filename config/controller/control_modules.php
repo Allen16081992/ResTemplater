@@ -44,6 +44,14 @@
             $this->formFields = $formFields;
         }
 
+        private function revert(): void {
+            // Hold onto filled fields and redirect
+            $_SESSION['old']['email'] = $email;
+            $_SESSION['signup'] = true;
+            header('location: ../index.php');          
+            exit();
+        }
+
         public function signupUser() {
             // Grimoire of Validators — arcane sequence
             $skip = ['username', 'action', 'csrf_token'];
@@ -88,6 +96,5 @@
 
             // Proceed with signing up
             $this->verifyUser($this->formFields);
-            ViewBook::breakRide(null, null);
         }
     }

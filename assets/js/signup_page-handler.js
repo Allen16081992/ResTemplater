@@ -2,13 +2,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("signup_form");
   const visual = document.getElementById("signupVisual");
-  const passwordInput = document.getElementById("password");
-  const signupBtn = document.getElementById("signupBtn");
 
-  const idleImg = 'url("assets/images/paperwitch_bold.png")';
+  if (!form || !visual || !signupBtn) {
+    console.warn("[PaperWitch] Missing signup_form / signupVisual / signupBtn");
+    return;
+  }
+
+  const idleImg  = 'url("assets/images/paperwitch_bold.png")';
   const burstImg = 'url("assets/images/paperwitch_glow.png")';
 
-  // Preload images (prevents flicker)
+  // Preload images
   [idleImg, burstImg].forEach(src => {
     const img = new Image();
     img.src = src.replace(/^url\(["']?(.+?)["']?\)$/, "$1");
@@ -16,23 +19,107 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Set initial background
   visual.style.backgroundImage = idleImg;
+  visual.style.filter = "brightness(1)";
 
-  // Helper: check if all required fields are filled
-  const allFilled = () =>
-    [...form.querySelectorAll("input[required]")].every(
-      input => input.value.trim() !== ""
+  // --- Helpers -------------------------------------------------
+
+  const isFilledInput = (el) => el.value.trim() !== "";
+
+  const isValidSelect = (sel) => {
+    const opt = sel.options[sel.selectedIndex];
+    return sel.value !== "" && opt && !opt.disabled;
+  };
+
+  // DOB is valid if:
+  // - date input filled OR
+  // - day+month+year selects are all valid
+  const dobIsValid = () => {
+    const dateInput = form.querySelector('input[type="date"][required], input[type="date"]');
+
+    const daySel = form.querySelector('select[name="day"]');
+    const monthSel = form.querySelector('select[name="month"]');
+    const yearSel = form.querySelector('select[name="year"]');
+
+    const dateOk = dateInput ? isFilledInput(dateInput) : false;
+
+    const selectsOk =
+      daySel && monthSel && yearSel &&
+      isValidSelect(daySel) && isValidSelect(monthSel) && isValidSelect(yearSel);
+
+    // If you have BOTH on the page, accept either method:
+    return dateOk || selectsOk;
+  };
+
+  // All required fields except DOB fields must be filled.
+  // Then DOB must be valid (via dobIsValid).
+  const allFilled = () => {
+    // Required inputs, EXCEPT date (because DOB has special logic)
+    const requiredInputs = [...form.querySelectorAll("input[required]")].filter(
+      el => el.type !== "date"
     );
 
-  // React on hover over the Sign-Up button
-  signupBtn.addEventListener("mouseenter", () => {
-    if (allFilled()) {
-      visual.style.backgroundImage = burstImg;
-      visual.style.filter = "brightness(1.15)";
-    }
-  });
+    const inputsOk = requiredInputs.every(isFilledInput);
 
-  signupBtn.addEventListener("mouseleave", () => {
-    visual.style.filter = "brightness(1)";
-    visual.style.backgroundImage = idleImg;
-  });
+    // Required selects, EXCEPT day/month/year (because DOB has special logic)
+    const requiredSelects = [...form.querySelectorAll("select[required]")].filter(
+      sel => !["day", "month", "year"].includes(sel.name)
+    );
+
+    const selectsOk = requiredSelects.every(isValidSelect);
+
+    return inputsOk && selectsOk && dobIsValid();
+  };
+
+  const applyGlow = (on) => {
+    visual.style.backgroundImage = on ? burstImg : idleImg;
+    visual.style.filter = on ? "brightness(1.15)" : "brightness(1)";
+  };
+
+  const updateVisual = () => applyGlow(allFilled());
+
+  // --- Events --------------------------------------------------
+
+  form.addEventListener("input", updateVisual);
+  form.addEventListener("change", updateVisual); // required for selects
+
+  // Initialize (for autofill)
+  updateVisual();
 });
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const form = document.getElementById("signup_form");
+//   const visual = document.getElementById("signupVisual");
+//   const passwordInput = document.getElementById("password");
+//   const signupBtn = document.getElementById("signupBtn");
+
+//   const idleImg = 'url("assets/images/paperwitch_bold.png")';
+//   const burstImg = 'url("assets/images/paperwitch_glow.png")';
+
+//   // Preload images (prevents flicker)
+//   [idleImg, burstImg].forEach(src => {
+//     const img = new Image();
+//     img.src = src.replace(/^url\(["']?(.+?)["']?\)$/, "$1");
+//   });
+
+//   // Set initial background
+//   visual.style.backgroundImage = idleImg;
+
+//   // Helper: check if all required fields are filled
+//   const allFilled = () =>
+//     [...form.querySelectorAll("input[required]")].every(
+//       input => input.value.trim() !== ""
+//     );
+
+//   // React on hover over the Sign-Up button
+//   signupBtn.addEventListener("mouseenter", () => {
+//     if (allFilled()) {
+//       visual.style.backgroundImage = burstImg;
+//       visual.style.filter = "brightness(1.15)";
+//     }
+//   });
+
+//   signupBtn.addEventListener("mouseleave", () => {
+//     visual.style.filter = "brightness(1)";
+//     visual.style.backgroundImage = idleImg;
+//   });
+// });

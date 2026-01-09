@@ -219,7 +219,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 .form-window {
     display: flex;
     place-items: center;
-    width: min(1080px, 94vw);
+    /* width: min(1080px, 94vw); */
     padding: clamp(14px, 2vw, 28px);
     margin: 0 auto;
     /* position:relative;
@@ -239,17 +239,19 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 
 .auth-card {
     display: flex;
-    height:auto;
+    /* height:auto; */
     background: rgba(15,17,24,.8);
     border: 1px solid rgba(255,255,255,.08);
     border-radius: 26px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+    backdrop-filter: blur(8px);
 
     .auth-columns {
         display: grid;
         grid-template-columns: 1.05fr 1fr;
         /* min-height: 690px; */
+        width:100%;
 
         @media (max-width: 980px) {
             grid-template-columns: 1fr;
@@ -267,8 +269,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
         background-image: url('../images/paperwitch_resentful.png');
         background-size: cover;
         background-position: center;
-        display: grid;
-        place-items: end start;
+        display: grid; place-items: end start;
         padding: 1.25rem;
 
         &::after {
@@ -312,10 +313,10 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     input[type="date"] { display:none; }
     .select-group {
         display: flex;
-        gap: 0.75rem; /* spacing between dropdowns */
+        gap: 0.35rem; /* spacing between dropdowns */
     }
     .select-group select {
-        max-width: 3.5rem; /* prevents full-width stacking */
+        max-width: 4.3rem; /* prevents full-width stacking */
     }
 
     .btn-primary.button {
@@ -506,9 +507,9 @@ select {
     margin-bottom:20px;
     cursor: pointer;   
 } 
-.day-select, .month-select, .year-select {
+/* .day-select, .month-select, .year-select {
     width:4.3rem;height:2.5rem;
-}
+} */
 
 /* .error-msg { 
     position:absolute;
@@ -525,8 +526,8 @@ select {
 } */
 
 /* Mobile Devices */
-@media only screen and (max-width: 540px) and (orientation: portrait) {
-    header {
+@media only screen and (max-width: 520px) and (orientation: portrait) {
+    header { /* was max-width: 540px */
         flex-direction: column;
         align-items: flex-start;
     }
@@ -565,7 +566,7 @@ select {
     section {min-height:100vh;} /* Pushes footer where it should be */
     .auth-title {display:none;}
 }
-@media only screen and (max-width: 340px) and (orientation: portrait) {
+@media only screen and (max-width: 768px) and (orientation: portrait) {
     .control .select-group, .select-group select {
         display: none;
     } 

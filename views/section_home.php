@@ -8,8 +8,8 @@
             <h1><?= htmlspecialchars($slogan = SetPhrase('slogan')); ?></h1>
             <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = SetPhrase('tagline')); ?></p>
             <div class="buttons mt-5">
-              <a href="#start" id="cta" class="button is-medium btn-cta">Create My Resume</a>
-              <a href="#templates" class="button is-medium is-light">🔮 Browse Templates</a>
+              <a href="client.php" id="cta" class="button is-medium btn-cta">Create My Resume</a>
+              <a href="export.php" class="button is-medium is-light" data-section="export">🔮 Browse Templates</a>
             </div>
           </div>
           <div class="column is-hidden-touch">
@@ -145,7 +145,7 @@
             <p class="has-text-grey-light">Start building now. Upgrade anytime for premium templates & palettes.</p>
           </div>
           <div class="column has-text-right-desktop">
-            <a class="button is-medium btn-cta" href="#start">Start Creating</a>
+            <a class="button is-medium btn-cta" href="client.php">Start Creating</a>
           </div>
         </div>
       </div>

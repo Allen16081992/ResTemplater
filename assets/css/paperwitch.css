@@ -46,9 +46,10 @@
     --panel: #0f1118;   /* card base */
     --muted: #a7a7b3;   /* subtle text */
     --font-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
-    --bg-gradients:radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.22), rgba(0,0,0,0) 40%),
-                    radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.18), rgba(0,0,0,0) 40%),
-                    linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
+    --bg-gradients:
+      radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.22), rgba(0,0,0,0) 40%),
+      radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.18), rgba(0,0,0,0) 40%),
+      linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
 }
 
 *, *::before, *::after {box-sizing: border-box;}

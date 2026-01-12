@@ -1,6 +1,6 @@
+<section class="hidden" id="export">
   <div class="pw-export-page">
     <div class="pw-export-shell">
-
       <header class="pw-export-header">
         <div class="pw-export-title-block">
           <h1>Export your resume</h1>
@@ -12,7 +12,7 @@
         <div class="pw-export-meta">
           <span>
             <span>✨</span>
-            <span>Last saved just now</span>
+            <span>Saved</span>
           </span>
           <small>“Neo-Gothic Internship Resume – v3”</small>
         </div>
@@ -36,10 +36,13 @@
             </ul>
             <div class="pw-export-actions">
               <!-- Hook this up to your export endpoint -->
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="pdf">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="pdf" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="pdf">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
               <!-- <button class="pw-btn pw-btn-ghost" type="button">
                 <span class="icon">👁️</span>
                 <span>Preview</span>
@@ -60,10 +63,13 @@
               <li>Lets you adjust text after export</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="docx">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="docx" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="docx">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
 
@@ -80,10 +86,13 @@
               <li>Easy to share in chats or socials</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="jpg">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="jpg" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="jpg">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
 
@@ -100,10 +109,13 @@
               <li>Maximum parser compatibility</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="txt">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="rtf" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="rtf">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
         </section>
@@ -116,28 +128,30 @@
               <span class="pw-export-preview-file">crystal-clear-resume.pdf</span>
             </div>
             <div class="pw-export-preview-body">
-{  
-  "name": "Allen Pieter",  
-  "target_role": "Internship – Junior Dev / IT",  
-  "templates": [  
-    "PaperWitch • Obsidian Scroll",  
-    "PaperWitch • Moonlit Intern"  
-  ],  
-  "highlights": [  
-    "Tailored to 1 specific vacancy",  
-    "Readable in under 30 seconds",  
-    "Keywords tuned for ATS portals"  
-  ]  
-}
+              {  
+                "name": "Allen Pieter",  
+                "target_role": "Internship – Junior Dev / IT",  
+                "templates": [  
+                  "PaperWitch • Obsidian Scroll",  
+                  "PaperWitch • Moonlit Intern"  
+                ],  
+                "highlights": [  
+                  "Tailored to 1 specific vacancy",  
+                  "Readable in under 30 seconds",  
+                  "Keywords tuned for ATS portals"  
+                ]  
+              }
             </div>
           </section>
 
           <section class="pw-export-note">
-            <strong>Small ritual tip:</strong><br />
-            Use <em>Crystal Clear PDF</em> for 90% of applications.  
-            Switch to <em>Plain Spell Text</em> only when a portal forces you to paste everything into text boxes.
+            <strong>Small ritual tip:</strong>
+            Even without experience, a recruiter or manager, may notice the effort in your paper.
+            Say you made it with Word or LibreOffice, thought about spacing, alignment and structure as well.
+            They may think <em>'No experience, but handy with documents. If this person can do that with Confluence pages, I'll make an exception.'</em>
           </section>
         </aside>
       </div>
     </div>
   </div>
+</section>

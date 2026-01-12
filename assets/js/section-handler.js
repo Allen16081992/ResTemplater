@@ -3,8 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Navigation elements
     let activeLink = null;
     const logoLink = document.getElementById('logo');
+    const templateLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main > section, main');
-    const navLinks = document.querySelectorAll('nav a[data-section], p a[data-section], button[data-section]');
+    const navLinks = document.querySelectorAll('nav a[data-section], p a[data-section], div a[data-section], button[data-section]');
 
     // Section visibility
     function paintSection(sectionId) {
@@ -66,69 +67,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    ////////////////// Accordions /////////////////////
-    const tab = document.querySelectorAll('#home .accordion');
-
-    function toggleAccordion() {
-        var panel = this.nextElementSibling;
-        var isOpen = panel.style.maxHeight;
-    
-        // Close all panels within the "home" section
-        Array.from(tab).forEach(function(accordion) {
-            accordion.classList.remove("active");
-            accordion.nextElementSibling.style.maxHeight = null;
-        });
-    
-        // Open this panel if it was previously closed
-        if (!isOpen) {
-            this.classList.add("active");
-            panel.style.maxHeight = panel.scrollHeight + "px";
-        }
-    }
-    
-    if (tab) { // Accordion Tabs
-        tab.forEach(function(accordion) {
-            accordion.addEventListener('click', toggleAccordion);
-        });
-    }
-
-    ////////////////////// 🆕 Tabs Interface (For Resume Builder) 🆕 //////////////////////
-    const tabButtons = document.querySelectorAll('.tab-buttons button');
-    const tabSections = document.querySelectorAll('.tab-content .tab-section');
-
-    // function switchTab(tabId) {
-    //     tabSections.forEach(section => {
-    //         section.classList.toggle('current', section.id === tabId);
-    //         section.classList.toggle('hidden', section.id !== tabId);
-    //     });
-    // }
-    function switchTab(tabId) {
-        tabSections.forEach(section => {
-            if (section.id === tabId) {
-                section.classList.add('fade-in');
-                section.classList.remove('hidden');
-            } else {
-                section.classList.remove('fade-in');
-                section.classList.add('hidden');
-            }
-        });
-    }
-
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const tabId = this.getAttribute('data-tab');
-            switchTab(tabId);
-        });
-    });
-
-    // Set default active tab (First tab is shown by default)
-    switchTab('contact');
+    ////////////////// /////////////////////
 
     ///////////////// Miscellaneous Effects ////////////////////
     const pwdID = document.getElementById('pwdField');
     const eye = document.querySelector('.toggle-eye i');
-    const selectCv = document.getElementById('selectCv');
-    const dateOptions = document.querySelectorAll('.date-options');
+    // const selectCv = document.getElementById('selectCv');
+    // const dateOptions = document.querySelectorAll('.date-options');
 
     if (eye) { // Password Eye
         eye.addEventListener('click', () => {
@@ -143,44 +88,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     
-    if (selectCv) { // Resume Selector
-        selectCv.addEventListener('change', function() {
-            this.form.submit(); // Submit the form that this select belongs to
-        });
-    }
+    // if (selectCv) { // Resume Selector
+    //     selectCv.addEventListener('change', function() {
+    //         this.form.submit(); // Submit the form that this select belongs to
+    //     });
+    // }
     
-    if (dateOptions) { // Date Options
-        dateOptions.forEach(group => {
-            const daySelect = group.querySelector('.day-select');
-            const monthSelect = group.querySelector('.month-select');
-            const yearSelect = group.querySelector('.year-select');
+    // if (dateOptions) { // Date Options
+    //     dateOptions.forEach(group => {
+    //         const daySelect = group.querySelector('.day-select');
+    //         const monthSelect = group.querySelector('.month-select');
+    //         const yearSelect = group.querySelector('.year-select');
 
-            // Check if all date elements exist in the current group
-            if (daySelect && monthSelect && yearSelect) {
-                // Populate days
-                for (let day = 1; day <= 31; day++) {
-                    const formatDay = ('0' + day).slice(-2); // Ensure two digits
-                    const dayOption = new Option(formatDay, formatDay);
-                    daySelect.add(dayOption);
-                }
+    //         // Check if all date elements exist in the current group
+    //         if (daySelect && monthSelect && yearSelect) {
+    //             // Populate days
+    //             for (let day = 1; day <= 31; day++) {
+    //                 const formatDay = ('0' + day).slice(-2); // Ensure two digits
+    //                 const dayOption = new Option(formatDay, formatDay);
+    //                 daySelect.add(dayOption);
+    //             }
                 
-                // Populate months
-                for (let month = 1; month <= 12; month++) {
-                    const formatMonth = ('0' + month).slice(-2); // Ensure two digits
-                    const monthOption = new Option(formatMonth, formatMonth);
-                    monthSelect.add(monthOption);
-                }
+    //             // Populate months
+    //             for (let month = 1; month <= 12; month++) {
+    //                 const formatMonth = ('0' + month).slice(-2); // Ensure two digits
+    //                 const monthOption = new Option(formatMonth, formatMonth);
+    //                 monthSelect.add(monthOption);
+    //             }
                 
-                // Populate years
-                const currentYear = new Date().getFullYear();
-                const targetYear = 1954;
-                for (let year = currentYear; year >= targetYear; year--) {
-                    const yearOption = new Option(year, year);
-                    yearSelect.add(yearOption);
-                }
-            }
-        });
-    }
+    //             // Populate years
+    //             const currentYear = new Date().getFullYear();
+    //             const targetYear = 1954;
+    //             for (let year = currentYear; year >= targetYear; year--) {
+    //                 const yearOption = new Option(year, year);
+    //                 yearSelect.add(yearOption);
+    //             }
+    //         }
+    //     });
+    // }
 });
 // Remove messages after a certain duration
 // window.onload = function() {

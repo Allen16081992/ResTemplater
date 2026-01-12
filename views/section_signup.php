@@ -17,24 +17,19 @@
                     <form id="signup_form" action="config/action_handler.conf.php" method="post">
                         <!-- Personal Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Personal Information</h3>
-
                         <div class="field is-horizontal">
                             <div class="field-body">
                                 <?php ViewBook::render('form_date_format.php'); ?>
                                 <div class="field">
-                                    <label class="label" for="username">Username (optional)</label>
-                                    <div class="control">
-                                    <input id="username" name="username" type="text" class="input" placeholder="Choose a username">
-                                    </div>
+                                    <label class="label" for="username">Username</label>
+                                    <input id="username" name="username" type="text" class="input" placeholder="(optional)">  
                                 </div>
                             </div>
                         </div>
-
                         <hr class="divider mt-3 mb-2">
 
                         <!-- Account Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Account Details</h3>
-
                         <div class="field">
                             <label class="label" for="email">Email address</label>
                             <div class="control has-icons-left">
@@ -51,6 +46,14 @@
                             <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>                      
                         </div>
 
+                        <ul class="pwd-rules">
+                            <li>● At least one lowercase letter</li>
+                            <li>● At least one uppercase letter</li>
+                            <li>● At least one number</li>
+                            <li>● At least one special character</li>
+                            <li>● Atleast 8 characters in length</li>
+                        </ul>
+
                         <div class="field m-3">
                             <label class="checkbox">
                             <input type="checkbox" id="terms" name="terms" required>
@@ -61,7 +64,6 @@
                         <div class="field mt-4">
                             <button type="submit" id="signupBtn" name="action" value="signup" class="button is-medium btn-primary is-fullwidth">Sign Up</button>
                         </div>
-
                         <p class="footnote">Already have an account? <a class="has-text-info">Sign in here</a>.</p>
                     </form>
                 </div>

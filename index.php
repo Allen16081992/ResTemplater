@@ -41,6 +41,7 @@
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/export_page.css">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
     <title>Thy Job Scroll Cauldron</title>
     <!-- Javascript -->
@@ -60,6 +61,7 @@
         <?php ViewBook::render('section_signup.php'); ?>  
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
+        <?php ViewBook::render('section_export.html'); ?>
         <section id="author" class="hidden"></section>
         <section id="contact" class="hidden"></section>
     </main>

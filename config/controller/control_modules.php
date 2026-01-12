@@ -6,7 +6,7 @@
 
         private function revert(): void {
             // Hold onto filled fields and redirect
-            $_SESSION['old']['email'] = $email;
+            //$_SESSION['old']['email'] = $email;
             $_SESSION['login'] = true;
             header('location: ../index.php');          
             exit();
@@ -16,7 +16,7 @@
             $email = $this->postData['email'] ?? '';
             $pwd   = $this->postData['pwd'] ?? '';
 
-            if (validGrimoire::emptyField($email)) {
+            if (validGrimoire::emptyField($postData)) {
                 $_SESSION['error']['email'] = 'This field is required.'; 
                 $this->revert();
             } 
@@ -87,7 +87,6 @@
             if(isset($_SESSION['error'])) {
                 // Hold onto filled fields and redirect
                 $_SESSION['form_old'] = $this->formFields;
-                ViewBook::breakRide(null, null);
             }
 
             // Combine into date format

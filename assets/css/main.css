@@ -1,3 +1,35 @@
+/* ========================================================================== */
+/*  PAPERWITCH CORE STYLESHEET                                                */
+/* -------------------------------------------------------------------------- */
+/*  File:        paperwitch.css                                               */
+/*  Author:      Allen Pieter                                                 */
+/*  Project:     PaperWitch — Resume Creation Tool                            */
+/*  Description: Core layout, navigation, and landing-page styles.            */
+/*               Defines root variables, gradients, navigation bar, hero      */
+/*               section, feature blocks, CTA bands, footer, and sparkles.    */
+/* -------------------------------------------------------------------------- */
+/*  Version:     1.0.0                                                        */
+/*  Created:     2025-10-21                                                   */
+/*  Compatibility: Chrome 112+, Edge 112+, Safari 16.5+, Firefox 117+         */
+/*  License:     © 2025 Allen Pieter. All rights reserved.                    */
+/* -------------------------------------------------------------------------- */
+/*  Notes:                                                                    */
+/*   • Employs global CSS variables for color and typography tokens.          */
+/*   • Fully nesting-ready: all selectors structured for native CSS nesting.  */
+/*   • Supported in Chromium 112+, Firefox 117+, Safari 17+.                  */
+/*   • Uses consistent clamp(), min(), and fluid units for responsiveness.    */
+/*   • Overflow-x hidden prevents minor skew-induced horizontal scroll.       */
+/*   • Sparkle effect styles defined at end for button hover bursts.          */
+/* -------------------------------------------------------------------------- */
+/*  Sections:                                                                 */
+/*   1. ROOT VARIABLES / GLOBALS                                              */
+/*   2. NAVIGATION (Landing)                                                  */
+/*   3. HERO + LANDING SECTIONS                                               */
+/* ========================================================================== */
+
+/* ==========================================================
+   1. ROOT VARIABLES / GLOBALS
+   ========================================================== */
 :root { /* Custom Modifiers */
     --def-style:#333;
     --def-styleII:#555;
@@ -63,18 +95,9 @@ h1, h2, h3 {
     letter-spacing: .2px; 
 }
 /* Base font sizes and line heights */
-h1 {
-  line-height: 1.1;
-  font-size: clamp(1.8rem, 4vw + 1rem, 3rem);
-}
-h2 {
-  line-height: 1.2;
-  font-size: clamp(1.6rem, 3vw + 1rem, 2.1rem);
-}
-h3 {
-  line-height: 1.3;
-  font-size: clamp(1.3rem, 2vw + 0.5rem, 1.8rem);
-}
+h1 { line-height: 1.1; font-size: clamp(1.8rem, 4vw + 1rem, 3rem); }
+h2 { line-height: 1.2; font-size: clamp(1.6rem, 3vw + 1rem, 2.1rem); }
+h3 { line-height: 1.3; font-size: clamp(1.3rem, 2vw + 0.5rem, 1.8rem); }
 p {
   font-weight: 400;
   line-height: 1.5;
@@ -83,7 +106,7 @@ p {
 .hidden {display:none;}
 
 /* ==========================================================
-   1. NAVIGATION BAR
+   2. NAVIGATION BAR
    ========================================================== */
 nav {
     display: flex;
@@ -113,7 +136,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 #logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
 
 /* ==========================================================
-   2. HERO + LANDING SECTIONS
+   3. HERO + LANDING SECTIONS
    ========================================================== */
 .hero.is-dark {
   background: var(--bg-gradients);
@@ -133,7 +156,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 .hero-sub { color: var(--muted); max-width: 56ch; }
 
 /* ==========================================================
-   2. SHOWCASE CAROUSEL
+   4. SHOWCASE CAROUSEL
    ========================================================== */
 .template-grid {
   display: grid;
@@ -176,7 +199,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 .step .num { position:absolute; top:-14px; left:-14px; background:var(--accent); color:#0b0820; font-weight:800; padding:.35rem .8rem; border-radius: 999px; box-shadow:0 8px 20px rgba(139,92,246,.4); }
 
 /* ==========================================================
-   3. CALL TO ACTION
+   5. CALL TO ACTION
    ========================================================== */
 .cta-band { background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(79,70,229,.15)); border:1px solid rgba(255,255,255,.08); border-radius: 22px; }
 .cta-band p { padding-top:1rem;}
@@ -213,28 +236,15 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 }
 
 
-/* ─────────────────────────────────────────────── */
-/* ─────────────────────────────────────────────── */
-
+/* ==========================================================
+   6. LOGIN + SIGNUP SECTIONS
+   ========================================================== */
 .form-window {
     display: flex;
     place-items: center;
     /* width: min(1080px, 94vw); */
     padding: clamp(14px, 2vw, 28px);
     margin: 0 auto;
-    /* position:relative;
-    padding:20px;
-    color:azure;
-    display: flex; 
-    flex-direction: column; 
-    max-width: 30rem;
-    min-width:21rem;
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 4px );
-    -webkit-backdrop-filter: blur( 4px );
-    border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
-    background-color:var(--bg-window); */
 }
 
 .auth-card {
@@ -310,14 +320,20 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
       border-radius: 12px; height: 2.9em;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
     }
+
+    /* Date Fields */
     input[type="date"] { display:none; }
-    .select-group {
-        display: flex;
-        gap: 0.35rem; /* spacing between dropdowns */
+    .select-group { display: flex; gap: 0.35rem; }
+    .select-group select { max-width: 4.3rem; }
+
+    /* Password Bulletpoint style */
+    .pwd-rules {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #999;
     }
-    .select-group select {
-        max-width: 4.3rem; /* prevents full-width stacking */
-    }
+    .pwd-rules li.valid { color: #2ecc71; }
+    .pwd-rules li.invalid { color: #e74c3c; }
 
     .btn-primary.button {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -338,122 +354,15 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     .footnote { color: var(--muted); font-size: .9rem; }
 }
 
-.signup-card {
-  background: rgba(15,17,24,.85);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 26px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
-  backdrop-filter: blur(8px);
-
-  .signup-columns {
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    min-height: 640px;
-
-    @media (max-width: 980px) {
-      grid-template-columns: 1fr;
-      min-height: unset;
-
-      .signup-visual { height: 260px; }
-    }
-  }
-  .auth-title { font-family: Unna, Georgia, serif; font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 400; line-height: 1.1; }
-  .auth-sub { color: var(--muted); font-size:15px; }
-    
-
-  .signup-visual {
-    position: relative;
-    background: #11131a;
-    background-size: cover;
-    background-position: center;
-    transition: background-image .8s ease-in-out, filter .6s ease-in-out;
-    display: grid;
-    place-items: end start;
-    padding: 1.25rem;
-
-    &::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.4) 60%, rgba(0,0,0,.6));
-      pointer-events: none;
-    }
-
-    .badge { 
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
-      color: #e9e9ff;
-      border-radius: 999px;
-      padding: .5rem .85rem;
-      box-shadow: 0 6px 22px rgba(0,0,0,.35);
-      font-weight: 600;
-    }
-  }
-
-  .auth-form {
-    padding: clamp(20px, 4vw, 48px);
-    display: grid;
-    align-content: center;
-    gap: 1.25rem;
-    background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
-  }
-}
 /* .form-window > button:first-child {
     margin-bottom: 5px;
     width:2cm;
 } */
 
-/* Sign up Wizard */
-/* .wizard-info {
-    margin-bottom:20px;
-    padding:5px;
-    display:flex;
-    align-items:center;
-    justify-content: space-between;
-    background:#334155;
-}
-.wizard-info .step {
-    width:100%;
-    cursor:default;
-    padding:5px;
-    text-align:center;
-}  */
-/* .tab {
-    display: flex;
-    justify-content: space-around; 
-    flex-wrap: wrap; 
-    margin:10px 0 10px 0;
-    gap: 10px; 
-} */
-
-.panel {
-    /* padding: 0 18px;
-    background-color: white; */
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-}
-
 #loginBtn { margin-top:10px; }
 #prevBtn { float:right; margin-right:10px;}
 #nextBtn { color:azure;}
-/* .rotator {
-  width:100%;
-  display: flex;
-  justify-content: space-between;
-} */
-/* input.invalid {
-    border: 2px solid red;
-}
-#terms.invalid {
-    outline: 2px solid red;  
-} */
+
 .step.active {
     opacity: 1;
 }
@@ -470,27 +379,6 @@ form {
     text-align: left;
     align-items: left; 
 }
-/* form label {
-    display: block;
-    margin-bottom: 4px; 
-    text-align: left; 
-} 
-form input[type="text"], form input[type="email"], form input[type="password"], form textarea {
-    margin: 0 0 20px;
-    padding: 0.6em;
-    font-size: 1em;
-    width: 100%;
-    background:rgb(235, 235, 235);
-    color:black;
-} */
-/* form select {
-    padding: 0.6em;
-    font-size: 0.9em;
-} */
-/* form input[type="checkbox"] {
-    margin: 0 0 20px; 
-    cursor: pointer;
-} */
 .toggle-eye > i {
     position:absolute;
     margin-top:8px;
@@ -502,11 +390,10 @@ form input[type="text"], form input[type="email"], form input[type="password"], 
 .toggle-eye > i:hover {
     color:rgb(58, 58, 253);
 }
-
-select {
+/* select {
     margin-bottom:20px;
     cursor: pointer;   
-} 
+}  */
 /* .day-select, .month-select, .year-select {
     width:4.3rem;height:2.5rem;
 } */
@@ -519,6 +406,10 @@ select {
     margin: -15px 0 10px ;
     cursor:default;
 } */
+
+/* ==========================================================
+   7. TABLET + MOBILE PHONE PREFIXES
+   ========================================================== */
 
 /* Tablet */
 /* @media only screen and (min-width:542px) and (max-width:912px) {

@@ -1,38 +1,32 @@
+<?php 
+  header('Cache-Control: private, no-cache, must-revalidate'); // per-user, don’t cache
+  header('Pragma: no-cache');   // legacy HTTP/1.0
+  header('Expires: 0');         // expire immediately
+  
+  // Essential PHP files
+  require_once "./config/session_manager.conf.php"; 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>PaperWitch — Export Your Resume</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Fonts (same pairing you already use) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PaperWitch export page for resume.">
+  <!-- Favicon -->
+  <?php include_once "./views/head_favicon.html" ?>
+  <!-- CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <link rel="stylesheet" href="assets/css/paperwitch.css">
+  <title>PaperWitch — Export Your Resume</title>
 
   <style>
     :root {
       --accent: #8b5cf6;
       --accent-2: #4f46e5;
-      --bg: #0a0a0f;
-      --panel: #0f1118;
-      --muted: #a7a7b3;
-      --danger: #f97373;
-      --success: #22c55e;
-      --font-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --font-title: Unna, Georgia, serif;
-      --bg-gradients:
-        radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.25), rgba(0,0,0,0) 40%),
-        radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.2), rgba(0,0,0,0) 40%),
-        linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
-    }
-
-    /* Scope everything under .pw-export-page so it’s safe to integrate */
-    body {
-      margin: 0;
-      background: var(--bg-gradients);
-      color: #e8e8ef;
-      font-family: var(--font-body);
     }
 
     .pw-export-page {
@@ -41,6 +35,7 @@
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
+      color: #e8e8ef;
     }
 
     .pw-export-shell {
@@ -105,7 +100,7 @@
       gap: 1.75rem;
     }
 
-    @media (max-width: 880px) {
+    @media (max-width: 835px) {
       .pw-export-layout {
         grid-template-columns: minmax(0, 1fr);
       }
@@ -332,13 +327,21 @@
         grid-template-columns: minmax(0, 1fr);
       }
     }
+    @media (max-width: 350px) {
+      .pw-export-page {
+        padding: 0;
+      }
+    }
   </style>
 </head>
 <body>
+  <header> 
+    <a href="<?= !isset($_SESSION['session_data']['user_id']) ? 'index.php' : 'client.php' ?>" id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a>
+  </header>
   <div class="pw-export-page">
     <div class="pw-export-shell">
-
       <header class="pw-export-header">
+        <nav aria-label="main navigation"><a href="<?= !isset($_SESSION['session_data']['user_id']) ? 'index.php' : 'client.php' ?>">Back</a></nav>
         <div class="pw-export-title-block">
           <h1>Export your resume</h1>
           <p>
@@ -349,7 +352,7 @@
         <div class="pw-export-meta">
           <span>
             <span>✨</span>
-            <span>Last saved just now</span>
+            <span>Saved</span>
           </span>
           <small>“Neo-Gothic Internship Resume – v3”</small>
         </div>
@@ -373,10 +376,13 @@
             </ul>
             <div class="pw-export-actions">
               <!-- Hook this up to your export endpoint -->
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="pdf">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="pdf" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="pdf">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
               <!-- <button class="pw-btn pw-btn-ghost" type="button">
                 <span class="icon">👁️</span>
                 <span>Preview</span>
@@ -397,10 +403,13 @@
               <li>Lets you adjust text after export</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="docx">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="docx" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="docx">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
 
@@ -417,10 +426,13 @@
               <li>Easy to share in chats or socials</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="jpg">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="jpg" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="jpg">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
 
@@ -437,10 +449,13 @@
               <li>Maximum parser compatibility</li>
             </ul>
             <div class="pw-export-actions">
-              <button class="pw-btn pw-btn-primary" type="button" data-export-format="txt">
-                <span class="icon">⬇️</span>
-                <span>Download</span>
-              </button>
+              <form action="#" method="post">
+                <input type="hidden" name="rtf" value="">
+                <button class="pw-btn pw-btn-primary" type="button" data-export-format="rtf">
+                  <span class="icon">⬇️</span>
+                  <span>Download</span>
+                </button>
+              </form>
             </div>
           </article>
         </section>
@@ -453,26 +468,27 @@
               <span class="pw-export-preview-file">crystal-clear-resume.pdf</span>
             </div>
             <div class="pw-export-preview-body">
-{  
-  "name": "Allen Pieter",  
-  "target_role": "Internship – Junior Dev / IT",  
-  "templates": [  
-    "PaperWitch • Obsidian Scroll",  
-    "PaperWitch • Moonlit Intern"  
-  ],  
-  "highlights": [  
-    "Tailored to 1 specific vacancy",  
-    "Readable in under 30 seconds",  
-    "Keywords tuned for ATS portals"  
-  ]  
-}
+              {  
+                "name": "Allen Pieter",  
+                "target_role": "Internship – Junior Dev / IT",  
+                "templates": [  
+                  "PaperWitch • Obsidian Scroll",  
+                  "PaperWitch • Moonlit Intern"  
+                ],  
+                "highlights": [  
+                  "Tailored to 1 specific vacancy",  
+                  "Readable in under 30 seconds",  
+                  "Keywords tuned for ATS portals"  
+                ]  
+              }
             </div>
           </section>
 
           <section class="pw-export-note">
-            <strong>Small ritual tip:</strong><br />
-            Use <em>Crystal Clear PDF</em> for 90% of applications.  
-            Switch to <em>Plain Spell Text</em> only when a portal forces you to paste everything into text boxes.
+            <strong>Small ritual tip:</strong>
+            Even without experience, a recruiter or manager, may notice the effort in your paper.
+            Say you made it with Word or LibreOffice, thought about spacing, alignment and structure as well.
+            They may think <em>'No experience, but handy with documents. If this person can do that with Confluence pages, I'll make an exception.'</em>
           </section>
         </aside>
       </div>

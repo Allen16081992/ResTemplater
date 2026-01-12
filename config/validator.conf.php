@@ -1,8 +1,15 @@
 <?php // Code Convention: camelCase
 
     class validGrimoire {
-        public static function emptyField($field) {
-            return trim((string)$field) === '';
+        public static function checkEmpty(mixed $postData) {
+            foreach ($postData as $fieldName => $value) {
+                if ($fieldName === 'action') {
+                    continue;
+                }
+                if (trim((string)$value) === '') {
+                    return $fieldName;
+                } 
+            }
         }
 
         public static function checkEmail(string $email): bool {

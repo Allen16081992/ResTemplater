@@ -1,4 +1,4 @@
-<section id="sign_up" class="<?= ViewBook::setView_Error('sign_up'); ?>">
+<section id="sign_up" class="<?= ViewBook::setVisibility('sign_up'); // ViewBook::setView_Error('sign_up'); ?>">
     <div class="form-window">
         <div class="auth-card">
             <div class="auth-columns">

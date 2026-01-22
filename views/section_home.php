@@ -1,4 +1,4 @@
-<section id="home" class="<?= ViewBook::Homepage(); ?> hero is-fullheight has-text-centered">
+<section id="home" class="<?= ViewBook::setVisibility('home'); //ViewBook::Homepage(); ?> hero is-fullheight has-text-centered">
   <article class="hero is-dark is-fullheight">
     <div class="floating-sheets"></div>
     <div class="hero-body">

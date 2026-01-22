@@ -1,4 +1,4 @@
-<section id="home" class="<?= ViewBook::Homepage(); ?>">
+<section id="home" class="<?= ViewBook::setVisibility('home'); //ViewBook::Homepage(); ?>">
   <section class="pw-baseline" id="pwBaseline">
     <header class="pw-header">
       <div>

@@ -1,42 +1,12 @@
-<?php 
-    $thisPage = basename($_SERVER['SCRIPT_NAME']); 
-    if ($thisPage  === 'client.php') {
-?>
-
 <a href="index.php" id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a>
 <nav aria-label="main navigation">
-    <a href="#" data-section="profile">Profile</a> 
-    <a href="#" data-section="home">Resume</a>
-    <a href="index.php">Logout</a>    
-    <!-- <a href="#" data-section="contact">Contact</a> -->    
-</nav>
-
-<?php } else { ?>
-
-<a href="index.php" id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a>
-<nav aria-label="main navigation">
-    <a href="#" data-section="policy">Privacy</a>  
-    <a href="#" data-section="login">Log in</a>
-    <a href="#" id="signUp" data-section="sign_up">Sign Up</a>   
-    <!-- <a href="#" data-section="contact">Contact</a> -->    
-</nav>
-
-<?php } ?>
-
-<?php 
-    //$isLogin = !empty($_SESSION['user_id']);
-    //$logoHref = $isLogin ? 'client.php' : 'index.php';
-?>
-
-<!-- <a href="//htmlspecialchars($logoHref, ENT_QUOTES, 'UTF-8') " id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a> -->
-<!-- <nav aria-label="main navigation"> -->
-    <?php //if ($isLogin): ?>
-        <!-- <a href="#" data-section="profile">Profile</a> 
-        <a href="#" data-section="home">My Resume</a>
-        <a href="logout.php">Logout</a> -->
-    <?php //else: ?>
-        <!-- <a href="#" data-section="policy">Privacy</a>  
+    <?php $page = basename($_SERVER['SCRIPT_NAME']); if ($page  === 'client.php') { ?>
+        <a href="#" data-section="profile">Profile</a> 
+        <a href="#" data-section="home">Resume</a>
+        <a href="index.php">Logout</a>  
+    <?php } else { ?>  
+        <a href="#" data-section="policy">Privacy</a>  
         <a href="#" data-section="login">Log in</a>
-        <a href="#" id="signUp" data-section="sign_up">Sign Up</a>  -->
-    <?php //endif; ?>           
-<!-- </nav> -->
+        <a href="#" id="signUp" data-section="sign_up">Sign Up</a> 
+    <?php } ?>
+</nav>

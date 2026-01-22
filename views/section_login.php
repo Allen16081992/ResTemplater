@@ -1,4 +1,4 @@
-<section id="login" class="<?= ViewBook::setView_Error('login'); ?>"> 
+<section id="login" class="<?= ViewBook::setVisibility('login'); //ViewBook::setView_Error('login'); ?>"> 
     <div class="form-window">
         <div class="auth-card">
             <div class="auth-columns">
@@ -27,7 +27,7 @@
                         <div class="field">
                             <label class="label" for="password">Password</label>
                             <div class="control has-icons-left">
-                                <input id="password" name="password" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required>
+                                <input id="password" name="pwd" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required>
                                 <span class="icon is-small is-left">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9h-2Zm-8 0V7a3 3 0 0 1 6 0v2H9Z"/></svg>
                                 </span>

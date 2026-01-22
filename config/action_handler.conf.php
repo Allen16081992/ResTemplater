@@ -33,12 +33,5 @@
 
     $pdo = Database::connect();
     $targetClass = $routes[$action];
-    $handler = new $targetClass($pdo, $_POST);
+    $handler = new $targetClass($pdo, $action);
     $handler->handle();
-
-    // Dismiss to homepage, Only for signup new user.
-    // if ($action === 'signup') {
-    //     $_SESSION['success'] = 'Your account has been conjured succesfully. You may log in.';
-    //     header('Location: ../views/signup_success.php');
-    //     exit;
-    // }

@@ -5,10 +5,6 @@
         header('location: ../index.php');
         exit();
     }
-    // in a controller, just shove data in session.
-    function flashForm(array $formData): void {
-        $_SESSION['form_old'] = $formData;
-    }
     
     // ┌───┐                                                                      ┌───┐
     // └─┬─┘  SessionBook handles sessions, security, and application integrity.  └─┬─┘
@@ -70,8 +66,13 @@
         }
 
         public static function clearUserSession(): void {
-            $keys = ['session_data', 'login', 'account', 'signup'];
+            $keys = ['session_data', 'action', 'login', 'signup', 'old'];
             foreach ($keys as $key) { unset($_SESSION[$key]); }
+        }
+
+        public static function clearPublicState(): void {
+            unset($_SESSION['error'], $_SESSION['flash'], $_SESSION['action'], $_SESSION['form_old']);
+            // optionally unset other UI-only keys
         }
 
         public static function revokeSession(): void {
@@ -91,18 +92,6 @@
                 $_SESSION['last_regen'] = $currentTime;
             }
             unset($lastRegen, $currentTime, $regenInterval);
-        }   
-
-        //────────────────────────────────────//
-        //          MESSAGING LOGIC           //
-        //────────────────────────────────────//
-        public static function flash(string $key): ?string {
-            if (isset($_SESSION[$key])) {
-                $msg = $_SESSION[$key];
-                unset($_SESSION[$key]);
-                return $msg;
-            }
-            return null;
         }
         
         //────────────────────────────────────//
@@ -149,25 +138,52 @@
         //────────────────────────────────────//
         //          VISIBILITY LOGIC          //
         //────────────────────────────────────//
-
-        public static function Homepage(): string {
-            if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
-                return 'hidden';
-            }
-            return 'current';
-        }        
-    
-        public static function setView_Error(string $key): string {
-            //return isset($_SESSION[$key]) ? 'current' : 'hidden';
-            if (isset($_SESSION[$key])) {
-                unset($_SESSION[$key]);
-                return 'current';
-            }
-            return 'hidden';
+        public static function setVisibility(string $key, string $default = 'home'): string {
+            // Catch UI state and abolish the superglobal
+            $action = $_SESSION['action'] ?? $default;
+            return ($action === $key) ? 'current' : 'hidden';
         }
+
+        // public static function Homepage(): string {
+        //     // return (($_SESSION['action'] ?? 'home') === $key) ? 'current' : 'hidden';
+        //     if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
+        //         return 'hidden';
+        //     }
+        //     return 'current';
+        // }        
+    
+        // public static function setView_Error(string $key): string {
+        //     if (isset($_SESSION[$key])) {
+        //         unset($_SESSION[$key]);
+        //         return 'current';
+        //     }
+        //     return 'hidden';
+        // }
    
         public static function render(string $view, array $data = []): void {
             extract($data); // all sorts of data
             require_once './views/'.$view; // file path
         }
+
+        public static function revert($view) : void {
+            // Read previous UI state from submit button
+            $_SESSION['action'] = $view;
+            header('Location: ../index.php'); exit();
+        }
+
+        //────────────────────────────────────//
+        //          MESSAGING LOGIC           //
+        //────────────────────────────────────//
+        public static function flashForm(array $formData): void {
+            $_SESSION['form_old'] = $formData;
+        }
+
+        // public static function flash(string $key): ?string {
+            // if (isset($_SESSION[$key])) {
+            //     $msg = $_SESSION[$key];
+            //     unset($_SESSION[$key]);
+            //     return $msg;
+            // }
+            // return null;
+        // }
     }

@@ -1,4 +1,4 @@
-<section id="profile" class="<?= ViewBook::setView_Error('profile'); ?>">
+<section id="profile" class="<?= ViewBook::setVisibility('profile'); //ViewBook::setView_Error('profile'); ?>">
     <article class="profile-wrap">
         <header class="profile-header">
             <label for="upload" class="profile-avatar">             

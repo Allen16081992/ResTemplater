@@ -5,11 +5,8 @@
     
     // Essential PHP files
     require_once "./config/session_manager.conf.php"; 
-
     // Miscellaneous PHP Files
     include_once "./config/phrases.conf.php";
-    // SessionBook::invokeSession();
-    // SessionBook::clearUserSession(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,6 +67,7 @@
         <p>It seems like you have Javascript disabled. This site should work but less streamlined. Expect more page refreshes.</p>
     </noscript>
 
-    <?php ViewBook::render('footer_sitemap.html'); ?>
+    <?php ViewBook::render('footer_sitemap.html'); 
+    SessionBook::revokeSession(); ?>
 </body>
 </html>

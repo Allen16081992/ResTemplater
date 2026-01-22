@@ -1,6 +1,6 @@
 <?php
 
-    class validGrimoire {
+    class AssWipe {
 
         public static function invalidCheck(mixed $value, string $rule): bool {
             switch ($rule) {
@@ -29,7 +29,7 @@
         
         public function lol() {
             $email = 'email';
-            if (validGrimoire::invalidCheck($email, 'email')) {
+            if (AssWipe::invalidCheck($email, 'email')) {
                     $rule=null;
                 $msg = [
                     // Rules
@@ -61,10 +61,6 @@
 
         public static function emptyField($field) {
             return trim((string)$field) === '';
-        }
-
-        public static function checkEmail(string $email): bool {
-            return filter_var($email, FILTER_VALIDATE_EMAIL);
         }
 
         public static function checkAlpha(string $alpha): bool {

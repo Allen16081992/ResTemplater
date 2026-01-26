@@ -1,5 +1,5 @@
 <?php // Database Configuration
-    require_once "./config/define.db.php";
+    require_once "../src/define.db.php";
 
     final class Database {
         public static function connect(): PDO {

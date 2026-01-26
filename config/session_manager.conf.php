@@ -28,14 +28,11 @@
 
         public static function enforceToken(): void {
             if (!isset($_POST['csrf_token'])) {
-                // Token missing
                 $_SESSION['error'] = '403: Forbidden. Request Denied.';
                 header('Location: ../client.php');
                 exit;
             }
-        
             if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-                // Token mismatch
                 $_SESSION['error'] = 'Something went wrong. It might just need a kick. Please try again.';
                 header('Location: ../client.php');
                 exit;
@@ -65,22 +62,6 @@
             }
         }
 
-        public static function clearUserSession(): void {
-            $keys = ['session_data', 'action', 'login', 'signup', 'old'];
-            foreach ($keys as $key) { unset($_SESSION[$key]); }
-        }
-
-        public static function clearPublicState(): void {
-            unset($_SESSION['error'], $_SESSION['flash'], $_SESSION['action'], $_SESSION['form_old']);
-            // optionally unset other UI-only keys
-        }
-
-        public static function revokeSession(): void {
-            if(session_status() === PHP_SESSION_ACTIVE) { 
-                session_unset(); session_destroy();
-            }
-        }
-
         // Periodically renew the session ID against session fixation and hijacking
         public static function sessionRegenTimer() {
             $lastRegen = $_SESSION['last_regen'] ?? 0;
@@ -93,46 +74,79 @@
             }
             unset($lastRegen, $currentTime, $regenInterval);
         }
+
+        public static function revokeSession(): void {
+            if(session_status() === PHP_SESSION_ACTIVE) { 
+                session_unset(); session_destroy();
+            }
+        }
+
+        public static function setUserSession($user): void {
+            $_SESSION['session_data'] = [
+                'user_id' => (int)$user['userID'],
+                'username' => (string)$user['username'] ?? '',
+                'fullname' => (string)$user['fullname']
+            ];
+        }
+
+        public static function clearUserSession(): void {
+            $keys = ['session_data', 'action', 'login', 'signup', 'old'];
+            foreach ($keys as $key) { unset($_SESSION[$key]); }
+        }
+
+        public static function clearPublicState(): void {
+            unset($_SESSION['error'], $_SESSION['flash'], $_SESSION['action'], $_SESSION['form_old']);
+            // optionally unset other UI-only keys
+        }
+
+        public static function intrusionGuard(): void {
+            if (!isset($_SESSION['session_data']['user_id'])) {
+                $_SESSION['error'] = '401: Access denied.';
+                header('Location: ../index.php');
+                exit;
+            }
+            session_regenerate_id(true);
+            $_SESSION['last_regen'] = time();
+        }
+
+        // Rate limiter against brute-force attacks, bot abuse, spamming form submissions
+        public static function throttleLogin(int $cooldown = 30): void {
+            if (isset($_SESSION['last_login_attempt']) && time() - $_SESSION['last_login_attempt'] < $cooldown) {
+                $_SESSION['login'] = true;
+                $_SESSION['error'] = "401: You're trying too quickly. Wait $cooldown sec.";
+                header('Location: ../index.php');
+                exit;
+            }
+            $_SESSION['last_login_attempt'] = time();
+        }
         
         //────────────────────────────────────//
         //             USER LOGIC             //
         //────────────────────────────────────//
         public static function addUsername() {
             // Check for user name or fallback options
-            if (isset($_SESSION['session_data']['user_name'])) {
-                return $_SESSION['session_data']['user_name'];
+            if (isset($_SESSION['session_data']['username'])) {
+                return $_SESSION['session_data']['username'];
             } elseif (isset($_SESSION['session_data']['firstname'])) {
                 return $_SESSION['session_data']['firstname'];
             } else { return "Profile"; }
         }
-
-        // rate limiter against brute-force attacks, bot abuse, spamming form submissions
-        public static function throttleLogin(int $cooldown = 30): void {
-            if (isset($_SESSION['last_login_attempt']) && time() - $_SESSION['last_login_attempt'] < $cooldown) {
-                $_SESSION['login'] = true;
-                $_SESSION['error'] = "401: You're trying too quickly. Wait $cooldown sec.";
-                header('Location: ../index.php');
-                die;
-            }
-            $_SESSION['last_login_attempt'] = time();
-        }  
-
-        public static function intrusionGuard(): void {
-            if (!isset($_SESSION['session_data']['user_id'])) {
-                $_SESSION['error'] = '401: Access denied.';
-                header('Location: ../index.php');
-                die;
-            }
-            session_regenerate_id(true);
-            $_SESSION['last_regen'] = time();
-        }
     }
     
-    // ┌───┐                                                            ┌───┐
-    // └─┬─┘   ViewBook handles view rendering and section visibility.  └─┬─┘
-    //   │     Load views and control what the user sees per session.     │
-    // ┌─┴─┐                                                            ┌─┴─┐
-    // └───┘                                                            └───┘
+    //   /##     /##   /##   /##########   /##            /##      /########
+    //  / ##    / ##  / ##  / ##______/   / ##           / ##     / ##___  ##
+    //  | ##    | ##  |__/  | ##          | ##     /#    | ##     | ##   | ##
+    //  | ##    | ##   /##  | ########    | ##    / #    | ##     | ########
+    //   \ ##  / ##/  / ##  | ##____/      \ ##  | ###  / ##      | ##___  ##
+    //    \ ##  ##/   | ##  | ##            \ ##/ ## ##/ ##       | ##   \ ##
+    //     \ ####/    | ##  | ##########     \ #### \ ####        | ########/ 
+    //      \___/     |__/  |__________/      \__/   \__/         |________/
+
+    // ┌───┐                                                             ┌───┐
+    // └─┬─┘   ViewBook provides view rendering, redirects, and section  └─┬─┘
+    //   │     visibility helpers based on session UI state.               │
+    // ┌─┴─┐                                                             ┌─┴─┐
+    // └───┘                                                             └───┘
 
     class ViewBook {
         //────────────────────────────────────//
@@ -143,29 +157,13 @@
             $action = $_SESSION['action'] ?? $default;
             return ($action === $key) ? 'current' : 'hidden';
         }
-
-        // public static function Homepage(): string {
-        //     // return (($_SESSION['action'] ?? 'home') === $key) ? 'current' : 'hidden';
-        //     if (isset($_SESSION['login']) || isset($_SESSION['signup']) || isset($_SESSION['success'])) {
-        //         return 'hidden';
-        //     }
-        //     return 'current';
-        // }        
-    
-        // public static function setView_Error(string $key): string {
-        //     if (isset($_SESSION[$key])) {
-        //         unset($_SESSION[$key]);
-        //         return 'current';
-        //     }
-        //     return 'hidden';
-        // }
    
         public static function render(string $view, array $data = []): void {
             extract($data); // all sorts of data
             require_once './views/'.$view; // file path
         }
 
-        public static function revert($view) : void {
+        public static function revert(string $view) : void {
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
             header('Location: ../index.php'); exit();
@@ -177,13 +175,4 @@
         public static function flashForm(array $formData): void {
             $_SESSION['form_old'] = $formData;
         }
-
-        // public static function flash(string $key): ?string {
-            // if (isset($_SESSION[$key])) {
-            //     $msg = $_SESSION[$key];
-            //     unset($_SESSION[$key]);
-            //     return $msg;
-            // }
-            // return null;
-        // }
     }

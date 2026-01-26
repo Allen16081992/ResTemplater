@@ -272,6 +272,8 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     .auth-title { font-family: Unna, Georgia, serif; font-size: clamp(1.8rem, 2.8vw, 2.4rem); font-weight: 400; line-height: 1.1; }
     .auth-sub { color: var(--muted); font-size:15px; }
     #signup_form > h3 {margin-bottom:20px;}
+    .pwd-rules li.ok {color: #3fb950;}
+
 
     .auth-visual {
         position: relative;

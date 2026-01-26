@@ -2,12 +2,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("signup_form");
   const visual = document.getElementById("signupVisual");
-
-  if (!form || !visual || !signupBtn) {
-    console.warn("[PaperWitch] Missing signup_form / signupVisual / signupBtn");
-    return;
-  }
-
   const idleImg  = 'url("assets/images/paperwitch_bold.png")';
   const burstImg = 'url("assets/images/paperwitch_glow.png")';
 
@@ -84,42 +78,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize (for autofill)
   updateVisual();
+
+  //-------------------Password Policy----------------------------
+  const pwdInput = form.querySelector('input[name="pwd"]');
+  if (!pwdInput) return;
+
+  const rules = {
+    min: document.getElementById("rule-min"),
+    max: document.getElementById("rule-max"),
+    visible: document.getElementById("rule-visible")
+  };
+
+  const utfLen = (s) => [...s].length;
+
+  const validate = (pwd) => {
+    const len = utfLen(pwd);
+    return {
+      min: len >= 12,
+      max: len <= 128,
+      visible: /\S/u.test(pwd)
+    };
+  };
+
+  const setState = (el, state) => {
+    if (!el) return;
+    el.classList.toggle("ok", state === "ok");
+    el.classList.toggle("bad", state === "bad");
+    el.classList.toggle("neutral", state === "neutral");
+  };
+
+  const update = () => {
+    const pwd = pwdInput.value;
+    if (pwd.length === 0) {
+      Object.values(rules).forEach(el => setState(el, "neutral"));
+      return;
+    }
+    const r = validate(pwd);
+    setState(rules.min, r.min ? "ok" : "bad");
+    setState(rules.max, r.max ? "ok" : "bad");
+    setState(rules.visible, r.visible ? "ok" : "bad");
+  };
+
+  pwdInput.addEventListener("input", update);
+  update();
 });
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   const form = document.getElementById("signup_form");
-//   const visual = document.getElementById("signupVisual");
-//   const passwordInput = document.getElementById("password");
-//   const signupBtn = document.getElementById("signupBtn");
-
-//   const idleImg = 'url("assets/images/paperwitch_bold.png")';
-//   const burstImg = 'url("assets/images/paperwitch_glow.png")';
-
-//   // Preload images (prevents flicker)
-//   [idleImg, burstImg].forEach(src => {
-//     const img = new Image();
-//     img.src = src.replace(/^url\(["']?(.+?)["']?\)$/, "$1");
-//   });
-
-//   // Set initial background
-//   visual.style.backgroundImage = idleImg;
-
-//   // Helper: check if all required fields are filled
-//   const allFilled = () =>
-//     [...form.querySelectorAll("input[required]")].every(
-//       input => input.value.trim() !== ""
-//     );
-
-//   // React on hover over the Sign-Up button
-//   signupBtn.addEventListener("mouseenter", () => {
-//     if (allFilled()) {
-//       visual.style.backgroundImage = burstImg;
-//       visual.style.filter = "brightness(1.15)";
-//     }
-//   });
-
-//   signupBtn.addEventListener("mouseleave", () => {
-//     visual.style.filter = "brightness(1)";
-//     visual.style.backgroundImage = idleImg;
-//   });
-// });

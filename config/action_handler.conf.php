@@ -11,7 +11,7 @@
 
     // Whitelisted Keys and Routes
     $routes = [
-        'login'  => LoginControl::class,
+        'login'  => loginControl::class,
         'signup' => signupControl::class
         // ... Add more routes here
     ];
@@ -28,10 +28,10 @@
 
     // Load PHP files
     require_once './database/v2_db.php';
-    // require_once './Model/class_master.php';
-    require_once './controller/control_modules.php';
+    require_once './controller/user_contr.php';
 
-    $pdo = Database::connect();
+    // $pdo = Database::connect();
     $targetClass = $routes[$action];
-    $handler = new $targetClass($pdo, $action);
+    $handler = new $targetClass($_POST);
     $handler->handle();
+    exit;

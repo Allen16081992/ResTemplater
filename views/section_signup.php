@@ -47,11 +47,10 @@
                         </div>
 
                         <ul class="pwd-rules">
-                            <li>● At least one lowercase letter</li>
-                            <li>● At least one uppercase letter</li>
-                            <li>● At least one number</li>
-                            <li>● At least one special character</li>
-                            <li>● Atleast 8 characters in length</li>
+                            <li id="rule-visible">● Must include at least 1 non-space character</li>
+                            <li id="rule-min">● Minimum 12 characters</li>
+                            <li id="rule-max">● Maximum 128 characters</li>
+                            <li>Spaces are allowed (passphrases recommended.)</li>
                         </ul>
 
                         <div class="field m-3">

@@ -1,4 +1,4 @@
-<section class="hidden" id="export">
+<section id="export" class="<?= ViewBook::setVisibility('export'); ?>">
   <div class="pw-export-page">
     <div class="pw-export-shell">
       <header class="pw-export-header">

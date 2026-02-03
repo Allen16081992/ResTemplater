@@ -12,18 +12,6 @@
                 } 
             }
             return $errors;
-        }  
-        
-        public static function validateUsername(string $uid): ?string {
-            $uid = trim($uid);
-
-            // Optional field: empty is allowed
-            if ($uid === '') { return null; }
-            if (strlen($uid) < 5 || strlen($uid) > 32) { return 'Must be between 5 and 32 characters.'; }
-            if (!preg_match('/^[a-zA-Z0-9._-]+$/', $uid)) { 
-                return 'Only letters, numbers, dots, dashes and underscores are allowed.'; 
-            }
-            return null;
         }
 
         public static function validateEmail(string $email): ?string {
@@ -68,7 +56,7 @@
             return null;
         }
 
-        public static function validatePhoneValue(string $value): ?string {
+        public static function validatePhone(string $value): ?string {
             $value = trim($value);
             if ($value === '') { return 'Phone number is required.'; }
 
@@ -83,7 +71,7 @@
             return null;
         }
 
-        public static function validateZipcode(string $value): ?string {
+        public static function validatePostcode(string $value): ?string {
             $value = trim($value);
             if ($value === '') { return 'Postcode is required.'; }
             if (mb_strlen($value, 'UTF-8') > 20) { return 'Postcode too long.'; }

@@ -1,4 +1,4 @@
-<section id="sign_up" class="<?= ViewBook::setVisibility('sign_up'); // ViewBook::setView_Error('sign_up'); ?>">
+<section id="sign_up" class="<?= ViewBook::setVisibility('sign_up'); ?>">
     <div class="form-window">
         <div class="auth-card">
             <div class="auth-columns">
@@ -18,12 +18,12 @@
                         <!-- Personal Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Personal Information</h3>
                         <div class="field is-horizontal">
-                            <div class="field-body">
+                            <div class="field"> <!-- "field-body" ommited since removal of 'username' field -->
                                 <?php ViewBook::render('form_date_format.php'); ?>
-                                <div class="field">
+                                <!-- <div class="field">
                                     <label class="label" for="username">Username</label>
                                     <input id="username" name="username" type="text" class="input" placeholder="(optional)">  
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <hr class="divider mt-3 mb-2">

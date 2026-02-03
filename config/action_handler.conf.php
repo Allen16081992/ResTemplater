@@ -12,7 +12,9 @@
     // Whitelisted Keys and Routes
     $routes = [
         'login'  => loginControl::class,
-        'signup' => signupControl::class
+        'signup' => signupControl::class,
+        'profile'=> profileControl::class,
+        'resume' => resumeControl::class
         // ... Add more routes here
     ];
 
@@ -29,6 +31,7 @@
     // Load PHP files
     require_once './database/v2_db.php';
     require_once './controller/user_contr.php';
+    require_once './controller/resume_contr.php';
 
     // $pdo = Database::connect();
     $targetClass = $routes[$action];

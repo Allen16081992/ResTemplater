@@ -7,6 +7,7 @@
     require_once "./config/session_manager.conf.php"; 
     // Miscellaneous PHP Files
     include_once "./config/phrases.conf.php";
+    SessionBook::invokeSession();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +31,9 @@
     <meta name="twitter:image" content="https://www.../assets/images/falcon250.webp">
     <link rel="canonical" href="https://www.../">
     <!-- Favicon -->
-    <?php include_once "./views/head_favicon.html" ?>
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/Favicon 180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon 32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon 16x16.png">
     <!-- CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,9 +51,7 @@
     <script defer src="assets/js/signup_page-handler.js"></script><!-- Control image manipulation -->
 </head>
 <body>
-    <header> 
-        <?php ViewBook::render('navbar_flex.php'); ?>
-    </header>
+    <?php ViewBook::render('navbar_flex.php'); ?>
     
     <main>
         <?php ViewBook::render('section_home.php'); ?>  
@@ -58,7 +59,7 @@
         <?php ViewBook::render('section_signup.php'); ?>  
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
-        <?php ViewBook::render('section_export.html'); ?>
+        <?php ViewBook::render('section_export.php'); ?>
         <section id="author" class="hidden"></section>
         <section id="contact" class="hidden"></section>
     </main>

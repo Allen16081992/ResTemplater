@@ -1,4 +1,4 @@
-<section id="login" class="<?= ViewBook::setVisibility('login'); //ViewBook::setView_Error('login'); ?>"> 
+<section id="login" class="<?= ViewBook::setVisibility('login'); ?>"> 
     <div class="form-window">
         <div class="auth-card">
             <div class="auth-columns">
@@ -14,6 +14,7 @@
                         <p class="auth-sub">Sign in to continue crafting your resume.</p>
                     </div>
                     <form action="config/action_handler.conf.php" method="post">
+                        <?= SessionBook::csrfField(); ?>
                         <div class="field">
                             <label class="label" for="email">Email</label>
                             <div class="control has-icons-left">

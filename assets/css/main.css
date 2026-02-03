@@ -67,8 +67,7 @@ body {
     flex-direction: column;
     background: var(--bg-gradients);
 }
-main { flex: 1;  }
-header {
+body > header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -76,6 +75,7 @@ header {
     background: rgba(0,0,0,.5);
     box-shadow: 0 8px 22px rgba(0,0,0,.35);
 }
+main { flex: 1;  }
 section {
     display: flex;
     flex-direction: column;
@@ -134,6 +134,16 @@ nav a.current { cursor: default; }
 a[data-section="sign_up"] { background:#04AA6D; }
 a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /* #44d884 */
 #logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
+/* Error coloring */
+/* .serV-error {
+    background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+} */
+
+/* Success coloring */
+/* .serV-good {
+    color:red;
+    background: radial-gradient(circle, rgb(52, 52, 52) 15%, rgba(8, 255, 0, 1) 100%);
+} */
 
 /* ==========================================================
    3. HERO + LANDING SECTIONS
@@ -326,7 +336,7 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
     /* Date Fields */
     input[type="date"] { display:none; }
     .select-group { display: flex; gap: 0.35rem; }
-    .select-group select { max-width: 4.3rem; }
+    /* .select-group select { max-width: 4.3rem; } we ommited 'username' field so width ain't that important anymore. */
 
     /* Password Bulletpoint style */
     .pwd-rules {
@@ -492,16 +502,6 @@ form {
     text-align: center;   
     animation-delay: 0s; 
     animation: fadeInSoft 0.7s ease-out forwards, fadeOutSoft 2s ease-in-out forwards 6s; 
-} */
-
-/* Error coloring */
-/* .serV-error {
-    background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
-} */
-
-/* Success coloring */
-/* .serV-oke {
-    background: radial-gradient(circle, rgb(52, 52, 52) 15%, rgba(8, 255, 0, 1) 100%);
 } */
 
 /* Fade-in */

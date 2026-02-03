@@ -1,4 +1,4 @@
-<section id="ready_user" class="<?= ViewBook::setVisibility('success'); //ViewBook::setView_Error('success'); ?>">
+<section id="ready_user" class="<?= ViewBook::setVisibility('success'); ?>">
     <h1 class="title is-size-2 has-text-grey-light has-text-centered animate__animated animate__fadeInDown" style="margin-top: 3rem;">
         ✨ Your account has been casted successfully ✨
     </h1>

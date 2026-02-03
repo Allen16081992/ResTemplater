@@ -217,7 +217,7 @@
   <div class="pw-editor-shell">
     <header class="pw-editor-header">
       <div>
-        <h1 class="pw-editor-title">Your Job Scroll Cauldron</h1>
+        <h1 class="pw-editor-title">Job Scroll Cauldron</h1>
         <p class="pw-editor-sub">
           Brew, tweak and trim your resume sections before sending them into the wild.
         </p>
@@ -389,7 +389,7 @@
           <header class="pw-panel-header">
             <div>
               <h2>Profile</h2>
-              <p>Who are you on this scroll? Keep it short, sharp and human.</p>
+              <p>Who are you on? Keep it short, sharp and human.</p>
             </div>
             <button type="button" class="button is-light pw-edit-btn">
               Edit

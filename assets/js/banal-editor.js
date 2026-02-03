@@ -1,39 +1,81 @@
 "use strict";
+
+/**
+ * FINAL Wizard JS — compatible with your FINAL MARKUP (ids + data-steps)
+ *
+ * Goals:
+ * - Wizard UI stays functional even if optional elements (progress/toast/summary) are missing.
+ * - Start button is visible (relies on your existing CSS: .pw-card.is-active).
+ * - No localStorage. No JS submit. Final submit is normal <button type="submit">.
+ * - Auto-inject first Experience entry on hasExp=yes.
+ * - Auto-inject first Education entry on studying=yes.
+ * - Experience/Education submit as arrays:
+ *     experience[0][job], experience[0][company], ...
+ *     education[0][program], education[0][school], ...
+ *
+ * Required in markup:
+ * - #pwBaseline, #pwStage
+ * - .pw-card[data-step]
+ * - #btnBack #btnNext #btnReset
+ * - [data-action="start"] [data-action="saveExpOne"] [data-action="saveEduOne"]
+ * - #expMount #eduMount
+ * - #experienceFields #educationFields (hidden containers inside the <form>)
+ * - #studyingVal #hasExpVal #expMoreVal #eduMoreVal (hidden inputs)
+ */
+
 (() => {
   const root = document.getElementById("pwBaseline");
-  if (!root) return; // important: only run if this widget exists on the page
+  if (!root) return;
 
   if (root.dataset.pwInit) return;
   root.dataset.pwInit = "1";
 
-  const STORAGE_KEY = "pw_baseline_resume_v1";
-
   const stage = root.querySelector("#pwStage");
+  if (!stage) return;
+
   const cards = Array.from(stage.querySelectorAll(".pw-card"));
-  const progressEl = root.querySelector("#pwProgress");
-  const toast = root.querySelector("#pwToast");
+  if (cards.length === 0) return;
 
   const btnBack = root.querySelector("#btnBack");
   const btnNext = root.querySelector("#btnNext");
   const btnReset = root.querySelector("#btnReset");
+  if (!btnBack || !btnNext || !btnReset) return;
 
+  // Optional
+  const progressEl = root.querySelector("#pwProgress");
+  const toast = root.querySelector("#pwToast");
   const summaryGrid = root.querySelector("#summaryGrid");
 
-  if (!stage || !progressEl || !toast || !btnBack || !btnNext || !btnReset || !summaryGrid) {
-    return;
-  }
+  // Hidden choice values
+  const studyingVal = root.querySelector("#studyingVal");
+  const hasExpVal = root.querySelector("#hasExpVal");
+  const expMoreVal = root.querySelector("#expMoreVal");
+  const eduMoreVal = root.querySelector("#eduMoreVal");
 
-  // Canonical data (minimal)
-  const data = {
-    fullName: "",
-    headline: "",
-    studying: null,   // "yes" | "no"
-    hasExp: null,     // "yes" | "no"
-    experience: [],
-    education: [],
-    contact: { email: "", city: "", country: "", website: "", phone: "" }
-  };
+  // Dynamic mounts + submit containers
+  const expMount = root.querySelector("#expMount");
+  const eduMount = root.querySelector("#eduMount");
+  const experienceFields = root.querySelector("#experienceFields");
+  const educationFields = root.querySelector("#educationFields");
+  if (!expMount || !eduMount || !experienceFields || !educationFields) return;
 
+  // Inputs
+  const fullNameEl = root.querySelector("#fullName");
+  const headlineEl = root.querySelector("#headline");
+  const emailEl = root.querySelector("#email");
+  const cityEl = root.querySelector("#city");
+  const countryEl = root.querySelector("#country");
+  const websiteEl = root.querySelector("#website");
+  const phoneEl = root.querySelector("#phone");
+
+  const startBtn = root.querySelector('[data-action="start"]');
+  const saveExpBtn = root.querySelector('[data-action="saveExpOne"]');
+  const saveEduBtn = root.querySelector('[data-action="saveEduOne"]');
+  if (!startBtn || !saveExpBtn || !saveEduBtn) return;
+
+  // --------------------------
+  // Progress chips (optional)
+  // --------------------------
   const stepsSemantic = [
     { key: "basics", label: "Basics" },
     { key: "experience", label: "Experience" },
@@ -43,54 +85,32 @@
     { key: "download", label: "Download" }
   ];
 
-  // Build progress chips
-  const chips = stepsSemantic.map(s => {
-    const chip = document.createElement("div");
-    chip.className = "pw-stepchip";
-    chip.dataset.pwchip = s.key;
-    chip.innerHTML = `<span class="dot"></span><span>${s.label}</span>`;
-    progressEl.appendChild(chip);
-    return chip;
-  });
-
-  let route = [];
-  let index = 0;
-
-  function showToast() {
-    toast.classList.add("is-show");
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => toast.classList.remove("is-show"), 850);
+  const chips = [];
+  if (progressEl) {
+    progressEl.innerHTML = "";
+    for (const s of stepsSemantic) {
+      const chip = document.createElement("div");
+      chip.className = "pw-stepchip";
+      chip.dataset.pwchip = s.key;
+      chip.innerHTML = `<span class="dot"></span><span>${escapeHtml(s.label)}</span>`;
+      progressEl.appendChild(chip);
+      chips.push(chip);
+    }
   }
 
-  function saveLocal() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      showToast();
-    } catch (e) {}
-  }
-
-  function loadLocal() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      Object.assign(data, parsed);
-      data.contact = Object.assign({ email:"", city:"", country:"", website:"", phone:"" }, parsed.contact || {});
-      data.experience = Array.isArray(parsed.experience) ? parsed.experience : [];
-      data.education  = Array.isArray(parsed.education) ? parsed.education : [];
-    } catch (e) {}
-  }
-
-  function setActive(stepKey) {
-    cards.forEach(c => c.classList.toggle("is-active", c.dataset.step === stepKey));
-    updateNavButtons();
-    syncProgressChips(stepKey);
-    if (stepKey === "review") renderSummary();
+  function toSemanticBucket(stepKey) {
+    if (["welcome", "basics", "studying"].includes(stepKey)) return "basics";
+    if (["hasExp", "expOne", "expMore"].includes(stepKey)) return "experience";
+    if (["eduOne", "eduMore"].includes(stepKey)) return "education";
+    if (["contact"].includes(stepKey)) return "contact";
+    if (["review"].includes(stepKey)) return "review";
+    return "download";
   }
 
   function syncProgressChips(activeStepKey) {
+    if (!chips.length) return;
     const bucket = toSemanticBucket(activeStepKey);
-    const activeIdx = stepsSemantic.findIndex(s => s.key === bucket);
+    const activeIdx = stepsSemantic.findIndex((s) => s.key === bucket);
 
     chips.forEach((chip, i) => {
       chip.classList.toggle("is-active", i === activeIdx);
@@ -98,25 +118,60 @@
     });
   }
 
-  function toSemanticBucket(stepKey) {
-    if (["welcome","basics","studying"].includes(stepKey)) return "basics";
-    if (["hasExp","expOne","expMore"].includes(stepKey)) return "experience";
-    if (["eduOne","eduMore"].includes(stepKey)) return "education";
-    if (["contact"].includes(stepKey)) return "contact";
-    if (["review"].includes(stepKey)) return "review";
-    return "download";
+  // --------------------------
+  // Toast (optional)
+  // --------------------------
+  function showToast(msg = "Saved") {
+    if (!toast) return;
+    const spans = toast.querySelectorAll("span");
+    if (spans.length >= 2) spans[1].textContent = msg;
+    toast.classList.add("is-show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("is-show"), 850);
   }
+
+  // --------------------------
+  // State + route
+  // --------------------------
+  const existingSteps = new Set(cards.map((c) => String(c.dataset.step || "")));
+
+  const state = {
+    studying: null, // "yes" | "no"
+    hasExp: null,   // "yes" | "no"
+    expMore: null,  // "yes" | "no"
+    eduMore: null,  // "yes" | "no"
+    expSaved: 0,
+    eduSaved: 0,
+    expCurrent: null, // current block in expMount (not yet moved to experienceFields)
+    eduCurrent: null
+  };
+
+  let route = [];
+  let index = 0;
 
   function buildRoute() {
     const r = ["welcome", "basics", "studying", "hasExp"];
-
-    if (data.hasExp === "yes") r.push("expOne", "expMore");
-    if (data.studying === "yes") r.push("eduOne", "eduMore");
-
+    if (state.hasExp === "yes") r.push("expOne", "expMore");
+    if (state.studying === "yes") r.push("eduOne", "eduMore");
     r.push("contact", "review", "download");
 
-    route = r;
+    route = r.filter((k) => existingSteps.has(k));
     if (index >= route.length) index = route.length - 1;
+    if (index < 0) index = 0;
+  }
+
+  function currentStep() {
+    return route[index] || "welcome";
+  }
+
+  function setActive(stepKey) {
+    // IMPORTANT: use is-active class for wizard visibility
+    cards.forEach((c) => c.classList.toggle("is-active", c.dataset.step === stepKey));
+
+    updateNavButtons();
+    syncProgressChips(stepKey);
+
+    if (stepKey === "review") renderSummary();
   }
 
   function goTo(i) {
@@ -125,11 +180,29 @@
   }
 
   function next() {
-    const step = route[index];
+    const step = currentStep();
     if (!validateStep(step)) return;
 
-    if (step === "expMore" && data._expMore === "yes") { goTo(index - 1); return; }
-    if (step === "eduMore" && data._eduMore === "yes") { goTo(index - 1); return; }
+    // Loop back logic
+    if (step === "expMore" && state.expMore === "yes") {
+      ensureExpBlock(); // next blank entry
+      state.expMore = null;
+      if (expMoreVal) expMoreVal.value = "";
+      clearChoiceGroup("expMore");
+      const expOneIdx = route.indexOf("expOne");
+      if (expOneIdx !== -1) goTo(expOneIdx);
+      return;
+    }
+
+    if (step === "eduMore" && state.eduMore === "yes") {
+      ensureEduBlock();
+      state.eduMore = null;
+      if (eduMoreVal) eduMoreVal.value = "";
+      clearChoiceGroup("eduMore");
+      const eduOneIdx = route.indexOf("eduOne");
+      if (eduOneIdx !== -1) goTo(eduOneIdx);
+      return;
+    }
 
     goTo(index + 1);
   }
@@ -139,83 +212,175 @@
   }
 
   function updateNavButtons() {
-    const step = route[index];
+    const step = currentStep();
+
     btnBack.disabled = (step === "welcome");
-    btnReset.disabled = false;
 
     if (step === "welcome") {
       btnNext.textContent = "Continue";
-      btnNext.disabled = true;
+      btnNext.disabled = true; // Start button advances from welcome
+      btnNext.style.visibility = "visible";
       return;
     }
 
     if (step === "download") {
       btnNext.disabled = true;
       btnNext.style.visibility = "hidden";
-    } else {
-      btnNext.disabled = false;
-      btnNext.style.visibility = "visible";
-      btnNext.textContent = "Continue";
+      return;
     }
+
+    btnNext.disabled = false;
+    btnNext.style.visibility = "visible";
+    btnNext.textContent = "Continue";
+  }
+
+  // --------------------------
+  // Validation
+  // --------------------------
+  function required(v) {
+    return v != null && String(v).trim().length > 0;
+  }
+
+  function markInvalid(el, on) {
+    if (!el) return;
+    el.style.borderColor = on ? "rgba(239,68,68,.85)" : "";
+  }
+
+  function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function isValidUrl(v) {
+    const s = String(v || "").trim();
+    if (!s) return true; // empty allowed
+
+    try {
+      const u = new URL(s.startsWith("http://") || s.startsWith("https://") ? s : "https://" + s);
+
+      // Only allow http(s)
+      if (!["http:", "https:"].includes(u.protocol)) return false;
+
+      const host = u.hostname;
+
+      // Allow localhost explicitly (optional; remove if you don't want it)
+      if (host === "localhost") return true;
+
+      // Reject single-label hosts like "ddd" or "intranet"
+      if (!host.includes(".")) return false;
+
+      // Basic: avoid trailing dot like "example.com."
+      if (host.endsWith(".")) return false;
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function normalizeUrl(v) {
+    const s = String(v || "").trim();
+    if (!s) return "";
+
+    // If scheme already present, keep it
+    if (/^https?:\/\//i.test(s)) return s;
+
+    // If user typed www.example.com or example.com
+    return "https://" + s;
+  }
+
+  function pulseInvalid(el) {
+    if (!el) return;
+    const old = el.style.borderColor;
+    el.style.borderColor = "rgba(239,68,68,.85)";
+    el.focus({ preventScroll: false });
+    setTimeout(() => (el.style.borderColor = old || ""), 850);
+  }
+
+  function validateCurrentExpBlock() {
+    if (!state.expCurrent) return false;
+    const job = state.expCurrent.querySelector('input[name$="[job]"]');
+    const company = state.expCurrent.querySelector('input[name$="[company]"]');
+    if (!required(job?.value)) { pulseInvalid(job); return false; }
+    if (!required(company?.value)) { pulseInvalid(company); return false; }
+    return true;
+  }
+
+  function validateCurrentEduBlock() {
+    if (!state.eduCurrent) return false;
+    const program = state.eduCurrent.querySelector('input[name$="[program]"]');
+    const school = state.eduCurrent.querySelector('input[name$="[school]"]');
+    if (!required(program?.value)) { pulseInvalid(program); return false; }
+    if (!required(school?.value)) { pulseInvalid(school); return false; }
+    return true;
   }
 
   function validateStep(step) {
     if (step === "welcome") return true;
 
     if (step === "basics") {
-      const fullName = root.querySelector("#fullName").value.trim();
-      if (!fullName) { pulseInvalid("fullName"); return false; }
-      data.fullName = fullName;
-      data.headline = root.querySelector("#headline").value.trim();
-      saveLocal();
+      if (!fullNameEl) return true;
+      if (!required(fullNameEl.value)) { pulseInvalid(fullNameEl); return false; }
       return true;
     }
 
     if (step === "studying") {
-      if (!data.studying) return false;
-      saveLocal();
-      return true;
+      return !!state.studying;
     }
 
     if (step === "hasExp") {
-      if (!data.hasExp) return false;
-      buildRoute();
-      saveLocal();
-      return true;
+      return !!state.hasExp;
     }
 
-    if (step === "expOne") return data.experience.length >= 1;
-    if (step === "expMore") { if (!data._expMore) return false; saveLocal(); return true; }
-    if (step === "eduOne") return data.education.length >= 1;
-    if (step === "eduMore") { if (!data._eduMore) return false; saveLocal(); return true; }
+    if (step === "expOne") return state.expSaved >= 1;
+    if (step === "expMore") return !!state.expMore;
+
+    if (step === "eduOne") return state.eduSaved >= 1;
+    if (step === "eduMore") return !!state.eduMore;
 
     if (step === "contact") {
-      const email = root.querySelector("#email").value.trim();
-      if (!email) { pulseInvalid("email"); return false; }
-      data.contact.email = email;
-      data.contact.city = root.querySelector("#city").value.trim();
-      data.contact.country = root.querySelector("#country").value.trim();
-      data.contact.website = root.querySelector("#website").value.trim();
-      data.contact.phone = root.querySelector("#phone").value.trim();
-      saveLocal();
+      const email = emailEl.value.trim();
+      const websiteRaw = websiteEl.value.trim();
+
+      // Email required
+      if (!email) {
+        markInvalid(emailEl, true);
+        emailEl.focus();
+        return false;
+      }
+
+      // Email must be valid
+      if (!isValidEmail(email)) {
+        markInvalid(emailEl, true);
+        emailEl.focus();
+        return false;
+      }
+      markInvalid(emailEl, false);
+
+      // Website optional, but if filled must be valid
+      if (websiteRaw && !isValidUrl(websiteRaw)) {
+        markInvalid(websiteEl, true);
+        websiteEl.focus();
+        return false;
+      }
+
+      // Normalize once accepted (only if filled)
+      if (websiteRaw) {
+        websiteEl.value = normalizeUrl(websiteRaw);
+      }
+      markInvalid(websiteEl, false);
+
       return true;
     }
 
     return true;
   }
 
-  function pulseInvalid(id) {
-    const el = root.querySelector("#" + id);
-    if (!el) return;
-    const old = el.style.borderColor;
-    el.style.borderColor = "rgba(239,68,68,.85)";
-    el.focus({ preventScroll: false });
-    setTimeout(() => el.style.borderColor = old || "", 850);
-  }
-
+  // --------------------------
+  // Choice UI
+  // --------------------------
   function clearChoiceGroup(groupName) {
     root.querySelectorAll(`.pw-choice[data-choice="${groupName}"]`)
-      .forEach(el => el.classList.remove("is-selected"));
+      .forEach((el) => el.classList.remove("is-selected"));
   }
 
   function setChoice(groupName, value) {
@@ -224,154 +389,246 @@
     if (el) el.classList.add("is-selected");
   }
 
-  function wireChoices() {
-    stage.addEventListener("click", (ev) => {
-      const choice = ev.target.closest(".pw-choice");
-      if (!choice) return;
+  stage.addEventListener("click", (ev) => {
+    const choice = ev.target.closest(".pw-choice");
+    if (!choice) return;
 
-      const group = choice.dataset.choice;
-      const value = choice.dataset.value;
+    const group = choice.dataset.choice;
+    const value = choice.dataset.value;
 
-      if (group === "studying") {
-        data.studying = value;
-        setChoice("studying", value);
-        buildRoute();
-        saveLocal();
-        next();
-        return;
-      }
-
-      if (group === "hasExp") {
-        data.hasExp = value;
-        setChoice("hasExp", value);
-        buildRoute();
-        saveLocal();
-        next();
-        return;
-      }
-
-      if (group === "expMore") {
-        data._expMore = value;
-        setChoice("expMore", value);
-        saveLocal();
-        next();
-        return;
-      }
-
-      if (group === "eduMore") {
-        data._eduMore = value;
-        setChoice("eduMore", value);
-        saveLocal();
-        next();
-        return;
-      }
-    });
-  }
-
-  function wireButtons() {
-    btnBack.addEventListener("click", back);
-    btnNext.addEventListener("click", next);
-
-    btnReset.addEventListener("click", () => {
-      localStorage.removeItem(STORAGE_KEY);
-
-      data.fullName = "";
-      data.headline = "";
-      data.studying = null;
-      data.hasExp = null;
-      data.experience = [];
-      data.education = [];
-      data.contact = { email:"", city:"", country:"", website:"", phone:"" };
-      data._expMore = null;
-      data._eduMore = null;
-
-      ["fullName","headline","email","city","country","website","phone",
-       "expRole","expCompany","expStart","expEnd","expDesc",
-       "eduProgram","eduSchool","eduStart","eduEnd","eduDesc"
-      ].forEach(id => {
-        const el = root.querySelector("#" + id);
-        if (el) el.value = "";
-      });
-
-      ["studying","hasExp","expMore","eduMore"].forEach(clearChoiceGroup);
+    if (group === "studying") {
+      state.studying = value;
+      if (studyingVal) studyingVal.value = value;
+      setChoice("studying", value);
 
       buildRoute();
-      goTo(0);
-    });
 
-    root.querySelector('[data-action="start"]').addEventListener("click", () => {
+      // Auto-inject first education block on yes
+      if (value === "yes") ensureEduBlock();
+
+      showToast("Saved");
+      next();
+      return;
+    }
+
+    if (group === "hasExp") {
+      state.hasExp = value;
+      if (hasExpVal) hasExpVal.value = value;
+      setChoice("hasExp", value);
+
       buildRoute();
-      goTo(1);
-    });
 
-    root.querySelector('[data-action="saveExpOne"]').addEventListener("click", (ev) => {
-      ev.preventDefault();
-      const role = root.querySelector("#expRole").value.trim();
-      const company = root.querySelector("#expCompany").value.trim();
-      if (!role) { pulseInvalid("expRole"); return; }
-      if (!company) { pulseInvalid("expCompany"); return; }
+      // Auto-inject first experience block on yes
+      if (value === "yes") ensureExpBlock();
 
-      const start = root.querySelector("#expStart").value;
-      const end = root.querySelector("#expEnd").value;
-      const descRaw = (root.querySelector("#expDesc").value || "").trim();
+      showToast("Saved");
+      next();
+      return;
+    }
 
-      const bullets = descRaw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+    if (group === "expMore") {
+      state.expMore = value;
+      if (expMoreVal) expMoreVal.value = value;
+      setChoice("expMore", value);
+      showToast("Saved");
+      next();
+      return;
+    }
 
-      data.experience.push({ role, company, start, end, bullets });
+    if (group === "eduMore") {
+      state.eduMore = value;
+      if (eduMoreVal) eduMoreVal.value = value;
+      setChoice("eduMore", value);
+      showToast("Saved");
+      next();
+      return;
+    }
+  });
 
-      ["expRole","expCompany","expStart","expEnd","expDesc"].forEach(id => root.querySelector("#"+id).value = "");
+  // --------------------------
+  // Dynamic blocks (Experience/Education)
+  // --------------------------
+  function createExpBlock(i) {
+    const wrap = document.createElement("div");
+    wrap.className = "pw-exp-block";
+    wrap.dataset.expIndex = String(i);
 
-      data._expMore = null;
-      clearChoiceGroup("expMore");
+    wrap.innerHTML = `
+      <div class="pw-row">
+        <div>
+          <label class="pw-label">Role *</label>
+          <input class="pw-input" type="text" name="experience[${i}][job]" placeholder="e.g. Junior IT Support (Intern)" autocomplete="organization-title">
+        </div>
+        <div>
+          <label class="pw-label">Company *</label>
+          <input class="pw-input" type="text" name="experience[${i}][company]" placeholder="e.g. TechCorp" autocomplete="organization">
+        </div>
+      </div>
 
-      saveLocal();
+      <div class="pw-row">
+        <div>
+          <label class="pw-label">Start</label>
+          <input class="pw-input" type="month" name="experience[${i}][start]">
+        </div>
+        <div>
+          <label class="pw-label">End</label>
+          <input class="pw-input" type="month" name="experience[${i}][end]">
+        </div>
+      </div>
 
-      const expMoreIndex = route.indexOf("expMore");
-      if (expMoreIndex !== -1) goTo(expMoreIndex);
-    });
-
-    root.querySelector('[data-action="saveEduOne"]').addEventListener("click", (ev) => {
-      ev.preventDefault();
-      const program = root.querySelector("#eduProgram").value.trim();
-      const school = root.querySelector("#eduSchool").value.trim();
-      if (!program) { pulseInvalid("eduProgram"); return; }
-      if (!school) { pulseInvalid("eduSchool"); return; }
-
-      const start = root.querySelector("#eduStart").value;
-      const end = root.querySelector("#eduEnd").value;
-      const note = (root.querySelector("#eduDesc").value || "").trim();
-
-      data.education.push({ program, school, start, end, note });
-
-      ["eduProgram","eduSchool","eduStart","eduEnd","eduDesc"].forEach(id => root.querySelector("#"+id).value = "");
-
-      data._eduMore = null;
-      clearChoiceGroup("eduMore");
-
-      saveLocal();
-
-      const eduMoreIndex = route.indexOf("eduMore");
-      if (eduMoreIndex !== -1) goTo(eduMoreIndex);
-    });
-
-    root.querySelector('[data-action="download"]').addEventListener("click", () => {
-      const payload = { schema: "paperwitch.resume.v1", createdAt: new Date().toISOString(), resume: data };
-
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = (data.fullName ? data.fullName.replace(/\s+/g, "_") : "resume") + "_paperwitch.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      URL.revokeObjectURL(url);
-    });
+      <div>
+        <label class="pw-label">What did you do?</label>
+        <textarea class="pw-textarea" name="experience[${i}][desc]" placeholder="Write 2–5 short lines."></textarea>
+        <div class="pw-hint">Tip: press Enter after each responsibility.</div>
+      </div>
+    `;
+    return wrap;
   }
 
+  function createEduBlock(i) {
+    const wrap = document.createElement("div");
+    wrap.className = "pw-edu-block";
+    wrap.dataset.eduIndex = String(i);
+
+    wrap.innerHTML = `
+      <div class="pw-row">
+        <div>
+          <label class="pw-label">Program / Degree *</label>
+          <input class="pw-input" type="text" name="education[${i}][program]" placeholder="e.g. BSc Information Technology">
+        </div>
+        <div>
+          <label class="pw-label">Institute *</label>
+          <input class="pw-input" type="text" name="education[${i}][school]" placeholder="e.g. Hogeschool Rotterdam">
+        </div>
+      </div>
+
+      <div class="pw-row">
+        <div>
+          <label class="pw-label">Start</label>
+          <input class="pw-input" type="month" name="education[${i}][start]">
+        </div>
+        <div>
+          <label class="pw-label">End</label>
+          <input class="pw-input" type="month" name="education[${i}][end]">
+        </div>
+      </div>
+
+      <div>
+        <label class="pw-label">Optional note</label>
+        <textarea class="pw-textarea" name="education[${i}][desc]" placeholder="Optional. One or two lines."></textarea>
+      </div>
+    `;
+    return wrap;
+  }
+
+  function ensureExpBlock() {
+    if (state.expCurrent) return;
+    const i = state.expSaved;
+    const block = createExpBlock(i);
+    expMount.innerHTML = "";
+    expMount.appendChild(block);
+    state.expCurrent = block;
+  }
+
+  function ensureEduBlock() {
+    if (state.eduCurrent) return;
+    const i = state.eduSaved;
+    const block = createEduBlock(i);
+    eduMount.innerHTML = "";
+    eduMount.appendChild(block);
+    state.eduCurrent = block;
+  }
+
+  saveExpBtn.addEventListener("click", () => {
+    ensureExpBlock();
+    if (!validateCurrentExpBlock()) return;
+
+    const block = state.expCurrent;
+    expMount.innerHTML = "";
+    experienceFields.appendChild(block);
+
+    state.expCurrent = null;
+    state.expSaved += 1;
+
+    // must answer expMore again
+    state.expMore = null;
+    if (expMoreVal) expMoreVal.value = "";
+    clearChoiceGroup("expMore");
+
+    showToast("Role saved");
+
+    const expMoreIdx = route.indexOf("expMore");
+    if (expMoreIdx !== -1) goTo(expMoreIdx);
+  });
+
+  saveEduBtn.addEventListener("click", () => {
+    ensureEduBlock();
+    if (!validateCurrentEduBlock()) return;
+
+    const block = state.eduCurrent;
+    eduMount.innerHTML = "";
+    educationFields.appendChild(block);
+
+    state.eduCurrent = null;
+    state.eduSaved += 1;
+
+    state.eduMore = null;
+    if (eduMoreVal) eduMoreVal.value = "";
+    clearChoiceGroup("eduMore");
+
+    showToast("Education saved");
+
+    const eduMoreIdx = route.indexOf("eduMore");
+    if (eduMoreIdx !== -1) goTo(eduMoreIdx);
+  });
+
+  // --------------------------
+  // Buttons
+  // --------------------------
+  btnBack.addEventListener("click", back);
+  btnNext.addEventListener("click", next);
+
+  btnReset.addEventListener("click", () => {
+    stage.reset();
+
+    // Clear dynamic blocks + saved
+    expMount.innerHTML = "";
+    eduMount.innerHTML = "";
+    experienceFields.innerHTML = "";
+    educationFields.innerHTML = "";
+
+    state.studying = null;
+    state.hasExp = null;
+    state.expMore = null;
+    state.eduMore = null;
+    state.expSaved = 0;
+    state.eduSaved = 0;
+    state.expCurrent = null;
+    state.eduCurrent = null;
+
+    if (studyingVal) studyingVal.value = "";
+    if (hasExpVal) hasExpVal.value = "";
+    if (expMoreVal) expMoreVal.value = "";
+    if (eduMoreVal) eduMoreVal.value = "";
+
+    ["studying", "hasExp", "expMore", "eduMore"].forEach(clearChoiceGroup);
+
+    buildRoute();
+    goTo(0);
+  });
+
+  startBtn.addEventListener("click", () => {
+    buildRoute();
+    const basicsIdx = route.indexOf("basics");
+    goTo(basicsIdx !== -1 ? basicsIdx : 1);
+  });
+
+  // --------------------------
+  // Review (optional)
+  // --------------------------
   function renderSummary() {
+    if (!summaryGrid) return;
+
     summaryGrid.innerHTML = "";
 
     const addCard = (title, val, mut) => {
@@ -385,41 +642,31 @@
       summaryGrid.appendChild(el);
     };
 
-    addCard("Name", data.fullName || "—", data.headline ? data.headline : "");
-    addCard("Experience", `${data.experience.length} role(s)`, data.experience.length ? data.experience[0].role : "—");
-    addCard("Education", `${data.education.length} entry(s)`, data.education.length ? data.education[0].program : (data.studying === "yes" ? "—" : "Not included"));
-    addCard("Contact", data.contact.email || "—", [data.contact.city, data.contact.country].filter(Boolean).join(", "));
+    const name = fullNameEl?.value?.trim() || "—";
+    const head = headlineEl?.value?.trim() || "";
+    const email = emailEl?.value?.trim() || "—";
+    const city = cityEl?.value?.trim() || "";
+    const country = countryEl?.value?.trim() || "";
+
+    addCard("Name", name, head);
+    addCard("Experience", `${state.expSaved} role(s)`, state.hasExp === "yes" ? "" : "Not included");
+    addCard("Education", `${state.eduSaved} entry(s)`, state.studying === "yes" ? "" : "Not included");
+    addCard("Contact", email, [city, country].filter(Boolean).join(", "));
   }
 
   function escapeHtml(str) {
-    return String(str).replace(/[&<>"']/g, s => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    return String(str).replace(/[&<>"']/g, (s) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
     }[s]));
   }
 
-  function hydrateUIFromData() {
-    root.querySelector("#fullName").value = data.fullName || "";
-    root.querySelector("#headline").value = data.headline || "";
-
-    if (data.studying) setChoice("studying", data.studying);
-    if (data.hasExp) setChoice("hasExp", data.hasExp);
-    if (data._expMore) setChoice("expMore", data._expMore);
-    if (data._eduMore) setChoice("eduMore", data._eduMore);
-
-    root.querySelector("#email").value = data.contact.email || "";
-    root.querySelector("#city").value = data.contact.city || "";
-    root.querySelector("#country").value = data.contact.country || "";
-    root.querySelector("#website").value = data.contact.website || "";
-    root.querySelector("#phone").value = data.contact.phone || "";
-  }
-
-  // Init
-  loadLocal();
-  hydrateUIFromData();
+  // --------------------------
+  // Init (guarantees Start visible)
+  // --------------------------
   buildRoute();
-  goTo(0);
-
-  wireChoices();
-  wireButtons();
-  buildRoute();
+  goTo(0); // welcome => .is-active => Start shows (CSS-controlled)
 })();

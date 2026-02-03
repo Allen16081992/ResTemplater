@@ -4,7 +4,7 @@
         public function __construct(private PDO $pdo) {}
 
         public function getUser(string $email): array|false {
-            $stmt = $this->pdo->prepare('SELECT userID, fullname, email, password_hash FROM users WHERE email = :email;');
+            $stmt = $this->pdo->prepare('SELECT id, username, email, password_hash FROM accounts WHERE email = :email LIMIT 1;');
             $stmt->execute(['email' => $email]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
@@ -13,18 +13,9 @@
     final class signupCodex {
         public function __construct(private PDO $pdo) {}
 
-        public function existUser(string $email, ?string $username): bool {
-            if ($username === null || $username === '') {
-                $stmt = $this->pdo->prepare('SELECT 1 FROM users WHERE email = :email LIMIT 1;');
-                $stmt->execute(['email' => $email]);
-                return $stmt->fetchColumn() !== false;
-            }
-
-            $stmt = $this->pdo->prepare('SELECT 1 FROM users WHERE email = :email OR username = :username LIMIT 1;');
-            $stmt->execute([
-                'email'    => $email,
-                'username' => $username,
-            ]);
+        public function lookupUser(string $email): bool {
+            $stmt = $this->pdo->prepare('SELECT 1 FROM accounts WHERE email = :email LIMIT 1');
+            $stmt->execute(['email' => $email]);
             return $stmt->fetchColumn() !== false;
         }
 
@@ -36,12 +27,74 @@
             ]; 
             $hashSigil = password_hash($postData['pwd'], PASSWORD_ARGON2ID, $options); 
 
-            $stmt = $this->pdo->prepare("INSERT INTO users (username, email, password_hash, birthday) VALUES (:username, :email, :password_hash, :birthday)");
+            $stmt = $this->pdo->prepare("INSERT INTO accounts (email, password_hash, birth_date) VALUES (:email, :hashSigil, :birth_date)");
             $stmt->execute([
-                'username'       => ($postData['username'] ?? '') !== '' ? $postData['username'] : null,
                 ':email'         => $postData['email'],
-                ':password_hash' => $hashSigil,
-                ':birthday'      => $postData['date'], // 'YYYY-MM-DD'
+                ':hashSigil' => $hashSigil,
+                ':birth_date'      => $postData['date'], // 'YYYY-MM-DD'
+            ]);
+            return (int) $this->pdo->lastInsertId();
+        }
+    }
+
+    final class profileCodex {
+        public function __construct(private PDO $pdo) {}
+
+        // Search Email
+        public function lookupEmail(string $email, $userID): bool {
+            $stmt = $this->pdo->prepare('SELECT 1 FROM users WHERE email = :email AND id != :id LIMIT 1');
+            $stmt->execute(['email' => $email, 'user_id' => $userID]);
+            return $stmt->fetchColumn() !== false;
+        }
+
+        public function updateAccount(string $email, $pwd, $userID): bool {
+            $options = [
+                'memory_cost' => 65536,  // 64 MiB (in KiB)
+                'time_cost' => 2,       // 4 iterations
+                'threads' => 1         // 4 parallel threads
+            ]; 
+            $hashSigil = password_hash($pwd, PASSWORD_ARGON2ID, $options); 
+
+            $stmt = $this->pdo->prepare("UPDATE accounts SET email = :email, password_hash = :pwd WHERE user_id = :user_id;");
+            $stmt->execute([
+                ':email'     => $email,
+                ':hashSigil' => $hashSigil,
+                ':user_id'   => $userID
+            ]);
+            return (int) $this->pdo->lastInsertId();
+        }
+
+        // Search User Contacts
+        public function getContact(string $uid): array|false {
+            $stmt = $this->pdo->prepare('SELECT firstname, lastname, phone, city, postalcode, country FROM contacts WHERE id = :id;');
+            $stmt->execute([':id' => $uid]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function setContact(array $postData): int {
+            $stmt = $this->pdo->prepare("INSERT INTO contacts (firstname, lastname, phone, city, country, postalcode, user_id) VALUES (:firstname, :lastname, :phone, :city, :country, :postalcode, :user_id)");
+            $stmt->execute([
+                ':firstname' => $postData['firstname'],
+                ':lastname'  => $postData['lastname'],
+                ':phone'     => $postData['phone'],
+                ':city'      => $postData['city'],
+                ':country'   => $postData['country'],
+                ':postalcode'=> $postData['postalcode'],
+                ':user_id'   => $postData['user_id']
+            ]);
+            return (int) $this->pdo->lastInsertId();
+        }
+        
+        public function updateContact(array $postData): int {
+            $stmt = $this->pdo->prepare("UPDATE contacts SET firstname = :firstname, lastname = :lastname, phone = :phone, city = :city, country = :country, postalcode = :postalcode WHERE user_id = :user_id;");
+            $stmt->execute([
+                ':firstname' => $postData['firstname'],
+                ':lastname'  => $postData['lastname'],
+                ':phone'     => $postData['phone'],
+                ':city'      => $postData['city'],
+                ':country'   => $postData['country'],
+                ':postalcode'=> $postData['postalcode'],
+                ':user_id'   => $postData['user_id']
             ]);
             return (int) $this->pdo->lastInsertId();
         }

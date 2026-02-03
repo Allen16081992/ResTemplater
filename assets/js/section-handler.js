@@ -2,8 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Navigation elements
     let activeLink = null;
-    const logoLink = document.getElementById('logo');
-    const templateLink = document.getElementById('logo');
+    // const logoLink = document.getElementById('logo');
     const sections = document.querySelectorAll('main > section, main');
     const navLinks = document.querySelectorAll('nav a[data-section], p a[data-section], div a[data-section], button[data-section]');
 
@@ -18,20 +17,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (logoLink) {
-        // Logo Homepage
-        logoLink.addEventListener('click', function(event) {
-            event.preventDefault();
+    // if (logoLink) {
+    //     // Logo Homepage
+    //     logoLink.addEventListener('click', function(event) {
+    //         event.preventDefault();
 
-            // Reset active link and show the home section
-            if (activeLink) {
-                activeLink.classList.remove('current');
-                activeLink = null; // Ensure no link is marked as active
-            }
-            
-            paintSection('home'); // Assume 'home' is the default section to show
-        });
-    }
+    //         // Reset active link and show the home section
+    //         if (activeLink) {
+    //             activeLink.classList.remove('current');
+    //             activeLink = null; // Ensure no link is marked as active
+    //         }
+    //         paintSection('home'); // Assume 'home' is the default section to show
+    //     });
+    // }
 
     // Navigation Bar
     navLinks.forEach(link => {
@@ -66,8 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
             activeLink = activeNavLink; 
         }
     }
-
-    ////////////////// /////////////////////
 
     ///////////////// Miscellaneous Effects ////////////////////
     const pwdID = document.getElementById('pwdField');
@@ -128,17 +124,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // }
 });
 // Remove messages after a certain duration
-// window.onload = function() {
-//     var serverMsg = document.getElementById('server-msg');
+window.onload = function() {
+    var serverMsg = document.getElementById('server-msg');
 
-//     // Set timeout to remove error message after 5 seconds
-//     if (serverMsg) {
-//         setTimeout(function() {
-//             serverMsg.style.transition = 'opacity 0.3s ease'; 
-//             serverMsg.style.opacity = '0'; 
-//             setTimeout(function() {
-//                 serverMsg.style.display = 'none'; 
-//             }, 4500);
-//         }, 5000); // 5000 milliseconds = 5 seconds
-//     }
-// };
+    // Set timeout to remove error message after 5 seconds
+    if (serverMsg) {
+        setTimeout(function() {
+            serverMsg.style.transition = 'opacity 0.3s ease'; 
+            serverMsg.style.opacity = '0'; 
+            setTimeout(function() {
+                serverMsg.style.display = 'none'; 
+            }, 4500);
+        }, 5000); // 5000 milliseconds = 5 seconds
+    }
+};

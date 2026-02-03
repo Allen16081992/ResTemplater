@@ -1,4 +1,4 @@
-<section id="profile" class="<?= ViewBook::setVisibility('profile'); //ViewBook::setView_Error('profile'); ?>">
+<section id="profile" class="<?= ViewBook::setVisibility('profile'); ?>">
     <article class="profile-wrap">
         <header class="profile-header">
             <label for="upload" class="profile-avatar">             
@@ -9,7 +9,7 @@
                 <h1>Joanna Ross</h1>
                 <p>Your job-hunting familiar</p>
                 <label class="include-toggle">
-                    <input type="checkbox" checked>
+                    <input id="av" type="checkbox">
                     <span>Include avatar on resume</span>
                 </label>
             </div>
@@ -20,18 +20,18 @@
             <div class="field is-grouped">
                 <div class="control">
                     <label for="firstname" class="label">First Name</label>
-                    <input type="text" id="firstname" class="input" placeholder="..." disabled>
+                    <input type="text" id="firstname" name="firstname" class="input" placeholder="..." disabled>
                 </div>
                 <div class="control">
                     <label for="lastname"class="label">Last Name</label>
-                    <input type="text" id="lastname" class="input" placeholder="..." disabled>
+                    <input type="text" id="lastname" name="lastname" class="input" placeholder="..." disabled>
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
                     <label for="phone" class="label">Phone Number</label>
-                    <input type="tel" id="phone" class="input" placeholder="+31 6 1234 5678" disabled>
+                    <input type="tel" id="phone" name="phone" class="input" placeholder="+31 6 1234 5678" disabled>
                 </div>
                 <div class="control">
                     <label for="dateOfBirth" class="label">Date of Birth</label>
@@ -42,19 +42,19 @@
             <div class="field is-grouped">
                 <div class="control">
                     <label for="city" class="label">City</label>
-                    <input type="text" id="city" class="input" placeholder="Rotterdam" disabled>
+                    <input type="text" id="city" name="city" class="input" placeholder="Rotterdam" disabled>
                 </div>
                 <div class="control">
                     <label for="postcode" class="label">Postal Code</label>
-                    <input type="text" id="postcode" class="input" placeholder="1234 AB" disabled>
+                    <input type="text" id="postcode" name="postcode" class="input" placeholder="1234 AB" disabled>
                 </div>
             </div>
             <div class="field">
                 <label for="country" class="label">Country</label>
-                <input type="text" for="country" class="input" placeholder="Netherlands" disabled>
+                <input type="text" id="country" name="country" class="input" placeholder="Netherlands" disabled>
             </div>
             <div class="buttons mt-4">
-                <button type="button" class="button is-light edit-btn">Edit</button>
+                <button type="button" name="action" value="profile" class="button is-light edit-btn">Edit</button>
                 <!-- Save dynamically added by JS -->
             </div>
         </form>
@@ -62,22 +62,17 @@
         <form id="account" class="profile-section">
             <h2>Account Details</h2>
             <div class="field">
-                <label for="username" class="label">Username (optional)</label>
-                <input type="text" id="username" class="input" placeholder="..." disabled>
-            </div>
-
-            <div class="field">
                 <label for="email" class="label">Email</label>
-                <input type="email" id="email" class="input" placeholder="you@domain.com" disabled>
+                <input type="email" id="email" name="email" class="input" placeholder="you@domain.com" disabled>
             </div>
 
             <div class="field">
                 <label for="password" class="label">Password</label>
-                <input type="password" id="password" class="input" placeholder="••••••••" disabled>
+                <input type="password" id="password" name="pwd" class="input" placeholder="••••••••" disabled>
             </div>
 
             <div class="buttons mt-4">
-                <button type="button" class="button is-light edit-btn">Edit</button>
+                <button type="button" name="action" value="profile" class="button is-light edit-btn">Edit</button>
                 <!-- Save dynamically added by JS -->
             </div>
         </form>

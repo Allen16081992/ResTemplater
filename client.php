@@ -5,9 +5,8 @@
 
   // Essential PHP files
   require_once "./config/session_manager.conf.php"; 
-  
-  // SessionBook::invokeSession();
-  // SessionBook::intrusionGuard();
+  SessionBook::invokeSession();
+  $_SESSION['error'] = 'Profile update failed.';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +22,9 @@
     <meta property="og:locale" content="eng_ENG">
     <meta property="og:type" content="website">
     <!-- Favicon -->
-    <?php include_once "./views/head_favicon.html" ?>
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/Favicon 180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon 32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon 16x16.png">
     <!-- CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,8 +33,8 @@
     <link rel="stylesheet" href="assets/css/paperwitch.css">
     <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="assets/css/editor.css">
-    <!-- <link rel="stylesheet" href="assets/css/export.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+    <link rel="stylesheet" href="assets/css/export_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
@@ -41,15 +42,14 @@
     <script defer src="assets/js/form-handler.js"></script>
 </head>
 <body>
-    <header> 
-        <?php ViewBook::render('navbar_flex.php'); ?>
-    </header>
-
+    <?php ViewBook::render('navbar_flex.php'); ?>
+    <?php ViewBook::flashMessage(); ?>
+    
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
         <?php ViewBook::render('section_resume.php'); ?>  
 
-        <section id="export" class="<?= ViewBook::setView_Error('export'); ?>"> 
+        <section id="export" class="<?= ViewBook::setVisibility('export'); ?>"> 
             <?php ViewBook::render('section_export.html'); ?>
         </section>
     </main>

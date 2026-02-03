@@ -8,7 +8,7 @@
     
     // ┌───┐                                                                      ┌───┐
     // └─┬─┘  SessionBook handles sessions, security, and application integrity.  └─┬─┘
-    //   │    Handles CSRF tokens, flash data, throttling, and intrusion control.   │
+    //   │    Handles CSRF tokens, throttling, and intrusion control.               │
     // ┌─┴─┐                                                                      ┌─┴─┐
     // └───┘                                                                      └───┘
 
@@ -29,14 +29,18 @@
         public static function enforceToken(): void {
             if (!isset($_POST['csrf_token'])) {
                 $_SESSION['error'] = '403: Forbidden. Request Denied.';
-                header('Location: ../client.php');
-                exit;
+                ViewBook::revert(''); 
             }
             if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-                $_SESSION['error'] = 'Something went wrong. It might just need a kick. Please try again.';
-                header('Location: ../client.php');
-                exit;
+                $_SESSION['error'] = '403: Forbidden. Request Denied.';
+                ViewBook::revert('');
             }
+        }
+
+        public static function csrfField(): string {
+            self::invokeToken();
+            $t = htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8');
+            return '<input type="hidden" name="csrf_token" value="'.$t.'">';
         }
         
         //────────────────────────────────────//
@@ -51,14 +55,10 @@
                     'domain' => '',
                     'secure' => $flag, // Dynamically enforce
                     'httponly' => true, 
-                    'samesite' => 'Strict', 
+                    'samesite' => 'Lax', 
                 ]);
+                ini_set('session.use_strict_mode', '1');
                 session_start(); 
-            }
-
-            // Only call token when needed
-            if (in_array(basename($_SERVER['PHP_SELF']), ['index.php', 'client.php'])) {
-                self::invokeToken();
             }
         }
 
@@ -83,9 +83,8 @@
 
         public static function setUserSession($user): void {
             $_SESSION['session_data'] = [
-                'user_id' => (int)$user['userID'],
-                'username' => (string)$user['username'] ?? '',
-                'fullname' => (string)$user['fullname']
+                'user_id' => (int)$user['id'],
+                'firstname' => (string)$user['firstname']
             ];
         }
 
@@ -95,7 +94,7 @@
         }
 
         public static function clearPublicState(): void {
-            unset($_SESSION['error'], $_SESSION['flash'], $_SESSION['action'], $_SESSION['form_old']);
+            unset($_SESSION['error'], $_SESSION['action'], $_SESSION['form_old']);
             // optionally unset other UI-only keys
         }
 
@@ -105,6 +104,9 @@
                 header('Location: ../index.php');
                 exit;
             }
+        }
+
+        public static function onLoginSuccess(): void {
             session_regenerate_id(true);
             $_SESSION['last_regen'] = time();
         }
@@ -119,28 +121,16 @@
             }
             $_SESSION['last_login_attempt'] = time();
         }
-        
-        //────────────────────────────────────//
-        //             USER LOGIC             //
-        //────────────────────────────────────//
-        public static function addUsername() {
-            // Check for user name or fallback options
-            if (isset($_SESSION['session_data']['username'])) {
-                return $_SESSION['session_data']['username'];
-            } elseif (isset($_SESSION['session_data']['firstname'])) {
-                return $_SESSION['session_data']['firstname'];
-            } else { return "Profile"; }
-        }
     }
     
-    //   /##     /##   /##   /##########   /##            /##      /########
-    //  / ##    / ##  / ##  / ##______/   / ##           / ##     / ##___  ##
-    //  | ##    | ##  |__/  | ##          | ##     /#    | ##     | ##   | ##
-    //  | ##    | ##   /##  | ########    | ##    / #    | ##     | ########
-    //   \ ##  / ##/  / ##  | ##____/      \ ##  | ###  / ##      | ##___  ##
-    //    \ ##  ##/   | ##  | ##            \ ##/ ## ##/ ##       | ##   \ ##
-    //     \ ####/    | ##  | ##########     \ #### \ ####        | ########/ 
-    //      \___/     |__/  |__________/      \__/   \__/         |________/
+    //   /##     /##   /##   /##########   /##            /##      /########     /#######     /#######    /##   /##
+    //  / ##    / ##  / ##  / ##______/   / ##           / ##     / ##___  ##   /##___  ##   /##___  ##  / ##  /##
+    //  | ##    | ##  |__/  | ##          | ##     /#    | ##     | ##   | ##  | ##   \ ##  | ##   | ##  | ## /##
+    //  | ##    | ##   /##  | ########    | ##    / #    | ##     | ########   | ##   | ##  | ##   | ##  | #####
+    //   \ ##  / ##/  / ##  | ##____/      \ ##  | ###  / ##      | ##___  ##  | ##   | ##  | ##   | ##  | ##_ ##
+    //    \ ##  ##/   | ##  | ##            \ ##/ ## ##/ ##       | ##   \ ##  | ##   | ##  | ##   | ##  | ## \ ##
+    //     \ ####/    | ##  | ##########     \ #### \ ####        | ########/  |  #######/  |  #######/  | ##  \ ##
+    //      \___/     |__/  |__________/      \__/   \__/         |________/   \________/   \________/   |__/   \_/
 
     // ┌───┐                                                             ┌───┐
     // └─┬─┘   ViewBook provides view rendering, redirects, and section  └─┬─┘
@@ -166,7 +156,21 @@
         public static function revert(string $view) : void {
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
-            header('Location: ../index.php'); exit();
+            if ($view == 'profile' || $view == 'resume') {
+                header('Location: ../client.php'); exit();
+            } else {
+                header('Location: ../index.php'); exit();
+            }
+        }
+
+        public static function flashMessage() {
+            echo '<div id="server-msg">';
+            if (isset($_SESSION['error'])) {
+                echo '<div class="error animate__animated animate__bounceInDown">'.$_SESSION['error'].'</div>';
+            } elseif (isset($_SESSION['success'])) {
+                echo '<div class="success animate__animated animate__bounceInDown">'.$_SESSION['success'].'</div>';
+            }
+            echo '</div>';
         }
 
         //────────────────────────────────────//
@@ -174,5 +178,15 @@
         //────────────────────────────────────//
         public static function flashForm(array $formData): void {
             $_SESSION['form_old'] = $formData;
+        }
+
+        //────────────────────────────────────//
+        //             USER LOGIC             //
+        //────────────────────────────────────//
+        public static function addUsername() {
+            // Check for user name or fallback options
+            if (isset($_SESSION['session_data']['firstname'])) {
+                return $_SESSION['session_data']['firstname'];
+            } else { return "Profile"; }
         }
     }

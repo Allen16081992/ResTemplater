@@ -86,4 +86,19 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.readAsDataURL(file);
     });
   }
+
+  // ─────────────────────────────────────
+  //  AVATAR TOGGLE (SESSION FLAG)
+  // ─────────────────────────────────────
+  const av = document.getElementById("av");
+  if (av) {
+    av.addEventListener("change", (e) => {
+      fetch("/set-avatar.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: new URLSearchParams({ avatar: e.target.checked ? "1" : "0" }).toString(),
+        credentials: "same-origin"
+      });
+    });
+  }
 });

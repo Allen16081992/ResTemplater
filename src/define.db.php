@@ -60,6 +60,29 @@
 
     // INSERT INTO `users` (`username`, `email`, `password_hash`, `birthday`) VALUES ('Hallohallo', 'hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '2026-01-25');
 
+    // CREATE TABLE IF NOT EXISTS `work_experience` (
+    // id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    // title          VARCHAR(100) NOT NULL,
+    // company        VARCHAR(120) NOT NULL,
+    // start_date     DATE NOT NULL,
+    // end_date       DATE NOT NULL,
+    // description    VARCHAR(2048) NULL,
+    // created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    // updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    // resume_id      INT UNSIGNED NOT NULL,
+    // user_id        INT UNSIGNED NOT NULL,
+    // PRIMARY KEY (id),
+
+    // -- 1:1 relationship (each user_id can appear only once in contacts)
+    // UNIQUE KEY uq_job_resume_id (resume_id),
+    // UNIQUE KEY uq_job_user_id (user_id),
+
+    // CONSTRAINT fk_job_accounts
+    //     FOREIGN KEY (user_id) REFERENCES accounts(id)
+    //     ON DELETE CASCADE
+    //     ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
     PaperWitch
 I want to create a modern Resume designer platform for students and young professionals.

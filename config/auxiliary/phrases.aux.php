@@ -30,11 +30,7 @@
                 "Back to the Magical World"
             ]
         ];
-
         // safety check: fallback to call-to-action
-        if (!isset($data[$type])) { 
-            $type = 'cta'; 
-        } 
-        
+        if (!isset($data[$type])) { $type = 'cta'; }  
         return $data[$type][array_rand($data[$type])];
     }

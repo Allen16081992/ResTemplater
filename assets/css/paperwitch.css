@@ -73,6 +73,10 @@ body > header {
   background: rgba(0,0,0,.5);
   box-shadow: 0 8px 22px rgba(0,0,0,.35);
 }
+footer { 
+  padding:2.5rem 0 2.5rem 0; 
+  a { color:#c7c7ff; } 
+}
 h1, h2, h3 { 
   font-weight: 600;
   font-family: Unna, Georgia, serif; 
@@ -99,7 +103,7 @@ p {
 .hidden {display:none;}
 
 /* ==========================================================
-   1. NAVIGATION BAR
+   2. NAVIGATION BAR
    ========================================================== */
 nav {
   display: flex;
@@ -128,20 +132,16 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 #logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
 
 
-/* ─────────────────────────────────────────────── */
+/* ==========================================================
+   6. LOGIN + SIGNUP SECTIONS
+   ========================================================== */
 
 .form-window {
   display: flex;
   place-items: center;
-  width: min(1080px, 94vw);
+  /* width: min(1080px, 94vw); */
   padding: clamp(14px, 2vw, 28px);
   margin: 0 auto;
-}
-
-/* Footer */
-footer { 
-  padding:1.5rem; 
-  a { color:#c7c7ff; } 
 }
 
 .toggle-eye > i {

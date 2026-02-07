@@ -184,7 +184,7 @@
         }
     }
 
-    class profileControl {
+    class userControl {
         public function __construct(private array $postData) {}
         
         public function handle(): void {
@@ -221,7 +221,7 @@
 
                 // DB lookup (only after validation)
                 $pdo = Database::Connect();
-                $model = new profileCodex($pdo); 
+                $model = new userCodex($pdo); 
                 $exist = $model->lookupEmail($this->postData['email'], $_SESSION['session_data']['user_id']);
 
                 if (!$exist) {
@@ -308,7 +308,7 @@
 
                 // DB lookup (only after validation)
                 $pdo = Database::Connect();
-                $model = new profileCodex($pdo); 
+                $model = new userCodex($pdo); 
                 $exist = $model->getContact($this->postData['user_id']);
 
                 if ($exist <= 0) {

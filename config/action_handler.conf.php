@@ -13,7 +13,7 @@
     $routes = [
         'login'  => loginControl::class,
         'signup' => signupControl::class,
-        'profile'=> profileControl::class,
+        'profile'=> userControl::class,
         'resume' => resumeControl::class
         // ... Add more routes here
     ];

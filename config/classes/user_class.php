@@ -68,6 +68,15 @@
             return (int) $this->pdo->lastInsertId();
         }
 
+        // Delete Account
+        public function wipeAccount(array $postData): void {
+            $stmt = $this->pdo->prepare("DELETE FROM accounts WHERE email = :email AND user_id = :user_id");
+            $stmt->execute([
+                ':email' => $postData['email'],
+                ':user_id' => $postData['user_id']
+            ]);
+        }
+
         // Search Contact / Personalia
         public function getContact(string $uid): array|false {
             $stmt = $this->pdo->prepare('SELECT firstname, lastname, phone, city, postalcode, country FROM contacts WHERE id = :id;');
@@ -103,11 +112,5 @@
                 ':user_id'   => $postData['user_id']
             ]);
             return (int) $this->pdo->lastInsertId();
-        }
-
-        // Delete Contact / Personalia
-        public function wipeContact(array $postData): void {
-            $stmt = $this->pdo->prepare("DELETE FROM contacts WHERE user_id = :user_id");
-            $stmt->execute([':user_id'   => $postData['user_id']]);
         }
     }

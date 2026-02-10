@@ -48,7 +48,8 @@
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
         <?php ViewBook::render('section_resume.php'); ?>  
-
+        <?php ViewBook::render('section_closure.html'); ?>
+        
         <section id="export" class="<?= ViewBook::setVisibility('export'); ?>"> 
             <?php ViewBook::render('section_export.html'); ?>
         </section>

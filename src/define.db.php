@@ -5,34 +5,23 @@
     define('DB_USER', 'root');
     define('DB_PASSWORD', ''); 
 
-    // CREATE TABLE IF NOT EXISTS `users` (
-    //   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    //   `username` VARCHAR(64) NULL,
-    //   `email` VARCHAR(255) NOT NULL,
-    //   `password_hash` VARCHAR(255) NOT NULL,
-    //   `birthday` DATE NOT NULL,
-    //   `registered` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    //   PRIMARY KEY (`id`),
-    //   UNIQUE KEY `uq_users_email` (`email`),
-    //   UNIQUE KEY `uq_users_username` (`username`)
-    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    // -- MySQL / MariaDB
-    // -- Use InnoDB to support foreign keys
+    // -- MySQL / MariaDB. Use InnoDB to support foreign keys
+    // -- DB SQL Script, paste & run ready
     
     // CREATE TABLE IF NOT EXISTS `accounts` (
     // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    // username  VARCHAR(100) NULL,
     // email         VARCHAR(255) NOT NULL,
-    // password_hash           VARCHAR(255) NOT NULL,
-    // birth_date      DATE NULL,
+    // password_hash VARCHAR(255) NOT NULL,
+    // birth_date    DATE NULL,
     // created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     // updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     // PRIMARY KEY (id),
+
     // UNIQUE KEY uq_accounts_email (email)
+
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `contacts` (
+    // CREATE TABLE IF NOT EXISTS `personal` (
     // id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
     // firstname      VARCHAR(100) NOT NULL,
     // lastname       VARCHAR(100) NOT NULL,
@@ -41,46 +30,122 @@
     // country        VARCHAR(120) NULL,
     // postalcode     VARCHAR(20) NULL,
     // image_url      VARCHAR(2048) NULL,
-    // user_id        INT UNSIGNED NOT NULL,
     // created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     // updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    // user_id        INT UNSIGNED NOT NULL,
     // PRIMARY KEY (id),
 
-    // -- 1:1 relationship (each user_id can appear only once in contacts)
-    // UNIQUE KEY uq_contacts_user_id (user_id),
+    // UNIQUE KEY uq_pers_accounts (user_id),
 
-    // -- index for FK lookups (MySQL will often create it implicitly, but explicit is fine)
-    // KEY idx_contacts_user_id (user_id),
-
-    // CONSTRAINT fk_contacts_accounts
+    // CONSTRAINT fk_pers_accounts
     //     FOREIGN KEY (user_id) REFERENCES accounts(id)
     //     ON DELETE CASCADE
     //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // INSERT INTO `users` (`username`, `email`, `password_hash`, `birthday`) VALUES ('Hallohallo', 'hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '2026-01-25');
+    // INSERT INTO `accounts` (`email`, `password_hash`, `birth_date`) VALUES ('hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '2026-01-25');
 
+    // CREATE TABLE IF NOT EXISTS `resume` (
+    //     id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     resume_title VARCHAR(100) NOT NULL,
+    //     user_id      INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     KEY idx_resume_user (user_id),
+
+    //     CONSTRAINT fk_res_accounts
+    //         FOREIGN KEY (user_id) REFERENCES accounts(id)
+    //         ON DELETE CASCADE
+    //         ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    
     // CREATE TABLE IF NOT EXISTS `work_experience` (
-    // id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    // title          VARCHAR(100) NOT NULL,
-    // company        VARCHAR(120) NOT NULL,
-    // start_date     DATE NOT NULL,
-    // end_date       DATE NOT NULL,
-    // description    VARCHAR(2048) NULL,
-    // created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    // updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    // resume_id      INT UNSIGNED NOT NULL,
-    // user_id        INT UNSIGNED NOT NULL,
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     title       VARCHAR(100) NOT NULL,
+    //     employer    VARCHAR(120) NOT NULL,
+    //     start_date  DATE NOT NULL,
+    //     end_date    DATE NULL,
+    //     summary     VARCHAR(2048) NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     resume_id   INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     KEY idx_work_resume_sort (resume_id, sort_order),
+
+    //     CONSTRAINT fk_work_resume
+    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         ON DELETE CASCADE
+    //         ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `academics` (
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
+    //     title       VARCHAR(100) NOT NULL,
+    //     institute   VARCHAR(120) NOT NULL,
+    //     start_date  DATE NOT NULL,
+    //     end_date    DATE NULL,
+    //     summary     VARCHAR(2048) NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     resume_id   INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     KEY idx_acad_resume_sort (resume_id, sort_order),
+
+    //     CONSTRAINT fk_acad_resume
+    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         ON DELETE CASCADE
+    //         ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `work_experience_bullets` (
+    // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    // text          TEXT NOT NULL,
+    // sort_order    INT NOT NULL DEFAULT 0,
+    // work_id       INT UNSIGNED NOT NULL,
     // PRIMARY KEY (id),
 
-    // -- 1:1 relationship (each user_id can appear only once in contacts)
-    // UNIQUE KEY uq_job_resume_id (resume_id),
-    // UNIQUE KEY uq_job_user_id (user_id),
+    // KEY idx_bullet_work_sort (work_id, sort_order),
 
-    // CONSTRAINT fk_job_accounts
-    //     FOREIGN KEY (user_id) REFERENCES accounts(id)
+    // CONSTRAINT fk_bullet_work
+    //     FOREIGN KEY (work_id) REFERENCES work_experience(id)
     //     ON DELETE CASCADE
     //     ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `acad_experience_bullets` (
+    // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    // text          TEXT NOT NULL,
+    // sort_order    INT NOT NULL DEFAULT 0,
+    // acad_id       INT UNSIGNED NOT NULL,
+    // PRIMARY KEY (id),
+
+    // KEY idx_bullet_acad_sort (acad_id, sort_order),
+
+    // CONSTRAINT fk_bullet_acad
+    //     FOREIGN KEY (acad_id) REFERENCES academics(id)
+    //     ON DELETE CASCADE
+    //     ON UPDATE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `technical_skills` (
+    //     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     name       VARCHAR(100) NOT NULL,
+    //     category   ENUM('language','framework','tool','platform','other') NOT NULL DEFAULT 'other',
+    //     level      ENUM('basic','intermediate','advanced') NULL,
+    //     sort_order INT NOT NULL DEFAULT 0,
+    //     resume_id  INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     UNIQUE KEY uq_skill_resume_name (resume_id, name),
+
+    //     CONSTRAINT fk_tech_resume
+    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         ON DELETE CASCADE
+    //         ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 

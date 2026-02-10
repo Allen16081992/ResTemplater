@@ -211,6 +211,49 @@
     border-radius: 18px;
   }
 }
+
+/* ------------------------------------------------------------ */
+.radio-card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+.radio-card-grid label {
+  flex: 1 1 calc(25% - 1rem); /* 4 per row */
+  min-width: 190px;
+  background: #1f2937;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  padding: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.radio-card-grid label:hover {
+  background: #111827;
+  border-color: #60a5fa;
+}
+
+.radio-card-grid input[type="radio"] {
+  display: none;
+}
+
+.radio-card-grid input[type="radio"]:checked + span {
+  font-weight: bold;
+  border-left: 4px solid #60a5fa;
+  padding-left: 0.5rem;
+}
+
+.radio-card-grid span {
+  display: block;
+  line-height: 1.4;
+}
     </style>
 </head>
 <section id="resume_editor" class="current">
@@ -236,6 +279,7 @@
         <select id="editorSectionSelect">
           <option value="newRes">+ New Resume</option>
           <option value="delRes">- Delete Resume</option>
+          <option value="getRekt"># Resume List</option>
           <option value="info" selected>Resume Info</option>
           <option value="profile">Profile</option>
           <option value="contact">Contact</option>
@@ -253,6 +297,9 @@
         </button>
         <button class="button pw-editor-tab" data-panel="delRes">
           <span>Delete</span>
+        </button>
+          <button class="button pw-editor-tab" data-panel="getRekt">
+          <span>View List</span>
         </button>
         <hr>
         <button class="pw-editor-tab is-active" data-panel="info">
@@ -333,6 +380,44 @@
             <button type="submit" class="button is-danger" name="del_resume">
               Delete
             </button>
+          </form>
+        </section>
+
+        <!-- VIEW LIST RESUME -->
+        <section id="panel-getRekt" class="pw-editor-panel">
+          <header class="pw-panel-header">
+            <div>
+              <h2>View List</h2>
+              <p>Pick a resume you want to view.</p>
+            </div>
+          </header>
+
+          <form method="post" action="#" class="pw-panel-form" id="form-getRekt">
+            <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
+              <!-- Resume Option -->
+              <label>
+                <input type="radio" name="resume_id" value="1" onchange="this.form.submit()">
+                <span>🧾 <strong>Internship - 2024</strong><br>
+                  <small>Last edited: 2 days ago</small>
+                </span>
+              </label>
+
+              <label>
+                <input type="radio" name="resume_id" value="2" onchange="this.form.submit()">
+                <span>🪄 <strong>Frontend Witcher</strong><br>
+                  <small>Last edited: 1 week ago</small>
+                </span>
+              </label>
+
+              <label>
+                <input type="radio" name="resume_id" value="3" onchange="this.form.submit()">
+                <span>🧠 <strong>Research (PhD)</strong><br>
+                  <small>Last edited: 3 months ago</small>
+                </span>
+              </label>
+
+              <!-- Add more options dynamically -->
+            </div>
           </form>
         </section>
 

@@ -121,4 +121,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
   pwdInput.addEventListener("input", update);
   update();
+
+  //---------------------LOGIN PAGE---------------------
+
+  // Login page helper
+  const loginImg = document.getElementById("loginVisual");
+  if (!loginImg) return;
+
+  // Configure
+  const BASE_PATH = 'assets/images/';
+  const IMAGES = [
+    "paperwitch_dare.png",
+    "paperwitch_dark.png",
+    "paperwitch_despise.png",
+    "paperwitch_resentful.png"
+  ];
+
+  // 48-hour deterministic rotation
+  // const PERIOD_MS = 48 * 60 * 60 * 1000;
+  const PERIOD_MS = 5 * 1000; // 5 seconds for testing
+  const slot = Math.floor(Date.now() / PERIOD_MS);
+  const file = IMAGES[slot % IMAGES.length];
+  const bg = `url("${BASE_PATH}${file}")`;
+
+  // Preload chosen image (avoids first-paint pop on some browsers)
+  const pre = new Image();
+  pre.src = `${BASE_PATH}${file}`;
+
+  // Apply background (matches your signup script approach)
+  loginImg.style.backgroundImage = bg;
 });

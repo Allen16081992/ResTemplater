@@ -60,7 +60,6 @@
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
         <?php ViewBook::render('section_export.php'); ?>
-        <section id="author" class="hidden"></section>
         <section id="contact" class="hidden"></section>
     </main>
 

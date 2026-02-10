@@ -3,7 +3,7 @@
         <div class="auth-card">
             <div class="auth-columns">
                 <!-- Left: IMAGE -->
-                <aside class="auth-visual">
+                <aside class="auth-visual" id="loginVisual">
                     <span class="badge">🧙‍♀️ PaperWitch • Witchy & Bold</span>
                 </aside>
 

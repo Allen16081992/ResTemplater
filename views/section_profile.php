@@ -76,5 +76,9 @@
                 <!-- Save dynamically added by JS -->
             </div>
         </form>
+
+        <div class="profile-section">     
+            <button class="button is-dark is-danger" data-section="closure">Remove Account</button>
+        </div>
     </article>
 </section>

@@ -5,6 +5,7 @@
 
   // Essential PHP files
   require_once "./config/session_manager.conf.php"; 
+  require_once "./config/loadResumes_conf.php";
   SessionBook::invokeSession();
   $_SESSION['error'] = 'Profile update failed.';
 ?>
@@ -32,14 +33,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/paperwitch.css">
     <link rel="stylesheet" href="assets/css/profile.css">
-    <link rel="stylesheet" href="assets/css/editor.css">
+    <link rel="stylesheet" href="assets/css/ui_wizard.css">
     <link rel="stylesheet" href="assets/css/export_page.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/banal-editor.js"></script>
-    <script defer src="assets/js/form-handler.js"></script>
+    <script defer src="assets/js/ui_editor-handler.js"></script>
+    <script defer src="assets/js/ui_wizard-handler.js"></script>
+    <script defer src="assets/js/profile-handler.js"></script>
 </head>
 <body>
     <?php ViewBook::render('navbar_flex.php'); ?>
@@ -47,12 +49,11 @@
     
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
-        <?php ViewBook::render('section_resume.php'); ?>  
-        <?php ViewBook::render('section_closure.html'); ?>
+        <?php ViewBook::render('section_ui_default.php'); ?>
+        <?php ViewBook::render('section_ui_wizard.html'); ?>     
         
-        <section id="export" class="<?= ViewBook::setVisibility('export'); ?>"> 
-            <?php ViewBook::render('section_export.html'); ?>
-        </section>
+        <?php ViewBook::render('section_export.html'); ?>
+        <?php ViewBook::render('section_closure.html'); ?>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->
@@ -60,7 +61,14 @@
     </noscript>
 
     <footer>
-        <p>CV Templater © 2023 - 2024</p>
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <strong>PaperWitch</strong><span class="has-text-grey-light"> © 2023 - 2024</span>
+                    <p class="has-text-grey is-size-6">Resumes with Attitude.</p>
+                </div>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

@@ -19,7 +19,7 @@
                     }
                 ?>
             </select>
-            <select name="year" id="year-select" required>
+            <select name="year" required>
                 <option value="" selected disabled>----</option>
                 <?php
                     $currentYear = date('Y');

@@ -1,7 +1,7 @@
 <?php 
     // Database Configuration Source
     define('DB_HOST', 'localhost');
-    define('DB_NAME', 'careerpunkdb');
+    define('DB_NAME', 'careerwitch_db');
     define('DB_USER', 'root');
     define('DB_PASSWORD', ''); 
 
@@ -80,7 +80,7 @@
     //         ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `academics` (
+    // CREATE TABLE IF NOT EXISTS `education` (
     //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
     //     title       VARCHAR(100) NOT NULL,
     //     institute   VARCHAR(120) NOT NULL,
@@ -116,7 +116,7 @@
     //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `acad_experience_bullets` (
+    // CREATE TABLE IF NOT EXISTS `education_bullets` (
     // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
     // text          TEXT NOT NULL,
     // sort_order    INT NOT NULL DEFAULT 0,
@@ -126,7 +126,7 @@
     // KEY idx_bullet_acad_sort (acad_id, sort_order),
 
     // CONSTRAINT fk_bullet_acad
-    //     FOREIGN KEY (acad_id) REFERENCES academics(id)
+    //     FOREIGN KEY (acad_id) REFERENCES education(id)
     //     ON DELETE CASCADE
     //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -149,92 +149,18 @@
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-    PaperWitch
-I want to create a modern Resume designer platform for students and young professionals.
-# Features:
-- Workspace: area for the editor
-- Experience: add/remove their job experience
-- Education: add/remove their college courses
-- Skills: add/remove skills
-- Contact: personal details
-- Users: who can create and save multiple resumes, change its layouts, structure, login and sign up.
-- Sections: inside the Hybrid-SPA that act as webpages
-- Build: with PHP and Javascript under the hood, lightweight, aimed at raw performance, ease of use, and no suprise-signup/paywalls.
-- Play: the build-in Side-scroller. As they play, fill in question clouds in npc/for and have a resume at the end of the level (or a part of it.)
----------+++------------
-snake_case only / ERD
--------------------------
-Accounts (User)
-- id # Int # Primary key
-- display name # string # varchar()
-- email # string # varchar() # UNIQUE
-- Pwd # string # varchar()
-- birthday # DATE
-- created_at # timestamp (Maybe current)
-- updated_at # timestamp
-
-Contacts (Personalia)
-- id # Int # Primary Key
-- firstname # string # varchar()
-- lastname # string # varchar()
-- phone # ? # ?
-- City # string # varchar()
-- Country # string # varchar()
-- postalcode # string # varchar()
-- image_url # string # varchar()
-- Social_media1 # string # varchar()
-- Social_media2 # string # varchar()
-- Social_media3 # string # varchar()
-- user_id # int # Index/fk
-- created_at # timestamp
-- updated_at # timestamp
-
-Resumes
-- id # int # Primary key
-- title # string # varchar()
-- user_id # int # Index/fk
-- created_at # timestamp
-- updated_at # timestamp
-
-Experiences (joint table)
-- id # int # Primary key
-- From # 
-- Until #
-- Profession # string # varchar()
-- Company
-- Description # string # varchar()
-- resume_id # int # Index/fk <---
-- user_id # int # Index/fk <---
-- created_at # timestamp
-- updated_at # timestamp
-
-Educations (joint table)
-- id # int # Primary key
-- From # 
-- Until #
-- Course/Study # string # varchar()
-- Institute
-- Description # string # varchar()
-- resume_id # int # Index/fk <---
-- user_id # int # Index/fk <---
-- created_at # timestamp
-- updated_at # timestamp
-
-Skills (joint table)
-- id # int # Primary key
-- Name # string # varchar() NOT NULL
-- resume_id # int # Index/fk <---
-- user_id # int # Index/fk <---
-- created_at # timestamp
-- updated_at # timestamp
-
-Bullet points (joint table)
-- id # int # Primary key
-- Title # string # varchar() # NULL
-- Desc. # string # varchar() # NOT NULL
-- exp_id # int # Index/fk <---
-- edu_id # int # Index/fk <---
-- resume_id # int # Index/fk <---
-- user_id # int # Index/fk <--- (foreign key)
-- created_at # timestamp
-- updated_at # timestamp
+//     PaperWitch
+// I want to create a modern Resume designer platform for students and young professionals.
+// # Features:
+// - Workspace: area for the editor
+// - Experience: add/remove their job experience
+// - Education: add/remove their college courses
+// - Skills: add/remove skills
+// - Contact: personal details
+// - Users: who can create and save multiple resumes, change its layouts, structure, login and sign up.
+// - Sections: inside the Hybrid-SPA that act as webpages
+// - Build: with PHP and Javascript under the hood, lightweight, aimed at raw performance, ease of use, and no suprise-signup/paywalls.
+// - Play: the build-in Side-scroller. As they play, fill in question clouds in npc/for and have a resume at the end of the level (or a part of it.)
+// ---------+++------------
+// snake_case only / ERD
+// -------------------------

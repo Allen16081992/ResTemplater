@@ -156,7 +156,7 @@
         public static function revert(string $view) : void {
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
-            if ($view == 'profile' || $view == 'resume') {
+            if ($view == 'profile') {
                 header('Location: ../client.php'); exit();
             } else {
                 header('Location: ../index.php'); exit();

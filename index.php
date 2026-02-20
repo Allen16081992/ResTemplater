@@ -46,9 +46,9 @@
     <title>Thy Job Scroll Cauldron</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/sparks_effect.js"></script>
+    <script defer src="assets/js/signup_page-handler.js"></script>
     <script defer src="assets/js/cta-padding-mobile.js"></script><!-- CSS refinement for mobile -->
-    <script defer src="assets/js/signup_page-handler.js"></script><!-- Control image manipulation -->
+    <script defer src="assets/js/sparks_effect.js"></script>
 </head>
 <body>
     <?php ViewBook::render('navbar_flex.php'); ?>
@@ -59,7 +59,7 @@
         <?php ViewBook::render('section_signup.php'); ?>  
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
-        <?php ViewBook::render('section_export.php'); ?>
+        <?php ViewBook::render('section_export.html'); ?>
         <section id="contact" class="hidden"></section>
     </main>
 

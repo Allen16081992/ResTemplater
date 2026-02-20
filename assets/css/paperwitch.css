@@ -60,11 +60,11 @@
   font-family: var(--font-body);
 } */
 body {
-    display: flex;
-    flex-direction: column;
-    background: var(--bg-gradients);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-gradients);
 }
-main { flex: 1;  }
+main { flex: 1; }
 body > header {
   display: flex;
   justify-content: space-between;

@@ -1,28 +1,6 @@
 "use strict";
 
-/**
- * FINAL Wizard JS — compatible with your FINAL MARKUP (ids + data-steps)
- *
- * Goals:
- * - Wizard UI stays functional even if optional elements (progress/toast/summary) are missing.
- * - Start button is visible (relies on your existing CSS: .pw-card.is-active).
- * - No localStorage. No JS submit. Final submit is normal <button type="submit">.
- * - Auto-inject first Experience entry on hasExp=yes.
- * - Auto-inject first Education entry on studying=yes.
- * - Experience/Education submit as arrays:
- *     experience[0][job], experience[0][company], ...
- *     education[0][program], education[0][school], ...
- *
- * Required in markup:
- * - #pwBaseline, #pwStage
- * - .pw-card[data-step]
- * - #btnBack #btnNext #btnReset
- * - [data-action="start"] [data-action="saveExpOne"] [data-action="saveEduOne"]
- * - #expMount #eduMount
- * - #experienceFields #educationFields (hidden containers inside the <form>)
- * - #studyingVal #hasExpVal #expMoreVal #eduMoreVal (hidden inputs)
- */
-
+/** FINAL Wizard JS  */
 (() => {
   const root = document.getElementById("pwBaseline");
   if (!root) return;

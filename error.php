@@ -1,4 +1,5 @@
 <?php 
+  session_start(); 
   $code = $_SESSION['error'] ?? 500;
   unset($_SESSION['error']);
 
@@ -10,7 +11,7 @@
       $msg = 'Access denied.';
       break;
     default:
-      $msg = 'It looks like the page you were looking for got affected by free will somehow. Take a spare broomstick and head back home.';
+      $msg = 'It looks like the page you were looking for got affected by free will.<br> Quick! Take a broomstick and go before they see you!';
   }
 ?>
 <!DOCTYPE html>
@@ -98,7 +99,11 @@
     <div class="content-area">
       <h1>Ohh No!</h1>
       <p class="subtitle"><?= $msg ?></p>
-      <a href="index.php" class="btn-home">Return Home</a>
+      <?php if (!isset($_SESSION['session_data']['user_id'])) { ?>
+        <a href="index.php" class="btn-home">Return Home</a>
+      <?php } else { ?>
+        <a href="client.php" class="btn-home">Return Home</a> 
+      <?php } ?>
       <footer>© 2025 PaperWitch</footer>
     </div>
   </main>

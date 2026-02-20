@@ -83,24 +83,3 @@
             return null;
         }
     }
-
-    trait Validators {
-
-        // Avoid iteration overhead and improve memory efficiency
-        private function invalidInput($input) {
-            // Validate submitted value
-            if (in_array($input, ['firstname', 'lastname', 'country', 'city'])) {
-                return preg_match('/[a-zA-ZÀ-ÿ]/', $input);
-            }
-
-            // Validate phone
-            if (in_array($input, ['phone'])) {
-                return preg_match('/^\+?[0-9]{1,3}?[-. ]?\(?[0-9]{1,4}?\)?[-. ]?[0-9]{1,4}[-. ]?[0-9]{1,9}$/', $input);
-            }
-
-            // Validate postal
-            if (in_array($input, ['postal'])) {
-                return preg_match('/[a-zA-ZÀ-ÿ0-9]/', $input);
-            }
-        }
-    }

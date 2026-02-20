@@ -14,7 +14,10 @@
         'login'  => loginControl::class,
         'signup' => signupControl::class,
         'profile'=> userControl::class,
-        'resume' => resumeControl::class
+        'resume' => resumeControl::class,
+        'experience' => experienceControl::class,
+        'education' => educationControl::class,
+        'social' => socialControl::class
         // ... Add more routes here
     ];
 
@@ -33,7 +36,7 @@
     require_once './controller/user_contr.php';
     require_once './controller/resume_contr.php';
 
-    // $pdo = Database::connect();
+    // Initialise Class
     $targetClass = $routes[$action];
     $handler = new $targetClass($_POST);
     $handler->handle();

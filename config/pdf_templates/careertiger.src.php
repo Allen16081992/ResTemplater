@@ -1,7 +1,7 @@
 <?php 
 // Start a session for handling data and error messages.
 require_once '../session_manager.src.php';
-sessionRegenTimer(); // Call the periodic session regeneration
+SessionBook::sessionRegenTimer(); 
 
 // Invoke the (improved) database connection and FPDF library.
 //require_once 'idb.config.php';
@@ -81,7 +81,6 @@ class ResumePDF extends FPDF {
             //$country = htmlspecialchars($this->data['contact'][0]['country']);
             $phone = htmlspecialchars($this->data['contact'][0]['phone']);
             $email = htmlspecialchars($this->data['accounts'][0]['email']);
-            $postal = htmlspecialchars($this->data['contact'][0]['postalcode']);
         }
         // Work Experience
         if (isset($this->data['experience'])) {
@@ -196,7 +195,7 @@ class ResumePDF extends FPDF {
         
         $this->Cell(9, 8, '', 0, 0, 'L'); // Add cell space for icon
         $this->Image($building, 12, 75, 5); 
-        $this->Cell(56, 8, $postal.', '.$city, 0, 1, 'L');
+        $this->Cell(56, 8, $city, 0, 1, 'L');
         $this->Ln(2);
 
         /////////////////////// EDUCATION ////////////////////////

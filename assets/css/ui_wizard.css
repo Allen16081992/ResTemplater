@@ -424,6 +424,7 @@
   color: var(--muted, #a7a7b3);
 }
 .pw-editor-status {
+  min-width:12rem;
   text-align: right;
   font-size: .85rem;
   color: var(--muted, #a7a7b3);
@@ -441,6 +442,7 @@
 }
 .pw-editor-status small {
   display: block;
+  text-align: left;
   margin-top: .3rem;
 }
 

@@ -1,4 +1,4 @@
-<section id="home" class="<?= ViewBook::setVisibility('home'); ?>">
+<section id="home" class="<?= ViewBook::setVisibility('builder'); ?>">
   <div class="pw-editor-shell">
     <header class="pw-editor-header">
       <div>
@@ -9,7 +9,11 @@
         <span class="pw-editor-status-pill">
           <span>🧪</span> Draft saved locally
         </span>
-        <small>Template: <strong>Neo-Gothic Internship</strong></small>
+        <?php if (!empty($data['resdata'])) { ?>
+          <small>Selected: <strong><?= htmlspecialchars($data['resdata']['title']) ?></strong></small>
+        <?php } else { ?>
+        <small>Selected: <strong>Neo-Gothic Internship</strong></small>
+        <?php } ?>
       </div>
     </header>
 
@@ -18,12 +22,16 @@
       <div class="select is-fullwidth">
         <select id="editorSectionSelect">
           <option value="newRes">+ Create a Resume</option>
-          <option value="delRes">- Delete a Resume</option>
-          <option value="fetchRes"># My List</option>
-          <option value="info" selected>Resume Info</option>
-          <option value="experience">Experience</option>
-          <option value="education">Education</option>
-          <option value="social">Social Media</option>
+          <?php //if (isset($data['papers'])) { ?>
+            <option value="delRes">- Delete a Resume</option>
+            <option value="fetchRes"># My List</option>
+          <?php //} ?>
+          <?php //if (isset($data['resdata']['title'])) { ?>
+            <option value="info" selected>Resume Info</option>
+            <option value="experience">Experience</option>
+            <option value="education">Education</option>
+            <option value="social">Social Media</option>
+          <?php //} ?>
         </select>
       </div>
     </div>
@@ -34,29 +42,33 @@
         <button class="button pw-editor-tab" data-panel="newRes">
           <span>New</span>
         </button>
-        <button class="button pw-editor-tab" data-panel="delRes">
-          <span>Delete</span>
-        </button>
+        <?php //if (isset($data['papers'])) { ?>
+          <button class="button pw-editor-tab" data-panel="delRes">
+            <span>Delete</span>
+          </button>
           <button class="button pw-editor-tab" data-panel="fetchRes">
-          <span>My List</span>
-        </button>
+            <span>My List</span>
+          </button>
+        <?php //} ?>
         <hr>
-        <button class="pw-editor-tab is-active" data-panel="info">
-          <span class="icon">⚗️</span>
-          <span>Resume Info</span>
-        </button>
-        <button class="pw-editor-tab" data-panel="experience">
-          <span class="icon">🏹</span>
-          <span>Experience</span>
-        </button>
-        <button class="pw-editor-tab" data-panel="education">
-          <span class="icon">🎓</span>
-          <span>Education</span>
-        </button>
-        <button class="pw-editor-tab" data-panel="social">
-          <span class="icon">📷</span>
-          <span>Social Media</span>
-        </button>
+        <?php //if (isset($data['resdata']['title'])) { ?>
+          <button class="pw-editor-tab is-active" data-panel="info">
+            <span class="icon">⚗️</span>
+            <span>Resume Info</span>
+          </button>
+          <button class="pw-editor-tab" data-panel="experience">
+            <span class="icon">🏹</span>
+            <span>Experience</span>
+          </button>
+          <button class="pw-editor-tab" data-panel="education">
+            <span class="icon">🎓</span>
+            <span>Education</span>
+          </button>
+          <button class="pw-editor-tab" data-panel="social">
+            <span class="icon">📷</span>
+            <span>Social Media</span>
+          </button>
+        <?php //} ?>
       </aside>
 
       <!-- MAIN PANELS -->
@@ -66,7 +78,7 @@
           <header class="pw-panel-header">
             <div>
               <h2>Create a resume</h2>
-              <p>First, let's give it a name. Preferably short & concise.</p>
+              <p>First, let's give it a name.</p>
             </div>
           </header>
 
@@ -74,16 +86,19 @@
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
-                  <label class="label">Title</label>
+                  <div class="is-flex">
+                    <label class="label">Title</label>
+                    <div id="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                  </div>
                   <div class="control">
-                    <input class="input" type="text" name="resume_title" placeholder="...">
+                    <input class="input" type="text" name="title" placeholder="...">
                   </div>
                 </div>
               </div>
             </div>
-            <button type="submit" class="button" name="action" value="resume">Create</button>
-            <input type="hidden" name="create" value="create">
-            <input type="hidden" name="user_id" value="">
+            <button type="submit" class="button is-link" name="action" value="resume">Create</button>
+            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $uid = $_SESSION['session_data']['user_id'] : ''; ?>">
+            <input type="hidden" name="create">
           </form>
         </section>
 
@@ -103,21 +118,27 @@
                   <label for="pwDeleteResumeSelect" class="label">Resume</label>
                   <div class="select is-fullwidth">
                     <select id="pwDeleteResumeSelect" name="resume_id">
-                      <option value="1" selected>Neo-Gothic Internship</option>
-                      <option value="2">Minimalist Student</option>
+                      <?php if (!empty($list['papers'])) { ?>
+                        <?php foreach ($list['papers'] as $paper) { ?>
+                          <option value="<?= htmlspecialchars($paper['id']) ?>"><?= htmlspecialchars($paper['title']) ?></option>
+                        <?php } ?>
+                      <?php } else { ?>
+                        <option value="1" selected>Neo-Gothic Internship</option>
+                        <option value="2">Minimalist Student</option>
+                      <?php } ?>
                     </select>
                   </div>
                 </div>
               </div>
             </div>
 
-            <button type="submit" class="button is-danger" name="action" value="resume">Delete</button>
-            <input type="hidden" name="delete" value="delete">
-            <input type="hidden" name="user_id" value="">
+            <button type="submit" class="button is-danger" style="margin-top:7px;" name="action" value="resume">Delete</button>
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="delete">
           </form>
         </section>
 
-        <!-- VIEW LIST RESUME -->
+        <!-- LIST RESUME -->
         <section id="panel-fetchRes" class="pw-editor-panel">
           <header class="pw-panel-header">
             <div>
@@ -126,14 +147,12 @@
             </div>
           </header>
 
-          <form id="form-fetchRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="action" value="resume">
-            <input type="hidden" name="fetch" value="fetch">
-            <input type="hidden" name="resume_id" value="">
-            <input type="hidden" name="user_id" value="">
+          <form id="form-fetchRes" class="pw-panel-form" action="" method="post">
+            <input type="hidden" name="selectCV">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
-              <?php if (!empty($resumes)): foreach ($resumes as $resume): ?>
-                <?php
+              <?php if (!empty($resumes)): foreach ($resumes as $resume):
+                  // Set last updated info
                   $updated = new DateTime($resume['updated_at']);
                   $now = new DateTime();
                   $diff = $now->diff($updated);
@@ -150,7 +169,7 @@
                 ?>
                 <label>
                   <input type="radio" name="resume_id" value="<?= htmlspecialchars($resume['resume_id']) ?>" onchange="this.form.submit()">
-                  <span>🧾 <strong><?= htmlspecialchars($resume['resume_title']) ?></strong><br><small>Last edited: <?= $timeAgo ?></small></span>
+                  <span>🧾 <strong><?= htmlspecialchars($resume['title']) ?></strong><br><small>Last edited: <?= $timeAgo ?></small></span>
                 </label>
               <?php endforeach; ?>
               <?php else: ?>
@@ -158,12 +177,10 @@
                   <input type="radio">
                   <span>🧾 <strong>Internship - 2024</strong><br><small>Last edited: 2 days ago</small></span>
                 </label>
-
                 <label>
                   <input type="radio">
                   <span>🪄 <strong>Frontend Witcher</strong><br><small>Last edited: 1 week ago</small></span>
                 </label>
-
                 <label>
                   <input type="radio">
                   <span>🧠 <strong>Research (PhD)</strong><br><small>Last edited: 3 months ago</small></span>
@@ -187,14 +204,14 @@
             <div class="field">
               <label class="label">Resume Title</label>
               <div class="control">
-                <input class="input" type="text" name="resume_title" placeholder="Name of this resume">
+                <input class="input" type="text" name="title" placeholder="Name of this resume" value="<?= htmlspecialchars($data['resdata']['title'] ?? '') ?>">
               </div>
             </div>
 
             <div class="field">
               <label class="label">Summary</label>
               <div class="control">
-                <textarea class="textarea" name="summary" rows="3" placeholder="Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing."></textarea>
+                <textarea class="textarea" name="summary" rows="3" placeholder="Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing." value="<?= htmlspecialchars($data['resdata']['summary'] ?? '') ?>"></textarea>
               </div>
             </div>
 
@@ -202,7 +219,7 @@
               <button type="submit" class="button btn-cta pw-save-btn" name="action" value="resume">Save</button>
             </div>
             <input type="hidden" name="action" value="resume">
-            <input type="hidden" name="update" value="update">
+            <input type="hidden" name="update">
             <input type="hidden" name="resume_id" value="">
             <input type="hidden" name="user_id" value="">
           </form>
@@ -220,63 +237,63 @@
           <form id="form-experience" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <div class="pw-repeater" data-repeater="experience">
               <!-- EXPERIENCE ITEM -->
-              <!-- <div class="pw-repeater-item">
-                <div class="field is-horizontal">
-                  <div class="field-body">
-                    <div class="field">
-                      <label class="label">Role</label>
-                      <div class="control">
-                        <input class="input" type="text" name="exp_role[]" placeholder="Junior IT Support (Intern)">
+              <?php if (!empty($data['experience'])) { ?>
+                <?php foreach ($data['experience'] as $exp) { ?>
+                  <div class="pw-repeater-item">
+                    <div class="field is-horizontal">
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="label">Role</label>
+                          <div class="control">
+                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($exp['title']) ?>">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label">Company</label>
+                          <div class="control">
+                            <input class="input" type="text" name="employer[]" value="<?= htmlspecialchars($exp['employer']) ?>">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="label">Start</label>           
+                          <div class="control">
+                            <input class="input" type="date" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label">End</label>
+                          <div class="control">
+                            <input class="input" type="date" name="end_date[]" value="<?= htmlspecialchars($exp['end_date'] ?? 'today') ?>">
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="field">
-                      <label class="label">Company</label>
+                      <label class="label">Description</label>
                       <div class="control">
-                        <input class="input" type="text" name="exp_company[]" placeholder="TechCorp">
+                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
+                    <button type="button" class="button is-text pw-remove-item" name="delete" disabled>Remove this experience</button>
+                    <hr class="pw-repeater-divider">
                   </div>
-                </div>
-
-                <div class="field is-horizontal">
-                  <div class="field-body">
-                    <div class="field">
-                      <label class="label">Start</label>           
-                      <div class="control">
-                        <input class="input" type="date" name="exp_start[]">
-                      </div>
-                    </div>
-                    <div class="field">
-                      <label class="label">End</label>
-                      <div class="control">
-                        <input class="input" type="date" name="exp_end[]">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label class="label">Description</label>
-                  <div class="control">
-                    <textarea class="textarea" name="exp_desc[]" rows="3" placeholder="..."></textarea>
-                  </div>
-                </div>
-
-                <button type="button" class="button is-text pw-remove-item" disabled>Remove this experience</button>
-                <hr class="pw-repeater-divider">
-              </div> -->
+                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
+                <?php } ?>
+              <?php } ?>
             </div>
 
-            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="experience">
-              + Add an experience
-            </button>
+            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="experience">+ Add an experience</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="experience" disabled>Save</button>
+              <button type="submit" class="button btn-cta pw-save-btn" name="create" disabled>Save</button>
             </div>
-            <input type="hidden" name="user_id" value="">
-            <input type="hidden" name="resume_id" value="">
-            <input type="hidden" name="experience_id" value="">
+            <input type="hidden" name="action" value="experience">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($uid) ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -287,13 +304,13 @@
                   <div class="field">
                     <label class="label">Role</label>
                     <div class="control">
-                      <input class="input" type="text" name="exp_role[]" placeholder="Role / Position">
+                      <input class="input" type="text" name="title[]" placeholder="Role / Position">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Company</label>
                     <div class="control">
-                      <input class="input" type="text" name="exp_company[]" placeholder="Company / Organization">
+                      <input class="input" type="text" name="employer[]" placeholder="Company / Organization">
                     </div>
                   </div>
                 </div>
@@ -304,13 +321,13 @@
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <input class="input" type="month" name="exp_start[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
+                      <input class="input" type="month" name="start_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="exp_end[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
+                      <input class="input" type="month" name="end_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
                     </div>
                   </div>
                 </div>
@@ -319,7 +336,7 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="exp_desc[]" rows="3" placeholder="What did you actually do, fix or ship?"></textarea>
+                  <textarea class="textarea" name="summary[]" rows="3" placeholder="What did you actually do, fix or ship?"></textarea>
                 </div>
               </div>
 
@@ -460,8 +477,7 @@
           <header class="pw-panel-header">
             <div>
               <h2>Social Media</h2>
-              <p>Do you have a portfolio or completed projects you'd like to point recruiters to?</p>
-              <p>Keep it relevant to the job. Between 1–3 links is ideal.</p>
+              <p>Do you have a portfolio or projects you like recruiters to see?</p>
             </div>
           </header>
 

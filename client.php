@@ -5,9 +5,15 @@
 
   // Essential PHP files
   require_once "./config/session_manager.conf.php"; 
-  require_once "./config/loadResumes_conf.php";
+  require_once "./config/loadResumeData_conf.php"; // DONE
   SessionBook::invokeSession();
-  $_SESSION['error'] = 'Profile update failed.';
+  SessionBook::sessionRegenTimer();
+
+  // Test variables
+//   $_SESSION['error'] = [
+//     'title' => 'This field is required'
+//   ];
+  $_SESSION['action'] = 'builder';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,10 +56,8 @@
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
         <?php ViewBook::render('section_ui_default.php'); ?>
-        <?php ViewBook::render('section_ui_wizard.html'); ?>     
-        
-        <?php ViewBook::render('section_export.html'); ?>
-        <?php ViewBook::render('section_closure.html'); ?>
+        <?php ViewBook::render('section_ui_wizard.php'); ?>     
+        <?php ViewBook::render('section_closure.php'); ?>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->

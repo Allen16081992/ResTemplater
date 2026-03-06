@@ -39,8 +39,8 @@
     saveBtn.textContent = "Save Changes";
 
     // Name the button so PHP can see which section was saved
-    if (form.id === "personal") saveBtn.name = "personal";
-    if (form.id === "account") saveBtn.name = "account";
+    if (form.id === "personal") saveBtn.name = "action", saveBtn.value = "contact";
+    if (form.id === "account") saveBtn.name = "action" , saveBtn.value = "account";
 
     let isEditing = false;
 

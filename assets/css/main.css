@@ -225,6 +225,59 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
   }
 }
 
+/* ─────────────────────────────────────────────── */
+/*  ✨ PAPERWITCH SERVER MESSAGE STYLING          */
+/* ─────────────────────────────────────────────── */
+
+/* Server message */
+#server-msg {
+  display:flex;
+  position:absolute;
+  pointer-events: none; 
+  top: 9rem;
+  left: 0;
+  z-index: 1;
+}
+#server-msg > div {
+  display:flex;
+  justify-content: center;
+  width:100vw;
+}
+/* New message colors */
+.error {
+  background-color: #2f1f1f;
+  color: #f87171; 
+  border: 1px solid #dc2626; 
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.success {
+  background-color: #222f1f;
+  color: #71f871; 
+  border: 1px solid #2cdc26; 
+  padding: 0.50rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+/* Retro message colors */
+.serV-error {
+  color:black;
+  background: radial-gradient(circle, rgba(252, 70, 107, 1) 0%, rgba(63, 94, 251, 1) 100%);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.serV-good {
+  color:black;
+  border-radius: 6px;
+  background: radial-gradient(circle, rgba(8, 255, 0, 1) 15%, rgb(52, 52, 52) 50%);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
 /* ─────────────────────────────────────────────── 
     ✨ PAPERWITCH SPARKLE EFFECT                   
     Particle burst for CTA + Sign-up buttons       
@@ -244,7 +297,6 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
 @media (prefers-reduced-motion: reduce) {
   .spark-particle { animation: none; opacity: 0; }
 }
-
 
 /* ==========================================================
    6. LOGIN + SIGNUP SECTIONS
@@ -418,6 +470,16 @@ form {
     margin: -15px 0 10px ;
     cursor:default;
 } */
+
+.elegant-divider {
+  width: 80rem;
+  max-height: 10rem;
+  /* background: url("/assets/images/divider3.png") center / contain no-repeat; */
+  opacity: 0.70;
+  pointer-events: none;
+  user-select: none;
+  filter: saturate(0); /* optional: reduces “metallic” vibe */
+}
 
 /* ==========================================================
    7. TABLET + MOBILE PHONE PREFIXES

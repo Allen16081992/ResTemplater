@@ -1,13 +1,14 @@
 <?php 
-    header('Cache-Control: private, no-cache, must-revalidate'); // per-user, don’t cache
-    header('Pragma: no-cache');   // legacy HTTP/1.0
-    header('Expires: 0');         // expire immediately
+  header('Cache-Control: private, no-cache, must-revalidate'); // per-user, don’t cache
+  header('Pragma: no-cache');   // legacy HTTP/1.0
+  header('Expires: 0');         // expire immediately
     
-    // Essential PHP files
-    require_once "./config/session_manager.conf.php"; 
-    // Miscellaneous PHP Files
-    include_once "./config/auxiliary/phrases.aux.php";
-    SessionBook::invokeSession();
+  // Essential PHP files
+  require_once "./config/session_manager.conf.php"; 
+  // Miscellaneous PHP Files
+  include_once "./config/auxiliary/phrases.aux.php";
+  SessionBook::invokeSession();
+  ViewBook::clearEditor();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,11 +43,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/export_page.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>Thy Job Scroll Cauldron</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/signup_page-handler.js"></script>
+    <script defer src="assets/js/auth_page-handler.js"></script>
     <script defer src="assets/js/cta-padding-mobile.js"></script><!-- CSS refinement for mobile -->
     <script defer src="assets/js/sparks_effect.js"></script>
 </head>
@@ -59,15 +60,13 @@
         <?php ViewBook::render('section_signup.php'); ?>  
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
-        <?php ViewBook::render('section_export.html'); ?>
         <section id="contact" class="hidden"></section>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->
         <p>It seems like you have Javascript disabled. This site should work but less streamlined. Expect more page refreshes.</p>
     </noscript>
-
-    <?php ViewBook::render('footer_sitemap.html'); 
-    SessionBook::revokeSession(); ?>
+    
+    <?php ViewBook::render('footer_sitemap.html'); ?>
 </body>
 </html>

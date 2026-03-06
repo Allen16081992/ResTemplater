@@ -2,12 +2,12 @@
     <a href="index.php" id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a>
     <nav aria-label="main navigation">
         <?php $page = basename($_SERVER['SCRIPT_NAME']); if ($page  === 'client.php') { ?>
-            <a href="#" data-section="profile"><?= ViewBook::addUsername(); ?></a>
+            <a href="#" data-section="profile">Profile</a><!-- Fix: Only logged in users can see this. -->
             <a href="#" data-section="home">Resume</a>
             <?php if (!isset($_SESSION['session_data']['user_id'])) { ?>
                 <a href="index.php">Back</a> 
             <?php } else { ?>
-                <a href="index.php">Logout</a>  
+                <a href="../config/logout_user.conf.php">Logout</a>  
             <?php } ?>
         <?php } else { ?>  
             <a href="#" data-section="policy">Privacy</a>  

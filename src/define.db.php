@@ -2,6 +2,7 @@
     // Database Configuration Source
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'careerwitch_db');
+    define('DB_CHARSET', 'utf8mb4');
     define('DB_USER', 'root');
     define('DB_PASSWORD', ''); 
 
@@ -21,14 +22,12 @@
 
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `personal` (
+    // CREATE TABLE IF NOT EXISTS `contact` (
     // id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    // firstname      VARCHAR(100) NOT NULL,
-    // lastname       VARCHAR(100) NOT NULL,
+    // fullname       VARCHAR(100) NOT NULL,
     // phone          VARCHAR(32) NULL,
     // city           VARCHAR(120) NULL,
     // country        VARCHAR(120) NULL,
-    // postalcode     VARCHAR(20) NULL,
     // image_url      VARCHAR(2048) NULL,
     // created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     // updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -40,23 +39,24 @@
     // CONSTRAINT fk_pers_accounts
     //     FOREIGN KEY (user_id) REFERENCES accounts(id)
     //     ON DELETE CASCADE
-    //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // INSERT INTO `accounts` (`email`, `password_hash`, `birth_date`) VALUES ('hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '2026-01-25');
+    // INSERT INTO `accounts` (`email`, `password_hash`, `birth_date`) VALUES ('hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '1998-01-25');
 
-    // CREATE TABLE IF NOT EXISTS `resume` (
+    // CREATE TABLE IF NOT EXISTS `resumes` (
     //     id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    //     resume_title VARCHAR(100) NOT NULL,
+    //     title VARCHAR(180) NOT NULL,
+    //     summary VARCHAR(2048) NULL,
+    //     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     //     user_id      INT UNSIGNED NOT NULL,
     //     PRIMARY KEY (id),
 
     //     KEY idx_resume_user (user_id),
 
     //     CONSTRAINT fk_res_accounts
-    //         FOREIGN KEY (user_id) REFERENCES accounts(id)
-    //         ON DELETE CASCADE
-    //         ON UPDATE CASCADE
+    //     FOREIGN KEY (user_id) REFERENCES accounts(id)
+    //     ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     
     // CREATE TABLE IF NOT EXISTS `work_experience` (
@@ -75,9 +75,8 @@
     //     KEY idx_work_resume_sort (resume_id, sort_order),
 
     //     CONSTRAINT fk_work_resume
-    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
     //         ON DELETE CASCADE
-    //         ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     // CREATE TABLE IF NOT EXISTS `education` (
@@ -96,39 +95,40 @@
     //     KEY idx_acad_resume_sort (resume_id, sort_order),
 
     //     CONSTRAINT fk_acad_resume
-    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
     //         ON DELETE CASCADE
-    //         ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     // CREATE TABLE IF NOT EXISTS `work_experience_bullets` (
-    // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    // text          TEXT NOT NULL,
-    // sort_order    INT NOT NULL DEFAULT 0,
-    // work_id       INT UNSIGNED NOT NULL,
-    // PRIMARY KEY (id),
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     text        TEXT NOT NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     work_id     INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
 
-    // KEY idx_bullet_work_sort (work_id, sort_order),
+    //     KEY idx_bullet_work_sort (work_id, sort_order),
 
     // CONSTRAINT fk_bullet_work
     //     FOREIGN KEY (work_id) REFERENCES work_experience(id)
     //     ON DELETE CASCADE
-    //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     // CREATE TABLE IF NOT EXISTS `education_bullets` (
-    // id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    // text          TEXT NOT NULL,
-    // sort_order    INT NOT NULL DEFAULT 0,
-    // acad_id       INT UNSIGNED NOT NULL,
-    // PRIMARY KEY (id),
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     text        TEXT NOT NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     acad_id     INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
 
     // KEY idx_bullet_acad_sort (acad_id, sort_order),
 
     // CONSTRAINT fk_bullet_acad
     //     FOREIGN KEY (acad_id) REFERENCES education(id)
     //     ON DELETE CASCADE
-    //     ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     // CREATE TABLE IF NOT EXISTS `technical_skills` (
@@ -137,30 +137,31 @@
     //     category   ENUM('language','framework','tool','platform','other') NOT NULL DEFAULT 'other',
     //     level      ENUM('basic','intermediate','advanced') NULL,
     //     sort_order INT NOT NULL DEFAULT 0,
+    //     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     //     resume_id  INT UNSIGNED NOT NULL,
     //     PRIMARY KEY (id),
 
     //     UNIQUE KEY uq_skill_resume_name (resume_id, name),
 
     //     CONSTRAINT fk_tech_resume
-    //         FOREIGN KEY (resume_id) REFERENCES resume(id)
+    //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
     //         ON DELETE CASCADE
-    //         ON UPDATE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
-//     PaperWitch
-// I want to create a modern Resume designer platform for students and young professionals.
-// # Features:
-// - Workspace: area for the editor
-// - Experience: add/remove their job experience
-// - Education: add/remove their college courses
-// - Skills: add/remove skills
-// - Contact: personal details
-// - Users: who can create and save multiple resumes, change its layouts, structure, login and sign up.
-// - Sections: inside the Hybrid-SPA that act as webpages
-// - Build: with PHP and Javascript under the hood, lightweight, aimed at raw performance, ease of use, and no suprise-signup/paywalls.
-// - Play: the build-in Side-scroller. As they play, fill in question clouds in npc/for and have a resume at the end of the level (or a part of it.)
-// ---------+++------------
-// snake_case only / ERD
-// -------------------------
+    //     PaperWitch
+    // I want to create a modern Resume designer platform for students and young professionals.
+    // # Features:
+    // - Workspace: area for the editor
+    // - Experience: add/remove their job experience
+    // - Education: add/remove their college courses
+    // - Skills: add/remove skills
+    // - Contact: personal details
+    // - Users: who can create and save multiple resumes, change its layouts, structure, login and sign up.
+    // - Sections: inside the Hybrid-SPA that act as webpages
+    // - Build: with PHP and Javascript under the hood, lightweight, aimed at raw performance, ease of use, and no suprise-signup/paywalls.
+    // - Play: the build-in Side-scroller. As they play, fill in question clouds in npc/for and have a resume at the end of the level (or a part of it.)
+    // ---------+++------------
+    // snake_case only / ERD
+    // -------------------------

@@ -1,11 +1,13 @@
-<?php require_once '../validator.conf.php';
+<?php // Load PHP Files
+    require_once '../validator.conf.php';
+    require_once '../classes/user_class.php';
 
     class loginControl {
         public function __construct(private array $postData) {}
+        use Auxiliary;
 
         public function handle(): void {
             SessionBook::throttleLogin(3); // example cooldown seconds
-            // Weak? Better to key on IP + email + counters server-side if no infra??
 
             // Hold submitted data
             ViewBook::flashForm(['email' => $this->postData['email'] ?? '']);
@@ -31,10 +33,10 @@
 
             // DB lookup (only after validation)
             $pdo = Database::Connect();
-            $model = new loginCodex($pdo);  
+            $model = new userCodex($pdo);  
 
             // Fetch user data
-            $user = $model->getUser($email);
+            $user = $model->findByEmail($email);
             if ($user === false) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = 'Invalid email or password.';
@@ -44,25 +46,31 @@
 
             // Verify password
             $pwd = (string)($this->postData['pwd'] ?? '');
-            if (!password_verify($pwd, $user['password_hash'])) {
+            if (!$this->verifyHash($pwd, $user['password_hash'])) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['pwd' => 'Invalid email or password.'];
                 ViewBook::revert($this->postData['action'] ?? 'login');
                 return;
             }
 
-            // Auth success: set session
-            SessionBook::onLoginSuccess();
-            SessionBook::setUserSession($user);
+            // Auth success: reset session
+            session_regenerate_id(true);
+            $_SESSION['last_regen'] = time();
+
+            // Auth success: set user
+            $_SESSION['session_data'] = [
+                'user_id' => (int)$user['id']
+            ];
 
             // Perform redirect
-            header('Location: ../client.php'); 
+            ViewBook::revert('wizard');
             exit;
         }
     }
 
     class signupControl {
         public function __construct(private array $postData) {}
+        use Auxiliary;
 
         private function oldForm(string $d, string $m, string $y): void {
             $oldForm = [
@@ -155,10 +163,10 @@
 
             // DB lookup (only after validation)
             $pdo = Database::Connect();
-            $model = new signupCodex($pdo);  
-            $lookup = $model->lookupUser($email);
+            $model = new userCodex($pdo);  
+            $exist = $model->emailExists($email);
 
-            if ($lookup) {
+            if ($exist) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = 'Email address already in use.';
                 ViewBook::revert($this->postData['action'] ?? 'sign_up');
@@ -170,22 +178,24 @@
             $this->postData['pwd'] = $pwd;
 
             // Set new user
-            $newUser = $model->setUser($this->postData);
+            $newUser = $model->createAccount($this->postData);
             if ($newUser <= 0) {
                 // Hold error message + set previous UI state
-                $_SESSION['error'] = 'Signing up failed.';
+                $_SESSION['error'] = 'Sign Up failed.';
                 ViewBook::revert($this->postData['action'] ?? 'sign_up');
                 return;
             }
 
+            // Registration done: redirect
             $_SESSION['action'] = 'success';
             ViewBook::revert($this->postData['action'] ?? 'success');
             exit;
         }
     }
 
-    class userControl {
+    class accountControl {
         public function __construct(private array $postData) {}
+        use Auxiliary;
         
         public function handle(): void {
             // Validate for missing value
@@ -197,8 +207,53 @@
                 return;
             }
 
+            // DB lookup (only after validation)
+            $pdo = Database::Connect();
+            $model = new userCodex($pdo); 
+
+            // Account closure
+            if (!isset($this->postData['closure'])) {
+                $exist = $model->findByEmail($this->postData['email']);
+                if (!$exist) {
+                    // Hold error message + set previous UI state
+                    $_SESSION['error'] = 'User not found.';
+                    ViewBook::revert($postData['action'] ?? 'profile');
+                    return; 
+                }
+
+                // If logged in user match, close account
+                if ($exist['id'] === (int)$this->postData['id']) {
+                    // Verify password
+                    $pwd = (string)($this->postData['pwd'] ?? '');
+                    if (!$this->verifyHash($pwd, $exist['password_hash'])) {
+                        // Hold error message + set previous UI state
+                        $_SESSION['error'] = ['pwd' => 'Password not right.'];
+
+                        // Set visibility
+                        $_SESSION['action'] = 'closure';
+                        ViewBook::revert($this->postData['action'] ?? 'closure');
+                        return;
+                    }
+                }
+
+                // Delete user (only after validation)
+                $erase = $model->deleteAccount($exist['id']);
+                if ($erase <= 0) {
+                    // Hold error message + set previous UI state
+                    $_SESSION['error'] = 'Failed to delete account.';
+                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    return;
+                }
+
+                // Set success message + redirect
+                $_SESSION['action'] = 'home';
+                $_SESSION['success'] = 'Account closed. Data erased.';
+                ViewBook::revert($this->postData['action'] ?? '');
+                return;
+            }
+
             // Account details
-            if (isset($this->postData['email'])) {
+            if (isset($this->postData['account'])) {
                 // Validate email format
                 $email = trim((string)($this->postData['email'] ?? ''));
                 $msg = ValidGrimoire::validateEmail($email);
@@ -211,27 +266,29 @@
 
                 // Validate password
                 $pwd = trim((string)($this->postData['pwd'] ?? ''));
-                $msg = ValidGrimoire::validatePwd($pwd);
-                if ($msg !== null) {
-                    // Hold error message for previous UI state
-                    $_SESSION['error'] = ['pwd' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'sign_up'); 
-                    return;
+                if (!empty($pwd)) {
+                    $msg = ValidGrimoire::validatePwd($pwd);
+                    if ($msg !== null) {
+                        // Hold error message for previous UI state
+                        $_SESSION['error'] = ['pwd' => $msg];
+                        ViewBook::revert($this->postData['action'] ?? 'sign_up'); 
+                        return;
+                    }
                 }
 
                 // DB lookup (only after validation)
-                $pdo = Database::Connect();
-                $model = new userCodex($pdo); 
-                $exist = $model->lookupEmail($this->postData['email'], $_SESSION['session_data']['user_id']);
+                // $pdo = Database::Connect();
+                // $model = new userCodex($pdo); 
+                $exist = $model->findByEmail($this->postData['email']);
 
                 if (!$exist) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Failed to update account.';
+                    $_SESSION['error'] = 'Update failed. User not found.';
                     ViewBook::revert($postData['action'] ?? 'profile');
                     return; 
                 }
-
-                $update = $model->updateAccount($email, $pwd, $_SESSION['session_data']['user_id']);
+                $user = $_SESSION['session_data']['user_id'];
+                $update = $model->updateEmail($user, $email);
 
                 // Verify if task was successful
                 if ($update <= 0) {
@@ -241,27 +298,26 @@
                     return;
                 }
 
+                if (!empty($pwd)) {
+                    $passw = $model->updatePasswordHash($user, $pwd);
+                    if ($passw <= 0) {
+                        // Hold error message + set previous UI state
+                        $_SESSION['error'] = 'Updating account failed.';
+                        ViewBook::revert($this->postData['action'] ?? 'profile');
+                        return;
+                    }
+                }
                 $_SESSION['success'] = 'Account updated.';
             } 
 
             // Personalia - Contacts
-            if (!isset($this->postData['email'])) {
+            if (!isset($this->postData['contact'])) {
                 // Validate firstname
-                $firstname = trim((string)($this->postData['firstname'] ?? ''));
-                $msg = ValidGrimoire::validateName($firstname, true);
+                $fullname = trim((string)($this->postData['fullname'] ?? ''));
+                $msg = ValidGrimoire::validateName($fullname, true);
                 if ($msg !== null) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['firstname' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
-                }
-
-                // Validate lastname
-                $lastname = trim((string)($this->postData['lastname'] ?? ''));
-                $msg = ValidGrimoire::validateName($lastname, true);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['lastname' => $msg];
+                    $_SESSION['error'] = ['fullname' => $msg];
                     ViewBook::revert($this->postData['action'] ?? 'profile'); 
                     return;
                 }
@@ -296,38 +352,26 @@
                     return;
                 }
 
-                // Validate phostcode format
-                $zip = trim((string)($this->postData['postcode'] ?? ''));
-                $msg = ValidGrimoire::validatePostcode($zip);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['postcode' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
-                }
-
                 // DB lookup (only after validation)
-                $pdo = Database::Connect();
-                $model = new userCodex($pdo); 
-                $exist = $model->getContact($this->postData['user_id']);
+                // $pdo = Database::Connect();
+                // $model = new userCodex($pdo); 
+                $exist = $model->fetchContact($this->postData['user_id']);
 
-                if ($exist <= 0) {
-                    $update = $model->setContact($this->postData);
+                if (!$exist) {
+                    $contact = $model->createContact($this->postData);
                 } else {
-                    $update = $model->updateContact($this->postData);
+                    $contact = $model->updateContact($this->postData);
                 }
 
                 // Verify if task was successful
-                if ($update <= 0) {
+                if ($contact <= 0) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Failed to update profile.';
+                    $_SESSION['error'] = 'Updating personal failed.';
                     ViewBook::revert($postData['action'] ?? 'profile');
                     return;
                 }
-
                 $_SESSION['success'] = 'Profile updated.';
             }
-
             ViewBook::revert($postData['action'] ?? 'profile');
             exit;
         }

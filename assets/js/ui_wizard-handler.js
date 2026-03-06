@@ -38,12 +38,12 @@
   if (!expMount || !eduMount || !experienceFields || !educationFields) return;
 
   // Inputs
-  const fullNameEl = root.querySelector("#fullName");
+  const fullNameEl = root.querySelector("#fullname");
   const headlineEl = root.querySelector("#headline");
   const emailEl = root.querySelector("#email");
   const cityEl = root.querySelector("#city");
   const countryEl = root.querySelector("#country");
-  const websiteEl = root.querySelector("#website");
+  const socialEl = root.querySelector("#website");
   const phoneEl = root.querySelector("#phone");
 
   const startBtn = root.querySelector('[data-action="start"]');
@@ -317,7 +317,7 @@
 
     if (step === "contact") {
       const email = emailEl.value.trim();
-      const websiteRaw = websiteEl.value.trim();
+      const socialRaw = socialEl.value.trim();
 
       // Email required
       if (!email) {
@@ -335,17 +335,17 @@
       markInvalid(emailEl, false);
 
       // Website optional, but if filled must be valid
-      if (websiteRaw && !isValidUrl(websiteRaw)) {
-        markInvalid(websiteEl, true);
-        websiteEl.focus();
+      if (socialRaw && !isValidUrl(socialRaw)) {
+        markInvalid(socialEl, true);
+        socialEl.focus();
         return false;
       }
 
       // Normalize once accepted (only if filled)
-      if (websiteRaw) {
-        websiteEl.value = normalizeUrl(websiteRaw);
+      if (socialRaw) {
+        socialEl.value = normalizeUrl(socialRaw);
       }
-      markInvalid(websiteEl, false);
+      markInvalid(socialEl, false);
 
       return true;
     }

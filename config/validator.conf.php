@@ -70,16 +70,4 @@
             }
             return null;
         }
-
-        public static function validatePostcode(string $value): ?string {
-            $value = trim($value);
-            if ($value === '') { return 'Postcode is required.'; }
-            if (mb_strlen($value, 'UTF-8') > 20) { return 'Postcode too long.'; }
-
-            // Letters, digits, spaces, hyphens only
-            if (!preg_match('/^[A-Za-z0-9 -]+$/', $value)) {
-                return 'Invalid postcode format.';
-            }
-            return null;
-        }
     }

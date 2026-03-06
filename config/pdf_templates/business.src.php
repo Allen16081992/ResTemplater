@@ -1,7 +1,7 @@
 <?php 
 // Start a session for handling data and error messages.
 require_once '../session_manager.src.php';
-sessionRegenTimer(); // Call the periodic session regeneration
+SessionBook::sessionRegenTimer(); 
 
 // Invoke the (improved) database connection and FPDF library.
 //require_once 'idb.config.php';

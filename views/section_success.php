@@ -7,4 +7,5 @@
         Welcome to PaperWitch, a resume editor born to life from a successful college project.
         Log in and make yourself at home. Your job scroll awaits ✨
     </p>
+    <button class="button is-medium animate__animated animate__fadeIn animate__delay-2s" data-section="login">Log in here</button>
 </section>

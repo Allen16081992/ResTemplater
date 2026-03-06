@@ -98,7 +98,7 @@
         <div class="step has-text-left">
           <span class="num">3</span>
           <h3 class="title is-5">Download</h3>
-          <p class="has-text-grey-light">Save as .PDF — Ready to send or print.</p>
+          <p class="has-text-grey-light">Save as PDF — Ready to send or print.</p>
         </div>
       </div>
     </div>
@@ -137,6 +137,7 @@
       PRICING / CTA BAND
   ========================================================= -->
   <article class="section angled-top">
+    <img class="elegant-divider" src="assets/images/divider1.png" alt="elegant divider">
     <div class="container">
       <div class="cta-band p-6">
         <div class="columns is-vcentered">

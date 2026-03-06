@@ -156,6 +156,10 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
   color:rgb(58, 58, 253);
 }
 
+/* ─────────────────────────────────────────────── */
+/*  ✨ PAPERWITCH SERVER MESSAGE STYLING          */
+/* ─────────────────────────────────────────────── */
+
 /* Server message */
 #server-msg {
   display:flex;
@@ -165,12 +169,23 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
   left: 0;
   z-index: 1;
 }
+#server-field {
+  display:flex;
+  position:relative;
+  pointer-events: none; 
+  color:red;
+  font-size: 0.75rem;
+  margin-left: 1rem;
+  margin-top: 0.3rem;
+  z-index: 1;
+}
+
 #server-msg > div {
   display:flex;
   justify-content: center;
   width:100vw;
 }
-/* Error message */
+/* New message colors */
 .error {
   background-color: #2f1f1f;
   color: #f87171; 
@@ -181,15 +196,23 @@ a[data-section="login"], a[data-section="logout"] {border: 2px solid #dfdfdf;} /
   font-size: 0.95rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
-/* Error coloring */
+.success {
+  background-color: #222f1f;
+  color: #71f871; 
+  border: 1px solid #2cdc26; 
+  padding: 0.50rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+/* Retro message colors */
 .serV-error {
   color:black;
   background: radial-gradient(circle, rgba(252, 70, 107, 1) 0%, rgba(63, 94, 251, 1) 100%);
   border-radius: 6px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.25);
 }
-
-/* Success coloring */
 .serV-good {
   color:black;
   border-radius: 6px;

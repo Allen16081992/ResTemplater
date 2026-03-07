@@ -60,8 +60,6 @@
             $stmt = $this->pdo->prepare('DELETE FROM accounts WHERE id = :id LIMIT 1');
             $stmt->execute([':id' => $uid]);
             return $stmt->rowCount();
-            // DB must CASCADE on DELETE 
-            // if we don't create deleteContact, deleteResume, ect.
         }
 
         // ==========================================================
@@ -94,6 +92,12 @@
                 ':country'   => $postData['country'],
                 ':user_id'   => $postData['user_id']
             ]);
+            return $stmt->rowCount();
+        }
+
+        public function deleteContact(int $uid): int {
+            $stmt = $this->pdo->prepare('DELETE FROM contacts WHERE user_id = :user_id LIMIT 1');
+            $stmt->execute([':user_d' => $uid]);
             return $stmt->rowCount();
         }
     }

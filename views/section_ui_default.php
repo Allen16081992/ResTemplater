@@ -216,12 +216,11 @@
             </div>
 
             <div class="pw-panel-actions">
-              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="resume">Save</button>
+              <button type="submit" name="action" value="resume" class="button btn-cta pw-save-btn">Save</button>
             </div>
-            <input type="hidden" name="action" value="resume">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="update">
-            <input type="hidden" name="resume_id" value="">
-            <input type="hidden" name="user_id" value="">
           </form>
         </section>
 
@@ -230,7 +229,13 @@
           <header class="pw-panel-header">
             <div>
               <h2>Experience</h2>
-              <p>Projects, jobs and side-quests that prove you can actually do things.</p>
+              <p>Jobs and side-quests (holiday work) that prove you can actually do things.</p>
+              <ul style="margin:10px; font-size:0.8rem;">Hint: for dates, you may use:
+                  <li>● Slashes, dots, or minus</li>
+                  <li>● Words as today, tomorrow or yesterday</li>
+                  <li>● Leaving the day out or not</li>
+                  <li>● If you leave End field empty, it will default to 'Present'</li>
+              </ul>
             </div>
           </header>
 
@@ -243,7 +248,7 @@
                     <div class="field is-horizontal">
                       <div class="field-body">
                         <div class="field">
-                          <label class="label">Role</label>
+                          <label class="label">Job title</label>
                           <div class="control">
                             <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($exp['title']) ?>">
                           </div>
@@ -261,13 +266,13 @@
                         <div class="field">
                           <label class="label">Start</label>           
                           <div class="control">
-                            <input class="input" type="date" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
+                            <input class="input" type="text" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="date" name="end_date[]" value="<?= htmlspecialchars($exp['end_date'] ?? 'today') ?>">
+                            <input class="input" type="text" name="end_date[]" value="<?= htmlspecialchars($exp['end_date'] ?? 'today') ?>">
                           </div>
                         </div>
                       </div>
@@ -285,13 +290,11 @@
                 <?php } ?>
               <?php } ?>
             </div>
-
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="experience">+ Add an experience</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" class="button btn-cta pw-save-btn" name="create" disabled>Save</button>
+              <button type="submit" name="action" value="experience" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
-            <input type="hidden" name="action" value="experience">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($uid) ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
           </form>
@@ -302,7 +305,7 @@
               <div class="field is-horizontal">
                 <div class="field-body">
                   <div class="field">
-                    <label class="label">Role</label>
+                    <label class="label">Job title</label>
                     <div class="control">
                       <input class="input" type="text" name="title[]" placeholder="Role / Position">
                     </div>
@@ -321,13 +324,15 @@
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <input class="input" type="month" name="start_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
+                      <!-- <input class="input" type="month" name="start_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}"> -->
+                      <input class="input" type="text" name="start_date[]">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="end_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
+                      <!-- <input class="input" type="month" name="end_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}"> -->
+                      <input class="input" type="text" name="end_date[]">
                     </div>
                   </div>
                 </div>
@@ -336,7 +341,7 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="summary[]" rows="3" placeholder="What did you actually do, fix or ship?"></textarea>
+                  <textarea class="textarea" name="summary[]" rows="3" placeholder="(Optional) What did you actually do, fix or improve?"></textarea>
                 </div>
               </div>
 
@@ -351,7 +356,13 @@
           <header class="pw-panel-header">
             <div>
               <h2>Education</h2>
-              <p>Projects, courses and internships that limit gaps in your years.</p>
+              <p>Courses and internships.</p>
+              <ul style="margin:10px; font-size:0.8rem;">Hint: for dates, you may use:
+                <li>● Slashes, dots, or minus</li>
+                <li>● Words as today, tomorrow or yesterday</li>
+                <li>● Leaving the day out or not</li>
+                <li>● If you leave End field empty, it will default to 'Present'</li>
+              </ul>
             </div>
           </header>
 
@@ -410,11 +421,10 @@
             </button>
 
             <div class="pw-panel-actions">
-              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="education" disabled>Save</button>
+              <button type="submit" name="action" value="education" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
             <input type="hidden" name="user_id" value="">
             <input type="hidden" name="resume_id" value="">
-            <input type="hidden" name="education_id" value="">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -457,16 +467,11 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="edu_desc[]" rows="3" placeholder="What did you actually study?"></textarea>
+                  <textarea class="textarea" name="edu_desc[]" rows="3" placeholder="(Optional) What did you actually study or learned?"></textarea>
                 </div>
               </div>
-              <form action="">
-                <input type="hidden" name="edu_id" value="">
-                <input type="hidden" name="user_id" value="">
-                <input type="hidden" name="resume_id" value="">
-                <input type="hidden" name="delete_edu" value="delete_edu">
-                <button type="button" class="button is-text pw-remove-item" name="action" value="education">Remove this education</button>
-              </form>
+
+              <button type="button" class="button is-text pw-remove-item" name="action" value="education">Remove this education</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>

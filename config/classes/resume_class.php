@@ -6,7 +6,7 @@
         // Create Resume
         public function createResume($title, $desc, $uid): int {
             $desc = $desc === '' ? null : $desc;
-            $stmt = $this->pdo->prepare("INSERT INTO `resumes` (title, summary, user_id) VALUES (:title, :summary, :user_id)");
+            $stmt = $this->pdo->prepare('INSERT INTO resumes (title, summary, user_id) VALUES (:title, :summary, :user_id)');
             $stmt->execute([
                 ':title'=> $title,
                 ':summary'     => $desc,
@@ -26,7 +26,7 @@
 
         // Update Resume
         public function updateResume($title, $desc, $uid): int {
-            $stmt = $this->pdo->prepare("UPDATE `resumes` SET title = :title, summary = :summary WHERE user_id = :user_id;");
+            $stmt = $this->pdo->prepare('UPDATE resumes SET title = :title, summary = :summary WHERE user_id = :user_id');
             $stmt->execute([
                 ':title'=> $title,
                 ':summary'     => $desc,

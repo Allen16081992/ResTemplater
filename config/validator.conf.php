@@ -70,4 +70,42 @@
             }
             return null;
         }
+
+        public static function validateAndFormatDate(string $input): array {
+            $input = trim(preg_replace('/\s+/', ' ', $input));
+
+            if ($input === 'end_date' && $input === '') {
+                return ['error' => null, 'date' => 'Present'];
+            }
+
+            if ($input === '') {
+                return ['error' => 'Date is required.', 'date' => null];
+            }
+
+            $lower = strtolower($input);
+
+            try {
+                // Handle exact natural phrases
+                if ($lower === 'today') {
+                    $d = new DateTime('today');
+                } elseif ($lower === 'tomorrow') {
+                    $d = new DateTime('tomorrow');
+                } elseif ($lower === 'yesterday') {
+                    $d = new DateTime('yesterday');
+                } else {
+                    // Parse numeric or word-based full date
+                    $d = new DateTime($input);
+                }
+            } catch (Exception $e) {
+                return ['error' => 'Invalid date.', 'date' => null];
+            }
+
+            // Ensure calendar date is valid
+            if (!checkdate((int)$d->format('m'), (int)$d->format('d'), (int)$d->format('Y'))) {
+                return ['error' => 'Invalid date.', 'date' => null];
+            }
+
+            // Return formatted date for MariaDB
+            return ['error' => null, 'date' => $d->format('Y-m-d')];
+        }
     }

@@ -20,7 +20,7 @@
         'closure'=> accountControl::class,// DONE
         'resume' => resumeControl::class, // DONE
         // Resume parts
-        // 'experience' => experienceControl::class,
+        'experience' => experienceControl::class, // DONE
         // 'education' => educationControl::class,
         // 'skills' => skillsControl::class,
         // 'social' => socialControl::class,
@@ -45,6 +45,7 @@
     require_once './controller/user_contr.php';
     require_once './controller/resume_contr.php';
     require_once './controller/wizard_contr.php';
+    require_once './controller/experience_contr.php';
 
     // Initialise Class
     $targetClass = $routes[$action];

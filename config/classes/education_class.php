@@ -1,17 +1,17 @@
 <?php require_once '../database/v2_db.php';
 
-    final class experienceCodex {
+    final class educationCodex {
         public function __construct(private PDO $pdo) {} 
 
         // Create Experience
-        public function createExperience(array $postData): int {
+        public function createEducation(array $postData): int {
             $stmt = $this->pdo->prepare(
-                'INSERT INTO work_experience (title, employer, start_date, end_date, summary, resume_id) 
-                VALUES (:title, :employer, :start_date, :end_date, :summary, :resume_id)'
+                'INSERT INTO education (title, institute, start_date, end_date, summary, resume_id) 
+                VALUES (:title, :institute, :start_date, :end_date, :summary, :resume_id)'
             );
             $stmt->execute([
                 ':title'     => $postData['title'],
-                ':employer'  => $postData['employer'],
+                ':institute' => $postData['institute'],
                 ':start_date'=> $postData['start_date'],
                 ':end_date'  => $postData['end_date'],
                 ':summary'   => $postData['summary'],
@@ -21,13 +21,13 @@
         }
 
         // Update Experience
-        public function updateExperience(array $postData): int {
+        public function updateEducation(array $postData): int {
             $stmt = $this->pdo->prepare(
-                'UPDATE work_experience SET title = :title, employer = :employer, start_date = :start_date, end_date = :end_date, summary = :summary WHERE resume_id = :resume_id'
+                'UPDATE education SET title = :title, institute = :institute, start_date = :start_date, end_date = :end_date, summary = :summary WHERE resume_id = :resume_id'
             );
             $stmt->execute([
                 ':title'     => $postData['title'],
-                ':employer'  => $postData['employer'],
+                ':institute' => $postData['institute'],
                 ':start_date'=> $postData['start_date'],
                 ':end_date'  => $postData['end_date'],
                 ':summary'   => $postData['summary'],
@@ -37,10 +37,10 @@
         }
 
         // Delete Experience
-        public function deleteExperience(int $exp, int $resume) {
-            $stmt = $this->pdo->prepare('DELETE FROM work_experience WHERE exp_id = :exp_id AND resume_id = :resume_id');
+        public function deleteEducation(int $edu, int $resume) {
+            $stmt = $this->pdo->prepare('DELETE FROM education WHERE edu_id = :edu_id AND resume_id = :resume_id');
             $stmt->execute([
-                ':exp_id'=> $exp,
+                ':edu_id'=> $edu,
                 ':resume_id'=> $resume
             ]);
             return $stmt->rowCount() > 0;

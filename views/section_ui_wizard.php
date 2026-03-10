@@ -1,4 +1,4 @@
-<section id="wizard" class="<?= ViewBook::setVisibility('home'); ?>">
+<section id="wizard" class="<?= ViewBook::setVisibility('wizard'); ?>">
   <div class="pw-baseline" id="pwBaseline">
     <header class="pw-header">
       <div>

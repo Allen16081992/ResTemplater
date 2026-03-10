@@ -53,7 +53,7 @@
                 $data['education_bullet'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 // Fetch data from the 'technical' table
-                $stmt = $this->pdo->prepare('SELECT * FROM technical_skills WHERE resume_id = :resume_id');
+                $stmt = $this->pdo->prepare('SELECT * FROM skills WHERE resume_id = :resume_id');
                 $stmt->execute([$resid]);
                 $data['skills'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

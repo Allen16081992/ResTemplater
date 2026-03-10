@@ -131,7 +131,7 @@
     //     ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `technical_skills` (
+    // CREATE TABLE IF NOT EXISTS `skills` (
     //     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
     //     name       VARCHAR(100) NOT NULL,
     //     category   ENUM('language','framework','tool','platform','other') NOT NULL DEFAULT 'other',

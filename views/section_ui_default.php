@@ -272,7 +272,7 @@
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="text" name="end_date[]" value="<?= htmlspecialchars($exp['end_date'] ?? 'today') ?>">
+                            <input class="input" type="text" name="end_date[]" value="<?= htmlspecialchars($exp['end_date']) ?>">
                           </div>
                         </div>
                       </div>
@@ -286,7 +286,7 @@
                     <button type="button" class="button is-text pw-remove-item" name="delete" disabled>Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
-                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
+                  <input type="hidden" name="exp_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
                 <?php } ?>
               <?php } ?>
             </div>
@@ -369,53 +369,54 @@
           <form id="form-education" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <div class="pw-repeater" data-repeater="education">
               <!-- Education ITEM -->
-              <!-- <div class="pw-repeater-item">
-                <div class="field is-horizontal">
-                  <div class="field-body">
-                    <div class="field">
-                      <label class="label">Role</label>
-                      <div class="control">
-                        <input class="input" type="text" name="edu_role[]" placeholder="Software Developer (Intern)">
+              <?php if (!empty($data['education'])) { ?>
+                <?php foreach ($data['education'] as $edu) { ?>
+                  <div class="pw-repeater-item">
+                    <div class="field is-horizontal">
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="label">Course</label>
+                          <div class="control">
+                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($edu['title']) ?>">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label">Institute</label>
+                          <div class="control">
+                            <input class="input" type="text" name="institute[]" value="<?= htmlspecialchars($edu['institute']) ?>">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field is-horizontal">
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="label">Start</label>
+                          <div class="control">
+                            <input class="input" type="month" name="start_date[]" value="<?= htmlspecialchars($edu['start_date']) ?>">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label">End</label>
+                          <div class="control">
+                            <input class="input" type="month" name="end_date[]"value="<?= htmlspecialchars($edu['end_date']) ?>">
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div class="field">
-                      <label class="label">Institute</label>
+                      <label class="label">Description</label>
                       <div class="control">
-                        <input class="input" type="text" name="edu_company[]" placeholder="TechCorp">
+                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($edu['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
+                    <button type="button" class="button is-text pw-remove-item" disabled>Remove this education</button>
+                    <hr class="pw-repeater-divider">
                   </div>
-                </div>
-
-                <div class="field is-horizontal">
-                  <div class="field-body">
-                    <div class="field">
-                      <label class="label">Start</label>
-                      <div class="control">
-                        <input class="input" type="month" name="edu_start[]">
-                      </div>
-                    </div>
-                    <div class="field">
-                      <label class="label">End</label>
-                      <div class="control">
-                        <input class="input" type="month" name="edu_end[]">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label class="label">Description</label>
-                  <div class="control">
-                    <textarea class="textarea" name="edu_desc[]" rows="3" placeholder="..."></textarea>
-                  </div>
-                </div>
-
-                <button type="button" class="button is-text pw-remove-item" disabled>Remove this education</button>
-                <hr class="pw-repeater-divider">
-              </div> -->
+                  <input type="hidden" name="edu_id[]" value="<?= htmlspecialchars($edu['id']) ?>">
+                <?php } ?>
+              <?php } ?>
             </div>
-
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="education">
               + Add an education
             </button>
@@ -423,8 +424,8 @@
             <div class="pw-panel-actions">
               <button type="submit" name="action" value="education" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
-            <input type="hidden" name="user_id" value="">
-            <input type="hidden" name="resume_id" value="">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($uid) ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -435,30 +436,30 @@
                   <div class="field">
                     <label class="label">Role</label>
                     <div class="control">
-                      <input class="input" type="text" name="edu_role[]" placeholder="Role / Position">
+                      <input class="input" type="text" name="title[]" placeholder="Role / Position">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Institute</label>
                     <div class="control">
-                      <input class="input" type="text" name="edu_company[]" placeholder="Company / Organization">
+                      <input class="input" type="text" name="institute[]" placeholder="Company / Organization">
                     </div>
                   </div>
                 </div>
               </div>
-
+              
               <div class="field is-horizontal">
                 <div class="field-body">
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <input class="input" type="month" name="edu_start[]">
+                      <input class="input" type="month" name="start_date[]">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="edu_end[]">
+                      <input class="input" type="month" name="ennd_date[]">
                     </div>
                   </div>
                 </div>
@@ -467,7 +468,7 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="edu_desc[]" rows="3" placeholder="(Optional) What did you actually study or learned?"></textarea>
+                  <textarea class="textarea" name="summary[]" rows="3" placeholder="(Optional) What did you study or learn?"></textarea>
                 </div>
               </div>
 

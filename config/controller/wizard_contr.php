@@ -125,6 +125,17 @@
                 $_SESSION['old_form'] = null;
             }
 
+            // Validate country
+            $skills = trim((string)($this->postData['skills'] ?? ''));
+            $msg = ValidGrimoire::validateName($skills, false);
+            if ($msg !== null) {
+                // Hold error message + set previous UI state
+                $_SESSION['error'] = ['skills' => $msg];
+                $this->oldForm($this->postData);
+                ViewBook::revert($this->postData['action'] ?? '');
+                return;
+            }
+
             // DB lookup (only after validation)  
             try {
                 $pdo = Database::Connect();

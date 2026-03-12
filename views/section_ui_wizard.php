@@ -1,4 +1,4 @@
-<section id="wizard" class="<?= ViewBook::setVisibility('wizard'); ?>">
+<section id="wizard" class="<?= ViewBook::setVisibility('home'); ?>">
   <div class="pw-baseline" id="pwBaseline">
     <header class="pw-header">
       <div>
@@ -167,6 +167,33 @@
             <div class="pw-choice" data-choice="eduMore" data-value="no">
               <strong>No</strong>
               <span>Continue.</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- STEP: Skills -->
+        <article class="pw-card" data-step="skills">
+          <h2>Skills</h2>
+          <p class="helptext">Add skills that match the kind of work you want.</p>
+
+          <div class="pw-form">
+            <div>
+              <label class="pw-label" for="skills">Skills</label>
+              <textarea id="skills" class="pw-textarea" name="skills" rows="7" placeholder="..."></textarea>
+              <div class="pw-hint">Need ideas? Tap a few that fit you.</div>
+            </div>
+
+            <div>
+              <div class="pw-chip-row">
+                <button type="button" class="pw-chip" data-skill="Teamwork">Teamwork</button>
+                <button type="button" class="pw-chip" data-skill="Communication">Communication</button>
+                <button type="button" class="pw-chip" data-skill="Planning">Planning</button>
+                <button type="button" class="pw-chip" data-skill="Organization">Organization</button>
+                <button type="button" class="pw-chip" data-skill="Problem solving">Problem solving</button>
+                <button type="button" class="pw-chip" data-skill="Attention to detail">Attention to detail</button>
+                <button type="button" class="pw-chip" data-skill="Customer service">Customer service</button>
+                <button type="button" class="pw-chip" data-skill="Microsoft Excel">Microsoft Excel</button>
+              </div>
             </div>
           </div>
         </article>

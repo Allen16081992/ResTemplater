@@ -22,8 +22,8 @@
         // Resume parts
         'experience'=> experienceControl::class,// DONE
         'education' => educationControl::class, // DONE
-        // 'skills' => skillsControl::class, <---- !Needs UI in editor
-        // 'social' => socialControl::class, <---- !Needs UI in editor
+        // 'skills' => skillsControl::class, <---- !Needs UI in default editor
+        // 'social' => socialControl::class, <---- !Needs UI in default editor
         // ... Add more routes here
         'wizard' => wizardControl::class  // DONE
     ];

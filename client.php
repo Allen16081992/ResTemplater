@@ -13,7 +13,7 @@
 //   $_SESSION['error'] = [
 //     'title' => 'This field is required'
 //   ];
-  $_SESSION['action'] = 'wizard';
+  $_SESSION['action'] = 'home';
 ?>
 <!DOCTYPE html>
 <html lang="en">

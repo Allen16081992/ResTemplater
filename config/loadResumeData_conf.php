@@ -68,8 +68,5 @@
         $resID = $_POST['resume_id'];
         $model = new FetchPaper($pdo); 
         $data = $model->fetchResumeData($resID, $uid);
-        
-        // Set correct visibility
-        // $_SESSION['action'] = 'builder';
         unset($pdo);
     }

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 if (!$_POST || !isset($_POST['resume'])) {
     http_response_code(400);
-    exit('Invalid request');
+    exit('Invalid request. Location is default.src.php');
 }
 
 echo '<pre>';

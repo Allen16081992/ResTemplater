@@ -43,7 +43,7 @@
   const emailEl = root.querySelector("#email");
   const cityEl = root.querySelector("#city");
   const countryEl = root.querySelector("#country");
-  const socialEl = root.querySelector("#website");
+  const socialEl = root.querySelector("#social");
   const phoneEl = root.querySelector("#phone");
 
   const startBtn = root.querySelector('[data-action="start"]');
@@ -58,6 +58,7 @@
     { key: "basics", label: "Basics" },
     { key: "experience", label: "Experience" },
     { key: "education", label: "Education" },
+    { key: "skills", label: "Skills" },
     { key: "contact", label: "Contact" },
     { key: "review", label: "Review" },
     { key: "download", label: "Download" }
@@ -80,6 +81,7 @@
     if (["welcome", "basics", "studying"].includes(stepKey)) return "basics";
     if (["hasExp", "expOne", "expMore"].includes(stepKey)) return "experience";
     if (["eduOne", "eduMore"].includes(stepKey)) return "education";
+    if (["skills"].includes(stepKey)) return "skills";
     if (["contact"].includes(stepKey)) return "contact";
     if (["review"].includes(stepKey)) return "review";
     return "download";
@@ -131,7 +133,7 @@
     const r = ["welcome", "basics", "studying", "hasExp"];
     if (state.hasExp === "yes") r.push("expOne", "expMore");
     if (state.studying === "yes") r.push("eduOne", "eduMore");
-    r.push("contact", "review", "download");
+    r.push("skills", "contact", "review", "download");
 
     route = r.filter((k) => existingSteps.has(k));
     if (index >= route.length) index = route.length - 1;
@@ -566,8 +568,9 @@
   btnBack.addEventListener("click", back);
   btnNext.addEventListener("click", next);
 
+  const form = root.querySelector("form");
   btnReset.addEventListener("click", () => {
-    stage.reset();
+    form.reset();
 
     // Clear dynamic blocks + saved
     expMount.innerHTML = "";
@@ -625,10 +628,15 @@
     const email = emailEl?.value?.trim() || "—";
     const city = cityEl?.value?.trim() || "";
     const country = countryEl?.value?.trim() || "";
+    const skills = skillsEl?.value
+      ?.split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean) || [];
 
     addCard("Name", name, head);
     addCard("Experience", `${state.expSaved} role(s)`, state.hasExp === "yes" ? "" : "Not included");
     addCard("Education", `${state.eduSaved} entry(s)`, state.studying === "yes" ? "" : "Not included");
+    addCard("Skills", skills.length ? skills.join(", ") : "—");
     addCard("Contact", email, [city, country].filter(Boolean).join(", "));
   }
 
@@ -641,6 +649,38 @@
       "'": "&#39;"
     }[s]));
   }
+
+  const skillsEl = root.querySelector("#skills");
+stage.addEventListener("click", (ev) => {
+  const chip = ev.target.closest(".pw-chip[data-skill]");
+  if (!chip || !skillsEl) return;
+
+  const skill = chip.dataset.skill.trim().toLowerCase();
+  if (!skill) return;
+
+  let lines = skillsEl.value
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const index = lines.findIndex(
+    (line) => line.toLowerCase() === skill
+  );
+
+  if (index !== -1) {
+    // remove
+    lines.splice(index, 1);
+    chip.classList.remove("is-selected");
+    showToast("Skill removed");
+  } else {
+    // add
+    lines.push(chip.dataset.skill);
+    chip.classList.add("is-selected");
+    showToast("Skill added");
+  }
+
+  skillsEl.value = lines.join("\n");
+});
 
   // --------------------------
   // Init (guarantees Start visible)

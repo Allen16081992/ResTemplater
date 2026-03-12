@@ -22,15 +22,15 @@
       <div class="select is-fullwidth">
         <select id="editorSectionSelect">
           <option value="newRes">+ Create a Resume</option>
-          <?php //if (isset($data['papers'])) { ?>
+          <?php //if (count($data['papers']) > 1) { ?>
             <option value="delRes">- Delete a Resume</option>
             <option value="fetchRes"># My List</option>
-          <?php //} ?>
-          <?php //if (isset($data['resdata']['title'])) { ?>
-            <option value="info" selected>Resume Info</option>
-            <option value="experience">Experience</option>
-            <option value="education">Education</option>
-            <option value="social">Social Media</option>
+            <?php //if (isset($data['resdata']['title'])) { ?>
+              <option value="info" selected>Resume Info</option>
+              <option value="experience">Experience</option>
+              <option value="education">Education</option>
+              <option value="social">Social Media</option>
+            <?php //} ?>
           <?php //} ?>
         </select>
       </div>

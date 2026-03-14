@@ -37,6 +37,11 @@
   const educationFields = root.querySelector("#educationFields");
   if (!expMount || !eduMount || !experienceFields || !educationFields) return;
 
+  // Skills
+  const skillsContainer = root.querySelector("#skills");
+  const addSkillBtn = root.querySelector("#add-skill");
+  const skillTemplateRow = skillsContainer?.querySelector(".skill-row") || null;
+
   // Inputs
   const fullNameEl = root.querySelector("#fullname");
   const headlineEl = root.querySelector("#headline");
@@ -116,13 +121,13 @@
   const existingSteps = new Set(cards.map((c) => String(c.dataset.step || "")));
 
   const state = {
-    studying: null, // "yes" | "no"
-    hasExp: null,   // "yes" | "no"
-    expMore: null,  // "yes" | "no"
-    eduMore: null,  // "yes" | "no"
+    studying: null,
+    hasExp: null,
+    expMore: null,
+    eduMore: null,
     expSaved: 0,
     eduSaved: 0,
-    expCurrent: null, // current block in expMount (not yet moved to experienceFields)
+    expCurrent: null,
     eduCurrent: null
   };
 
@@ -145,7 +150,6 @@
   }
 
   function setActive(stepKey) {
-    // IMPORTANT: use is-active class for wizard visibility
     cards.forEach((c) => c.classList.toggle("is-active", c.dataset.step === stepKey));
 
     updateNavButtons();
@@ -163,9 +167,8 @@
     const step = currentStep();
     if (!validateStep(step)) return;
 
-    // Loop back logic
     if (step === "expMore" && state.expMore === "yes") {
-      ensureExpBlock(); // next blank entry
+      ensureExpBlock();
       state.expMore = null;
       if (expMoreVal) expMoreVal.value = "";
       clearChoiceGroup("expMore");
@@ -198,7 +201,7 @@
 
     if (step === "welcome") {
       btnNext.textContent = "Continue";
-      btnNext.disabled = true; // Start button advances from welcome
+      btnNext.disabled = true;
       btnNext.style.visibility = "visible";
       return;
     }
@@ -232,23 +235,16 @@
 
   function isValidUrl(v) {
     const s = String(v || "").trim();
-    if (!s) return true; // empty allowed
+    if (!s) return true;
 
     try {
       const u = new URL(s.startsWith("http://") || s.startsWith("https://") ? s : "https://" + s);
 
-      // Only allow http(s)
       if (!["http:", "https:"].includes(u.protocol)) return false;
 
       const host = u.hostname;
-
-      // Allow localhost explicitly (optional; remove if you don't want it)
       if (host === "localhost") return true;
-
-      // Reject single-label hosts like "ddd" or "intranet"
       if (!host.includes(".")) return false;
-
-      // Basic: avoid trailing dot like "example.com."
       if (host.endsWith(".")) return false;
 
       return true;
@@ -260,11 +256,7 @@
   function normalizeUrl(v) {
     const s = String(v || "").trim();
     if (!s) return "";
-
-    // If scheme already present, keep it
     if (/^https?:\/\//i.test(s)) return s;
-
-    // If user typed www.example.com or example.com
     return "https://" + s;
   }
 
@@ -294,6 +286,51 @@
     return true;
   }
 
+  function getSkillRows() {
+    if (!skillsContainer) return [];
+    return Array.from(skillsContainer.querySelectorAll(".skill-row"));
+  }
+
+  function getSkillData() {
+    return getSkillRows()
+      .map((row) => {
+        const nameEl = row.querySelector('input[name="name[]"]');
+        const categoryEl = row.querySelector('select[name="category[]"]');
+        return {
+          row,
+          name: nameEl ? nameEl.value.trim() : "",
+          category: categoryEl ? categoryEl.value.trim() : ""
+        };
+      })
+      .filter((item) => item.name.length > 0);
+  }
+
+  function updateSkillWarning() {
+    const count = getSkillData().length;
+    const el = document.getElementById("skillWarning");
+    if (!el) return;
+
+    if (count >= 10) {
+      el.textContent = "Tip: Most resumes list around 8–12 skills.";
+    } else {
+      el.textContent = "";
+    }
+  }
+
+  function validateSkillsStep() {
+    const rows = getSkillRows();
+    if (!rows.length) return false;
+
+    const filled = getSkillData();
+    if (filled.length < 1) {
+      const firstName = rows[0].querySelector('input[name="name[]"]');
+      pulseInvalid(firstName);
+      return false;
+    }
+
+    return true;
+  }
+
   function validateStep(step) {
     if (step === "welcome") return true;
 
@@ -303,32 +340,27 @@
       return true;
     }
 
-    if (step === "studying") {
-      return !!state.studying;
-    }
-
-    if (step === "hasExp") {
-      return !!state.hasExp;
-    }
-
+    if (step === "studying") return !!state.studying;
+    if (step === "hasExp") return !!state.hasExp;
     if (step === "expOne") return state.expSaved >= 1;
     if (step === "expMore") return !!state.expMore;
-
     if (step === "eduOne") return state.eduSaved >= 1;
     if (step === "eduMore") return !!state.eduMore;
+
+    if (step === "skills") {
+      return validateSkillsStep();
+    }
 
     if (step === "contact") {
       const email = emailEl.value.trim();
       const socialRaw = socialEl.value.trim();
 
-      // Email required
       if (!email) {
         markInvalid(emailEl, true);
         emailEl.focus();
         return false;
       }
 
-      // Email must be valid
       if (!isValidEmail(email)) {
         markInvalid(emailEl, true);
         emailEl.focus();
@@ -336,14 +368,12 @@
       }
       markInvalid(emailEl, false);
 
-      // Website optional, but if filled must be valid
       if (socialRaw && !isValidUrl(socialRaw)) {
         markInvalid(socialEl, true);
         socialEl.focus();
         return false;
       }
 
-      // Normalize once accepted (only if filled)
       if (socialRaw) {
         socialEl.value = normalizeUrl(socialRaw);
       }
@@ -382,8 +412,6 @@
       setChoice("studying", value);
 
       buildRoute();
-
-      // Auto-inject first education block on yes
       if (value === "yes") ensureEduBlock();
 
       showToast("Saved");
@@ -397,8 +425,6 @@
       setChoice("hasExp", value);
 
       buildRoute();
-
-      // Auto-inject first experience block on yes
       if (value === "yes") ensureExpBlock();
 
       showToast("Saved");
@@ -530,7 +556,6 @@
     state.expCurrent = null;
     state.expSaved += 1;
 
-    // must answer expMore again
     state.expMore = null;
     if (expMoreVal) expMoreVal.value = "";
     clearChoiceGroup("expMore");
@@ -563,6 +588,195 @@
   });
 
   // --------------------------
+  // Skills
+  // --------------------------
+  function clearSkillRow(row) {
+    if (!row) return;
+
+    const input = row.querySelector('input[name="name[]"]');
+    const select = row.querySelector('select[name="category[]"]');
+
+    if (input) {
+      input.value = "";
+      input.removeAttribute("id");
+    }
+
+    if (select) {
+      select.selectedIndex = 0;
+    }
+  }
+
+  function detectSkillCategory(skill) {
+    const lower = String(skill || "").trim().toLowerCase();
+
+    if ([
+      "teamwork",
+      "communication",
+      "planning",
+      "organization",
+      "problem solving",
+      "attention to detail",
+      "risk analysis"
+    ].includes(lower)) {
+      return "Soft Skills";
+    }
+
+    if ([
+      "first aid"
+    ].includes(lower)) {
+      return "Certificate";
+    }
+
+    if ([
+      "microsoft excel",
+    ].includes(lower)) {
+      return "Software / Tools";
+    }
+
+    return "";
+  }
+
+  function createSkillRow(name = "", category = "") {
+    if (!skillTemplateRow) return null;
+
+    const row = skillTemplateRow.cloneNode(true);
+    row.classList.add("skill-row");
+
+    const input = row.querySelector('input[name="name[]"]');
+    const select = row.querySelector('select[name="category[]"]');
+
+    if (input) {
+      input.value = name;
+      input.removeAttribute("id");
+    }
+
+    if (select) {
+      if (category && Array.from(select.options).some((opt) => opt.value === category || opt.textContent.trim() === category)) {
+        select.value = category;
+      } else {
+        select.selectedIndex = 0;
+      }
+    }
+
+    return row;
+  }
+
+  function ensureOneSkillRow() {
+    if (!skillsContainer) return;
+    if (getSkillRows().length > 0) return;
+
+    const row = createSkillRow();
+    if (row) skillsContainer.appendChild(row);
+  }
+
+  function syncSkillChips() {
+    const skillNames = getSkillData().map((item) => item.name.toLowerCase());
+
+    root.querySelectorAll(".pw-chip[data-skill]").forEach((chip) => {
+      const skill = String(chip.dataset.skill || "").trim().toLowerCase();
+      chip.classList.toggle("is-selected", skillNames.includes(skill));
+    });
+  }
+
+  function findFirstEmptySkillInput() {
+    const rows = getSkillRows();
+    for (const row of rows) {
+      const input = row.querySelector('input[name="name[]"]');
+      if (input && !input.value.trim()) return input;
+    }
+    return null;
+  }
+
+  if (skillsContainer && skillTemplateRow) {
+    clearSkillRow(skillTemplateRow);
+
+    if (addSkillBtn) {
+      addSkillBtn.addEventListener("click", () => {
+        const row = createSkillRow();
+        if (!row) return;
+
+        skillsContainer.appendChild(row);
+
+        const input = row.querySelector('input[name="name[]"]');
+        if (input) input.focus();
+        updateSkillWarning();
+      });
+    }
+
+    skillsContainer.addEventListener("click", (ev) => {
+      const removeBtn = ev.target.closest(".remove");
+      if (!removeBtn) return;
+
+      const row = removeBtn.closest(".skill-row");
+      if (!row) return;
+
+      const rows = getSkillRows();
+
+      if (rows.length <= 1) {
+        clearSkillRow(row);
+      } else {
+        row.remove();
+      }
+
+      syncSkillChips();
+      showToast("Skill removed");
+      updateSkillWarning();
+    });
+
+    skillsContainer.addEventListener("input", (ev) => {
+      if (ev.target.matches('input[name="name[]"]')) {
+        syncSkillChips();
+        updateSkillWarning();
+      }
+    });
+  }
+
+  stage.addEventListener("click", (ev) => {
+    const chip = ev.target.closest(".pw-chip[data-skill]");
+    if (!chip || !skillsContainer) return;
+
+    const skill = String(chip.dataset.skill || "").trim();
+    if (!skill) return;
+
+    const existing = getSkillData().find((item) => item.name.toLowerCase() === skill.toLowerCase());
+
+    if (existing) {
+      existing.row.remove();
+      ensureOneSkillRow();
+      syncSkillChips();
+      showToast("Skill removed");
+      return;
+    }
+
+    let input = findFirstEmptySkillInput();
+
+    if (!input) {
+      const row = createSkillRow(skill, detectSkillCategory(skill));
+      if (!row) return;
+      skillsContainer.appendChild(row);
+      syncSkillChips();
+      showToast("Skill added");
+      updateSkillWarning();
+      return;
+    }
+
+    input.value = skill;
+
+    const row = input.closest(".skill-row");
+    const select = row?.querySelector('select[name="category[]"]');
+    if (select) {
+      const detected = detectSkillCategory(skill);
+      if (detected) {
+        select.value = detected;
+      }
+    }
+
+    syncSkillChips();
+    showToast("Skill added");
+    updateSkillWarning();
+  });
+
+  // --------------------------
   // Buttons
   // --------------------------
   btnBack.addEventListener("click", back);
@@ -572,11 +786,16 @@
   btnReset.addEventListener("click", () => {
     form.reset();
 
-    // Clear dynamic blocks + saved
     expMount.innerHTML = "";
     eduMount.innerHTML = "";
     experienceFields.innerHTML = "";
     educationFields.innerHTML = "";
+
+    if (skillsContainer) {
+      skillsContainer.innerHTML = "";
+      const row = createSkillRow();
+      if (row) skillsContainer.appendChild(row);
+    }
 
     state.studying = null;
     state.hasExp = null;
@@ -593,6 +812,10 @@
     if (eduMoreVal) eduMoreVal.value = "";
 
     ["studying", "hasExp", "expMore", "eduMore"].forEach(clearChoiceGroup);
+
+    root.querySelectorAll(".pw-chip.is-selected").forEach((chip) => {
+      chip.classList.remove("is-selected");
+    });
 
     buildRoute();
     goTo(0);
@@ -628,15 +851,12 @@
     const email = emailEl?.value?.trim() || "—";
     const city = cityEl?.value?.trim() || "";
     const country = countryEl?.value?.trim() || "";
-    const skills = skillsEl?.value
-      ?.split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean) || [];
+    const skills = getSkillData();
 
     addCard("Name", name, head);
     addCard("Experience", `${state.expSaved} role(s)`, state.hasExp === "yes" ? "" : "Not included");
     addCard("Education", `${state.eduSaved} entry(s)`, state.studying === "yes" ? "" : "Not included");
-    addCard("Skills", skills.length ? skills.join(", ") : "—");
+    addCard("Skills", skills.length ? skills.map((s) => s.name).join(", ") : "—");
     addCard("Contact", email, [city, country].filter(Boolean).join(", "));
   }
 
@@ -650,41 +870,10 @@
     }[s]));
   }
 
-  const skillsEl = root.querySelector("#skills");
-stage.addEventListener("click", (ev) => {
-  const chip = ev.target.closest(".pw-chip[data-skill]");
-  if (!chip || !skillsEl) return;
-
-  const skill = chip.dataset.skill.trim().toLowerCase();
-  if (!skill) return;
-
-  let lines = skillsEl.value
-    .split("\n")
-    .map((s) => s.trim())
-    .filter(Boolean);
-
-  const index = lines.findIndex(
-    (line) => line.toLowerCase() === skill
-  );
-
-  if (index !== -1) {
-    // remove
-    lines.splice(index, 1);
-    chip.classList.remove("is-selected");
-    showToast("Skill removed");
-  } else {
-    // add
-    lines.push(chip.dataset.skill);
-    chip.classList.add("is-selected");
-    showToast("Skill added");
-  }
-
-  skillsEl.value = lines.join("\n");
-});
-
   // --------------------------
-  // Init (guarantees Start visible)
+  // Init
   // --------------------------
   buildRoute();
-  goTo(0); // welcome => .is-active => Start shows (CSS-controlled)
+  syncSkillChips();
+  goTo(0);
 })();

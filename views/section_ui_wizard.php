@@ -41,7 +41,7 @@
           <div class="pw-form">
             <div>
               <label class="pw-label" for="fullname">Full name *</label>
-              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['fullname'].'" disabled' : 'autocomplete="fullname"'; ?>>
+              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['fullname'].'" disabled' : 'autocomplete="fullname"'; ?> value="b">
             </div>
             <div>
               <label for="headline" class="pw-label">Headline</label>
@@ -177,23 +177,43 @@
           <p class="helptext">Add skills that match the kind of work you want.</p>
 
           <div class="pw-form">
-            <div>
-              <label class="pw-label" for="skills">Skills</label>
-              <textarea id="skills" class="pw-textarea" name="skills" rows="7" placeholder="..."></textarea>
-              <div class="pw-hint">Need ideas? Tap a few that fit you.</div>
+            <div id="skills">
+              <div class="field is-grouped skill-row">
+                <div class="control">
+                  <input type="text" name="name[]" class="pw-input" placeholder="...">
+                </div>
+                <div class="control">
+                  <select class="pw-select" name="category[]">
+                    <option selected disabled>Select a Category:</option>
+                    <option>Software / Tools</option>
+                    <option>Languages</option>
+                    <option>Technical</option>
+                    <option>Certificate</option>
+                    <option>Soft Skills</option>
+                    <option>Hard Skills</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <button type="button" class="remove">✕</button>
+              </div>
             </div>
 
-            <div>
-              <div class="pw-chip-row">
-                <button type="button" class="pw-chip" data-skill="Teamwork">Teamwork</button>
-                <button type="button" class="pw-chip" data-skill="Communication">Communication</button>
-                <button type="button" class="pw-chip" data-skill="Planning">Planning</button>
-                <button type="button" class="pw-chip" data-skill="Organization">Organization</button>
-                <button type="button" class="pw-chip" data-skill="Problem solving">Problem solving</button>
-                <button type="button" class="pw-chip" data-skill="Attention to detail">Attention to detail</button>
-                <button type="button" class="pw-chip" data-skill="Customer service">Customer service</button>
-                <button type="button" class="pw-chip" data-skill="Microsoft Excel">Microsoft Excel</button>
-              </div>
+            <div class="skill-actions">
+              <button type="button" class="button is-dark is-small pw-add-item" id="add-skill">+ Add Skill</button>
+              <p id="skillWarning" class="help is-danger"></p>
+            </div>
+
+            <div class="pw-hint">Need ideas? Tap a few that fit you.</div>
+            <div class="pw-chip-row">
+              <button type="button" class="pw-chip" data-skill="Teamwork">Teamwork</button>
+              <button type="button" class="pw-chip" data-skill="Communication">Communication</button>
+              <button type="button" class="pw-chip" data-skill="Planning">Planning</button>
+              <button type="button" class="pw-chip" data-skill="Organization">Organization</button>
+              <button type="button" class="pw-chip" data-skill="Problem solving">Problem solving</button>
+              <button type="button" class="pw-chip" data-skill="Attention to detail">Attention to detail</button>
+              <button type="button" class="pw-chip" data-skill="Risk analysis">Risk analysis</button>
+              <button type="button" class="pw-chip" data-skill="Microsoft Excel">Microsoft Excel</button>
+              <button type="button" class="pw-chip" data-skill="First Aid">First Aid</button>
             </div>
           </div>
         </article>

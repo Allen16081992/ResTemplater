@@ -11,7 +11,7 @@
             <?php } ?>
         <?php } else { ?>  
             <a href="#" data-section="policy">Privacy</a>  
-            <a href="#" data-section="login">Log in</a>
+            <a href="#" id="signIn" data-section="login">Log in</a>
             <a href="#" id="signUp" data-section="sign_up">Sign Up</a> 
         <?php } ?>
     </nav>

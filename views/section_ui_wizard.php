@@ -1,4 +1,4 @@
-<section id="wizard" class="<?= ViewBook::setVisibility('home'); ?>">
+<section id="wizard" class="<?= ViewBook::setVisibility('wizard'); ?>">
   <div class="pw-baseline" id="pwBaseline">
     <header class="pw-header">
       <div>
@@ -180,10 +180,10 @@
             <div id="skills">
               <div class="field is-grouped skill-row">
                 <div class="control">
-                  <input type="text" name="name[]" class="pw-input" placeholder="...">
+                  <input type="text" name="skill[]['name']" class="pw-input" placeholder="...">
                 </div>
                 <div class="control">
-                  <select class="pw-select" name="category[]">
+                  <select class="pw-select" name="skill[]['category']">
                     <option selected disabled>Select a Category:</option>
                     <option>Software / Tools</option>
                     <option>Languages</option>

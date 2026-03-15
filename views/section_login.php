@@ -46,7 +46,7 @@
                             <button type="button" class="button is-light is-fullwidth">Sign in with Google</button>
                         </div>
 
-                        <p class="footnote">No account yet? <a class="pw-link" href="#signup">Create one</a> and tuck away your resumes.</p>
+                        <p class="footnote">No account yet? <a class="pw-link" data-section="sign_up">Create one</a> and tuck away your resumes.</p>
                     </form>
                 </div>
             </div>

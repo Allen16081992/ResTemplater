@@ -29,6 +29,7 @@
               <option value="info" selected>Resume Info</option>
               <option value="experience">Experience</option>
               <option value="education">Education</option>
+              <option value="skills">Skills</option>
               <option value="social">Social Media</option>
             <?php //} ?>
           <?php //} ?>
@@ -53,7 +54,7 @@
         <hr>
         <?php //if (isset($data['resdata']['title'])) { ?>
           <button class="pw-editor-tab is-active" data-panel="info">
-            <span class="icon">⚗️</span>
+            <span class="icon">📃</span>
             <span>Resume Info</span>
           </button>
           <button class="pw-editor-tab" data-panel="experience">
@@ -63,6 +64,10 @@
           <button class="pw-editor-tab" data-panel="education">
             <span class="icon">🎓</span>
             <span>Education</span>
+          </button>
+          <button class="pw-editor-tab" data-panel="skills">
+            <span class="icon">⚗️</span>
+            <span>Hard & Soft Skills</span>
           </button>
           <button class="pw-editor-tab" data-panel="social">
             <span class="icon">📷</span>
@@ -211,7 +216,7 @@
             <div class="field">
               <label class="label">Summary</label>
               <div class="control">
-                <textarea class="textarea" name="summary" rows="3" placeholder="Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing." value="<?= htmlspecialchars($data['resdata']['summary'] ?? '') ?>"></textarea>
+                <textarea class="textarea" name="summary" rows="3" placeholder="Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing."><?= htmlspecialchars($data['resdata']['summary'] ?? '') ?></textarea>
               </div>
             </div>
 
@@ -459,7 +464,7 @@
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="ennd_date[]">
+                      <input class="input" type="month" name="end_date[]">
                     </div>
                   </div>
                 </div>
@@ -478,6 +483,85 @@
           </template>
         </section>
 
+        <!-- SKILLS PANEL -->
+        <section id="panel-skills" class="pw-editor-panel">
+          <header class="pw-panel-header">
+            <div>
+              <h2>Hard & Soft Skills</h2>
+              <p>What skills did you obtain as you grew up and define what you can?</p>
+            </div>
+          </header>
+          <!-- Toggle for include Account photo or not. -->
+
+          <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="action" value="skills">
+
+            <div class="pw-repeater" data-repeater="skills">
+              <!-- Skills ITEM -->
+              <?php if (!empty($data['skills'])) { ?>
+                <?php foreach ($data['skills'] as $skill) { ?>
+                <div class="pw-repeater-item">                         
+                  <div class="field is-grouped skill-row">
+                    <div class="control">
+                      <input type="text" name="skill[][name]" class="pw-input" value="<?= htmlspecialchars($skill['name']) ?>">
+                    </div>
+                    <div class="control">
+                      <select class="pw-select" name="skill[]['category']">
+                        <option selected><?= htmlspecialchars($skill['category']) ?></option>
+                        <option disabled>Select a Category:</option>
+                        <option>Software / Tools</option>
+                        <option>Languages</option>
+                        <option>Technical</option>
+                        <option>Certificate</option>
+                        <option>Soft Skills</option>
+                        <option>Hard Skills</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                    <input type="hidden" name="skill_id" value="<?= htmlspecialchars($skill['id']) ?>">
+                    <button type="submit" class="remove" name="delete_skill" value="<?= htmlspecialchars($skill['id']) ?>">✕</button>
+                  </div>  
+                </div>
+                <?php } ?>
+              <?php } ?>
+            </div>
+            <div class="skill-actions">
+              <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="skills" id="add-skill">+ Add Skill</button>
+              <p id="skillWarning" class="help is-danger"></p>
+            </div>
+
+            <div class="pw-panel-actions">
+              <button type="submit" name="save_skill" class="button btn-cta pw-save-btn" disabled>Save</button>
+            </div>
+          </form>
+
+          <!-- TEMPLATE FOR JS CLONING -->
+          <template id="tpl-skills-item">
+            <div class="pw-repeater-item">
+              <div class="field is-grouped skill-row">
+                <div class="control">
+                  <input type="text" name="skill[]['name']" class="pw-input" placeholder="...">
+                </div>
+                <div class="control">
+                  <select class="pw-select" name="skill[]['category']">
+                    <option selected disabled>Select a Category:</option>
+                    <option>Software / Tools</option>
+                    <option>Languages</option>
+                    <option>Technical</option>
+                    <option>Certificate</option>
+                    <option>Soft Skills</option>
+                    <option>Hard Skills</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <button type="button" class="remove is-text pw-remove-item">✕</button>
+              </div>
+            </div>
+          </template>
+        </section>
+
         <!-- SOCIAL MEDIA PANEL -->
         <section id="panel-social" class="pw-editor-panel">
           <header class="pw-panel-header">
@@ -488,6 +572,10 @@
           </header>
 
           <form id="form-social" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="action" value="social">
+
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
               <!-- <div class="pw-repeater-item">
@@ -500,16 +588,11 @@
                 <button type="button" class="button is-text pw-remove-item" disabled>Remove this url</button>
               </div> -->
             </div>
-
-            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="social">
-              + Add a link
-            </button>
+            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="social">+ Add a link</button>
 
             <div class="pw-panel-actions">
               <button type="submit" class="button btn-cta pw-save-btn" name="action" value="set_social" disabled>Save</button>
             </div>
-            <input type="hidden" name="user_id" value="">
-            <input type="hidden" name="resume_id" value="">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -521,12 +604,7 @@
                   <input class="input" type="url" name="social_website[]" placeholder="https://example.com">
                 </div>
               </div>
-              <form action="./config/action_handler.conf.php" method="post">
-                <input type="hidden" name="user_id" value="">
-                <input type="hidden" name="resume_id" value="">
-                <input type="hidden" name="social_id" value="">
-                <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>
-              </form>
+              <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>
             </div>
           </template>
         </section>

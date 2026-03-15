@@ -13,7 +13,8 @@
                 'phone' => $this->postData['phone'] ?? '',
                 'country' => $this->postData['country'] ?? '',
                 'experience' => [],
-                'education' => []
+                'education' => [],
+                'skills' => []
             ];
             $exp = $this->postData['experience'] ?? [];
             if (!is_array($exp)) $exp = [];
@@ -43,6 +44,20 @@
                     'start'   => $row['start'] ?? '',
                     'end'     => $row['end'] ?? '',
                     'desc'    => $row['desc'] ?? '',
+                ];
+            }
+
+            $ski = $this->postData['skills'] ?? [];
+            if (!is_array($ski)) $ski = [];
+
+            foreach ($ski as $y => $row) {
+                if (!is_array($row)) continue;
+
+                $oldForm['skills'][] = [
+                    'id'      => $row['id'] ?? null,           // optional if editing
+                    'name'     => $row['name'] ?? '',
+                    'category' => $row['category'] ?? '',
+                    'level'   => $row['level'] ?? null
                 ];
             }
             ViewBook::flashForm($oldForm);
@@ -110,31 +125,23 @@
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['phone' => $msg];
                 $this->oldForm($this->postData);
-                ViewBook::revert($this->postData['action'] ?? 'profile'); 
+                ViewBook::revert($this->postData['action'] ?? ''); 
                 return;
             }
 
             $sessionOld = $_SESSION['form_old'] ?? [];
             if (!array_key_exists('experience', $this->postData) && isset($sessionOld['experience']) && is_array($sessionOld['experience'])) {
                 $this->postData['experience'] = $sessionOld['experience'];
-                $_SESSION['old_form'] = null;
             }
 
             if (!array_key_exists('education', $this->postData) && isset($sessionOld['education']) && is_array($sessionOld['education'])) {
                 $this->postData['education'] = $sessionOld['education'];
-                $_SESSION['old_form'] = null;
             }
 
-            // Validate country
-            $skills = trim((string)($this->postData['skills'] ?? ''));
-            $msg = ValidGrimoire::validateName($skills, false);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['skills' => $msg];
-                $this->oldForm($this->postData);
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
+            if (!array_key_exists('skills', $this->postData) && isset($sessionOld['skills']) && is_array($sessionOld['skills'])) {
+                $this->postData['skills'] = $sessionOld['skills'];         
             }
+            $_SESSION['old_form'] = null;
 
             // DB lookup (only after validation)  
             try {

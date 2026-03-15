@@ -65,19 +65,16 @@
 
                 // 3️⃣ Insert Skills
                 if (!empty($postData['skills'])) {
-                    // Separation reformat
-                    $textarea = preg_split('/\r\n|\r|\n/', $postData['skills']);
-                    $skills = array_filter(array_map('trim', $textarea));
-
                     $stmtSki = $this->pdo->prepare("
-                        INSERT INTO skills (name, sort_order, resume_id)
-                        VALUES (:name, :sort_order, NOW(), :resume_id)
+                        INSERT INTO skills (name, category, sort_order, resume_id)
+                        VALUES (:name, :category, :sort_order, NOW(), :resume_id)
                     ");
 
                     $sort = 1;
-                    foreach ($skills as $skill) {
+                    foreach ($postData['skills'] as $qi) {
                         $stmtSki->execute([
-                            ':name'      => $skill,
+                            ':name'      => $qi['name'],
+                            ':category'  => $qi['category'],
                             ':sort_order'=> $sort,
                             ':resume_id' => $resumeId
                         ]);

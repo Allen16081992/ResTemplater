@@ -63,7 +63,7 @@
                         <div class="field mt-4">
                             <button type="submit" id="signupBtn" name="action" value="signup" class="button is-medium btn-primary is-fullwidth">Sign Up</button>
                         </div>
-                        <p class="footnote">Already have an account? <a class="has-text-info">Sign in here</a>.</p>
+                        <p class="footnote">Already have an account? <a class="has-text-info" data-section="login">Sign in here</a>.</p>
                     </form>
                 </div>
             </div>

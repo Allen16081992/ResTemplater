@@ -35,11 +35,11 @@
                 $data['resdata'] = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 // Fetch Experience data
-                $stmt = $this->pdo->prepare('SELECT * FROM work_experience WHERE resume_id = :resume_id');
+                $stmt = $this->pdo->prepare('SELECT * FROM experience WHERE resume_id = :resume_id');
                 $stmt->execute([':resume_id' => $resid]);
                 $data['experience'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                $stmt = $this->pdo->prepare('SELECT * FROM work_experience_bullets WHERE resume_id = :resume_id');
+                $stmt = $this->pdo->prepare('SELECT * FROM experience_bullets WHERE resume_id = :resume_id');
                 $stmt->execute([':resume_id' => $resid]);
                 $data['experience_bullet'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

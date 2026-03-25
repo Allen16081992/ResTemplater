@@ -3,7 +3,7 @@
     <nav aria-label="main navigation">
         <?php $page = basename($_SERVER['SCRIPT_NAME']); if ($page  === 'client.php') { ?>
             <a href="#" data-section="profile">Profile</a><!-- Fix: Only logged in users can see this. -->
-            <a href="#" data-section="home">Resume</a>
+            <a href="#" data-section="home">Resume</a><!-- Fix: Only logged in users have 'home'/editor select. -->
             <?php if (!isset($_SESSION['session_data']['user_id'])) { ?>
                 <a href="index.php">Back</a> 
             <?php } else { ?>

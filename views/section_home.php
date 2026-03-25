@@ -9,7 +9,7 @@
             <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = setPhrase('tagline')); ?></p>
             <div class="buttons mt-5">
               <a href="client.php" id="cta" class="button is-medium btn-cta">Create My Resume</a>
-              <a href="export.php" class="button is-medium is-light" data-section="export">🔮 Browse Templates</a>
+              <a href="#" class="button is-medium is-light">🔮 Browse Templates</a>
             </div>
           </div>
           <div class="column is-hidden-touch">

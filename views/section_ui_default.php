@@ -1,4 +1,4 @@
-<section id="home" class="<?= ViewBook::setVisibility('builder'); ?>">
+<section id="builder" class="<?= ViewBook::setVisibility('builder'); ?>">
   <div class="pw-editor-shell">
     <header class="pw-editor-header">
       <div>
@@ -9,6 +9,7 @@
         <span class="pw-editor-status-pill">
           <span>🧪</span> Draft saved locally
         </span>
+        <a class="pw-btn" data-section="home">Switch Editor</a>
         <?php if (!empty($data['resdata'])) { ?>
           <small>Selected: <strong><?= htmlspecialchars($data['resdata']['title']) ?></strong></small>
         <?php } else { ?>
@@ -31,6 +32,7 @@
               <option value="education">Education</option>
               <option value="skills">Skills</option>
               <option value="social">Social Media</option>
+              <option value="template">Templates</option>
             <?php //} ?>
           <?php //} ?>
         </select>
@@ -40,39 +42,22 @@
     <div class="pw-editor-layout">
       <!-- SIDEBAR -->
       <aside class="pw-editor-sidebar" aria-label="Resume sections">
-        <button class="button pw-editor-tab" data-panel="newRes">
-          <span>New</span>
-        </button>
+        <div class="pw-nav-title">Actions</div>
+        <button class="pw-editor-tab" data-panel="newRes"><span>➕ New</span></button>
         <?php //if (isset($data['papers'])) { ?>
-          <button class="button pw-editor-tab" data-panel="delRes">
-            <span>Delete</span>
-          </button>
-          <button class="button pw-editor-tab" data-panel="fetchRes">
-            <span>My List</span>
-          </button>
+          <button class="pw-editor-tab" data-panel="delRes"><span>❌ Delete</span></button>
+          <button class="pw-editor-tab" data-panel="fetchRes"><span>💼 My List</span></button>
         <?php //} ?>
         <hr>
         <?php //if (isset($data['resdata']['title'])) { ?>
-          <button class="pw-editor-tab is-active" data-panel="info">
-            <span class="icon">📃</span>
-            <span>Resume Info</span>
-          </button>
-          <button class="pw-editor-tab" data-panel="experience">
-            <span class="icon">🏹</span>
-            <span>Experience</span>
-          </button>
-          <button class="pw-editor-tab" data-panel="education">
-            <span class="icon">🎓</span>
-            <span>Education</span>
-          </button>
-          <button class="pw-editor-tab" data-panel="skills">
-            <span class="icon">⚗️</span>
-            <span>Hard & Soft Skills</span>
-          </button>
-          <button class="pw-editor-tab" data-panel="social">
-            <span class="icon">📷</span>
-            <span>Social Media</span>
-          </button>
+          <div class="pw-nav-title">Resume</div>
+          <button class="pw-editor-tab is-active" data-panel="info"><span class="icon">📃</span><span>Resume Info</span></button>
+          <button class="pw-editor-tab" data-panel="experience"><span class="icon">🏹</span><span>Experience</span></button>
+          <button class="pw-editor-tab" data-panel="education"><span class="icon">🎓</span><span>Education</span></button>
+          <button class="pw-editor-tab" data-panel="skills"><span class="icon">⚗️</span><span>Hard & Soft Skills</span></button>
+          <button class="pw-editor-tab" data-panel="social"><span class="icon">📷</span><span>Social Media</span></button>
+          <hr>
+          <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
         <?php //} ?>
       </aside>
 
@@ -607,6 +592,36 @@
               <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>
             </div>
           </template>
+        </section>
+
+        <!-- TEMPLATES -->
+        <section id="panel-template" class="pw-editor-panel">
+          <header class="pw-panel-header">
+            <div>
+              <h2>Templates</h2>
+              <p>Pick a style for a visual representation.</p>
+            </div>
+          </header>
+
+          <form id="form-template" class="pw-panel-form" action="" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="selectTemplate">
+            <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
+              <button>
+                <input type="submit" name="vintage">
+                <span>Vintage (1970 - 1980)</span>
+              </button>
+              <button>
+                <input type="submit" name="default">
+                <span>Normal (Default)</span>
+              </button>
+              <button>
+                <input type="submit" name="new_contro">
+                <span>New Controverse (Business)</span>
+              </button>
+            </div>
+          </form>
         </section>
 
       </main>

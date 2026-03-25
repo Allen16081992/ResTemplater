@@ -25,6 +25,14 @@
             }
         }
 
+        public static function verifySession(): void {
+            if (isset($_SESSION['session_data']['user_id'])) {
+                $_SESSION['action'] = 'home';
+            } else {
+                $_SESSION['action'] = 'wizard';
+            }
+        }
+
         public static function intrusionGuard(): void {
             self::invokeSession();
             if (!isset($_SESSION['session_data']['user_id'])) {
@@ -160,6 +168,11 @@
             } else {
                 header('Location: ../index.php'); exit();
             }
+        }
+
+        public static function seEditor() {
+            $_SESSION['action'] = $_POST['action'] ?? '';
+            unset($_POST['action']);  
         }
 
         //────────────────────────────────────//

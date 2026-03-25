@@ -8,12 +8,12 @@
   require_once "./config/loadResumeData_conf.php"; // DONE
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
+  SessionBook::verifySession();
 
   // Test variables
-//   $_SESSION['error'] = [
-//     'title' => 'This field is required'
-//   ];
-  $_SESSION['action'] = 'builder';
+    //   $_SESSION['error'] = [
+    //     'title' => 'This field is required'
+    //   ];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="assets/css/paperwitch.css">
     <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="assets/css/ui_wizard.css">
-    <link rel="stylesheet" href="assets/css/export_page.css">
+    <!-- <link rel="stylesheet" href="assets/css/export_page.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
@@ -55,6 +55,9 @@
     
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
+        <section id="home" class="<?= ViewBook::setVisibility('home'); ?>"> 
+            <?php ViewBook::render('section_builder_select.html'); ?>
+        </section>
         <?php ViewBook::render('section_ui_default.php'); ?>
         <?php ViewBook::render('section_ui_wizard.php'); ?>     
         <?php ViewBook::render('section_closure.php'); ?>

@@ -61,6 +61,9 @@
         <?php ViewBook::render('section_success.php'); ?>
         <?php ViewBook::render('section_policy.html'); ?>
         <section id="contact" class="hidden"></section>
+
+        <!-- Kan misschien iets mee gedaan worden... -->
+        <?php ViewBook::render('section_export.html'); ?>
     </main>
 
     <noscript><!-- Als Javascript is uitgeschakeld -->

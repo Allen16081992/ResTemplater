@@ -1,414 +1,438 @@
-<?php 
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit;
-}
 
-if (!$_POST || !isset($_POST['resume'])) {
-    http_response_code(400);
-    exit('Invalid request. Location is default.src.php');
-}
+    // if (!$_POST || !isset($_POST['resume'])) {
+    //     http_response_code(400);
+    //     exit('Invalid request. Location is default.src.php');
+    // }
 
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
-// // Example access
-// $fullName = $data['resume']['fullName'] ?? '';
-// $email    = $data['resume']['contact']['email'] ?? '';
+    // Example access
+    // $fullName = $data['resume']['fullName'] ?? '';
+    // $email    = $data['resume']['contact']['email'] ?? '';
 
-// foreach ($_POST as $key => $value) {
-//     echo $key.' '.$value;
-// }
+    // foreach ($_POST as $key => $value) {
+    //     echo $key.' '.$value;
+    // }
 
-// Start a session for handling data and error messages.
-// require_once '../session_manager.src.php';
-// SessionBook::sessionRegenTimer(); 
+    // // Start a session for handling data and error messages.
+    // require_once '../session_manager.src.php';
+    // SessionBook::sessionRegenTimer(); 
 
-// Invoke the (improved) database connection and FPDF library.
-//require_once 'idb.config.php';
-//require_once '../fpdf185/fpdf.php';
+    // // Invoke the (improved) database connection and FPDF library.
+    require_once __DIR__ . '/../../modules/fpdf185/fpdf.php';
 
-// class ResumePDF extends FPDF {
-//     private $pdo;
-//     private $data;
+    class ResumePDF extends FPDF {
+        private array $data = [];
 
-//     public function __construct() {
-//         parent::__construct();
-//         $database = new Database();
-//         $this->pdo = $database->connect();
-//         $this->SetAutoPageBreak(true, 15);
-//     }
+        public function __construct() {
+            parent::__construct();
+            $this->SetAutoPageBreak(true, 15);
+        }
 
-//     public function fetchData($resumeID, $userID) {
-//         $result = array();
-//         $tables = array('resume', 'accounts', 'contact', 'profile', 'experience', 'education', 'techskill', 'motivation');
+        public function fetchData(int $resumeID, int $userID) {
+            $result = [];
+            $tables = ['resume', 'accounts', 'contact', 'profile', 'experience', 'education', 'techskill', 'motivation'];
+            $pdo = Database::connect();
 
-//         // Loop through each table and fetch data
-//         foreach ($tables as $table) {
-//             if ($table === 'resume') {
-//                 $stmt = $this->pdo->prepare("SELECT resumetitle FROM `$table` WHERE resumeID = ?");
-//                 $stmt->execute([$resumeID]);
-//                 $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//             } elseif ($table === 'accounts') {
-//                 $stmt = $this->pdo->prepare("SELECT email FROM `$table` WHERE userID = ?");
-//                 $stmt->execute([$userID]);
-//                 $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//             } elseif ($table === 'contact') {
-//                 $stmt = $this->pdo->prepare("SELECT * FROM `$table` WHERE userID = ?");
-//                 $stmt->execute([$userID]);
-//                 $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//             } else {
-//                 $stmt = $this->pdo->prepare("SELECT * FROM `$table` WHERE resumeID = ? AND userID = ?");
-//                 $stmt->execute([$resumeID, $userID]);
-//                 $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//             }
-//         }
+            // Loop through each table and fetch data
+            foreach ($tables as $table) {
+                if ($table === 'resume') {
+                    $stmt = $pdo->prepare("SELECT resume_title FROM `$table` WHERE resumeID = ?");
+                    $stmt->execute([$resumeID]);
+                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } elseif ($table === 'accounts') {
+                    $stmt = $pdo->prepare("SELECT email FROM `$table` WHERE userID = ?");
+                    $stmt->execute([$userID]);
+                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } elseif ($table === 'contacts') {
+                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE userID = ?");
+                    $stmt->execute([$userID]);
+                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } else {
+                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE resumeID = ?");
+                    $stmt->execute([$resumeID]);
+                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+            }
 
-//         if (empty($result)) {
-//             $_SESSION['error'] = 'No data found.';
-//         }
-//         $this->data = $result; 
-//     }
-    
-//     function Header() {
-//         if ($this->PageNo() == 1) {
-//             //Cell( width, height, text, border, end line, align)
-//             // Set the font and size
-//             $this->SetFont('Arial', 'B', 16);
-//             // Add Custom header
-//             $this->Cell(0, 10, 'Curriculum Vitae', 0, 0, 'C');
-//             // Add a line break
-//             $this->Ln(10);
-//         }
-//     }
-    
-//     function Footer() {
-//         // Check if more than one page exists
-//         if ($this->PageNo() > 1) {
-//             // Select Arial italic 8
-//             $this->SetFont('Arial','I',8);
-//             // Set the position of the footer at 15mm from the bottom
-//             $this->SetY(-15);
-//             // Page number
-//             $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
-//         }
-//     }
+            $resume = $result['resume'][0] ?? [];
+            $account = $result['accounts'][0] ?? [];
+            $contact = $result['contacts'][0] ?? [];
 
-//     public function generatePDF() {
-//         $this->AliasNbPages();
-//         $this->AddPage();
-//         $this->SetFont('Arial', '', 12);
+            $skills = [];
+            foreach (($result['skills'] ?? []) as $item) {
+                $name = trim((string)($item['name'] ?? ''));
+                if ($name === '') { continue; }
+
+                $skills[] = [
+                    'name' => $name,
+                    'category' => trim((string)($item['category'] ?? '')),
+                ];
+            }
+
+            $experience = [];
+            foreach (($result['experience'] ?? []) as $item) {
+                $experience[] = [
+                    'title' => trim((string)($item['title'] ?? '')),
+                    'employer' => trim((string)($item['employer'] ?? '')),
+                    'start_date' => trim((string)($item['start_date'] ?? '')),
+                    'end_date' => trim((string)($item['end_date'] ?? '')),
+                    'summary' => trim((string)($item['summary'] ?? ''))
+                ];
+            }
+
+            $exp_bullets = [];
+            foreach (($result['experience_bullets'] ?? []) as $item) {
+                $exp_bullets[] = [
+                    'desc' => trim((string)($item['desc'] ?? '')),
+                    'work_id' => trim((string)($item['work_id'] ?? ''))
+                ];
+            }
+
+            $education = [];
+            foreach (($result['education'] ?? []) as $item) {
+                $education[] = [
+                    'title' => trim((string)($item['title'] ?? '')),
+                    'institute' => trim((string)($item['institute'] ?? '')),
+                    'start_date' => trim((string)($item['start_date'] ?? '')),
+                    'end_date' => trim((string)($item['end_date'] ?? '')),
+                    'summary' => trim((string)($item['summary'] ?? ''))
+                ];
+            }
+
+            $acad_bullets = [];
+            foreach (($result['experience_bullets'] ?? []) as $item) {
+                $acad_bullets[] = [
+                    'desc' => trim((string)($item['desc'] ?? '')),
+                    'acad_id' => trim((string)($item['acad_id'] ?? ''))
+                ];
+            }
+
+            if (empty($result)) {
+                $_SESSION['error'] = 'No data found.';
+            }
+            $this->data = $result; 
+        }
+
+        public function loadPostData(array $post): void {
+            $skills = [];
+            $rawSkills = $post['skills'] ?? [];
+
+            if (is_array($rawSkills)) {
+                foreach ($rawSkills as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    $name = trim((string) ($item['name'] ?? ''));
+                    $category = trim((string) ($item['category'] ?? ''));
+
+                    if ($name === '') {
+                        continue;
+                    }
+
+                    $skills[] = [
+                        'name' => $name,
+                        'category' => $category
+                    ];
+                }
+            }
+
+            $experience = [];
+            $rawExperience = $post['experience'] ?? [];
+
+            if (is_array($rawExperience)) {
+                foreach ($rawExperience as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    $job = trim((string) ($item['job'] ?? ''));
+                    $employer = trim((string) ($item['employer'] ?? ''));
+                    $start = trim((string) ($item['start_date'] ?? ''));
+                    $end = trim((string) ($item['end_date'] ?? ''));
+                    $desc = trim((string) ($item['desc'] ?? ''));
+
+                    if ($job === '' && $employer === '' && $desc === '') {
+                        continue;
+                    }
+
+                    $experience[] = [
+                        'job' => $job,
+                        'employer' => $employer,
+                        'start_date' => $start,
+                        'end_date' => $end,
+                        'desc' => $desc
+                    ];
+                }
+            }
+
+            $education = [];
+            $rawEducation = $post['education'] ?? [];
+
+            if (is_array($rawEducation)) {
+                foreach ($rawEducation as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    $program = trim((string) ($item['program'] ?? ''));
+                    $school = trim((string) ($item['school'] ?? ''));
+                    $start = trim((string) ($item['start_date'] ?? ''));
+                    $end = trim((string) ($item['end_date'] ?? ''));
+                    $desc = trim((string) ($item['desc'] ?? ''));
+
+                    if ($program === '' && $school === '' && $desc === '') {
+                        continue;
+                    }
+
+                    $education[] = [
+                        'program' => $program,
+                        'school' => $school,
+                        'start_date' => $start,
+                        'end_date' => $end,
+                        'desc' => $desc
+                    ];
+                }
+            }
+
+            $this->data = [
+                'fullname' => trim((string) ($post['fullname'] ?? '')),
+                'headline' => trim((string) ($post['headline'] ?? '')),
+                'email' => trim((string) ($post['email'] ?? '')),
+                'city' => trim((string) ($post['city'] ?? '')),
+                'country' => trim((string) ($post['country'] ?? '')),
+                'phone' => trim((string) ($post['phone'] ?? '')),
+                'social' => trim((string) ($post['social'] ?? '')),
+                'experience' => $experience,
+                'education' => $education,
+                'skills' => $skills
+            ];
+        }
         
-//         //////////////////// TRADEMARK ///////////////////
-//         $imagePath = '../img/CV-headed-eagle.png';
-//         $building = '../img/icons/buildings-24.png'; 
-//         $envelope = '../img/icons/envelope-24.png';
-//         $mobile = '../img/icons/phone-24.png'; 
-//         $world = '../img/icons/world-24.png';
-
-//         // Set Trademark
-//         $this->Image($imagePath, 10, 10, 30); // Adjust positioning and dimensions
-
-//         // Set font
-//         $this->SetFont('Arial', '', 10);
-
-//         // Sanitize data using htmlspecialchars
-//         // Resume title becomes Filename
-//         if (isset($this->data['resume'][0]['resumetitle'])) {
-//             $doc = htmlspecialchars($this->data['resume'][0]['resumetitle']); 
-//             $this->SetTitle('My '.$doc.' DT');
-//         }
-//         // Name and Contact
-//         if (isset($this->data['contact'][0])) {
-//             $firstname = htmlspecialchars($this->data['contact'][0]['firstname']);
-//             $surname = htmlspecialchars($this->data['contact'][0]['lastname']);
-//             $city = htmlspecialchars($this->data['contact'][0]['city']);
-//             $country = htmlspecialchars($this->data['contact'][0]['country']);
-//             $phone = htmlspecialchars($this->data['contact'][0]['phone']);
-//             $email = htmlspecialchars($this->data['accounts'][0]['email']); 
-//         }
-//         // Work Experience
-//         if (isset($this->data['experience'])) {
-//             $workTitles = array_column($this->data['experience'], 'worktitle');
-//             $workCompany = array_column($this->data['experience'], 'company');
-//             $workFirstDate = array_column($this->data['experience'], 'firstDate');
-//             $workLastDate = array_column($this->data['experience'], 'lastDate');
-//             $workSummary = array_column($this->data['experience'], 'workdesc');
-//             // Sanitize
-//             $workTitles = array_map('htmlspecialchars', $workTitles);
-//             $workCompany = array_map('htmlspecialchars', $workCompany);
-//             $workFirstDate = array_map('htmlspecialchars', $workFirstDate);
-//             $workLastDate = array_map('htmlspecialchars', $workLastDate);
-//             $workSummary = array_map('htmlspecialchars', $workSummary);
-//         }
-//         // Education
-//         if (isset($this->data['education'])) {
-//             $eduTitles = array_column($this->data['education'], 'edutitle');
-//             $eduCompany = array_column($this->data['education'], 'company');
-//             $eduFirstDate = array_column($this->data['education'], 'firstDate');
-//             $eduLastDate = array_column($this->data['education'], 'lastDate');
-//             $eduSummary = array_column($this->data['education'], 'edudesc');
-//             // Sanitize
-//             $eduTitles = array_map('htmlspecialchars', $eduTitles);
-//             $eduCompany = array_map('htmlspecialchars', $eduCompany);
-//             $eduFirstDate = array_map('htmlspecialchars', $eduFirstDate);
-//             $eduLastDate = array_map('htmlspecialchars', $eduLastDate);
-//             $eduSummary = array_map('htmlspecialchars', $eduSummary);
-//         }
-//         // Skills
-//         if (isset($this->data['techskill'])) {
-//             $techTitle = array_column($this->data['techskill'], 'techtitle');
-//             $language = array_column($this->data['techskill'], 'language');
-//             $interest = array_column($this->data['techskill'], 'interest');
-//             // Sanitize
-//             $techTitle = array_map('htmlspecialchars', $techTitle);
-//             $language = array_map('htmlspecialchars', $language);
-//             $interest = array_map('htmlspecialchars', $interest);
-//         }
-//         // Motivation
-//         if (isset($this->data['motivation'])) {
-//             $motivation = array_column($this->data['motivation'], 'motdesc');
-//             // Sanitize
-//             $motivation = array_map('htmlspecialchars', $motivation);
-//         }
-
-//         //////////////////// HEADER ///////////////////
-
-//         // Add name and surname
-//         $this->SetXY(110, 10); // Set the position for text
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Cell(0, 10, $firstname.' '.$surname, 0, 1, 'R');
-
-//         // Add city, phone and email
-//         $this->SetFont('Arial', '', 10);
-//         $this->SetX($this->GetPageWidth() - 10); //add an offset margin
-//         $this->Cell(-5, 5, $city, 0, 1, 'R'); 
-//         $this->Image($building, 195, 20, 5); //add icon
-
-//         $this->SetX($this->GetPageWidth() - 10); 
-//         $this->Cell(-5, 5, $country, 0, 1, 'R'); 
-//         $this->Image($world, 195, 25, 5); 
-//         $this->Ln(4); // add a line break
-
-//         //$this->SetX(110); // Set the position for the email
-//         $this->SetX($this->GetPageWidth() - 10); 
-//         $this->Cell(-5, 5, $phone, 0, 1, 'R'); 
-//         $this->Image($mobile, 195, 34, 5); 
-
-//         $this->SetX($this->GetPageWidth() - 10); 
-//         $this->Cell(-5, 5, $email, 0, 1, 'R'); 
-//         $this->Image($envelope, 195, 39, 5); 
-
-//         $this->Ln(10);
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Cell(0, 5, 'Profiel', 0, 1, 'L'); 
-//         $this->Ln(1);
-//         $this->SetFont('Arial', '', 10);
-//         if (isset($this->data['profile'][0]['profiledesc'])) {
-//             $profiledesc = $this->data['profile'][0]['profiledesc'];
-//             $this->MultiCell(0, 5, html_entity_decode($profiledesc), 0, 0, '');
-//         }
+        function Header() {
+            if ($this->PageNo() == 1) {
+                //Cell( width, height, text, border, end line, align)
+                // Set the font and size
+                $this->SetFont('Courier', 'B', 16);
+                // Add Custom header
+                $this->Cell(0, 10, 'Curriculum Vitae', 0, 0, 'C');          
+                // Add a line break
+                $this->Ln(10);
+            }
+        }
         
-//         // Add a line break
-//         $this->Ln(10);
+        function Footer() {
+            // Check if more than one page exists
+            if ($this->PageNo() > 1) {
+                // Select Arial italic 8
+                $this->SetFont('Arial','I',8);
+                // Set the position of the footer at 15mm from the bottom
+                $this->SetY(-15);
+                // Page number
+                $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
+            }
+        }
 
-//         /////////////////////// WORK EXPERIENCE ////////////////////////
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Cell(0, 10, 'Werkervaring', 1, 1, 'C');
-//         $this->Ln(2);
+        public function generatePDF() {
+            $this->AliasNbPages();
+            $this->AddPage();
+            $this->SetFont('Arial', '', 12);
+            
+            //////////////////// TRADEMARK ///////////////////
+            //$imagePath = '../../assets/images/witch_logo2.png';
+            // $building = '../../assets/images/icons/buildings-24.png'; 
+            // $envelope = '../../assets/images/icons/envelope-24.png';
+            // $mobile = '../../assets/images/icons/phone-24.png'; 
+            // $world = '../../assets/images/icons/world-24.png';
 
-//         // Show values from array position specifically. Limit - 3 jobs.
-//         if (count($workTitles) >= 1) {
-//             $this->SetFont('Arial', '', 10);
-//             // DATES
-//             if (isset($workFirstDate[0]) && isset($workLastDate[0])) {
-//                 $this->Cell(22, 10, $workFirstDate[0], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $workLastDate[0], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);           
-//             // PROFESSION, COMPANY, SUMMARY
-//             if (isset($workTitles[0]) && isset($workCompany[0])) {
-//                 $this->Cell(60, 10, $workTitles[0], 0, 0, 'L');
-//                 $this->Cell(50, 10, $workCompany[0], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', '', 10);    
-//             if (isset($workSummary[0])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($workSummary[0]));
-//                 $this->Ln(5);
-//             }
-//         }
-//         if (count($workTitles) >= 2) {
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($workFirstDate[1]) && isset($workLastDate[1])) {
-//                 $this->Cell(22, 10, $workFirstDate[1], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $workLastDate[1], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);
-//             if (isset($workTitles[1]) && isset($workCompany[1])) {
-//                 $this->Cell(60, 10, $workTitles[1], 0, 0, 'L');
-//                 $this->Cell(50, 10, $workCompany[1], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', 'I', 10);
-//             if (isset($workSummary[1])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($workSummary[1]));
-//                 $this->Ln(5);
-//             }
-//         } 
-//         if (count($workTitles) >= 3) {
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($workFirstDate[2]) && isset($workLastDate[2])) {
-//                 $this->Cell(22, 10, $workFirstDate[2], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $workLastDate[2], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);
-//             if (isset($workTitles[2]) && isset($workCompany[2])) {
-//                 $this->Cell(60, 10, $workTitles[2], 0, 0, 'L');
-//                 $this->Cell(50, 10, $workCompany[2], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', 'I', 10);
-//             if (isset($workSummary[2])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($workSummary[2]));
-//                 $this->Ln(5);
-//             }
-//         }
+            // Set Trademark
+            //$this->Image($imagePath, 10, 10, 30); // Adjust positioning and dimensions
 
-//         /////////////////////// EDUCATION ////////////////////////
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Cell(0, 10, 'Opleiding', 1, 1, 'C');
-//         $this->Ln(2);
+            // Set font
+            $this->SetFont('Arial', '', 10);
 
-//         // Show values from array position specifically. Limit - 3 jobs.
-//         if (count($eduTitles) >= 1) {
-//             $this->SetFont('Arial', '', 10);
-//             // DATES
-//             if (isset($eduFirstDate[0]) && isset($eduLastDate[0])) {
-//                 $this->Cell(22, 10, $eduFirstDate[0], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $eduLastDate[0], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);
-//             // PROFESSION, COMPANY, SUMMARY
-//             if (isset($eduTitles[0]) && isset($eduCompany[0])) {
-//                 $this->Cell(60, 10, $eduTitles[0], 0, 0, 'L');
-//                 $this->Cell(50, 10, $eduCompany[0], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($eduSummary[0])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[0]));
-//                 $this->Ln(5);
-//             }
-//         }
-//         if (count($eduTitles) >= 2) {
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($eduFirstDate[1]) && isset($eduLastDate[1])) {
-//                 $this->Cell(22, 10, $eduFirstDate[1], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $eduLastDate[1], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);
-//             if (isset($eduTitles[1]) && isset($eduCompany[1])) {
-//                 $this->Cell(60, 10, $eduTitles[1], 0, 0, 'L');
-//                 $this->Cell(50, 10, $eduCompany[1], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($eduSummary[1])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[1]));
-//                 $this->Ln(5);
-//             }
-//         } 
-//         if (count($eduTitles) >= 3) {
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($eduFirstDate[2]) && isset($eduLastDate[2])) {
-//                 $this->Cell(22, 10, $eduFirstDate[2], 0, 0, '');
-//                 $this->Cell(5, 10, '-', 0, 0, '');
-//                 $this->Cell(30, 10, $eduLastDate[2], 0, 0, '');
-//             }
-//             $this->SetFont('Arial', 'B', 12);
-//             if (isset($eduTitles[2]) && isset($eduCompany[2])) {
-//                 $this->Cell(60, 10, $eduTitles[2], 0, 0, 'L');
-//                 $this->Cell(50, 10, $eduCompany[2], 0, 1, '');
-//             }
-//             $this->SetFont('Arial', '', 10);
-//             if (isset($eduSummary[2])) {
-//                 $this->SetFontSize(10);
-//                 $this->MultiCell(0, 5, html_entity_decode($eduSummary[2]));
-//                 $this->Ln(5);
-//             }
-//         }
+            // Sanitize data using htmlspecialchars
+            // Resume title becomes Filename
+            if (isset($this->data['resume'][0]['resume_title'])) {
+                $doc = htmlspecialchars($this->data['resume'][0]['resume_title']); 
+                $this->SetTitle('My '.$doc.' DT');
+            } else { 
+                // Wizard
+                $this->SetTitle('My Scroll - Standard');
+            }
 
-//         /////////////////////// SKILLS ////////////////////////
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Cell(0, 10, 'Vaardigheden', 1, 1, 'C');
-//         $this->Ln(3);
 
-//         $this->SetFont('Arial', '', 10);
-//         $this->Cell(63, 5, 'Vaardigheden', 1, 0, 'C');
-//         $this->Cell(63, 5, 'Talen', 1, 0, 'C');
-//         $this->Cell(63, 5, 'Interessen', 1, 1, 'C');
+            //////////////////// HEADLINE ///////////////////
+            if ($this->data['headline'] !== '') {
+                $this->SetFont('Courier', '', 8);
+                $this->SetX(77);
+                $this->MultiCell(0, 2, $this->data['headline'], 0, 'L');
+            }
+            $this->Ln(4);
+            
 
-//         $this->SetFont('Arial', 'B', 14);
-//         $this->Ln(2);
+            //////////////////// PERSONAL //////////////////
+            $this->SetFont('Courier', 'BU', 11);
+            $this->Cell(0, 10, 'Personal', 0, 1, 'L');
+            $this->SetFont('Courier', '', 10);
 
-//         // Show values from array position specifically. Limit - 3 jobs.
-//         // Determine the maximum number of entries to display
-//         $maxEntries = max(count($techTitle), count($language), count($interest));
+            // Two-Column
+            $labelX = 10;
+            $valueX = 76;
+            $rowH   = 4;
+            $y = $this->GetY();
+            $this->data['birth_date'] = '02/06/1956';
+            $rows = [
+                'Name'          => $this->data['fullname'] ?? '',
+                'City'          => $this->data['city'] ?? '',
+                'Country'       => $this->data['country'] ?? '',
+                'Date of Birth' => $this->data['birth_date'] ?? '',
+                'Email'         => $this->data['email'] ?? '',
+                'Phone'         => $this->data['phone'] ?? '',  
+            ];
+            foreach ($rows as $label => $value) {
+                $y = $this->GetY();
 
-//         // Loop through the entries
-//         for ($i = 0; $i < $maxEntries; $i++) {
-//             $this->SetFont('Arial', 'B', 10);
-//             $this->Cell(20, 5, '', 0, 0, '');
-//             // SKILLS, LANGUAGES, INTERESTS
-//             $this->Cell(60, 5, isset($techTitle[$i]) ? $techTitle[$i] : '', 0, 0, 'L');
-//             $this->Cell(8, 5, '', 0, 0, 'L');
-//             $this->Cell(60, 5, isset($language[$i]) ? $language[$i] : '', 0, 0, 'L');
-//             $this->Cell(60, 5, isset($interest[$i]) ? $interest[$i] : '', 0, 1, 'L');
-//             $this->Ln(5);
-//         }
+                $this->SetXY($labelX, $y);
+                $this->Cell(40, $rowH, $label, 0, 0, 'L');
+
+                $this->SetXY($valueX, $y);
+                $this->Cell(0, $rowH, ': ' . $value, 0, 1, 'L');
+            }
+            $this->Ln($rowH);
+
+
+            /////////////////////// EDUCATION ////////////////////////
+            $this->SetFont('Courier', 'BU', 11);
+            $this->Cell(0, 10, 'Education', 0, 1, 'L');
+
+            $educations = $this->data['education'] ?? [];
+            foreach (array_slice($educations, 0, 6) as $item) {
+                $start    = $item['start_date'] ?? '';
+                $end      = $item['end_date'] ?? '';
+                $program  = $item['program'] ?? '';
+                $school   = $item['school'] ?? '';
+                $desc     = $item['summary'] ?? '';
+
+                $dateRange = trim($start . ' - ' . $end, ' -');
+
+                $this->SetFont('Courier', '', 10);
+                $this->Cell(60, 6, $dateRange, 0, 0, 'L');
+                $this->SetX(76);
+                $this->Cell(0, 6, ': '.$program.'  ('.$school.')', 0, 1, 'L');
+
+                if ($desc !== '') {
+                    $this->SetFont('Courier', '', 8);
+                    $this->SetX(77);
+                    $this->MultiCell(0, 2, '  ' . $desc, 0, 'L');
+                }
+            }
+            if (!isset($this->data['education']['summary']) || empty($this->data['education']['summary'])) {
+                $edu_bullets = $this->data['education_bullets'] ?? [];
+                foreach (array_slice($edu_bullets, 0, 6) as $item) {
+                    $desc    = $item['desc'] ?? '';
+                    $sort      = $item['sort_order'] ?? '';
+
+                    $this->SetFont('Courier', '', 8);
+                    $this->SetX(77);
+                    $this->Cell(5, 6, chr(149), 0, 0);
+                    $this->MultiCell(0, 2, '  ' . $desc, 0, 'L');
+                }
+            }
+            $this->Ln($rowH);
+
+
+            /////////////////////// EXPERIENCE ////////////////////////
+            $this->SetFont('Courier', 'BU', 11);
+            $this->Cell(0, 10, 'Experience', 0, 1, 'L');
+
+            $experiences = $this->data['experience'] ?? [];
+            foreach (array_slice($experiences, 0, 6) as $item) {
+                $start    = $item['start_date'] ?? '';
+                $end      = $item['end_date'] ?? '';
+                $job      = $item['job'] ?? '';
+                $employer = $item['employer'] ?? '';
+                $desc     = $item['summary'] ?? '';
+
+                $dateRange = trim($start . ' - ' . $end, ' -');
+
+                $this->SetFont('Courier', '', 10);
+                $this->Cell(60, 6, $dateRange, 0, 0, 'L');
+                $this->SetX(76);
+                $this->Cell(0, 6, ': '.$job.'  ('.$employer.')', 0, 1, 'L');
+
+                if ($desc !== '') {
+                    $this->SetFont('Courier', '', 8);
+                    $this->SetX(77);
+                    $this->MultiCell(0, 2, '  ' . $desc, 0, 'L');
+                }
+            }
+            if (!isset($this->data['experience']['summary']) || empty($this->data['experience']['summary'])) {
+                $exp_bullets = $this->data['experience_bullets'] ?? [];
+                foreach (array_slice($exp_bullets, 0, 6) as $item) {
+                    $desc    = $item['desc'] ?? '';
+                    $sort      = $item['sort_order'] ?? '';
+
+                    $this->SetFont('Courier', '', 8);
+                    $this->SetX(77);
+                    $this->Cell(5, 6, chr(149), 0, 0);
+                    $this->MultiCell(0, 2, '  ' . $desc, 0, 'L');
+                }
+            }
+
+            $this->Ln($rowH);
+
+
+            /////////////////////// SKILLS ////////////////////////
+            $this->SetFont('Courier', 'BU', 11);
+            $this->Cell(0, 10, 'Skills', 0, 1, 'L');
+
+            $skills = $this->data['skills'] ?? [];
+            foreach (array_slice($skills, 0, 10) as $item) {
+                $name     = $item['name'] ?? '';
+                $category = $item['category'] ?? '';
+
+                $this->SetFont('Courier', '', 10);
+                // $bullet = iconv('UTF-8', 'windows-1252', '•');
+                // $this->Cell(5, 6, $bullet, 0, 0);
+                $this->Cell(5, 6, chr(149), 0, 0);
+                $first = explode(' ', $category)[0];
+                $this->Cell(0, 6, '('.$first.') '.$name, 0, 1, 'L');
+            }
+            $this->Ln($rowH);
+
+            $this->Output();
+        }
+    }
+
+    // 1. Guardrail. Only form submissions allowed!
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $_SESSION['error'] = 405;
+        header('location: ../error.php');          
+        exit;
+    }
+
+    // 2. Router. User and Visitor
+    if (isset($_SESSION['session_data']['user_id'])) {
+        $resid = $_SESSION['session_data']['resumeID'];
+        $uid = $_SESSION['session_data']['user_id'];
+
+        $resumePDF = new ResumePDF();
+        $resumePDF->fetchData($resid, $usid);
+        $resumePDF->generatePDF();
         
-//         // Show motivation
-//         if (isset($motivation[0])) {
-//             $this->AddPage();
-//             $this->SetFont('Arial', '', 15);
-    
-//             // Add Custom header
-//             $this->Cell(0, 10, 'Motivatie', 0, 0, 'C');
-    
-//             // Add a line break
-//             $this->Ln(15);
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'wizard') {
+        $resumePDF = new ResumePDF();
+        $resumePDF->loadPostData($_POST);
+        $resumePDF->generatePDF();
 
-//             $this->SetFont('Arial', '', 10);
-//             $this->MultiCell(0, 5, $motivation[0], 0, 0, '');
-//         }
+        // echo '<pre>';
+        // print_r($_POST);
+        // echo '</pre>';
 
-//         $this->Output();
-//     }
-// }
-
-// if (isset($_SESSION['resumeID'])) {
-//     $resumeID = $_SESSION['resumeID'];
-//     $userID = $_SESSION['user_id'];
-
-//     $resumePDF = new ResumePDF();
-//     $resumePDF->fetchData($resumeID, $userID);
-//     $resumePDF->generatePDF();
-// } else {
-//     // No resume selected.
-//     // $_SESSION['error'] = 'Select a resume to view as PDF.';
-//     // header('location: ../client.php');          
-//     // exit();
-//     echo "Default Template reached. Congratulations!
-//         <form action='../../client.php' method='post'>
-//         <button class='return' data-section='home'>Terug</button>
-//         </form>
-//     ";
-// }
+    } else {
+        // No goal. Try again later.
+        header('location: ../error.php');          
+        exit;
+    }

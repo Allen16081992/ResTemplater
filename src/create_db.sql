@@ -18,6 +18,7 @@
     city           VARCHAR(120) NULL,
     country        VARCHAR(120) NULL,
     image_url      VARCHAR(2048) NULL,
+    image_active   INT NULL,
     created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     user_id        INT UNSIGNED NOT NULL,
@@ -50,7 +51,7 @@
         ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     
-    CREATE TABLE IF NOT EXISTS `work_experience` (
+    CREATE TABLE IF NOT EXISTS `experience` (
         id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
         title       VARCHAR(100) NOT NULL,
         employer    VARCHAR(120) NOT NULL,
@@ -92,7 +93,7 @@
             ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    CREATE TABLE IF NOT EXISTS `work_experience_bullets` (
+    CREATE TABLE IF NOT EXISTS `experience_bullets` (
         id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
         text        TEXT NOT NULL,
         sort_order  INT NOT NULL DEFAULT 0,

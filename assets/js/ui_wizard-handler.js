@@ -271,9 +271,9 @@
   function validateCurrentExpBlock() {
     if (!state.expCurrent) return false;
     const job = state.expCurrent.querySelector('input[name$="[job]"]');
-    const company = state.expCurrent.querySelector('input[name$="[company]"]');
+    const employer = state.expCurrent.querySelector('input[name$="[employer]"]');
     if (!required(job?.value)) { pulseInvalid(job); return false; }
-    if (!required(company?.value)) { pulseInvalid(company); return false; }
+    if (!required(employer?.value)) { pulseInvalid(employer); return false; }
     return true;
   }
 
@@ -294,8 +294,8 @@
   function getSkillData() {
     return getSkillRows()
       .map((row) => {
-        const nameEl = row.querySelector('input[name="name[]"]');
-        const categoryEl = row.querySelector('select[name="category[]"]');
+        const nameEl = row.querySelector('input[name="skills[name][]"]');
+        const categoryEl = row.querySelector('select[name="skills[category][]"]');
         return {
           row,
           name: nameEl ? nameEl.value.trim() : "",
@@ -466,19 +466,19 @@
           <input class="pw-input" type="text" name="experience[${i}][job]" placeholder="e.g. Junior IT Support (Intern)" autocomplete="organization-title">
         </div>
         <div>
-          <label class="pw-label">Company *</label>
-          <input class="pw-input" type="text" name="experience[${i}][company]" placeholder="e.g. TechCorp" autocomplete="organization">
+          <label class="pw-label">Employer *</label>
+          <input class="pw-input" type="text" name="experience[${i}][employer]" placeholder="e.g. TechCorp" autocomplete="organization">
         </div>
       </div>
 
       <div class="pw-row">
         <div>
           <label class="pw-label">Start</label>
-          <input class="pw-input" type="month" name="experience[${i}][start]">
+          <input class="pw-input" type="month" name="experience[${i}][start_date]">
         </div>
         <div>
           <label class="pw-label">End</label>
-          <input class="pw-input" type="month" name="experience[${i}][end]">
+          <input class="pw-input" type="month" name="experience[${i}][end_date]">
         </div>
       </div>
 
@@ -511,11 +511,11 @@
       <div class="pw-row">
         <div>
           <label class="pw-label">Start</label>
-          <input class="pw-input" type="month" name="education[${i}][start]">
+          <input class="pw-input" type="month" name="education[${i}][start_date]">
         </div>
         <div>
           <label class="pw-label">End</label>
-          <input class="pw-input" type="month" name="education[${i}][end]">
+          <input class="pw-input" type="month" name="education[${i}][end_date]">
         </div>
       </div>
 
@@ -590,11 +590,42 @@
   // --------------------------
   // Skills
   // --------------------------
+  function getSkillRows() {
+    if (!skillsContainer) return [];
+    return Array.from(skillsContainer.querySelectorAll(".skill-row"));
+  }
+
+  function getSkillNameInput(row) {
+    return row?.querySelector('input[name$="[name]"]') || null;
+  }
+
+  function getSkillCategorySelect(row) {
+    return row?.querySelector('select[name$="[category]"]') || null;
+  }
+
+  function reindexSkillRows() {
+    getSkillRows().forEach((row, i) => {
+      row.dataset.skillIndex = String(i);
+
+      const input = getSkillNameInput(row);
+      const select = getSkillCategorySelect(row);
+
+      if (input) {
+        input.name = `skills[${i}][name]`;
+        input.removeAttribute("id");
+      }
+
+      if (select) {
+        select.name = `skills[${i}][category]`;
+      }
+    });
+  }
+
   function clearSkillRow(row) {
     if (!row) return;
 
-    const input = row.querySelector('input[name="name[]"]');
-    const select = row.querySelector('select[name="category[]"]');
+    const input = getSkillNameInput(row);
+    const select = getSkillCategorySelect(row);
 
     if (input) {
       input.value = "";
@@ -604,6 +635,47 @@
     if (select) {
       select.selectedIndex = 0;
     }
+  }
+
+  function getSkillData() {
+    return getSkillRows()
+      .map((row) => {
+        const nameEl = getSkillNameInput(row);
+        const categoryEl = getSkillCategorySelect(row);
+
+        return {
+          row,
+          name: nameEl ? nameEl.value.trim() : "",
+          category: categoryEl ? categoryEl.value.trim() : ""
+        };
+      })
+      .filter((item) => item.name.length > 0);
+  }
+
+  function updateSkillWarning() {
+    const count = getSkillData().length;
+    const el = root.querySelector("#skillWarning");
+    if (!el) return;
+
+    if (count >= 10) {
+      el.textContent = "Tip: Most resumes list around 8–12 skills.";
+    } else {
+      el.textContent = "";
+    }
+  }
+
+  function validateSkillsStep() {
+    const rows = getSkillRows();
+    if (!rows.length) return false;
+
+    const filled = getSkillData();
+    if (filled.length < 1) {
+      const firstName = getSkillNameInput(rows[0]);
+      pulseInvalid(firstName);
+      return false;
+    }
+
+    return true;
   }
 
   function detectSkillCategory(skill) {
@@ -628,7 +700,7 @@
     }
 
     if ([
-      "microsoft excel",
+      "microsoft excel"
     ].includes(lower)) {
       return "Software / Tools";
     }
@@ -636,27 +708,29 @@
     return "";
   }
 
-  function createSkillRow(name = "", category = "") {
-    if (!skillTemplateRow) return null;
+  function createSkillRow(i, name = "", category = "") {
+    const row = document.createElement("div");
+    row.className = "field is-grouped skill-row";
+    row.dataset.skillIndex = String(i);
 
-    const row = skillTemplateRow.cloneNode(true);
-    row.classList.add("skill-row");
-
-    const input = row.querySelector('input[name="name[]"]');
-    const select = row.querySelector('select[name="category[]"]');
-
-    if (input) {
-      input.value = name;
-      input.removeAttribute("id");
-    }
-
-    if (select) {
-      if (category && Array.from(select.options).some((opt) => opt.value === category || opt.textContent.trim() === category)) {
-        select.value = category;
-      } else {
-        select.selectedIndex = 0;
-      }
-    }
+    row.innerHTML = `
+      <div class="control">
+        <input type="text" name="skills[${i}][name]" class="pw-input" placeholder="..." value="${escapeHtml(name)}">
+      </div>
+      <div class="control">
+        <select class="pw-select" name="skills[${i}][category]">
+          <option disabled ${!category ? "selected" : ""}>Select a Category:</option>
+          <option ${category === "Software / Tools" ? "selected" : ""}>Software / Tools</option>
+          <option ${category === "Languages" ? "selected" : ""}>Languages</option>
+          <option ${category === "Technical" ? "selected" : ""}>Technical</option>
+          <option ${category === "Certificate" ? "selected" : ""}>Certificate</option>
+          <option ${category === "Soft Skills" ? "selected" : ""}>Soft Skills</option>
+          <option ${category === "Hard Skills" ? "selected" : ""}>Hard Skills</option>
+          <option ${category === "Other" ? "selected" : ""}>Other</option>
+        </select>
+      </div>
+      <button type="button" class="remove">✕</button>
+    `;
 
     return row;
   }
@@ -665,8 +739,8 @@
     if (!skillsContainer) return;
     if (getSkillRows().length > 0) return;
 
-    const row = createSkillRow();
-    if (row) skillsContainer.appendChild(row);
+    const row = createSkillRow(0);
+    skillsContainer.appendChild(row);
   }
 
   function syncSkillChips() {
@@ -681,24 +755,27 @@
   function findFirstEmptySkillInput() {
     const rows = getSkillRows();
     for (const row of rows) {
-      const input = row.querySelector('input[name="name[]"]');
+      const input = getSkillNameInput(row);
       if (input && !input.value.trim()) return input;
     }
     return null;
   }
 
-  if (skillsContainer && skillTemplateRow) {
-    clearSkillRow(skillTemplateRow);
+  if (skillsContainer) {
+    reindexSkillRows();
+
+    const firstRow = getSkillRows()[0];
+    if (firstRow) clearSkillRow(firstRow);
 
     if (addSkillBtn) {
       addSkillBtn.addEventListener("click", () => {
-        const row = createSkillRow();
-        if (!row) return;
-
+        const row = createSkillRow(getSkillRows().length);
         skillsContainer.appendChild(row);
+        reindexSkillRows();
 
-        const input = row.querySelector('input[name="name[]"]');
+        const input = getSkillNameInput(row);
         if (input) input.focus();
+
         updateSkillWarning();
       });
     }
@@ -716,6 +793,7 @@
         clearSkillRow(row);
       } else {
         row.remove();
+        reindexSkillRows();
       }
 
       syncSkillChips();
@@ -724,8 +802,14 @@
     });
 
     skillsContainer.addEventListener("input", (ev) => {
-      if (ev.target.matches('input[name="name[]"]')) {
+      if (ev.target.matches('input[name$="[name]"]')) {
         syncSkillChips();
+        updateSkillWarning();
+      }
+    });
+
+    skillsContainer.addEventListener("change", (ev) => {
+      if (ev.target.matches('select[name$="[category]"]')) {
         updateSkillWarning();
       }
     });
@@ -743,17 +827,23 @@
     if (existing) {
       existing.row.remove();
       ensureOneSkillRow();
+      reindexSkillRows();
       syncSkillChips();
       showToast("Skill removed");
+      updateSkillWarning();
       return;
     }
 
     let input = findFirstEmptySkillInput();
 
     if (!input) {
-      const row = createSkillRow(skill, detectSkillCategory(skill));
-      if (!row) return;
+      const row = createSkillRow(
+        getSkillRows().length,
+        skill,
+        detectSkillCategory(skill)
+      );
       skillsContainer.appendChild(row);
+      reindexSkillRows();
       syncSkillChips();
       showToast("Skill added");
       updateSkillWarning();
@@ -763,7 +853,7 @@
     input.value = skill;
 
     const row = input.closest(".skill-row");
-    const select = row?.querySelector('select[name="category[]"]');
+    const select = getSkillCategorySelect(row);
     if (select) {
       const detected = detectSkillCategory(skill);
       if (detected) {

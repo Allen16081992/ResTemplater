@@ -7,6 +7,7 @@
       </div>
       <div class="pw-status" aria-live="polite">
         <div class="pw-pill"><span>🧪</span><span>Saved</span></div>
+        <a class="pw-btn" data-section="home">Switch Editor</a>
         <div style="opacity:.9">Mode: <strong>Quick Start</strong></div>
       </div>
     </header>
@@ -17,10 +18,6 @@
 
     <div id="pwStage" class="pw-stage">
       <div class="pw-toast" id="pwToast"><span>✓</span><span>Saved</span></div>
-
-      <!-- JS dynamic fields -->
-      <div id="experienceFields" hidden></div>
-      <div id="educationFields" hidden></div>
 
       <!-- STEP: Welcome -->
       <article class="pw-card" data-step="welcome">
@@ -41,7 +38,7 @@
           <div class="pw-form">
             <div>
               <label class="pw-label" for="fullname">Full name *</label>
-              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['fullname'].'" disabled' : 'autocomplete="fullname"'; ?> value="b">
+              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['fullname'].'" disabled' : 'autocomplete="fullname"'; ?> value="Keira Greenhill">
             </div>
             <div>
               <label for="headline" class="pw-label">Headline</label>
@@ -180,10 +177,10 @@
             <div id="skills">
               <div class="field is-grouped skill-row">
                 <div class="control">
-                  <input type="text" name="skill[]['name']" class="pw-input" placeholder="...">
+                  <input type="text" name="skills[0][name]" class="pw-input" placeholder="...">
                 </div>
                 <div class="control">
-                  <select class="pw-select" name="skill[]['category']">
+                  <select class="pw-select" name="skills[0][category]">
                     <option selected disabled>Select a Category:</option>
                     <option>Software / Tools</option>
                     <option>Languages</option>
@@ -218,6 +215,10 @@
           </div>
         </article>
 
+        <!-- JS dynamic fields -->
+        <div id="experienceFields" hidden></div>
+        <div id="educationFields" hidden></div>
+
         <!-- STEP: Contact -->
         <article class="pw-card" data-step="contact">
           <h2>Contact</h2>
@@ -226,17 +227,17 @@
           <div class="pw-form">
             <div>
               <label class="pw-label" for="email">Email *</label>
-              <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['email'].'" disabled' : 'autocomplete="email"'; ?>>
+              <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['email'].'" disabled' : 'autocomplete="email"'; ?> value="keira_greenhill32@hotmail.com">
             </div>
 
             <div class="pw-row">
               <div>
                 <label class="pw-label" for="city">City *</label>
-                <input type="text" id="city" name="city" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['city'].'" disabled' : 'autocomplete="address-level2"'; ?>>
+                <input type="text" id="city" name="city" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['city'].'" disabled' : 'autocomplete="address-level2"'; ?> value="Rotterdam">
               </div>
               <div>
                 <label class="pw-label" for="country">Country *</label>
-                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['country'].'" disabled' : 'autocomplete="country-name"'; ?>>
+                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['country'].'" disabled' : 'autocomplete="country-name"'; ?> value="Rotterdam">
               </div>
             </div>
 
@@ -247,7 +248,7 @@
               </div>
               <div>
                 <label class="pw-label" for="phone">Phone *</label>
-                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['phone'].'" disabled' : 'autocomplete="tel"'; ?>>
+                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['phone'].'" disabled' : 'autocomplete="tel"'; ?> value="063166457">
               </div>
             </div>
           </div>

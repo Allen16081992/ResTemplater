@@ -5,7 +5,7 @@
 
   switch ($code) {
     case 405:
-      $msg = 'Invalid request method.';
+      $msg = 'Method Not Allowed.';
       break;
     case 403:
       $msg = 'Access denied.';

@@ -282,3 +282,66 @@ nav a.current { cursor: default; }
   } 
   footer {margin-bottom:5.5rem; padding: 0 0 0 5px;}
 }
+
+/* ==========================================================
+   2. DEFAULT EDITOR STYLESHEET
+   ========================================================== */
+.pw-editor {
+  /* padding: 28px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(14px, 2vw, 28px);
+  min-height:70vh;
+}
+
+.pw-editor > .pw-panel {
+  width: min(680px, 100%);
+}
+
+.pw-option {
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+}
+
+.pw-option > .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.intro {
+  margin: 0 0 28px;
+  color: #555;
+  font: 16px/1.65 Arial, sans-serif;
+  max-width: 52ch;
+}
+
+.row > div > h2 {
+  margin: 0 0 6px;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.row > div > p {
+  margin: 0 0 22px;
+  color: #555;
+  line-height: 1.6;
+  max-width: 34ch;
+}
+
+.row > div > a {
+  width: fit-content;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid #111;
+  color: #111;
+  font-weight: 700;
+}
+
+.dark {
+  background: #111;
+  color: white;
+}

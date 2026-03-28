@@ -3,7 +3,7 @@
     class validGrimoire {
         public static function emptyField(array $postData): array {
             $errors = [];
-            $skip = ['action', 'username', 'date'];
+            $skip = ['action', 'username', 'date', 'month'];
 
             foreach ($postData as $field => $value) {
                 if (in_array($field, $skip, true)) { continue; }

@@ -8,12 +8,13 @@
   require_once "./config/loadResumeData_conf.php"; // DONE
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
-  SessionBook::verifySession();
+  //SessionBook::verifySession();
 
   // Test variables
     //   $_SESSION['error'] = [
     //     'title' => 'This field is required'
     //   ];
+    $_SESSION['action'] = "builder";
 ?>
 <!DOCTYPE html>
 <html lang="en">

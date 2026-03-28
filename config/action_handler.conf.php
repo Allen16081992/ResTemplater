@@ -22,10 +22,11 @@
         // Resume parts
         'experience'=> experienceControl::class,// DONE
         'education' => educationControl::class, // DONE
-        // 'skills' => skillsControl::class, <---- !Needs UI in default editor
-        // 'social' => socialControl::class, <---- !Needs UI in default editor
-        // ... Add more routes here
+        'skill' => skillControl::class, // DONE
+        'social' => socialControl::class, 
+        // Odd duck in the list
         'wizard' => wizardControl::class  // DONE
+        //'template'=> templateSelect::class
     ];
 
     // User submits a form
@@ -47,6 +48,8 @@
     require_once './controller/wizard_contr.php';
     require_once './controller/experience_contr.php';
     require_once './controller/education_contr.php';
+    require_once './controller/skill_contr.php';
+    require_once './controller/social_contr.php';
 
     // Initialise Class
     $targetClass = $routes[$action];

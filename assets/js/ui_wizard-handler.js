@@ -40,7 +40,7 @@
   // Skills
   const skillsContainer = root.querySelector("#skills");
   const addSkillBtn = root.querySelector("#add-skill");
-  const skillTemplateRow = skillsContainer?.querySelector(".skill-row") || null;
+  //const skillTemplateRow = skillsContainer?.querySelector(".skill-row") || null;
 
   // Inputs
   const fullNameEl = root.querySelector("#fullname");
@@ -48,7 +48,6 @@
   const emailEl = root.querySelector("#email");
   const cityEl = root.querySelector("#city");
   const countryEl = root.querySelector("#country");
-  const socialEl = root.querySelector("#social");
   const phoneEl = root.querySelector("#phone");
 
   const startBtn = root.querySelector('[data-action="start"]');
@@ -233,32 +232,39 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   }
 
-  function isValidUrl(v) {
+  function isValidPhone(v) {
     const s = String(v || "").trim();
-    if (!s) return true;
+    if (!s) return true; // optional field
 
-    try {
-      const u = new URL(s.startsWith("http://") || s.startsWith("https://") ? s : "https://" + s);
-
-      if (!["http:", "https:"].includes(u.protocol)) return false;
-
-      const host = u.hostname;
-      if (host === "localhost") return true;
-      if (!host.includes(".")) return false;
-      if (host.endsWith(".")) return false;
-
-      return true;
-    } catch {
-      return false;
-    }
+    return /^\+?[0-9]{6,15}$/.test(s);
   }
 
-  function normalizeUrl(v) {
-    const s = String(v || "").trim();
-    if (!s) return "";
-    if (/^https?:\/\//i.test(s)) return s;
-    return "https://" + s;
-  }
+  // function isValidUrl(v) {
+  //   const s = String(v || "").trim();
+  //   if (!s) return true;
+
+  //   try {
+  //     const u = new URL(s.startsWith("http://") || s.startsWith("https://") ? s : "https://" + s);
+
+  //     if (!["http:", "https:"].includes(u.protocol)) return false;
+
+  //     const host = u.hostname;
+  //     if (host === "localhost") return true;
+  //     if (!host.includes(".")) return false;
+  //     if (host.endsWith(".")) return false;
+
+  //     return true;
+  //   } catch {
+  //     return false;
+  //   }
+  // }
+
+  // function normalizeUrl(v) {
+  //   const s = String(v || "").trim();
+  //   if (!s) return "";
+  //   if (/^https?:\/\//i.test(s)) return s;
+  //   return "https://" + s;
+  // }
 
   function pulseInvalid(el) {
     if (!el) return;
@@ -353,14 +359,14 @@
 
     if (step === "contact") {
       const email = emailEl.value.trim();
-      const socialRaw = socialEl.value.trim();
+      const phone = phoneEl.value.trim();
 
+      // Email 
       if (!email) {
         markInvalid(emailEl, true);
         emailEl.focus();
         return false;
       }
-
       if (!isValidEmail(email)) {
         markInvalid(emailEl, true);
         emailEl.focus();
@@ -368,16 +374,18 @@
       }
       markInvalid(emailEl, false);
 
-      if (socialRaw && !isValidUrl(socialRaw)) {
-        markInvalid(socialEl, true);
-        socialEl.focus();
+      // Phone
+      if (!phone) {
+        markInvalid(phoneEl, true);
+        phoneEl.focus();
         return false;
       }
-
-      if (socialRaw) {
-        socialEl.value = normalizeUrl(socialRaw);
+      if (!isValidPhone(phone)) {
+        markInvalid(phoneEl, true);
+        phoneEl.focus();
+        return false;
       }
-      markInvalid(socialEl, false);
+      markInvalid(phoneEl, false);
 
       return true;
     }

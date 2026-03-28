@@ -1,19 +1,5 @@
 <?php declare(strict_types=1);
 
-
-    // if (!$_POST || !isset($_POST['resume'])) {
-    //     http_response_code(400);
-    //     exit('Invalid request. Location is default.src.php');
-    // }
-
-    // Example access
-    // $fullName = $data['resume']['fullName'] ?? '';
-    // $email    = $data['resume']['contact']['email'] ?? '';
-
-    // foreach ($_POST as $key => $value) {
-    //     echo $key.' '.$value;
-    // }
-
     // // Start a session for handling data and error messages.
     // require_once '../session_manager.src.php';
     // SessionBook::sessionRegenTimer(); 
@@ -31,23 +17,23 @@
 
         public function fetchData(int $resumeID, int $userID) {
             $result = [];
-            $tables = ['resume', 'accounts', 'contact', 'profile', 'experience', 'education', 'techskill', 'motivation'];
+            $tables = ['resumes', 'accounts', 'contacts', 'experience', 'experience_bullets', 'education', 'education_bullets', 'skills'];
             $pdo = Database::connect();
 
             // Loop through each table and fetch data
             foreach ($tables as $table) {
-                if ($table === 'resume') {
+                if ($table === 'resumes') {
                     $stmt = $pdo->prepare("SELECT resume_title FROM `$table` WHERE resumeID = ?");
                     $stmt->execute([$resumeID]);
-                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
                 } elseif ($table === 'accounts') {
                     $stmt = $pdo->prepare("SELECT email FROM `$table` WHERE userID = ?");
                     $stmt->execute([$userID]);
-                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
                 } elseif ($table === 'contacts') {
                     $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE userID = ?");
                     $stmt->execute([$userID]);
-                    $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
                 } else {
                     $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE resumeID = ?");
                     $stmt->execute([$resumeID]);
@@ -55,9 +41,15 @@
                 }
             }
 
-            $resume = $result['resume'][0] ?? [];
-            $account = $result['accounts'][0] ?? [];
-            $contact = $result['contacts'][0] ?? [];
+            $resumetitle = $result['resumes'] ?: [];
+            if (empty($resume)) {
+                $_SESSION['error'] = 'No data found.';
+                header('location: ../client.php');          
+                exit;
+            }
+
+            $email = $result['accounts'] ?: [];
+            $contact = $result['contacts'] ?: [];
 
             $skills = [];
             foreach (($result['skills'] ?? []) as $item) {
@@ -81,14 +73,6 @@
                 ];
             }
 
-            $exp_bullets = [];
-            foreach (($result['experience_bullets'] ?? []) as $item) {
-                $exp_bullets[] = [
-                    'desc' => trim((string)($item['desc'] ?? '')),
-                    'work_id' => trim((string)($item['work_id'] ?? ''))
-                ];
-            }
-
             $education = [];
             foreach (($result['education'] ?? []) as $item) {
                 $education[] = [
@@ -100,44 +84,35 @@
                 ];
             }
 
-            $acad_bullets = [];
+            $exp_bullets = [];
             foreach (($result['experience_bullets'] ?? []) as $item) {
-                $acad_bullets[] = [
+                $exp_bullets[] = [
+                    'desc' => trim((string)($item['desc'] ?? '')),
+                    'work_id' => trim((string)($item['work_id'] ?? ''))
+                ];
+            }
+
+            $edu_bullets = [];
+            foreach (($result['education_bullets'] ?? []) as $item) {
+                $edu_bullets[] = [
                     'desc' => trim((string)($item['desc'] ?? '')),
                     'acad_id' => trim((string)($item['acad_id'] ?? ''))
                 ];
             }
 
-            if (empty($result)) {
-                $_SESSION['error'] = 'No data found.';
-            }
-            $this->data = $result; 
+            $this->data = [
+                'resume_title' => $resumetitle,
+                'email' => $email,
+                'contact' => $contact,
+                'skills' => $skills,
+                'experience' => $experience,
+                'education' => $education,
+                'exp_bullets' => $exp_bullets,
+                'edu_bullets' => $edu_bullets
+            ];
         }
 
         public function loadPostData(array $post): void {
-            $skills = [];
-            $rawSkills = $post['skills'] ?? [];
-
-            if (is_array($rawSkills)) {
-                foreach ($rawSkills as $item) {
-                    if (!is_array($item)) {
-                        continue;
-                    }
-
-                    $name = trim((string) ($item['name'] ?? ''));
-                    $category = trim((string) ($item['category'] ?? ''));
-
-                    if ($name === '') {
-                        continue;
-                    }
-
-                    $skills[] = [
-                        'name' => $name,
-                        'category' => $category
-                    ];
-                }
-            }
-
             $experience = [];
             $rawExperience = $post['experience'] ?? [];
 
@@ -192,6 +167,29 @@
                         'start_date' => $start,
                         'end_date' => $end,
                         'desc' => $desc
+                    ];
+                }
+            }
+
+            $skills = [];
+            $rawSkills = $post['skills'] ?? [];
+
+            if (is_array($rawSkills)) {
+                foreach ($rawSkills as $item) {
+                    if (!is_array($item)) {
+                        continue;
+                    }
+
+                    $name = trim((string) ($item['name'] ?? ''));
+                    $category = trim((string) ($item['category'] ?? ''));
+
+                    if ($name === '') {
+                        continue;
+                    }
+
+                    $skills[] = [
+                        'name' => $name,
+                        'category' => $category
                     ];
                 }
             }
@@ -422,7 +420,7 @@
         $resumePDF->fetchData($resid, $usid);
         $resumePDF->generatePDF();
         
-    } elseif (isset($_POST['action']) && $_POST['action'] === 'wizard') {
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'vintage') {
         $resumePDF = new ResumePDF();
         $resumePDF->loadPostData($_POST);
         $resumePDF->generatePDF();

@@ -10,14 +10,13 @@
 
                 // 1️⃣ Insert Resume
                 $stmtResume = $this->pdo->prepare("
-                    INSERT INTO resumes (title, headline, summary, user_id)
-                    VALUES (:title, :headline, :summary, :user_id)
+                    INSERT INTO resumes (title, headline, user_id)
+                    VALUES (:title, :headline, :user_id)
                 ");
 
                 $stmtResume->execute([
                     ':title'       => $postData['title'],
                     ':headline'    => $postData['headline'] ?? null,
-                    ':summary'     => $postData['summary'] ?? null,
                     ':user_id'     => $postData['user_id']
                 ]);
 
@@ -86,8 +85,8 @@
                 if (!empty($postData['contacts'])) {
                     $stmtEdu = $this->pdo->prepare("
                         INSERT INTO contacts
-                        (fullname, phone, city, country, summary, resume_id)
-                        VALUES (:title, :institute, :start_date, :end_date, :summary, :resume_id)
+                        (fullname, phone, city, country, resume_id)
+                        VALUES (:title, :institute, :start_date, :end_date, :resume_id)
                     ");
 
                     $stmtEdu->execute([

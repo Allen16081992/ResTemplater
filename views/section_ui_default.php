@@ -73,6 +73,8 @@
           </header>
 
           <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $uid = $_SESSION['session_data']['user_id'] : ''; ?>">
+            <input type="hidden" name="create">
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
@@ -87,8 +89,6 @@
               </div>
             </div>
             <button type="submit" class="button is-link" name="action" value="resume">Create</button>
-            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $uid = $_SESSION['session_data']['user_id'] : ''; ?>">
-            <input type="hidden" name="create">
           </form>
         </section>
 
@@ -102,6 +102,8 @@
           </header>
 
           <form id="form-delRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="delete">
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
@@ -123,8 +125,6 @@
             </div>
 
             <button type="submit" class="button is-danger" style="margin-top:7px;" name="action" value="resume">Delete</button>
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
-            <input type="hidden" name="delete">
           </form>
         </section>
 
@@ -137,9 +137,9 @@
             </div>
           </header>
 
-          <form id="form-fetchRes" class="pw-panel-form" action="" method="post">
-            <input type="hidden" name="selectCV">
+          <form id="form-fetchRes" class="pw-panel-form" action="#" method="post">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="selectCV">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
               <?php if (!empty($resumes)): foreach ($resumes as $resume):
                   // Set last updated info
@@ -191,6 +191,9 @@
           <!-- Toggle for include Account photo or not. -->
 
           <form id="form-info" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="update">
             <div class="field">
               <label class="label">Resume Title</label>
               <div class="control">
@@ -208,9 +211,6 @@
             <div class="pw-panel-actions">
               <button type="submit" name="action" value="resume" class="button btn-cta pw-save-btn">Save</button>
             </div>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
-            <input type="hidden" name="update">
           </form>
         </section>
 
@@ -230,6 +230,8 @@
           </header>
 
           <form id="form-experience" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
               <!-- EXPERIENCE ITEM -->
               <?php if (!empty($data['experience'])) { ?>
@@ -285,8 +287,6 @@
             <div class="pw-panel-actions">
               <button type="submit" name="action" value="experience" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($uid) ?>">
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -357,6 +357,8 @@
           </header>
 
           <form id="form-education" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
               <!-- Education ITEM -->
               <?php if (!empty($data['education'])) { ?>
@@ -389,7 +391,7 @@
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="end_date[]"value="<?= htmlspecialchars($edu['end_date']) ?>">
+                            <input class="input" type="month" name="end_date[]" value="<?= htmlspecialchars($edu['end_date']) ?>">
                           </div>
                         </div>
                       </div>
@@ -414,8 +416,6 @@
             <div class="pw-panel-actions">
               <button type="submit" name="action" value="education" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($uid) ?>">
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
           </form>
 
           <!-- TEMPLATE FOR JS CLONING -->
@@ -481,32 +481,30 @@
           <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="action" value="skills">
-
+            <input type="hidden" name="action" value="skill">
             <div class="pw-repeater" data-repeater="skills">
               <!-- Skills ITEM -->
               <?php if (!empty($data['skills'])) { ?>
-                <?php foreach ($data['skills'] as $skill) { ?>
+                <?php foreach ($data['skills'] as $i => $skill) { ?>
                 <div class="pw-repeater-item">                         
                   <div class="field is-grouped skill-row">
                     <div class="control">
-                      <input type="text" name="skill[][name]" class="pw-input" value="<?= htmlspecialchars($skill['name']) ?>">
+                      <input type="text" name="skill[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($skill['name']) ?>">
                     </div>
                     <div class="control">
-                      <select class="pw-select" name="skill[]['category']">
-                        <option selected><?= htmlspecialchars($skill['category']) ?></option>
+                      <select class="pw-select" name="skill[<?= $i ?>][category]">
                         <option disabled>Select a Category:</option>
-                        <option>Software / Tools</option>
-                        <option>Languages</option>
-                        <option>Technical</option>
-                        <option>Certificate</option>
-                        <option>Soft Skills</option>
-                        <option>Hard Skills</option>
-                        <option>Other</option>
+                        <option <?= $skill['category'] === 'Software / Tools' ? 'selected' : '' ?>>Software / Tools</option>
+                        <option <?= $skill['category'] === 'Languages' ? 'selected' : '' ?>>Languages</option>
+                        <option <?= $skill['category'] === 'Technical' ? 'selected' : '' ?>>Technical</option>
+                        <option <?= $skill['category'] === 'Certificate' ? 'selected' : '' ?>>Certificate</option>
+                        <option <?= $skill['category'] === 'Soft Skills' ? 'selected' : '' ?>>Soft Skills</option>
+                        <option <?= $skill['category'] === 'Hard Skills' ? 'selected' : '' ?>>Hard Skills</option>
+                        <option <?= $skill['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
                       </select>
                     </div>
-                    <input type="hidden" name="skill_id" value="<?= htmlspecialchars($skill['id']) ?>">
-                    <button type="submit" class="remove" name="delete_skill" value="<?= htmlspecialchars($skill['id']) ?>">✕</button>
+                    <input type="hidden" name="skill[<?= $i ?>][id]" value="<?= htmlspecialchars($skill['id']) ?>">
+                    <button type="submit" class="remove" name="delete" value="<?= htmlspecialchars($skill['id']) ?>">✕</button>
                   </div>  
                 </div>
                 <?php } ?>
@@ -518,7 +516,7 @@
             </div>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="save_skill" class="button btn-cta pw-save-btn" disabled>Save</button>
+              <button type="submit" name="save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
 
@@ -560,18 +558,22 @@
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="action" value="social">
-
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
-              <!-- <div class="pw-repeater-item">
-                <div class="field">
-                  <label class="label">Link</label>
-                  <div class="control">
-                    <input class="input" type="url" name="social_website[]" placeholder="https://example.com">
+              <?php if (!empty($data['social'])) { ?>
+                <?php foreach ($data['social'] as $media) { ?>
+                  <div class="pw-repeater-item">
+                    <div class="field">
+                      <label class="label">Link</label>
+                      <div class="control">
+                        <input class="input" type="url" name="social[<?= $i ?>][media]" value="<?= htmlspecialchars($media['media']) ?>">
+                      </div>
+                    </div>
+                    <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($media['id']) ?>">
+                    <button type="submit" class="button is-text pw-remove-item" name="delete" value="<?= htmlspecialchars($media['id']) ?>">Remove this link</button>
                   </div>
-                </div>
-                <button type="button" class="button is-text pw-remove-item" disabled>Remove this url</button>
-              </div> -->
+                <?php } ?>
+              <?php } ?>
             </div>
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="social">+ Add a link</button>
 
@@ -586,7 +588,7 @@
               <div class="field">
                 <label class="label">Link</label>
                 <div class="control">
-                  <input class="input" type="url" name="social_website[]" placeholder="https://example.com">
+                  <input class="input" type="url" name="social[]" placeholder="https://example.com">
                 </div>
               </div>
               <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>
@@ -603,21 +605,18 @@
             </div>
           </header>
 
-          <form id="form-template" class="pw-panel-form" action="" method="post">
+          <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="selectTemplate">
+            <input type="hidden" name="action" value="template">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
-              <button>
-                <input type="submit" name="vintage">
+              <button class="radio-card" type="submit" name="template" value="vintage">
                 <span>Vintage (1970 - 1980)</span>
               </button>
-              <button>
-                <input type="submit" name="default">
+              <button class="radio-card" type="submit" name="template" value="default">
                 <span>Normal (Default)</span>
               </button>
-              <button>
-                <input type="submit" name="new_contro">
+              <button class="radio-card" type="submit" name="template" value="new_contro">
                 <span>New Controverse (Business)</span>
               </button>
             </div>

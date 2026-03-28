@@ -9,47 +9,45 @@
                 'email' => $this->postData['email'] ?? '',
                 'city' => $this->postData['city'] ?? '',
                 'country' => $this->postData['country'] ?? '',
-                'social' => $this->postData['social'] ?? '',
                 'phone' => $this->postData['phone'] ?? '',
                 'country' => $this->postData['country'] ?? '',
                 'experience' => [],
                 'education' => [],
                 'skills' => []
             ];
+
             $exp = $this->postData['experience'] ?? [];
             if (!is_array($exp)) $exp = [];
-
             foreach ($exp as $i => $row) {
                 if (!is_array($row)) continue;
 
                 $oldForm['experience'][] = [
-                    'id'      => $row['id'] ?? null,           // optional if editing
-                    'job'     => $row['job'] ?? '',
-                    'company' => $row['company'] ?? '',
-                    'start'   => $row['start'] ?? '',
-                    'end'     => $row['end'] ?? '',
-                    'desc'    => $row['desc'] ?? '',
+                    'id'        => $row['id'] ?? null,           // optional if editing
+                    'job'       => $row['job'] ?? '',
+                    'company'   => $row['company'] ?? '',
+                    'start_date'=> $row['start_date'] ?? '',
+                    'end_date'  => $row['end_date'] ?? '',
+                    'desc'      => $row['desc'] ?? ''
                 ];
             }
+
             $edu = $this->postData['education'] ?? [];
             if (!is_array($edu)) $edu = [];
-
             foreach ($edu as $e => $row) {
                 if (!is_array($row)) continue;
 
                 $oldForm['education'][] = [
-                    'id'      => $row['id'] ?? null,           // optional if editing
-                    'job'     => $row['job'] ?? '',
-                    'company' => $row['company'] ?? '',
-                    'start'   => $row['start'] ?? '',
-                    'end'     => $row['end'] ?? '',
-                    'desc'    => $row['desc'] ?? '',
+                    'id'        => $row['id'] ?? null,           // optional if editing
+                    'program'   => $row['program'] ?? '',
+                    'school'    => $row['school'] ?? '',
+                    'start_date'=> $row['start_date'] ?? '',
+                    'end_date'  => $row['end_date'] ?? '',
+                    'desc'      => $row['desc'] ?? ''
                 ];
             }
 
             $ski = $this->postData['skills'] ?? [];
             if (!is_array($ski)) $ski = [];
-
             foreach ($ski as $y => $row) {
                 if (!is_array($row)) continue;
 

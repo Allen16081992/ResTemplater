@@ -225,9 +225,15 @@
           <p class="helptext">Where can someone reach you?</p>
 
           <div class="pw-form">
-            <div>
-              <label class="pw-label" for="email">Email *</label>
-              <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['email'].'" disabled' : 'autocomplete="email"'; ?> value="keira_greenhill32@hotmail.com">
+            <div class="pw-row">
+              <div>
+                <label class="pw-label" for="email">Email *</label>
+                <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['email'].'" disabled' : 'autocomplete="email"'; ?> value="keira_greenhill32@hotmail.com">
+              </div>
+              <div>
+                <label class="pw-label" for="phone">Phone *</label>
+                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['phone'].'" disabled' : 'autocomplete="tel"'; ?> value="063166457">
+              </div>
             </div>
 
             <div class="pw-row">
@@ -237,18 +243,7 @@
               </div>
               <div>
                 <label class="pw-label" for="country">Country *</label>
-                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['country'].'" disabled' : 'autocomplete="country-name"'; ?> value="Rotterdam">
-              </div>
-            </div>
-
-            <div class="pw-row">
-              <div>
-                <label class="pw-label" for="social">Social media</label>
-                <input type="url" class="pw-input" id="social" name="social" placeholder="https://example.com">
-              </div>
-              <div>
-                <label class="pw-label" for="phone">Phone *</label>
-                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['phone'].'" disabled' : 'autocomplete="tel"'; ?> value="063166457">
+                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['country'].'" disabled' : 'autocomplete="country-name"'; ?> value="Netherlands">
               </div>
             </div>
           </div>
@@ -270,7 +265,7 @@
             <input type="hidden" name="create" value="create">
           <?php } ?>
           <div class="pw-final-only">
-            <button type="submit" name="action" value="wizard" class="pw-btn pw-btn-primary">
+            <button type="submit" name="action" value="vintage" class="pw-btn pw-btn-primary">
               <?= isset($_SESSION['session_data']['user_id']) ? 'Let’s save first' : 'Let’s Download'; ?>
             </button>
           </div>

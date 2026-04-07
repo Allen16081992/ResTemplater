@@ -1,5 +1,4 @@
 <?php declare(strict_types=1);
-
     // // Start a session for handling data and error messages.
     // require_once '../session_manager.src.php';
     // SessionBook::sessionRegenTimer(); 
@@ -13,6 +12,32 @@
         public function __construct() {
             parent::__construct();
             $this->SetAutoPageBreak(true, 15);
+        }
+
+        private function abbrFullname(string $fullName, string $mode = 'initial') {
+            // 1. Clean up and split
+            $words = explode(' ', trim($fullName));
+            
+            // 2. Safety check: If only one word, just return it capitalized
+            if (count($words) <= 1) {
+                return strtoupper(substr($words[0], 0, 1)); // Or return $words[0]
+            }
+
+            $first = ucfirst($words[0]);
+            $last  = ucfirst(end($words));
+
+            // Mode logic
+            if ($mode === 'short') {
+                // Option 2: Just Initials (e.g., AD)
+                return strtoupper(substr($first, 0, 1) . substr($last, 0, 1));
+            }
+
+            // Default: Firstname + Last Initial (e.g., Andreas D.)
+            return $first . ' ' . strtoupper(substr($last, 0, 1)) . '.';
+        }
+
+        private function printDate(string $value) {
+            return date("d/m/Y", strtotime($value));
         }
 
         public function fetchData(int $resumeID, int $userID) {
@@ -201,7 +226,6 @@
                 'city' => trim((string) ($post['city'] ?? '')),
                 'country' => trim((string) ($post['country'] ?? '')),
                 'phone' => trim((string) ($post['phone'] ?? '')),
-                'social' => trim((string) ($post['social'] ?? '')),
                 'experience' => $experience,
                 'education' => $education,
                 'skills' => $skills
@@ -235,7 +259,7 @@
         public function generatePDF() {
             $this->AliasNbPages();
             $this->AddPage();
-            $this->SetFont('Arial', '', 12);
+            $this->SetFont('Courier', '', 12);
             
             //////////////////// TRADEMARK ///////////////////
             //$imagePath = '../../assets/images/witch_logo2.png';
@@ -247,14 +271,12 @@
             // Set Trademark
             //$this->Image($imagePath, 10, 10, 30); // Adjust positioning and dimensions
 
-            // Set font
-            $this->SetFont('Arial', '', 10);
-
             // Sanitize data using htmlspecialchars
             // Resume title becomes Filename
-            if (isset($this->data['resume'][0]['resume_title'])) {
-                $doc = htmlspecialchars($this->data['resume'][0]['resume_title']); 
-                $this->SetTitle('My '.$doc.' DT');
+            if (isset($this->data['contacts']['fullname'])) {
+                $today = $this->printDate('today');
+                $doc = $this->abbrFullname($this->data['contacts']['fullname']); 
+                $this->SetTitle($doc.' '.$today);
             } else { 
                 // Wizard
                 $this->SetTitle('My Scroll - Standard');
@@ -290,13 +312,13 @@
                 'Phone'         => $this->data['phone'] ?? '',  
             ];
             foreach ($rows as $label => $value) {
-                $y = $this->GetY();
-
                 $this->SetXY($labelX, $y);
                 $this->Cell(40, $rowH, $label, 0, 0, 'L');
 
                 $this->SetXY($valueX, $y);
                 $this->Cell(0, $rowH, ': ' . $value, 0, 1, 'L');
+
+                $y += $rowH;
             }
             $this->Ln($rowH);
 
@@ -425,12 +447,12 @@
         $resumePDF->loadPostData($_POST);
         $resumePDF->generatePDF();
 
+    } else {
         // echo '<pre>';
         // print_r($_POST);
         // echo '</pre>';
-
-    } else {
+        
         // No goal. Try again later.
-        header('location: ../error.php');          
+        header('location: ../../error.php');          
         exit;
     }

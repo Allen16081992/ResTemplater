@@ -56,6 +56,5 @@
                 ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
-
         }
     }

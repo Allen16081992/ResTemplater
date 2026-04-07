@@ -145,3 +145,19 @@
             ON DELETE CASCADE
             ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    CREATE TABLE IF NOT EXISTS `social` (
+        id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        media_url      VARCHAR(500) NOT NULL,
+        sort_order INT NOT NULL DEFAULT 0,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        resume_id  INT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+
+        UNIQUE KEY uq_social_resume_media (resume_id, media_url),
+
+        CONSTRAINT fk_social_resume
+            FOREIGN KEY (resume_id) REFERENCES resumes(id)
+            ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

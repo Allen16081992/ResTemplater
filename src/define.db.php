@@ -112,7 +112,7 @@
     //     KEY idx_bullet_work_sort (work_id, sort_order),
 
     // CONSTRAINT fk_bullet_work
-    //     FOREIGN KEY (work_id) REFERENCES work_experience(id)
+    //     FOREIGN KEY (work_id) REFERENCES experience(id)
     //     ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -146,6 +146,48 @@
     //     UNIQUE KEY uq_skill_resume_name (resume_id, name),
 
     //     CONSTRAINT fk_tech_resume
+    //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
+    //         ON DELETE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `social` (
+    //     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     media_url      VARCHAR(500) NOT NULL,
+    //     sort_order INT NOT NULL DEFAULT 0,
+    //     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    //     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    //     resume_id  INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     UNIQUE KEY uq_social_resume_media (resume_id, media_url),
+
+    //     CONSTRAINT fk_social_resume
+    //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
+    //         ON DELETE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `projects` (
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
+    //     title       VARCHAR(100) NOT NULL, 
+    //     role       VARCHAR(100) NOT NULL,
+    //     summary VARCHAR(2048) NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     resume_id   INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+    //     CONSTRAINT fk_proj_resume FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+    // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    // CREATE TABLE IF NOT EXISTS `project_bullets` (
+    //     id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    //     text        TEXT NOT NULL,
+    //     sort_order  INT NOT NULL DEFAULT 0,
+    //     project_id  INT UNSIGNED NOT NULL,
+    //     resume_id   INT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+
+    //     KEY uq_project_resume_sort (project_id, sort_order),
+
+    //     CONSTRAINT fk_project_resume
     //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
     //         ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -14,7 +14,7 @@
     //   $_SESSION['error'] = [
     //     'title' => 'This field is required'
     //   ];
-    $_SESSION['action'] = "builder";
+    $_SESSION['action'] = 'builder';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,9 +56,7 @@
     
     <main>
         <?php ViewBook::render('section_profile.php'); ?>
-        <section id="home" class="<?= ViewBook::setVisibility('home'); ?>"> 
-            <?php ViewBook::render('section_builder_select.html'); ?>
-        </section>
+        <?php ViewBook::render('section_builder_select.php'); ?>
         <?php ViewBook::render('section_ui_default.php'); ?>
         <?php ViewBook::render('section_ui_wizard.php'); ?>     
         <?php ViewBook::render('section_closure.php'); ?>

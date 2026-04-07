@@ -23,7 +23,7 @@
         'experience'=> experienceControl::class,// DONE
         'education' => educationControl::class, // DONE
         'skill' => skillControl::class, // DONE
-        'social' => socialControl::class, 
+        'social' => socialControl::class, // DONE
         // Odd duck in the list
         'wizard' => wizardControl::class  // DONE
         //'template'=> templateSelect::class
@@ -50,6 +50,7 @@
     require_once './controller/education_contr.php';
     require_once './controller/skill_contr.php';
     require_once './controller/social_contr.php';
+    require_once './controller/template_contr.php';
 
     // Initialise Class
     $targetClass = $routes[$action];

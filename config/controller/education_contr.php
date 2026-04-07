@@ -1,6 +1,6 @@
 <?php // Load PHP Files
     require_once '../validator.conf.php';
-    require_once '../classes/educationn_class.php';
+    require_once '../classes/education_class.php';
 
     class educationControl {
         public function __construct(private array $postData) {}

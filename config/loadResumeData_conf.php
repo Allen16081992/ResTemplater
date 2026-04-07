@@ -52,10 +52,15 @@
                 $stmt->execute([':resume_id' => $resid]);
                 $data['education_bullet'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Fetch data from the 'technical' table
+                // Fetch Skills data
                 $stmt = $this->pdo->prepare('SELECT * FROM skills WHERE resume_id = :resume_id');
                 $stmt->execute([$resid]);
                 $data['skills'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Fetch Social Media link data
+                $stmt = $this->pdo->prepare('SELECT * FROM socials WHERE resume_id = :resume_id');
+                $stmt->execute([$resid]);
+                $data['socials'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 if (empty($data['resdata'])) {
                     $_SESSION['error'] = 'Resume not found.';

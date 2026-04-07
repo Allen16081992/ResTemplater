@@ -1,4 +1,4 @@
-<!-- <section id="home" class="current"> -->
+<section id="home" class="<?= ViewBook::setVisibility('home'); ?>">
     <div class="pw-editor">
         <article class="pw-panel">
             <h1 class="is-size-1">How would you like to build your resume?</h1>
@@ -13,17 +13,17 @@
                     <a class="pw-btn" data-section="wizard">Start Wizard</a>
                 </div>
             </div>
-
-            <div class="pw-option">
-                <div class="row">
-                    <div>
-                        <h2>Editor</h2>
-                        <p>A direct editing workspace for users who want more freedom.</p>
+            <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
+                <div class="pw-option">
+                    <div class="row">
+                        <div>
+                            <h2>Editor</h2>
+                            <p>A direct editing workspace for users who want more freedom.</p>
+                        </div>
+                        <a class="pw-btn" data-section="builder">Open Editor</a>
                     </div>
-                    <a class="pw-btn" data-section="builder">Open Editor</a>
                 </div>
-            </div>
-
+            <?php } ?>
             <div class="pw-option">
                 <div class="row">
                     <div>
@@ -35,4 +35,4 @@
             </div>
         </article>
     </div>
-<!-- </section> -->
+</section>

@@ -6,14 +6,13 @@
         <p class="pw-editor-sub">Brew, tweak and trim your resume sections before sending them into the wild.</p>
       </div>
       <div class="pw-editor-status">
-        <span class="pw-editor-status-pill">
+        <!-- <span class="pw-editor-status-pill">
           <span>🧪</span> Draft saved locally
-        </span>
-        <a class="pw-btn" data-section="home">Switch Editor</a>
-        <?php if (!empty($data['resdata'])) { ?>
+        </span> -->
+        <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
+          <a class="pw-btn" data-section="home">Switch Editor</a>
+        <?php } if (!empty($data['resdata'])) { ?>
           <small>Selected: <strong><?= htmlspecialchars($data['resdata']['title']) ?></strong></small>
-        <?php } else { ?>
-        <small>Selected: <strong>Neo-Gothic Internship</strong></small>
         <?php } ?>
       </div>
     </header>
@@ -23,18 +22,19 @@
       <div class="select is-fullwidth">
         <select id="editorSectionSelect">
           <option value="newRes">+ Create a Resume</option>
-          <?php //if (count($data['papers']) > 1) { ?>
+          <?php //if (isset($data['papers'])) { ?>
             <option value="delRes">- Delete a Resume</option>
             <option value="fetchRes"># My List</option>
             <?php //if (isset($data['resdata']['title'])) { ?>
               <option value="info" selected>Resume Info</option>
               <option value="experience">Experience</option>
               <option value="education">Education</option>
+              <option value="projects">Projects</option>
               <option value="skills">Skills</option>
               <option value="social">Social Media</option>
-              <option value="template">Templates</option>
             <?php //} ?>
           <?php //} ?>
+          <option value="template">Templates</option>
         </select>
       </div>
     </div>
@@ -54,11 +54,14 @@
           <button class="pw-editor-tab is-active" data-panel="info"><span class="icon">📃</span><span>Resume Info</span></button>
           <button class="pw-editor-tab" data-panel="experience"><span class="icon">🏹</span><span>Experience</span></button>
           <button class="pw-editor-tab" data-panel="education"><span class="icon">🎓</span><span>Education</span></button>
+          <button class="pw-editor-tab" data-panel="projects"><span class="icon">🚀</span><span>Projects</span></button>
           <button class="pw-editor-tab" data-panel="skills"><span class="icon">⚗️</span><span>Hard & Soft Skills</span></button>
           <button class="pw-editor-tab" data-panel="social"><span class="icon">📷</span><span>Social Media</span></button>
           <hr>
-          <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
+        <?php //} else { ?>
+          <!-- <span>Make a new resume to see more options!</span> -->
         <?php //} ?>
+        <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
       </aside>
 
       <!-- MAIN PANELS -->
@@ -111,12 +114,10 @@
                   <div class="select is-fullwidth">
                     <select id="pwDeleteResumeSelect" name="resume_id">
                       <?php if (!empty($list['papers'])) { ?>
+                        <option disabled>: Select</option>
                         <?php foreach ($list['papers'] as $paper) { ?>
                           <option value="<?= htmlspecialchars($paper['id']) ?>"><?= htmlspecialchars($paper['title']) ?></option>
                         <?php } ?>
-                      <?php } else { ?>
-                        <option value="1" selected>Neo-Gothic Internship</option>
-                        <option value="2">Minimalist Student</option>
                       <?php } ?>
                     </select>
                   </div>
@@ -162,8 +163,7 @@
                   <span>🧾 <strong><?= htmlspecialchars($resume['title']) ?></strong><br><small>Last edited: <?= $timeAgo ?></small></span>
                 </label>
               <?php endforeach; ?>
-              <?php else: ?>
-                <label>
+                <!-- <label>
                   <input type="radio">
                   <span>🧾 <strong>Internship - 2024</strong><br><small>Last edited: 2 days ago</small></span>
                 </label>
@@ -174,7 +174,7 @@
                 <label>
                   <input type="radio">
                   <span>🧠 <strong>Research (PhD)</strong><br><small>Last edited: 3 months ago</small></span>
-                </label>
+                </label> -->
               <?php endif; ?>
             </div>
           </form>
@@ -182,6 +182,7 @@
 
         <!-- RESUME INFO PANEL -->
         <section id="panel-info" class="pw-editor-panel is-active">
+          <?php //if (isset($data['papers'])) { ?>
           <header class="pw-panel-header">
             <div>
               <h2>Resume Info</h2>
@@ -212,6 +213,33 @@
               <button type="submit" name="action" value="resume" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>
+          <?php //} else { ?>
+            <!-- <header class="pw-panel-header">
+              <div>
+                <h2>Create a resume</h2>
+                <p>First, let's give it a name.</p>
+              </div>
+            </header>
+
+            <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+              <input type="hidden" name="user_id">
+              <input type="hidden" name="create">
+              <div class="field is-horizontal">
+                <div class="field-body">
+                  <div class="field">
+                    <div class="is-flex">
+                      <label class="label">Title</label>
+                      <div id="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                    </div>
+                    <div class="control">
+                      <input class="input" type="text" name="title" placeholder="...">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="button is-link" name="action" value="resume">Create</button>
+            </form> -->
+          <?php //} ?>
         </section>
 
         <!-- EXPERIENCE PANEL -->
@@ -258,13 +286,13 @@
                         <div class="field">
                           <label class="label">Start</label>           
                           <div class="control">
-                            <input class="input" type="text" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
+                            <input class="input" type="month" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="text" name="end_date[]" value="<?= htmlspecialchars($exp['end_date']) ?>">
+                            <input class="input" type="month" name="end_date[]" value="<?= htmlspecialchars($exp['end_date']) ?>">
                           </div>
                         </div>
                       </div>
@@ -314,15 +342,13 @@
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <!-- <input class="input" type="month" name="start_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}"> -->
-                      <input class="input" type="text" name="start_date[]">
+                      <input class="input" type="month" name="start_date[]">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <!-- <input class="input" type="month" name="end_date[]" placeholder="YYYY-MM" pattern="\d{4}-\d{2}"> -->
-                      <input class="input" type="text" name="end_date[]">
+                      <input class="input" type="month" name="end_date[]">
                     </div>
                   </div>
                 </div>
@@ -468,6 +494,101 @@
           </template>
         </section>
 
+        <!-- Projects PANEL -->
+        <section id="panel-projects" class="pw-editor-panel">
+          <header class="pw-panel-header">
+            <div>
+              <h2>Projects</h2>
+              <p>Show off the things you built, the code you wrote, or the systems you designed.</p>
+              <ul style="margin:10px; font-size:0.8rem;">Hint:
+                  <li>● Use the summary to list your <strong>Tech Stack</strong> (e.g., PHP, MySQL).</li>
+                  <li>● Focus on the "Problem" you solved and the "Result" you got.</li>
+                  <li>● If you have a GitHub link, put it in the Social Media section for a QR code.</li>
+              </ul>
+            </div>
+          </header>
+
+          <form id="form-projects" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            
+            <!-- Projects ITEM -->
+            <div class="pw-repeater" data-repeater="projects">
+              <?php if (!empty($data['projects'])) { ?>
+                <?php foreach ($data['projects'] as $proj) { ?>
+                  <div class="pw-repeater-item">
+                    <div class="field is-horizontal">
+                      <div class="field-body">
+                        <div class="field">
+                          <label class="label">Project Name</label>
+                          <div class="control">
+                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($proj['title']) ?>">
+                          </div>
+                        </div>
+                        <div class="field">
+                          <label class="label">Your Role</label>
+                          <div class="control">
+                            <input class="input" type="text" name="role[]" value="<?= htmlspecialchars($proj['role'] ?? 'Lead Developer') ?>">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="field">
+                      <label class="label">Project Summary & Tech Stack</label>
+                      <div class="control">
+                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($proj['summary'] ?? '') ?></textarea>
+                      </div>
+                    </div>
+                    
+                    <button type="button" class="button is-text pw-remove-item" name="delete">Remove this project</button>
+                    <hr class="pw-repeater-divider">
+                    <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($proj['id']) ?>">
+                  </div>
+                <?php } ?>
+              <?php } ?>
+            </div>
+            
+            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="projects">+ Add a project</button>
+
+            <div class="pw-panel-actions">
+              <button type="submit" name="action" value="projects" class="button btn-cta pw-save-btn" disabled>Save</button>
+            </div>
+          </form>
+
+          <!-- TEMPLATE FOR JS CLONING -->
+          <template id="tpl-projects-item">
+            <div class="pw-repeater-item">
+              <div class="field is-horizontal">
+                <div class="field-body">
+                  <div class="field">
+                    <label class="label">Project Name</label>
+                    <div class="control">
+                      <input class="input" type="text" name="title[]" placeholder="e.g. ResTemplater Engine">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label class="label">Your Role</label>
+                    <div class="control">
+                      <input class="input" type="text" name="role[]" placeholder="e.g. Backend Architect">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Project Summary & Tech Stack</label>
+                <div class="control">
+                  <textarea class="textarea" name="summary[]" rows="3" placeholder="What was the goal? What tech did you use? (PHP, SQL, etc.)"></textarea>
+                </div>
+              </div>
+
+              <button type="button" class="button is-text pw-remove-item">Remove this project</button>
+              <hr class="pw-repeater-divider">
+            </div>
+          </template>
+        </section>
+
         <!-- SKILLS PANEL -->
         <section id="panel-skills" class="pw-editor-panel">
           <header class="pw-panel-header">
@@ -566,7 +687,7 @@
                     <div class="field">
                       <label class="label">Link</label>
                       <div class="control">
-                        <input class="input" type="url" name="social[<?= $i ?>][media]" value="<?= htmlspecialchars($media['media']) ?>">
+                        <input class="input" type="url" name="social[<?= $i ?>][media_url]" value="<?= htmlspecialchars($media['media_url']) ?>">
                       </div>
                     </div>
                     <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($media['id']) ?>">
@@ -605,18 +726,18 @@
             </div>
           </header>
 
-          <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" target="_blank" method="post">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="action" value="template">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
-              <button class="radio-card" type="submit" name="template" value="vintage">
+              <button type="submit" class="radio-card" name="template" value="vintage">
                 <span>Vintage (1970 - 1980)</span>
               </button>
-              <button class="radio-card" type="submit" name="template" value="default">
+              <button type="submit" class="radio-card" name="template" value="default">
                 <span>Normal (Default)</span>
               </button>
-              <button class="radio-card" type="submit" name="template" value="new_contro">
+              <button type="submit" class="radio-card" name="template" value="new_contro">
                 <span>New Controverse (Business)</span>
               </button>
             </div>

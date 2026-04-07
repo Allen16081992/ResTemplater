@@ -6,8 +6,10 @@
         <p class="pw-subtitle">Answer a few questions. We’ll turn it into a clean resume.</p>
       </div>
       <div class="pw-status" aria-live="polite">
-        <div class="pw-pill"><span>🧪</span><span>Saved</span></div>
-        <a class="pw-btn" data-section="home">Switch Editor</a>
+        <div class="pw-pill"><span>🧪</span><span>Draft saved locally</span></div>
+        <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
+          <a class="pw-btn" data-section="home">Switch Editor</a>
+        <?php } ?>
         <div style="opacity:.9">Mode: <strong>Quick Start</strong></div>
       </div>
     </header>
@@ -30,7 +32,7 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form <?= isset($_SESSION['session_data']['user_id']) ? 'action="./config/action_handler.conf.php"' : 'action="./config/pdf_templates/default.src.php" target="_blank"'; ?> method="post">
+      <form <?= isset($_SESSION['session_data']['user_id']) ? 'action="./config/action_handler.conf.php"' : 'action="./config/pdf_templates/business.src.php" target="_blank"'; ?> method="post">
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
           <p class="helptext">Just the essentials.</p>
@@ -265,7 +267,7 @@
             <input type="hidden" name="create" value="create">
           <?php } ?>
           <div class="pw-final-only">
-            <button type="submit" name="action" value="vintage" class="pw-btn pw-btn-primary">
+            <button type="submit" name="action" value="business" class="pw-btn pw-btn-primary">
               <?= isset($_SESSION['session_data']['user_id']) ? 'Let’s save first' : 'Let’s Download'; ?>
             </button>
           </div>

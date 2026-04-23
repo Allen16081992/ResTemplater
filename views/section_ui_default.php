@@ -76,6 +76,7 @@
           </header>
 
           <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $uid = $_SESSION['session_data']['user_id'] : ''; ?>">
             <input type="hidden" name="create">
             <div class="field is-horizontal">
@@ -105,6 +106,7 @@
           </header>
 
           <form id="form-delRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="delete">
             <div class="field is-horizontal">
@@ -139,6 +141,7 @@
           </header>
 
           <form id="form-fetchRes" class="pw-panel-form" action="#" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="selectCV">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
@@ -192,6 +195,7 @@
           <!-- Toggle for include Account photo or not. -->
 
           <form id="form-info" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="update">
@@ -258,6 +262,7 @@
           </header>
 
           <form id="form-experience" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
@@ -383,6 +388,7 @@
           </header>
 
           <form id="form-education" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
@@ -395,13 +401,13 @@
                         <div class="field">
                           <label class="label">Course</label>
                           <div class="control">
-                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($edu['title']) ?>">
+                            <input class="input" type="text" name="program[]" value="<?= htmlspecialchars($edu['program']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">Institute</label>
                           <div class="control">
-                            <input class="input" type="text" name="institute[]" value="<?= htmlspecialchars($edu['institute']) ?>">
+                            <input class="input" type="text" name="school[]" value="<?= htmlspecialchars($edu['school']) ?>">
                           </div>
                         </div>
                       </div>
@@ -450,15 +456,15 @@
               <div class="field is-horizontal">
                 <div class="field-body">
                   <div class="field">
-                    <label class="label">Role</label>
+                    <label class="label">Program</label>
                     <div class="control">
-                      <input class="input" type="text" name="title[]" placeholder="Role / Position">
+                      <input class="input" type="text" name="program[]" placeholder="Program / Course">
                     </div>
                   </div>
                   <div class="field">
-                    <label class="label">Institute</label>
+                    <label class="label">School</label>
                     <div class="control">
-                      <input class="input" type="text" name="institute[]" placeholder="Company / Organization">
+                      <input class="input" type="text" name="school[]" placeholder="School / Organization">
                     </div>
                   </div>
                 </div>
@@ -509,6 +515,7 @@
           </header>
 
           <form id="form-projects" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             
@@ -600,6 +607,7 @@
           <!-- Toggle for include Account photo or not. -->
 
           <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="action" value="skill">
@@ -676,6 +684,7 @@
           </header>
 
           <form id="form-social" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="action" value="social">
@@ -727,6 +736,7 @@
           </header>
 
           <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" target="_blank" method="post">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <input type="hidden" name="action" value="template">

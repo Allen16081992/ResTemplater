@@ -1,10 +1,8 @@
 <?php // Load PHP Files
-    require_once '../database/v2_db.php';
-    require_once '../auxiliary/password_aux.php';
+    require_once __DIR__ . '/../mixedGrimoire.conf.php';
 
     final class userCodex {
         public function __construct(private PDO $pdo) {}
-        use Auxiliary;
 
         // ==========================================================
         // 1. LOGIN CODEX
@@ -25,7 +23,7 @@
         }
 
         public function createAccount(array $postData): int {
-            $hashSigil = $this->pwdHasher($postData['pwd']);
+            $hashSigil = mixedGrimoire::pwHasher($postData['pwd']);
             $stmt = $this->pdo->prepare('INSERT INTO accounts (email, password_hash, birth_date) VALUES (:email, :hashSigil, :birth_date)');
             $stmt->execute([
                 ':email'      => $postData['email'],
@@ -50,7 +48,7 @@
             return $stmt->rowCount();
         }
 
-        public function updatePasswordHash(int $uid, string $pwdHash): int {
+        public function updateHash(int $uid, string $pwdHash): int {
             $stmt = $this->pdo->prepare('UPDATE accounts SET password_hash = :hashSigil WHERE id = :id LIMIT 1');
             $stmt->execute([':hashSigil' => $pwdHash, ':id' => $uid]);
             return $stmt->rowCount();

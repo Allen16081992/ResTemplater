@@ -1,59 +1,48 @@
-<?php // Start Session
-    require_once './session_manager.conf.php';
-    SessionBook::invokeSession();
+<?php // PHP Files
+    require_once __DIR__ . '/autoloader.conf.php'; 
+    require_once __DIR__ . '/session_manager.conf.php';
+    require_once __DIR__ . '/validGrimoire.conf.php';
 
-    // Negate non-POST requests
+    // 1. Session Mechanics
+    SessionBook::invokeSession();
+    SessionBook::enforceToken();
+
+    // 2. Negate non-POST Requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         $_SESSION['error'] = 405;
         header('Location: ../error.php');
         exit;
     }
 
-    // CSRF-Authentication
-    SessionBook::enforceToken();
-    
-    // Whitelisted Keys and Routes
+    // 3. Routing Table
     $routes = [
-        'login'  => loginControl::class,  // DONE
-        'signup' => signupControl::class, // DONE
-        'account'=> accountControl::class,// DONE
-        'closure'=> accountControl::class,// DONE
-        'resume' => resumeControl::class, // DONE
-        // Resume parts
-        'experience'=> experienceControl::class,// DONE
-        'education' => educationControl::class, // DONE
-        'skill' => skillControl::class, // DONE
-        'social' => socialControl::class, // DONE
-        // Odd duck in the list
-        'wizard' => wizardControl::class  // DONE
-        //'template'=> templateSelect::class
+        'login'    => 'loginControl',
+        'signup'   => 'signupControl',
+        'account'  => 'userControl',
+        'resume'   => 'resumeControl',
+        'template' => 'templateControl',
+        'experience'=> 'experienceControl',
+        'education' => 'educationControl',
+        'projects'  => 'projectControl',
+        'skill'     => 'skillControl',
+        'social'    => 'socialControl',
+        'wizard'    => 'wizardControl'
     ];
 
-    // User submits a form
     $action = $_POST['action'] ?? '';
     if (!is_string($action)) $action = '';
     $action = trim($action);
-
-    // Verify if submitted action is permitted
+    
     if (!isset($routes[$action])) {
         $_SESSION['error'] = 403;
         header('Location: ../error.php');
         exit;
     }
-
-    // Load PHP files
-    require_once './database/v2_db.php';
-    require_once './controller/user_contr.php';
-    require_once './controller/resume_contr.php';
-    require_once './controller/wizard_contr.php';
-    require_once './controller/experience_contr.php';
-    require_once './controller/education_contr.php';
-    require_once './controller/skill_contr.php';
-    require_once './controller/social_contr.php';
-    require_once './controller/template_contr.php';
-
-    // Initialise Class
+    
+    // 4. Requires are now handled by our autoloader
     $targetClass = $routes[$action];
+
+    // 5. Invoke Class & Function
     $handler = new $targetClass($_POST);
     $handler->handle();
     exit;

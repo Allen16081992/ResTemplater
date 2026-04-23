@@ -1,5 +1,5 @@
-<?php // Database Configuration
-    require_once "././src/define.db.php";
+<?php // v2 Database Configuration
+    require_once __DIR__ . '/../../src/define.db.php';
 
     final class Database {
         public static function connect(): PDO {

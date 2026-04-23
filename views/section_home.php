@@ -5,12 +5,12 @@
       <div class="container">
         <div class="columns is-vcentered">
           <div class="column has-text-left">
-            <h1><?= htmlspecialchars($slogan = setPhrase('slogan')); ?></h1>
-            <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = setPhrase('tagline')); ?></p>
-            <div class="buttons mt-5">
-              <a href="client.php" id="cta" class="button is-medium btn-cta">Create My Resume</a>
-              <a href="#" class="button is-medium is-light">🔮 Browse Templates</a>
-            </div>
+            <h1><?= htmlspecialchars($slogan = mixedGrimoire::setPhrase('slogan')); ?></h1>
+            <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = mixedGrimoire::setPhrase('tagline')); ?></p>
+            <form class="buttons mt-5" action="client.php" method="post">
+                <button type="submit" id="cta" class="button is-medium btn-cta" name="demo" value="wizard">Create My Resume</button>
+                <a href="#" class="button is-medium is-light">🔮 Browse Templates</a>
+            </form>
           </div>
           <div class="column is-hidden-touch">
             <!-- Placeholder device/mockup -->

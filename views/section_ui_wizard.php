@@ -32,7 +32,8 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form <?= isset($_SESSION['session_data']['user_id']) ? 'action="./config/action_handler.conf.php"' : 'action="./config/pdf_templates/business.src.php" target="_blank"'; ?> method="post">
+      <form action="./config/action_handler.conf.php" <?= isset($_SESSION['session_data']['user_id']) ?: 'target="_blank"'; ?> method="post">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
           <p class="helptext">Just the essentials.</p>
@@ -101,7 +102,7 @@
 
           <div class="pw-form" id="expMount" aria-label="Experience entry form">
             <!-- JS injects the current experience block here, e.g.:
-                experience[0][job], experience[0][company], ...
+                experience[0][title], experience[0][employer], ...
             -->
           </div>
 
@@ -267,7 +268,8 @@
             <input type="hidden" name="create" value="create">
           <?php } ?>
           <div class="pw-final-only">
-            <button type="submit" name="action" value="business" class="pw-btn pw-btn-primary">
+            <input type="hidden" name="template" value="vintage">
+            <button type="submit" name="action" value="template" class="pw-btn pw-btn-primary">
               <?= isset($_SESSION['session_data']['user_id']) ? 'Let’s save first' : 'Let’s Download'; ?>
             </button>
           </div>

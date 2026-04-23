@@ -276,9 +276,9 @@
 
   function validateCurrentExpBlock() {
     if (!state.expCurrent) return false;
-    const job = state.expCurrent.querySelector('input[name$="[job]"]');
+    const title = state.expCurrent.querySelector('input[name$="[title]"]');
     const employer = state.expCurrent.querySelector('input[name$="[employer]"]');
-    if (!required(job?.value)) { pulseInvalid(job); return false; }
+    if (!required(title?.value)) { pulseInvalid(title); return false; }
     if (!required(employer?.value)) { pulseInvalid(employer); return false; }
     return true;
   }
@@ -471,7 +471,7 @@
       <div class="pw-row">
         <div>
           <label class="pw-label">Role *</label>
-          <input class="pw-input" type="text" name="experience[${i}][job]" placeholder="e.g. Junior IT Support (Intern)" autocomplete="organization-title">
+          <input class="pw-input" type="text" name="experience[${i}][title]" placeholder="e.g. Junior IT Support (Intern)" autocomplete="organization-title">
         </div>
         <div>
           <label class="pw-label">Employer *</label>
@@ -492,7 +492,7 @@
 
       <div>
         <label class="pw-label">What did you do?</label>
-        <textarea class="pw-textarea" name="experience[${i}][desc]" placeholder="Write 2–5 short lines."></textarea>
+        <textarea class="pw-textarea" name="experience[${i}][summary]" placeholder="Write 2–5 short lines."></textarea>
         <div class="pw-hint">Tip: press Enter after each responsibility.</div>
       </div>
     `;
@@ -511,7 +511,7 @@
           <input class="pw-input" type="text" name="education[${i}][program]" placeholder="e.g. BSc Information Technology">
         </div>
         <div>
-          <label class="pw-label">Institute *</label>
+          <label class="pw-label">School *</label>
           <input class="pw-input" type="text" name="education[${i}][school]" placeholder="e.g. Hogeschool Rotterdam">
         </div>
       </div>
@@ -529,7 +529,7 @@
 
       <div>
         <label class="pw-label">Optional note</label>
-        <textarea class="pw-textarea" name="education[${i}][desc]" placeholder="Optional. One or two lines."></textarea>
+        <textarea class="pw-textarea" name="education[${i}][summary]" placeholder="Optional. One or two lines."></textarea>
       </div>
     `;
     return wrap;

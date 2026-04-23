@@ -8,13 +8,17 @@
   require_once "./config/loadResumeData_conf.php"; // DONE
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
+  SessionBook::invokeToken();
   //SessionBook::verifySession();
+  if (isset($_POST['demo'])) {
+    $_SESSION['action'] = $_POST['demo'];
+  }
 
   // Test variables
     //   $_SESSION['error'] = [
     //     'title' => 'This field is required'
     //   ];
-    $_SESSION['action'] = 'builder';
+    //$_SESSION['action'] = 'wizard';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +45,6 @@
     <link rel="stylesheet" href="assets/css/paperwitch.css">
     <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="assets/css/ui_wizard.css">
-    <!-- <link rel="stylesheet" href="assets/css/export_page.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->

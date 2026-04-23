@@ -1,26 +1,23 @@
-<?php // Load PHP Files
-    require_once '../validator.conf.php';
-    require_once '../classes/education_class.php';
-
-    class educationControl {
+<?php
+    class experienceControl {
         public function __construct(private array $postData) {}
 
         public function handle(): void {
             // DB querry (only after validation)
             $pdo = Database::Connect();
-            $model = new educationCodex($pdo); 
-
+            $model = new experienceCodex($pdo); 
+            
             if (isset($this->postData['delete'])) {
                 // DB querry (only after validation)
-                $trash = $model->deleteEducation($this->postData['edu_id'], $this->postData['resume_id']);
+                $trash = $model->deleteExperience($this->postData['exp_id'], $this->postData['resume_id']);
                 if (!$trash) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Failed to delete education.';
+                    $_SESSION['error'] = 'Failed to delete experience.';
                     ViewBook::revert($this->postData['action'] ?? '');
                     return;
                 }
 
-                $_SESSION['success'] = 'Education entry removed.';
+                $_SESSION['success'] = 'Experience entry removed.';
                 ViewBook::revert('builder');  
                 return;
             }
@@ -45,11 +42,11 @@
             }
 
             // Validate company / employer
-            $institute = trim((string)($this->postData['institute'] ?? ''));
-            $msg = ValidGrimoire::validateName($institute, true);
+            $company = trim((string)($this->postData['company'] ?? ''));
+            $msg = ValidGrimoire::validateName($company, true);
             if ($msg !== null) {
                 // Hold error message + set previous UI state
-                $_SESSION['error'] = ['institute' => $msg];
+                $_SESSION['error'] = ['company' => $msg];
                 ViewBook::revert($this->postData['action'] ?? ''); 
                 return;
             }
@@ -72,23 +69,22 @@
             }
             $this->postData['end_date'] = $date['date'];
 
-            // Verify educationn id
-            if (empty($this->postData['edu_id'])) {
-                $course = $model->createEducation($this->postData);
+            // Verify experience id
+            if (empty($this->postData['exp_id'])) {
+                $work = $model->createExperience($this->postData);
             } else {
-                $course = $model->updateEducation($this->postData);
+                $work = $model->updateExperience($this->postData);
             }
 
-            if ($course <= 0) {
+            if ($work <= 0) {
                 // Hold error message + set previous UI state
-                $_SESSION['error'] = 'Failed to save education.';
+                $_SESSION['error'] = 'Failed to save work experience.';
                 ViewBook::revert($this->postData['action'] ?? ''); 
                 return;
             }
 
-            $_SESSION['success'] = 'Education saved.';
+            $_SESSION['success'] = 'Work experience saved.';
             ViewBook::revert($this->postData['action'] ?? '');
             return;
         }
-
     }

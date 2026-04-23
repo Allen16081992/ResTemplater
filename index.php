@@ -6,7 +6,7 @@
   // Essential PHP files
   require_once "./config/session_manager.conf.php"; 
   // Miscellaneous PHP Files
-  include_once "./config/auxiliary/phrases.aux.php";
+  include_once "./config/mixedGrimoire.conf.php";
   SessionBook::invokeSession();
   ViewBook::clearEditor();
 ?>

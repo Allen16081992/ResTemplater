@@ -1,15 +1,13 @@
 <?php // Load PHP Files
-    require_once 'database/v2_db.php';
+    require_once __DIR__ . '/autoloader.conf.php'; 
     $pdo = Database::Connect(); 
 
     if (isset($_SESSION['session_data']['user_id'])) {
-        // Load PHP files
-        require_once './classes/user_class.php';
-        require_once './classes/resume_class.php';
-        $uid = $_SESSION['session_data']['user_id'];
+        require_once __DIR__ . '/session_manager.conf.php';
 
         // Fetch Account data
         $accModel = new userCodex($pdo);
+        $uid = $_SESSION['session_data']['user_id'];
         $profile['account'] = $accModel->fetchAccount($uid);
         $profile['contact'] = $uidModel->fetchContact($uid);
 

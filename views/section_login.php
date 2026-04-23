@@ -13,10 +13,11 @@
                         <h1 class="auth-title">Welcome back</h1>
                         <p class="auth-sub">Sign in to continue crafting your resume.</p>
                     </div>
-                    <form action="config/action_handler.conf.php" method="post">
+                    <form action="./config/action_handler.conf.php" method="post">
                         <?= SessionBook::csrfField(); ?>
                         <div class="field">
                             <label class="label" for="email">Email</label>
+                            <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
                             <div class="control has-icons-left">
                                 <input id="email" name="email" type="email" class="input" value="<?= ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" autocomplete="username" required>
                                 <span class="icon is-small is-left">
@@ -27,6 +28,7 @@
                         <?= ViewBook::clearOldForm(); ?>
                         <div class="field">
                             <label class="label" for="password">Password</label>
+                            <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['pwd'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
                             <div class="control has-icons-left">
                                 <input id="password" name="pwd" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required>
                                 <span class="icon is-small is-left">

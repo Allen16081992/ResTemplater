@@ -1,5 +1,4 @@
-<?php require_once '../database/v2_db.php';
-
+<?php
     final class wizardCodex {
         public function __construct(private PDO $pdo) {}
 

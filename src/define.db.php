@@ -150,7 +150,7 @@
     //         ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    // CREATE TABLE IF NOT EXISTS `social` (
+    // CREATE TABLE IF NOT EXISTS `socials` (
     //     id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
     //     media_url      VARCHAR(500) NOT NULL,
     //     sort_order INT NOT NULL DEFAULT 0,
@@ -159,9 +159,9 @@
     //     resume_id  INT UNSIGNED NOT NULL,
     //     PRIMARY KEY (id),
 
-    //     UNIQUE KEY uq_social_resume_media (resume_id, media_url),
+    //     UNIQUE KEY uq_socials_resume_media (resume_id, media_url),
 
-    //     CONSTRAINT fk_social_resume
+    //     CONSTRAINT fk_socials_resume
     //         FOREIGN KEY (resume_id) REFERENCES resumes(id)
     //         ON DELETE CASCADE
     // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

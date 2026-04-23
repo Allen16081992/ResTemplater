@@ -1,5 +1,4 @@
 <?php // Code Convention: camelCase
-
     class validGrimoire {
         public static function emptyField(array $postData): array {
             $errors = [];

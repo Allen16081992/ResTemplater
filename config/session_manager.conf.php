@@ -163,14 +163,16 @@
         public static function revert(string $view) : void {
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
-            if ($view == 'profile' || 'wizard' || 'builder') {
-                header('Location: ../client.php'); exit();
+            if (in_array($view, ['profile', 'wizard', 'builder'])) {
+                header('Location: ../client.php'); 
+                exit();
             } else {
-                header('Location: ../index.php'); exit();
+                header('Location: ../index.php'); 
+                exit();
             }
         }
 
-        public static function seEditor() {
+        public static function setEditor() {
             $_SESSION['action'] = $_POST['action'] ?? '';
             unset($_POST['action']);  
         }

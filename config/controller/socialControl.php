@@ -1,7 +1,4 @@
-<?php // Load PHP Files
-    require_once '../validator.conf.php';
-    //require_once '../social_class.php';
-
+<?php 
     class socialControl {
         public function __construct(private array $postData) {}
 

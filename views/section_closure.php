@@ -16,8 +16,9 @@
                 <label for="password" class="label">Password</label>
                 <input type="password" id="password" name="pwd" class="input" placeholder="••••••••">
             </div>
-            <button type="submit" name="action" value="closure" class="button is-dark is-danger animate__animated animate__fadeIn animate__delay-3s">Erase me permanently</button>
+            <button type="submit" name="action" value="account" class="button is-dark is-danger animate__animated animate__fadeIn animate__delay-3s">Erase me permanently</button>
             <input type="hidden" name="id" value="<?= $_SESSION['session_data']['user_id'] ?? '' ?>">
+            <input type="hidden" name="closure">
         </form> 
     </article>
 </section>

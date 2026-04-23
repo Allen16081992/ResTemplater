@@ -5,12 +5,12 @@
             'tagline' => [
                 "Build an event-highlighting resume in minutes. Modern layouts, bold headers, and instant PDF export.",
                 "When corporates decline your application we shall say: Up Yours!",
-                "A Scoped Resume is more effective than a general one",
+                "A Scoped Resume is more effective than a general one.",
                 "Write. Enhance. Impress."
             ],
             'slogan' => [
                 "Most Vacancies are written for the Gutter.",
-                "Job Rejections Offend us. Papers Will Get Louder!",
+                "Job Rejections Offends us. Papers Will Get Louder!",
                 "When Explicit Moments Meet Credibility.",
                 "The Dark Arts of Standing Out.",
                 "Your Job Hunting Familiar.",

@@ -1,5 +1,4 @@
-<?php require_once '../validator.conf.php';
-
+<?php
     class wizardControl {
         public function __construct(private array $postData) {}
 

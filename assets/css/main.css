@@ -238,6 +238,17 @@ nav a.current { cursor: default; }
   left: 0;
   z-index: 1;
 }
+#server-field {
+  display:flex;
+  position:absolute;
+  pointer-events: none; 
+  color:red;
+  font-size: 0.75rem;
+  margin-left: 8rem;
+  /* margin-top: 0.9rem; */
+  z-index: 1;
+}
+
 #server-msg > div {
   display:flex;
   justify-content: center;

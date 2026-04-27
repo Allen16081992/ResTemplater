@@ -1,20 +1,27 @@
 <?php // Load PHP Files
     require_once __DIR__ . '/autoloader.conf.php'; 
     $pdo = Database::Connect(); 
-
+    
     if (isset($_SESSION['session_data']['user_id'])) {
-        require_once __DIR__ . '/session_manager.conf.php';
-
         // Fetch Account data
         $accModel = new userCodex($pdo);
         $uid = $_SESSION['session_data']['user_id'];
-        $profile['account'] = $accModel->fetchAccount($uid);
-        $profile['contact'] = $uidModel->fetchContact($uid);
+
+        $data['account'] = $accModel->fetchAccount($uid);
+        $data['contact'] = $accModel->fetchContact($uid);
 
         // Fetch Resumes list
         $resModel = new resumeCodex($pdo); 
         $data['papers'] = $resModel->fetchResumes($uid);
-    } 
+
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
+    } else {
+        // Optionally handle the logged-out state
+        header('Location: index.php');
+        exit;
+    }
 
     // Load resume dependancies
     if (isset($_POST['selectCV'])) {

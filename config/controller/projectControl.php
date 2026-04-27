@@ -33,21 +33,20 @@
 
             // Validate project name
             $title = trim((string)($this->postData['title'] ?? ''));
-            $msg = ValidGrimoire::validateName($title, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['title' => $msg];
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
+            if ($msg = ValidGrimoire::validateName($title, true)) {
+                $errors['title'] = $msg;
             }
 
             // Validate project role
             $role = trim((string)($this->postData['role'] ?? ''));
-            $msg = ValidGrimoire::validateName($role, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['role' => $msg];
-                ViewBook::revert($this->postData['action'] ?? ''); 
+            if ($msg = ValidGrimoire::validateName($role, true)) {
+                $errors['role'] = $msg;
+            }
+
+            // Final check: if errors exist, send them back together
+            if (!empty($errors)) {
+                $_SESSION['error'] = $errors;
+                ViewBook::revert($this->postData['action'] ?? 'profile');
                 return;
             }
 

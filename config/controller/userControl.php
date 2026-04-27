@@ -63,33 +63,31 @@
             if (isset($this->postData['account'])) {
                 // Validate email format
                 $email = trim((string)($this->postData['email'] ?? ''));
-                $msg = ValidGrimoire::validateEmail($email);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['email' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
+                if ($msg = ValidGrimoire::validateEmail($email)) {
+                    $errors['email'] = $msg;
                 }
 
                 // Validate password
                 $pwd = trim((string)($this->postData['pwd'] ?? ''));
-                if (!empty($pwd)) {
-                    $msg = ValidGrimoire::validatePwd($pwd);
-                    if ($msg !== null) {
-                        // Hold error message for previous UI state
-                        $_SESSION['error'] = ['pwd' => $msg];
-                        ViewBook::revert($this->postData['action'] ?? 'sign_up'); 
-                        return;
-                    }
+                if ($msg = ValidGrimoire::validatePwd($pwd)) {
+                    $errors['pwd'] = $msg;
                 }
-                $exist = $model->findByEmail($this->postData['email']);
 
+                // Final check: if errors exist, send them back together
+                if (!empty($errors)) {
+                    $_SESSION['error'] = $errors;
+                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    return;
+                }
+
+                $exist = $model->findByEmail($this->postData['email']);
                 if (!$exist) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Update failed. User not found.';
                     ViewBook::revert($postData['action'] ?? 'profile');
                     return; 
                 }
+                
                 $user = $_SESSION['session_data']['user_id'];
                 $update = $model->updateEmail($user, $email);
 
@@ -115,47 +113,31 @@
 
             // Personalia - Contacts
             if (!isset($this->postData['contact'])) {
-                // Validate firstname
-                $fullname = trim((string)($this->postData['fullname'] ?? ''));
-                $msg = ValidGrimoire::validateName($fullname, true);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['fullname' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
+                $errors = [];
+
+                // Collect errors
+                $fields = ['fullname', 'city', 'country'];
+                foreach ($fields as $field) {
+                    $value = trim((string)($this->postData[$field] ?? ''));
+                    if ($msg = ValidGrimoire::validateName($value, true)) {
+                        $errors[$field] = $msg;
+                    }
                 }
 
-                // Validate city
-                $city = trim((string)($this->postData['city'] ?? ''));
-                $msg = ValidGrimoire::validateName($city, true);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['city' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
-                }
-
-                // Validate nation
-                $country = trim((string)($this->postData['country'] ?? ''));
-                $msg = ValidGrimoire::validateName($country, true);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['country' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
-                    return;
-                }
-
-                // Validate phone number format
+                // Separate logic for phone
                 $phone = trim((string)($this->postData['phone'] ?? ''));
-                $msg = ValidGrimoire::validatePhone($phone);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['phone' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? 'profile'); 
+                if ($msg = ValidGrimoire::validatePhone($phone)) {
+                    $errors['phone'] = $msg;
+                }
+
+                // Final check: if errors exist, send them back together
+                if (!empty($errors)) {
+                    $_SESSION['error'] = $errors;
+                    ViewBook::revert($this->postData['action'] ?? 'profile');
                     return;
                 }
-                $exist = $model->fetchContact($this->postData['user_id']);
 
+                $exist = $model->fetchContact($this->postData['user_id']);
                 if (!$exist) {
                     $contact = $model->createContact($this->postData);
                 } else {

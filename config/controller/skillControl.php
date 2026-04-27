@@ -44,17 +44,18 @@
                     continue;
                 }
 
-                $msg = ValidGrimoire::validateName($name, true, 80);
-                if ($msg !== null) {
-                    $_SESSION['error'] = ['name' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? '');
-                    return;
+                if ($msg = ValidGrimoire::validateName($name, true, 80)) {
+                    $errors['name'] = $msg;
                 }
 
-                $msg = ValidGrimoire::validateName($category, true, 80);
-                if ($msg !== null) {
-                    $_SESSION['error'] = ['category' => $msg];
-                    ViewBook::revert($this->postData['action'] ?? '');
+                if ($msg = ValidGrimoire::validateName($category, true, 80)) {
+                    $errors['category'] = $msg;
+                }
+
+                // Final check: if errors exist, send them back together
+                if (!empty($errors)) {
+                    $_SESSION['error'] = $errors;
+                    ViewBook::revert($this->postData['action'] ?? 'profile');
                     return;
                 }
 

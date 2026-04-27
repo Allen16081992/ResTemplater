@@ -68,21 +68,20 @@
 
                 // Validate resume name
                 $title = trim((string)($this->postData['title'] ?? ''));
-                $msg = ValidGrimoire::validateName($title, true);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['title' => $msg];
-                    ViewBook::revert('builder');  
-                    return;
+                if ($msg = ValidGrimoire::validateName($title, true)) {
+                    $errors['title'] = $msg;
                 }
 
                 // Validate summary
                 $summary = trim((string)($this->postData['summary'] ?? ''));
-                $msg = ValidGrimoire::validateName($summary, false);
-                if ($msg !== null) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['summary' => $msg];
-                    ViewBook::revert('builder');  
+                if ($msg = ValidGrimoire::validateName($summary, false)) {
+                    $errors['summary'] = $msg;
+                }
+
+                // Final check: if errors exist, send them back together
+                if (!empty($errors)) {
+                    $_SESSION['error'] = $errors;
+                    ViewBook::revert('builder');
                     return;
                 }
                 $uid = $this->postData['user_id'];

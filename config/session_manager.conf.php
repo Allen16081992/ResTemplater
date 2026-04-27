@@ -17,7 +17,7 @@
                     'path' => '/',
                     'domain' => '',
                     'secure' => $flag, // Dynamically enforce
-                    'httponly' => true, 
+                    //'httponly' => true, 
                     'samesite' => 'Lax', 
                 ]);
                 ini_set('session.use_strict_mode', '1');
@@ -112,7 +112,7 @@
             $token = $_POST['csrf_token'] ?? '';
             if (!is_string($token) || !hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
                 $_SESSION['error'] = '403: Forbidden. Request Denied.';
-                ViewBook::revert('');
+                ViewBook::revert('error');
             }
         }
 
@@ -142,6 +142,13 @@
         //────────────────────────────────────//
         //          VISIBILITY LOGIC          //
         //────────────────────────────────────//
+        private static function sanitize(mixed $data): mixed {
+            if (is_array($data)) {
+                return array_map([self::class, 'sanitize'], $data);
+            }
+            return is_string($data) ? htmlspecialchars($data, ENT_QUOTES, 'UTF-8') : $data;
+        }
+
         public static function setVisibility(string $key, string $default = 'home'): string {
             // Catch UI state and abolish the superglobal
             $action = $_SESSION['action'] ?? $default;
@@ -149,14 +156,15 @@
             return ($action === $key) ? 'current' : 'hidden';
         }
 
-        public static function clearEditor(): void {
-            if(isset($_SESSION['action']) && $_SESSION['action'] == 'wizard' || isset($_SESSION['action']) && $_SESSION['action'] == 'builder' ) {
-                $_SESSION['action'] = 'home';
-            }
-        }
+        // public static function resetView(): void {
+        //     if(isset($_SESSION['action']) && $_SESSION['action'] !== 'login' && $_SESSION['action'] !== 'sign_up' ) {
+        //         $_SESSION['action'] = 'home';
+        //     }
+        // }
    
         public static function render(string $view, array $data = []): void {
-            extract($data); // all sorts of data
+            $safeData = self::sanitize($data);
+            extract($safeData);
             require_once './views/'.$view; // file path
         }
 
@@ -165,11 +173,12 @@
             $_SESSION['action'] = $view;
             if (in_array($view, ['profile', 'wizard', 'builder'])) {
                 header('Location: ../client.php'); 
-                exit();
+            } elseif (in_array($view, ['error'])) {
+                header('Location: ../error.php'); 
             } else {
                 header('Location: ../index.php'); 
-                exit();
             }
+            exit;
         }
 
         public static function setEditor() {
@@ -180,6 +189,13 @@
         //────────────────────────────────────//
         //          MESSAGING LOGIC           //
         //────────────────────────────────────//
+        public static function getError(string $field): string {
+            $error = $_SESSION['error'][$field] ?? '';
+            // Clear it after reading so it doesn't persist forever
+            unset($_SESSION['error'][$field]); 
+            return htmlspecialchars($error, ENT_QUOTES, 'UTF-8');
+        }
+
         public static function flashForm(array $formData): void {
             $_SESSION['form_old'] = $formData;
         }
@@ -203,7 +219,7 @@
             if (is_string($error)) {
                 echo '<div class="error animate__animated animate__bounceInDown">'.htmlspecialchars($error, ENT_QUOTES, 'UTF-8').'</div>';
                 unset($_SESSION['error']);
-            } elseif ($success) {
+            } elseif (is_string($success)) {
                 echo '<div class="success animate__animated animate__bounceInDown">'.htmlspecialchars($success, ENT_QUOTES, 'UTF-8').'</div>';
                 unset($_SESSION['success']);
             }

@@ -1,5 +1,6 @@
 <?php 
-  session_start(); 
+  session_start();
+  $_SESSION['action'] = 'home'; 
   $code = $_SESSION['error'] ?? 500;
   unset($_SESSION['error']);
 
@@ -8,7 +9,7 @@
       $msg = 'Method Not Allowed.';
       break;
     case 403:
-      $msg = 'Access denied.';
+      $msg = 'Forbidden. Request Denied.';
       break;
     default:
       $msg = 'It looks like the page you were looking for got affected by free will.<br> Quick! Take a broomstick and go before they see you!';

@@ -6,8 +6,7 @@
             </label>
             <input type="file" id="upload" name="upload"> 
             <div>
-                <h1>Joanna Ross</h1>
-                <p>Your job-hunting familiar</p>
+                <h1><?= $contact['fullname'] ?? 'Your name' ?></h1>
                 <label class="include-toggle">
                     <input id="av" type="checkbox">
                     <span>Include avatar on resume</span>
@@ -16,33 +15,38 @@
         </header>
 
         <form id="personal" class="profile-section" action="./config/action_handler.conf.php" method="post">
+            <?= SessionBook::csrfField(); ?>
             <h2>Personal Details</h2>
             <div class="field">
                 <div class="control">
                     <label for="fullname" class="label">Full Name</label>
-                    <input type="text" id="fullname" name="fullname" class="input" placeholder="..." value="<?= htmlspecialchars($profile['contact']['fullname'] ?? '') ?>" disabled>
+                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('fullname') ?></div>
+                    <input type="text" id="fullname" name="fullname" class="input" placeholder="..." value="<?= $contact['fullname'] ?? '' ?>">
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
                     <label for="phone" class="label">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" class="input" placeholder="+31 6 1234 5678" value="<?= htmlspecialchars($profile['contact']['phone'] ?? '') ?>" disabled>
+                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('phone') ?></div>
+                    <input type="tel" id="phone" name="phone" class="input" placeholder="+31 6 1234 5678" value="<?= $contact['phone'] ?? '' ?>" disabled>
                 </div>
                 <div class="control">
                     <label for="dateOfBirth" class="label">Date of Birth</label>
-                    <input type="date" id="dateOfBirth" class="input" value="<?= htmlspecialchars($profile['account']['birth_date'] ?? '') ?>" disabled>
+                    <input type="date" id="dateOfBirth" class="input" value="<?= $account['birth_date'] ?? '' ?>" disabled>
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
                     <label for="city" class="label">City</label>
-                    <input type="text" id="city" name="city" class="input" placeholder="Rotterdam" value="<?= htmlspecialchars($profile['contact']['city'] ?? '') ?>" disabled>
+                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('city') ?></div>
+                    <input type="text" id="city" name="city" class="input" placeholder="Rotterdam" value="<?= $contact['city'] ?? '' ?>" disabled>
                 </div>
                 <div class="control">
                     <label for="country" class="label">Country</label>
-                    <input type="text" id="country" name="country" class="input" placeholder="Netherlands" value="<?= htmlspecialchars($profile['contact']['country'] ?? '') ?>" disabled>
+                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('country') ?></div>
+                    <input type="text" id="country" name="country" class="input" placeholder="Netherlands" value="<?= $contact['country'] ?? '' ?>" disabled>
                 </div>
             </div>
             <div class="buttons mt-4">
@@ -52,10 +56,12 @@
         </form>
 
         <form id="account" class="profile-section" action="./config/action_handler.conf.php" method="post">
+            <?= SessionBook::csrfField(); ?>
             <h2>Account Details</h2>
             <div class="field">
                 <label for="email" class="label">Email</label>
-                <input type="email" id="email" name="email" class="input" placeholder="you@domain.com" value="<?= htmlspecialchars($profile['account']['email'] ?? '') ?>" disabled>
+                <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
+                <input type="email" id="email" name="email" class="input" placeholder="you@domain.com" value="<?= $account['email'] ?? '' ?>" disabled>
             </div>
 
             <div class="field">

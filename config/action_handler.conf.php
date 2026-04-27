@@ -19,6 +19,7 @@
         'login'    => 'loginControl',
         'signup'   => 'signupControl',
         'account'  => 'userControl',
+        'contact'  => 'userControl',
         'resume'   => 'resumeControl',
         'template' => 'templateControl',
         'experience'=> 'experienceControl',

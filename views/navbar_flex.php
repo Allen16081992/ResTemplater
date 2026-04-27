@@ -13,7 +13,7 @@
             $links = [
                 ['label' => 'Profile', 'href' => '#', 'attr' => 'data-section="profile"'],
                 ['label' => 'Resume',  'href' => '#', 'attr' => 'data-section="home"'],
-                ['label' => 'Logout',  'href' => '../config/logout_user.conf.php', 'attr' => '']
+                ['label' => 'Logout',  'href' => 'config/logout_user.conf.php', 'attr' => '']
             ];
         } elseif (!$isLoggedIn && $isClientPage) {
             // This handles the "Back" button requirement
@@ -24,7 +24,7 @@
             // Default/Homepage navigation
             $links = [
                 ['label' => 'Privacy', 'href' => '#', 'attr' => 'data-section="policy"'],
-                ['label' => 'Log in',  'href' => '#', 'attr' => 'id="signIn" data-section="login"'],
+                ['label' => 'Login',  'href' => '#', 'attr' => 'id="signIn" data-section="login"'],
                 ['label' => 'Sign Up', 'href' => '#', 'attr' => 'id="signUp" data-section="sign_up"']
             ];
         }

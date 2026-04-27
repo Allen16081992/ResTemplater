@@ -4,12 +4,14 @@
   header('Expires: 0');         // expire immediately
 
   // Essential PHP files
-  require_once "./config/session_manager.conf.php"; 
-  require_once "./config/loadResumeData_conf.php"; // DONE
+  require_once __DIR__ . '/config/session_manager.conf.php'; 
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
   SessionBook::invokeToken();
   //SessionBook::verifySession();
+
+  require_once __DIR__ . '/config/loadResumeData_conf.php';
+
   if (isset($_POST['demo'])) {
     $_SESSION['action'] = $_POST['demo'];
   }
@@ -58,10 +60,10 @@
     <?php ViewBook::flashMessage(); ?>
     
     <main>
-        <?php ViewBook::render('section_profile.php'); ?>
-        <?php ViewBook::render('section_builder_select.php'); ?>
-        <?php ViewBook::render('section_ui_default.php'); ?>
-        <?php ViewBook::render('section_ui_wizard.php'); ?>     
+        <?php ViewBook::render('section_profile.php', $data); ?>
+        <?php ViewBook::render('section_builder_select.php', $data); ?>
+        <?php ViewBook::render('section_ui_default.php', $data); ?>
+        <?php ViewBook::render('section_ui_wizard.php', $data); ?>     
         <?php ViewBook::render('section_closure.php'); ?>
     </main>
 

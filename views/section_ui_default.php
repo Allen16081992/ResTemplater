@@ -22,18 +22,18 @@
       <div class="select is-fullwidth">
         <select id="editorSectionSelect">
           <option value="newRes">+ Create a Resume</option>
-          <?php //if (isset($data['papers'])) { ?>
+          <?php if (isset($data['papers']) && !empty($data['papers'])) { ?>
             <option value="delRes">- Delete a Resume</option>
             <option value="fetchRes"># My List</option>
-            <?php //if (isset($data['resdata']['title'])) { ?>
+            <?php if (isset($data['resdata']['title'])) { ?>
               <option value="info" selected>Resume Info</option>
               <option value="experience">Experience</option>
               <option value="education">Education</option>
               <option value="projects">Projects</option>
               <option value="skills">Skills</option>
               <option value="social">Social Media</option>
-            <?php //} ?>
-          <?php //} ?>
+            <?php } ?>
+          <?php } ?>
           <option value="template">Templates</option>
         </select>
       </div>
@@ -44,12 +44,12 @@
       <aside class="pw-editor-sidebar" aria-label="Resume sections">
         <div class="pw-nav-title">Actions</div>
         <button class="pw-editor-tab" data-panel="newRes"><span>➕ New</span></button>
-        <?php //if (isset($data['papers'])) { ?>
+        <?php if (isset($data['papers']) && !empty($data['papers'])) { ?>
           <button class="pw-editor-tab" data-panel="delRes"><span>❌ Delete</span></button>
           <button class="pw-editor-tab" data-panel="fetchRes"><span>💼 My List</span></button>
-        <?php //} ?>
+        <?php } ?>
         <hr>
-        <?php //if (isset($data['resdata']['title'])) { ?>
+        <?php if (isset($data['resdata']['title'])) { ?>
           <div class="pw-nav-title">Resume</div>
           <button class="pw-editor-tab is-active" data-panel="info"><span class="icon">📃</span><span>Resume Info</span></button>
           <button class="pw-editor-tab" data-panel="experience"><span class="icon">🏹</span><span>Experience</span></button>
@@ -58,10 +58,10 @@
           <button class="pw-editor-tab" data-panel="skills"><span class="icon">⚗️</span><span>Hard & Soft Skills</span></button>
           <button class="pw-editor-tab" data-panel="social"><span class="icon">📷</span><span>Social Media</span></button>
           <hr>
-        <?php //} else { ?>
-          <!-- <span>Make a new resume to see more options!</span> -->
-        <?php //} ?>
-        <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
+          <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
+        <?php } else { ?>
+          <span>Make a new resume to see more options!</span>
+        <?php } ?>
       </aside>
 
       <!-- MAIN PANELS -->
@@ -185,7 +185,7 @@
 
         <!-- RESUME INFO PANEL -->
         <section id="panel-info" class="pw-editor-panel is-active">
-          <?php //if (isset($data['papers'])) { ?>
+          <?php if (isset($data['papers']) && !empty($data['papers'])) { ?>
           <header class="pw-panel-header">
             <div>
               <h2>Resume Info</h2>
@@ -217,8 +217,8 @@
               <button type="submit" name="action" value="resume" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>
-          <?php //} else { ?>
-            <!-- <header class="pw-panel-header">
+          <?php } else { ?>
+            <header class="pw-panel-header">
               <div>
                 <h2>Create a resume</h2>
                 <p>First, let's give it a name.</p>
@@ -242,8 +242,8 @@
                 </div>
               </div>
               <button type="submit" class="button is-link" name="action" value="resume">Create</button>
-            </form> -->
-          <?php //} ?>
+            </form>
+          <?php } ?>
         </section>
 
         <!-- EXPERIENCE PANEL -->

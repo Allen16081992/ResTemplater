@@ -8,7 +8,6 @@
   // Miscellaneous PHP Files
   include_once "./config/mixedGrimoire.conf.php";
   SessionBook::invokeSession();
-  ViewBook::clearEditor();
 ?>
 <!DOCTYPE html>
 <html lang="en">

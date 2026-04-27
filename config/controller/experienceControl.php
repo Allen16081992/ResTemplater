@@ -33,41 +33,36 @@
             
             // Validate job title
             $title = trim((string)($this->postData['title'] ?? ''));
-            $msg = ValidGrimoire::validateName($title, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['title' => $msg];
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
+            if ($msg = ValidGrimoire::validateName($title, true)) {
+                $errors['title'] = $msg;
             }
 
-            // Validate company / employer
-            $company = trim((string)($this->postData['company'] ?? ''));
-            $msg = ValidGrimoire::validateName($company, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['company' => $msg];
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
+            // Validate employer
+            $employer = trim((string)($this->postData['employer'] ?? ''));
+            if ($msg = ValidGrimoire::validateName($employer, true)) {
+                $errors['employer'] = $msg;
             }
 
-            $date = validGrimoire::validateAndFormatDate($this->postData['start_date']);
-            if ($date['error']) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = $date['error']; // show validation message
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
-            } 
-            $this->postData['start_date'] = $date['date'];
+            $startDate = ValidGrimoire::validateAndFormatDate($this->postData['start_date']);
+            if ($startDate['error']) {
+                $errors['start_date'] = $startDate['error'];
+            } else {
+                $this->postData['start_date'] = $startDate['date'];
+            }
 
-            $date = validGrimoire::validateAndFormatDate($this->postData['end_date']);
-            if ($date['error']) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = $date['error']; // show validation message
-                ViewBook::revert($this->postData['action'] ?? ''); 
+            $endDate = ValidGrimoire::validateAndFormatDate($this->postData['end_date']);
+            if ($endDate['error']) {
+                $errors['end_date'] = $endDate['error'];
+            } else {
+                $this->postData['end_date'] = $endDate['date'];
+            }
+
+            // Final check: if errors exist, send them back together
+            if (!empty($errors)) {
+                $_SESSION['error'] = $errors;
+                ViewBook::revert($this->postData['action'] ?? 'profile');
                 return;
             }
-            $this->postData['end_date'] = $date['date'];
 
             // Verify experience id
             if (empty($this->postData['exp_id'])) {

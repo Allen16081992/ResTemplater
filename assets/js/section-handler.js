@@ -2,6 +2,7 @@
 
 (() => {
   // Defensive: if none of the features exist, do nothing
+  const logoLink = document.getElementById('logo');
   const sections = document.querySelectorAll("main > section, main");
   const navLinks = document.querySelectorAll(
     "nav a[data-section], p a[data-section], div a[data-section], button[data-section]"
@@ -31,6 +32,21 @@
         section.classList.replace("current", "hidden");
       }
     });
+  }
+
+  if (logoLink) {
+      // Logo Homepage
+      logoLink.addEventListener('click', function(event) {
+          event.preventDefault();
+
+          // Reset active link and show the home section
+          if (activeLink) {
+              activeLink.classList.remove('current');
+              activeLink = null; // Ensure no link is marked as active
+          }
+          
+          paintSection('home'); // Assume 'home' is the default section to show
+      });
   }
 
   function updateActiveLink(sectionId) {

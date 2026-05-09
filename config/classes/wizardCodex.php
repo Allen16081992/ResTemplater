@@ -3,7 +3,7 @@
         public function __construct(private PDO $pdo) {}
 
         // Create Resume
-        public function setFullResume(array $postData): int {
+        public function setFullResume(array $postData): void {
             try {
                 $this->pdo->beginTransaction();
 
@@ -14,8 +14,8 @@
                 ");
 
                 $stmtResume->execute([
-                    ':title'       => $postData['title'],
-                    ':headline'    => $postData['headline'] ?? null,
+                    ':title'       => $postData['title'] ?? $postData['fullname'],
+                    ':headline'    => $postData['headline'] ?? rand(0,100),
                     ':user_id'     => $postData['user_id']
                 ]);
 
@@ -24,7 +24,7 @@
                 // 2️⃣ Insert Experience
                 if (!empty($postData['experience'])) {
                     $stmtExp = $this->pdo->prepare("
-                        INSERT INTO work_experience
+                        INSERT INTO experience
                         (title, employer, start_date, end_date, summary, resume_id)
                         VALUES (:title, :employer, :start_date, :end_date, :summary, :resume_id)
                     ");
@@ -45,14 +45,14 @@
                 if (!empty($postData['education'])) {
                     $stmtEdu = $this->pdo->prepare("
                         INSERT INTO education
-                        (title, institute, start_date, end_date, summary, resume_id)
-                        VALUES (:title, :institute, :start_date, :end_date, :summary, :resume_id)
+                        (program, school, start_date, end_date, summary, resume_id)
+                        VALUES (:program, :school, :start_date, :end_date, :summary, :resume_id)
                     ");
 
                     foreach ($postData['education'] as $edu) {
                         $stmtEdu->execute([
-                            ':title'     => $edu['title'],
-                            ':institute'     => $edu['institute'],
+                            ':program'     => $edu['program'],
+                            ':school'     => $edu['school'],
                             ':start_date' => $edu['start_date'],
                             ':end_date'   => $edu['end_date'] ?? null,
                             ':summary'   => $edu['summary'] ?? null,
@@ -65,7 +65,7 @@
                 if (!empty($postData['skills'])) {
                     $stmtSki = $this->pdo->prepare("
                         INSERT INTO skills (name, category, sort_order, resume_id)
-                        VALUES (:name, :category, :sort_order, NOW(), :resume_id)
+                        VALUES (:name, :category, :sort_order, :resume_id)
                     ");
 
                     $sort = 1;
@@ -81,11 +81,14 @@
                 }
 
                 // 3️⃣ Insert Contacts
-                if (!empty($postData['contacts'])) {
+                $stmtCon = $this->pdo->prepare('SELECT 1 FROM contacts WHERE user_id = :user_id LIMIT 1');
+                $stmtCon->execute([':user_id' => $postData['user_id']]);
+
+                if ($stmtCon->fetch() === false) {
                     $stmtEdu = $this->pdo->prepare("
                         INSERT INTO contacts
-                        (fullname, phone, city, country, resume_id)
-                        VALUES (:title, :institute, :start_date, :end_date, :resume_id)
+                        (fullname, phone, city, country, user_id)
+                        VALUES (:fullname, :phone, :city, :country, :user_id)
                     ");
 
                     $stmtEdu->execute([
@@ -93,13 +96,13 @@
                         ':phone'     => $postData['phone'],
                         ':city'      => $postData['city'],
                         ':country'   => $postData['country'],
-                        ':resume_id' => $resumeId
+                        ':user_id'   => $postData['user_id']
                     ]);
                 }
 
                 // 4️⃣ If everything worked
                 $this->pdo->commit();
-                return $resumeId;
+                $_SESSION['success'] = "Your paper is saved.";
 
             } catch (\Throwable $e) {
                 if ($this->pdo->inTransaction()) {

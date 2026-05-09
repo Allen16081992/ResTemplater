@@ -39,7 +39,7 @@
                                 </span>
                             </div>
                         </div>
-                        <?= ViewBook::clearOldForm(); ?>
+
                         <div class="toggle-eye">
                             <label class="label" for="pwdField">Password</label>                     
                             <input type="password" id="pwdField" name="pwd" class="input" placeholder="••••••••" required>

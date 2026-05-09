@@ -155,12 +155,6 @@
             // unset($_SESSION['action']);
             return ($action === $key) ? 'current' : 'hidden';
         }
-
-        // public static function resetView(): void {
-        //     if(isset($_SESSION['action']) && $_SESSION['action'] !== 'login' && $_SESSION['action'] !== 'sign_up' ) {
-        //         $_SESSION['action'] = 'home';
-        //     }
-        // }
    
         public static function render(string $view, array $data = []): void {
             $safeData = self::sanitize($data);
@@ -203,7 +197,8 @@
         public static function setOldForm(string $key, string $default = ''): string {
             SessionBook::invokeSession();
             $val = $_SESSION['form_old'][$key] ?? $default;
-            return htmlspecialchars((string)$val, ENT_QUOTES, 'UTF-8');
+            self::sanitize($val);
+            return (string)$val;
         }
 
         public static function clearOldForm(): void {
@@ -224,5 +219,63 @@
                 unset($_SESSION['success']);
             }
             echo '</div>';
+        }
+
+        public static function glyphByID(int $id): string {
+            $glyphs = ['✨', '📜', '🪄', '🧠', '🧪', '✨', '⚔️', '🛡️', '📖', '🏺', '🔮', '🦇', '🕯️'];
+            
+            // Use the ID to pick an index from the array
+            $index = $id % count($glyphs); 
+            return $glyphs[$index];
+        }
+
+        public static function glyphByName(string $title): string {
+            $map = [
+                'frontend' => '🪄',
+                'research' => '🧠',
+                'intern'   => '🧾',
+                'science'  => '🧪',
+                'security' => '⚔️',
+                'design'   => '🎨',
+                'money'    => '💰',
+                'data'     => '💾'
+            ];
+
+            foreach ($map as $keyword => $emoji) {
+                if (stripos($title, $keyword) !== false) {
+                    return $emoji;
+                }
+            }
+
+            return '📜'; // Default "generic" scroll
+        }
+
+        public static function getPaperIcon(int $id, string $title): string {
+            // 1. Try to find a meaningful match
+            $glyph = self::glyphByName($title);
+            
+            // 2. If it returned the default scroll, use the ID math instead
+            if ($glyph === '📜') {
+                return self::glyphByID($id);
+            }
+            
+            return $glyph;
+        }
+
+        public static function timeAgo(string $date) {
+            // Set last updated info
+            $updated = new DateTime($date);
+            $now = new DateTime();
+            $diff = $now->diff($updated);
+
+            if ($diff->d > 0) {
+                return $diff->d . ' day' . ($diff->d > 1 ? 's' : '') . ' ago';
+            } elseif ($diff->h > 0) {
+                return $diff->h . ' hour' . ($diff->h > 1 ? 's' : '') . ' ago';
+            } elseif ($diff->i > 0) {
+                return $diff->i . ' minute' . ($diff->i > 1 ? 's' : '') . ' ago';
+            } else {
+                return 'Just now';
+            }
         }
     }

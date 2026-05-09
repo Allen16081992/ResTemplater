@@ -1,3 +1,13 @@
+<?php
+  // Variable "Shortcuts"
+  $master = $data['active_paper']['master'] ?? null;
+  $sections = $data['active_paper']['sections'] ?? [];
+  $experience = $sections['experience'] ?? [];
+  $education = $sections['education'] ?? [];
+  $projects = $sections['projects'] ?? [];
+  $skills = $sections['skills'] ?? [];
+  $socialurl = $sections['socials'] ?? [];
+?>
 <section id="builder" class="<?= ViewBook::setVisibility('builder'); ?>">
   <div class="pw-editor-shell">
     <header class="pw-editor-header">
@@ -6,13 +16,13 @@
         <p class="pw-editor-sub">Brew, tweak and trim your resume sections before sending them into the wild.</p>
       </div>
       <div class="pw-editor-status">
-        <!-- <span class="pw-editor-status-pill">
-          <span>🧪</span> Draft saved locally
-        </span> -->
+        <span class="pw-editor-status-pill">
+          <span>🧪</span> Always hit save!
+        </span>
         <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
           <a class="pw-btn" data-section="home">Switch Editor</a>
-        <?php } if (!empty($data['resdata'])) { ?>
-          <small>Selected: <strong><?= htmlspecialchars($data['resdata']['title']) ?></strong></small>
+        <?php } if (!empty($data['active_paper']['master'])) { ?>
+          <small>Selected: <strong><?= htmlspecialchars($data['active_paper']['master']['title']) ?></strong></small>
         <?php } ?>
       </div>
     </header>
@@ -25,16 +35,20 @@
           <?php if (isset($data['papers']) && !empty($data['papers'])) { ?>
             <option value="delRes">- Delete a Resume</option>
             <option value="fetchRes"># My List</option>
-            <?php if (isset($data['resdata']['title'])) { ?>
+          <?php } ?>
+          <hr>
+          <?php if (!empty($data['active_paper']['master'])) { ?>
               <option value="info" selected>Resume Info</option>
               <option value="experience">Experience</option>
               <option value="education">Education</option>
               <option value="projects">Projects</option>
               <option value="skills">Skills</option>
               <option value="social">Social Media</option>
-            <?php } ?>
+              <hr>
+              <option value="template">Templates</option>
+          <?php } else { ?>
+            <span>Ready to make one?</span>
           <?php } ?>
-          <option value="template">Templates</option>
         </select>
       </div>
     </div>
@@ -49,7 +63,7 @@
           <button class="pw-editor-tab" data-panel="fetchRes"><span>💼 My List</span></button>
         <?php } ?>
         <hr>
-        <?php if (isset($data['resdata']['title'])) { ?>
+        <?php if (!empty($data['active_paper']['master'])) { ?>
           <div class="pw-nav-title">Resume</div>
           <button class="pw-editor-tab is-active" data-panel="info"><span class="icon">📃</span><span>Resume Info</span></button>
           <button class="pw-editor-tab" data-panel="experience"><span class="icon">🏹</span><span>Experience</span></button>
@@ -60,7 +74,7 @@
           <hr>
           <button class="pw-editor-tab" data-panel="template"><span class="icon">🗂️</span><span>Templates</span></button>
         <?php } else { ?>
-          <span>Make a new resume to see more options!</span>
+          <span>Select or make a new resume to see more options!</span>
         <?php } ?>
       </aside>
 
@@ -77,7 +91,7 @@
 
           <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $uid = $_SESSION['session_data']['user_id'] : ''; ?>">
+            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $_SESSION['session_data']['user_id'] : ''; ?>">
             <input type="hidden" name="create">
             <div class="field is-horizontal">
               <div class="field-body">
@@ -92,7 +106,7 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="button is-link" name="action" value="resume">Create</button>
+            <button type="submit" class="button is-contrast" name="action" value="resume">Create</button>
           </form>
         </section>
 
@@ -115,10 +129,10 @@
                   <label for="pwDeleteResumeSelect" class="label">Resume</label>
                   <div class="select is-fullwidth">
                     <select id="pwDeleteResumeSelect" name="resume_id">
-                      <?php if (!empty($list['papers'])) { ?>
-                        <option disabled>: Select</option>
-                        <?php foreach ($list['papers'] as $paper) { ?>
-                          <option value="<?= htmlspecialchars($paper['id']) ?>"><?= htmlspecialchars($paper['title']) ?></option>
+                      <?php if (!empty($data['papers'])) { ?>
+                        <option disabled selected>Select:</option>
+                        <?php foreach ($data['papers'] as $resume) { ?>
+                          <option value="<?= htmlspecialchars($resume['id']) ?>"><?= htmlspecialchars($resume['title']) ?></option>
                         <?php } ?>
                       <?php } ?>
                     </select>
@@ -126,7 +140,6 @@
                 </div>
               </div>
             </div>
-
             <button type="submit" class="button is-danger" style="margin-top:7px;" name="action" value="resume">Delete</button>
           </form>
         </section>
@@ -140,31 +153,21 @@
             </div>
           </header>
 
-          <form id="form-fetchRes" class="pw-panel-form" action="#" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
-            <input type="hidden" name="selectCV">
+          <div class="pw-panel-form">
+            <!-- <input type="hidden" name="csrf_token" value="<?php //$_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="selectCV"> -->
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
-              <?php if (!empty($resumes)): foreach ($resumes as $resume):
-                  // Set last updated info
-                  $updated = new DateTime($resume['updated_at']);
-                  $now = new DateTime();
-                  $diff = $now->diff($updated);
+              <?php if (!empty($data['papers'])): foreach ($data['papers'] as $resume): ?>
+                <a href="client.php?resume_id=<?= $resume['id'] ?>" class="edit-link">
+                  <?= ViewBook::getPaperIcon($resume['id'], $resume['title']) ?> 
+                  <strong><?= htmlspecialchars($resume['title']) ?></strong>
+                  <small>Last edited: <?= ViewBook::timeAgo($resume['updated_at']) ?></small>
+                </a>
 
-                  if ($diff->d > 0) {
-                    $timeAgo = $diff->d . ' day' . ($diff->d > 1 ? 's' : '') . ' ago';
-                  } elseif ($diff->h > 0) {
-                    $timeAgo = $diff->h . ' hour' . ($diff->h > 1 ? 's' : '') . ' ago';
-                  } elseif ($diff->i > 0) {
-                    $timeAgo = $diff->i . ' minute' . ($diff->i > 1 ? 's' : '') . ' ago';
-                  } else {
-                    $timeAgo = 'Just now';
-                  }
-                ?>
-                <label>
-                  <input type="radio" name="resume_id" value="<?= htmlspecialchars($resume['resume_id']) ?>" onchange="this.form.submit()">
-                  <span>🧾 <strong><?= htmlspecialchars($resume['title']) ?></strong><br><small>Last edited: <?= $timeAgo ?></small></span>
-                </label>
+                <!-- <label>
+                  <input type="radio" name="resume_id" value="<?php //htmlspecialchars($resume['id']) ?>" onchange="this.form.submit()">
+                  <span><?php //ViewBook::setEmoji($resume['id'], $resume['title']) ?><strong><?php //htmlspecialchars($resume['title']) ?></strong><br><small>Last edited: <?php //$timeAgo ?></small></span>
+                </label> -->
               <?php endforeach; ?>
                 <!-- <label>
                   <input type="radio">
@@ -177,10 +180,14 @@
                 <label>
                   <input type="radio">
                   <span>🧠 <strong>Research (PhD)</strong><br><small>Last edited: 3 months ago</small></span>
+                </label>
+                <label>
+                  <input type="radio">
+                  <span>💋 <strong>OnlyFans</strong><br><small>Last edited: 3 months ago</small></span>
                 </label> -->
               <?php endif; ?>
             </div>
-          </form>
+          </div>
         </section>
 
         <!-- RESUME INFO PANEL -->
@@ -189,7 +196,11 @@
           <header class="pw-panel-header">
             <div>
               <h2>Resume Info</h2>
-              <p>Rename your resume or write a short summary about yourself, it's optional.</p>
+              <p>Title of your document and a short summary.</p>
+              <ul style="margin:10px; font-size:0.8rem;">
+                <li>● Rename your resume (Optional)</li>
+                <li>● Write a short summary about yourself (Optional)</li>
+              </ul>
             </div>
           </header>
           <!-- Toggle for include Account photo or not. -->
@@ -202,14 +213,14 @@
             <div class="field">
               <label class="label">Resume Title</label>
               <div class="control">
-                <input class="input" type="text" name="title" placeholder="Name of this resume" value="<?= htmlspecialchars($data['resdata']['title'] ?? '') ?>">
+                <input class="input" type="text" name="title" placeholder="Name of this resume" value="<?= htmlspecialchars($master['title'] ?? '') ?>">
               </div>
             </div>
 
             <div class="field">
-              <label class="label">Summary</label>
+              <label class="label">Headline</label>
               <div class="control">
-                <textarea class="textarea" name="summary" rows="3" placeholder="Enthusiastic junior techie with a soft spot for clean code, tinkering and learning-by-doing."><?= htmlspecialchars($data['resdata']['summary'] ?? '') ?></textarea>
+                <textarea class="textarea" name="headline" maxlength="850" rows="3" placeholder="Max 850 characters."><?= htmlspecialchars($master['headline'] ?? '') ?></textarea>
               </div>
             </div>
 
@@ -221,7 +232,7 @@
             <header class="pw-panel-header">
               <div>
                 <h2>Create a resume</h2>
-                <p>First, let's give it a name.</p>
+                <p>First, you create one.</p>
               </div>
             </header>
 
@@ -241,7 +252,7 @@
                   </div>
                 </div>
               </div>
-              <button type="submit" class="button is-link" name="action" value="resume">Create</button>
+              <button type="submit" class="button is-contrast" name="action" value="resume">Create</button>
             </form>
           <?php } ?>
         </section>
@@ -267,8 +278,8 @@
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
               <!-- EXPERIENCE ITEM -->
-              <?php if (!empty($data['experience'])) { ?>
-                <?php foreach ($data['experience'] as $exp) { ?>
+              <?php if (!empty($experience)) { ?>
+                <?php foreach ($experience as $exp) { ?>
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
@@ -291,13 +302,13 @@
                         <div class="field">
                           <label class="label">Start</label>           
                           <div class="control">
-                            <input class="input" type="month" name="start_date[]" value="<?= htmlspecialchars($exp['start_date']) ?>">
+                            <input class="input" type="month" name="start_date[]" value="<?= !empty($exp['start_date']) ? date('Y-m', strtotime($exp['start_date'])) : '' ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="end_date[]" value="<?= htmlspecialchars($exp['end_date']) ?>">
+                            <input class="input" type="month" name="end_date[]" value="<?= !empty($exp['end_date']) ? date('Y-m', strtotime($exp['end_date'])) : '' ?>">
                           </div>
                         </div>
                       </div>
@@ -393,8 +404,8 @@
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
               <!-- Education ITEM -->
-              <?php if (!empty($data['education'])) { ?>
-                <?php foreach ($data['education'] as $edu) { ?>
+              <?php if (!empty($education)) { ?>
+                <?php foreach ($education as $edu) { ?>
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
@@ -417,13 +428,13 @@
                         <div class="field">
                           <label class="label">Start</label>
                           <div class="control">
-                            <input class="input" type="month" name="start_date[]" value="<?= htmlspecialchars($edu['start_date']) ?>">
+                            <input class="input" type="month" name="start_date[]" value="<?= !empty($edu['start_date']) ? date('Y-m', strtotime($edu['start_date'])) : '' ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="end_date[]" value="<?= htmlspecialchars($edu['end_date']) ?>">
+                            <input class="input" type="month" name="end_date[]" value="<?= !empty($edu['end_date']) ? date('Y-m', strtotime($edu['end_date'])) : '' ?>">
                           </div>
                         </div>
                       </div>
@@ -441,9 +452,7 @@
                 <?php } ?>
               <?php } ?>
             </div>
-            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="education">
-              + Add an education
-            </button>
+            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="education">+ Add an education</button>
 
             <div class="pw-panel-actions">
               <button type="submit" name="action" value="education" class="button btn-cta pw-save-btn" disabled>Save</button>
@@ -521,21 +530,21 @@
             
             <!-- Projects ITEM -->
             <div class="pw-repeater" data-repeater="projects">
-              <?php if (!empty($data['projects'])) { ?>
-                <?php foreach ($data['projects'] as $proj) { ?>
+              <?php if (!empty($projects)) { ?>
+                <?php foreach ($projects as $ass) { ?>
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
                         <div class="field">
                           <label class="label">Project Name</label>
                           <div class="control">
-                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($proj['title']) ?>">
+                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($ass['title']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">Your Role</label>
                           <div class="control">
-                            <input class="input" type="text" name="role[]" value="<?= htmlspecialchars($proj['role'] ?? 'Lead Developer') ?>">
+                            <input class="input" type="text" name="role[]" value="<?= htmlspecialchars($ass['role'] ?? 'Lead Developer') ?>">
                           </div>
                         </div>
                       </div>
@@ -544,18 +553,17 @@
                     <div class="field">
                       <label class="label">Project Summary & Tech Stack</label>
                       <div class="control">
-                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($proj['summary'] ?? '') ?></textarea>
+                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($ass['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
                     
                     <button type="button" class="button is-text pw-remove-item" name="delete">Remove this project</button>
                     <hr class="pw-repeater-divider">
-                    <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($proj['id']) ?>">
+                    <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($ass['id']) ?>">
                   </div>
                 <?php } ?>
               <?php } ?>
             </div>
-            
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="projects">+ Add a project</button>
 
             <div class="pw-panel-actions">
@@ -613,27 +621,27 @@
             <input type="hidden" name="action" value="skill">
             <div class="pw-repeater" data-repeater="skills">
               <!-- Skills ITEM -->
-              <?php if (!empty($data['skills'])) { ?>
-                <?php foreach ($data['skills'] as $i => $skill) { ?>
+              <?php if (!empty($skills)) { ?>
+                <?php foreach ($skills as $i => $ski) { ?>
                 <div class="pw-repeater-item">                         
                   <div class="field is-grouped skill-row">
                     <div class="control">
-                      <input type="text" name="skill[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($skill['name']) ?>">
+                      <input type="text" name="skill[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($ski['name']) ?>">
                     </div>
                     <div class="control">
                       <select class="pw-select" name="skill[<?= $i ?>][category]">
                         <option disabled>Select a Category:</option>
-                        <option <?= $skill['category'] === 'Software / Tools' ? 'selected' : '' ?>>Software / Tools</option>
-                        <option <?= $skill['category'] === 'Languages' ? 'selected' : '' ?>>Languages</option>
-                        <option <?= $skill['category'] === 'Technical' ? 'selected' : '' ?>>Technical</option>
-                        <option <?= $skill['category'] === 'Certificate' ? 'selected' : '' ?>>Certificate</option>
-                        <option <?= $skill['category'] === 'Soft Skills' ? 'selected' : '' ?>>Soft Skills</option>
-                        <option <?= $skill['category'] === 'Hard Skills' ? 'selected' : '' ?>>Hard Skills</option>
-                        <option <?= $skill['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
+                        <option <?= $ski['category'] === 'Software / Tools' ? 'selected' : '' ?>>Software / Tools</option>
+                        <option <?= $ski['category'] === 'Languages' ? 'selected' : '' ?>>Languages</option>
+                        <option <?= $ski['category'] === 'Technical' ? 'selected' : '' ?>>Technical</option>
+                        <option <?= $ski['category'] === 'Certificate' ? 'selected' : '' ?>>Certificate</option>
+                        <option <?= $ski['category'] === 'Soft Skills' ? 'selected' : '' ?>>Soft Skills</option>
+                        <option <?= $ski['category'] === 'Hard Skills' ? 'selected' : '' ?>>Hard Skills</option>
+                        <option <?= $ski['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
                       </select>
                     </div>
-                    <input type="hidden" name="skill[<?= $i ?>][id]" value="<?= htmlspecialchars($skill['id']) ?>">
-                    <button type="submit" class="remove" name="delete" value="<?= htmlspecialchars($skill['id']) ?>">✕</button>
+                    <input type="hidden" name="skill[<?= $i ?>][id]" value="<?= htmlspecialchars($ski['id']) ?>">
+                    <button type="submit" class="remove" name="delete" value="<?= htmlspecialchars($ski['id']) ?>">✕</button>
                   </div>  
                 </div>
                 <?php } ?>
@@ -690,17 +698,17 @@
             <input type="hidden" name="action" value="social">
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
-              <?php if (!empty($data['social'])) { ?>
-                <?php foreach ($data['social'] as $media) { ?>
+              <?php if (!empty($socialurl)) { ?>
+                <?php foreach ($socialurl as $url) { ?>
                   <div class="pw-repeater-item">
                     <div class="field">
                       <label class="label">Link</label>
                       <div class="control">
-                        <input class="input" type="url" name="social[<?= $i ?>][media_url]" value="<?= htmlspecialchars($media['media_url']) ?>">
+                        <input class="input" type="url" name="social[<?= $i ?>][media_url]" value="<?= htmlspecialchars($url['media_url']) ?>">
                       </div>
                     </div>
-                    <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($media['id']) ?>">
-                    <button type="submit" class="button is-text pw-remove-item" name="delete" value="<?= htmlspecialchars($media['id']) ?>">Remove this link</button>
+                    <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($url['id']) ?>">
+                    <button type="submit" class="button is-text pw-remove-item" name="delete" value="<?= htmlspecialchars($url['id']) ?>">Remove this link</button>
                   </div>
                 <?php } ?>
               <?php } ?>

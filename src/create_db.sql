@@ -1,5 +1,5 @@
     CREATE DATABASE IF NOT EXISTS `careerwitch_db`;
-    
+    USE `careerwitch_db`;
     CREATE TABLE IF NOT EXISTS `accounts` (
     id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
     email         VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@
 
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    CREATE TABLE IF NOT EXISTS `contact` (
+    CREATE TABLE IF NOT EXISTS `contacts` (
     id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
     fullname       VARCHAR(100) NOT NULL,
     phone          VARCHAR(32) NULL,
@@ -34,11 +34,12 @@
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     INSERT INTO `accounts` (`email`, `password_hash`, `birth_date`) VALUES ('hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '1998-01-25');
+    INSERT INTO `contacts` (`fullname`, `phone`, `city`, `country`, `user_id`) VALUES ('Jade Greenhill', '634177567', 'Wieringen', 'Netherlands', 1);
 
     CREATE TABLE IF NOT EXISTS `resumes` (
         id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
         title VARCHAR(180) NOT NULL,
-        summary VARCHAR(2048) NULL,
+        headline VARCHAR(850) NULL,
         created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         user_id      INT UNSIGNED NOT NULL,
@@ -73,8 +74,8 @@
 
     CREATE TABLE IF NOT EXISTS `education` (
         id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
-        title       VARCHAR(100) NOT NULL,
-        institute   VARCHAR(120) NOT NULL,
+        program     VARCHAR(100) NOT NULL,
+        school      VARCHAR(120) NOT NULL,
         start_date  DATE NOT NULL,
         end_date    DATE NULL,
         summary     VARCHAR(2048) NULL,
@@ -89,6 +90,17 @@
         CONSTRAINT fk_acad_resume
             FOREIGN KEY (resume_id) REFERENCES resumes(id)
             ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    CREATE TABLE IF NOT EXISTS `projects` (
+        id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
+        title       VARCHAR(100) NOT NULL, 
+        role       VARCHAR(100) NOT NULL,
+        summary VARCHAR(2048) NULL,
+        sort_order  INT NOT NULL DEFAULT 0,
+        resume_id   INT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+        CONSTRAINT fk_proj_resume FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     CREATE TABLE IF NOT EXISTS `experience_bullets` (
@@ -123,6 +135,21 @@
         ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+    CREATE TABLE IF NOT EXISTS `project_bullets` (
+        id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        text        TEXT NOT NULL,
+        sort_order  INT NOT NULL DEFAULT 0,
+        project_id  INT UNSIGNED NOT NULL,
+        resume_id   INT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+
+        KEY uq_project_resume_sort (project_id, sort_order),
+
+        CONSTRAINT fk_project_resume
+            FOREIGN KEY (resume_id) REFERENCES resumes(id)
+            ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
     CREATE TABLE IF NOT EXISTS `skills` (
         id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
         name       VARCHAR(100) NOT NULL,
@@ -153,32 +180,6 @@
         UNIQUE KEY uq_socials_resume_media (resume_id, media_url),
 
         CONSTRAINT fk_socials_resume
-            FOREIGN KEY (resume_id) REFERENCES resumes(id)
-            ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    CREATE TABLE IF NOT EXISTS `projects` (
-        id          INT UNSIGNED NOT NULL AUTO_INCREMENT,     
-        title       VARCHAR(100) NOT NULL, 
-        role       VARCHAR(100) NOT NULL,
-        summary VARCHAR(2048) NULL,
-        sort_order  INT NOT NULL DEFAULT 0,
-        resume_id   INT UNSIGNED NOT NULL,
-        PRIMARY KEY (id),
-        CONSTRAINT fk_proj_resume FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-    CREATE TABLE IF NOT EXISTS `project_bullets` (
-        id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
-        text        TEXT NOT NULL,
-        sort_order  INT NOT NULL DEFAULT 0,
-        project_id  INT UNSIGNED NOT NULL,
-        resume_id   INT UNSIGNED NOT NULL,
-        PRIMARY KEY (id),
-
-        KEY uq_project_resume_sort (project_id, sort_order),
-
-        CONSTRAINT fk_project_resume
             FOREIGN KEY (resume_id) REFERENCES resumes(id)
             ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

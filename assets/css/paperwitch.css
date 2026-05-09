@@ -35,8 +35,14 @@
     --def-style:#333;
     --def-styleII:#555;
     --default:#007bff;
+    --buttercup:#f2bb16;
+    --torea-bay:#173ba6;
+    --bunting:#121d59;
+    --cold-purple:#a496d9;
+
     --edit:rgb(181, 129, 25);
     --edit-hover:rgb(62,149,163);
+
     --trash:rgb(192, 50, 50);
     --trash-hover:rgb(169, 47, 59);
     --bg-window:rgba(0,0,0,0.8);
@@ -53,12 +59,6 @@
 }
 
 *, *::before, *::after {box-sizing: border-box;}
-/* body {
-  overflow-x: hidden;
-  background: var(--bg-gradients);
-  color: #e8e8ef;
-  font-family: var(--font-body);
-} */
 body {
   display: flex;
   flex-direction: column;
@@ -130,12 +130,12 @@ nav a.current { cursor: default; }
 #signUp { background:#04AA6D; }
 #signIn, a[data-section="logout"] {border: 2px solid #dfdfdf;} /* #44d884 */
 #logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
+.is-contrast { color: black; background:var(--buttercup);}
 
 
 /* ==========================================================
-   6. LOGIN + SIGNUP SECTIONS
+   3. LOGIN + SIGNUP SECTIONS
    ========================================================== */
-
 .form-window {
   display: flex;
   place-items: center;
@@ -284,7 +284,7 @@ nav a.current { cursor: default; }
 }
 
 /* ==========================================================
-   2. DEFAULT EDITOR STYLESHEET
+   4. DEFAULT EDITOR STYLESHEET
    ========================================================== */
 .pw-editor {
   /* padding: 28px; */
@@ -344,4 +344,82 @@ nav a.current { cursor: default; }
 .dark {
   background: #111;
   color: white;
+}
+
+/* ================================= 
+  5. Portrait Select
+   ================================*/
+.gallery {
+  display: grid;
+  /* repeat(auto-fit...) can leave cards left-aligned if there aren't enough to fill a row */
+  /* Using auto-center logic: */
+  grid-template-columns: repeat(auto-fit, 240px); 
+  justify-content: center; /* This centers the cards inside the gallery div */
+  gap: 40px;
+  width: min(1000px, 90vw);
+  margin: 0 auto; /* This centers the gallery div inside the page */
+}
+
+/* Frame */
+.card {
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s ease;
+  background: none;    /* Undo Bulma default */
+  box-shadow: none;    /* Undo Bulma default */
+  border: none;        /* Undo Bulma default */
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+/* Frame border */
+.frame {
+  padding: 12px;
+  background: linear-gradient(145deg, #6b4b1f, #3a2410);
+  border: 3px solid #c69b4c;
+  box-shadow:
+    0 0 20px rgba(198,155,76,0.4),
+    inset 0 0 15px rgba(0,0,0,0.6);
+}
+
+/* Painting area */
+.painting {
+  height: 180px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #120819, #2a1335);
+  position: relative;
+  overflow: hidden;
+  font-size: 60px;
+}
+
+/* Example visuals */
+.scroll::before {
+  content: "📜";
+}
+
+.cauldron::before {
+  content: "🧪";
+}
+
+.chaos::before {
+  content: "✨";
+}
+
+/* Glow on hover */
+.card:hover .painting {
+  box-shadow: 0 0 25px rgba(88,255,173,0.5);
+}
+
+/* Label plate */
+.label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.sub {
+  font-size: 0.85rem;
+  opacity: 0.7;
 }

@@ -9,7 +9,6 @@
                 'city' => $this->postData['city'] ?? '',
                 'country' => $this->postData['country'] ?? '',
                 'phone' => $this->postData['phone'] ?? '',
-                'country' => $this->postData['country'] ?? '',
                 'experience' => [],
                 'education' => [],
                 'skills' => []
@@ -66,7 +65,7 @@
             if (!empty($errors)) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = $errors;
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
@@ -77,7 +76,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['email' => $msg];
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? ''); 
                 return;
             }
@@ -88,7 +87,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['fullname' => $msg];
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
@@ -99,7 +98,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['city' => $msg];
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
@@ -110,7 +109,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['country' => $msg];
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
@@ -121,7 +120,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['phone' => $msg];
-                $this->oldForm($this->postData);
+                $this->oldForm();
                 ViewBook::revert($this->postData['action'] ?? ''); 
                 return;
             }
@@ -138,21 +137,21 @@
             if (!array_key_exists('skills', $this->postData) && isset($sessionOld['skills']) && is_array($sessionOld['skills'])) {
                 $this->postData['skills'] = $sessionOld['skills'];         
             }
-            $_SESSION['old_form'] = null;
+
+            // echo "<pre>";
+            // print_r($this->postData);
+            // echo "</pre>";
 
             // DB lookup (only after validation)  
             try {
                 $pdo = Database::Connect();
                 $modelRes = new wizardCodex($pdo);
                 $modelRes->setFullResume($this->postData);
-                $_SESSION['success'] = "Resume saved successfully.";
-                ViewBook::revert($this->postData['action'] ?? '');
-                exit;
-
             } catch (\Throwable $e) {
-                $_SESSION['error'] = "Failed to save resume. Please try again.";
-                ViewBook::revert($this->postData['action'] ?? '');
-                exit;
+                $_SESSION['error'] = "Saving failed. Please try again.";
             }
+
+            ViewBook::revert($this->postData['action'] ?? '');
+            exit;
         }
     }

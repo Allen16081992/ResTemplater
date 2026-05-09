@@ -2,13 +2,25 @@
     class validGrimoire {
         public static function emptyField(array $postData): array {
             $errors = [];
-            $skip = ['action', 'username', 'date', 'month'];
+            $skip = ['action', 'headline', 'date', 'month'];
 
             foreach ($postData as $field => $value) {
                 if (in_array($field, $skip, true)) { continue; }
-                if (trim((string)$value) === '') {
-                    $errors[$field] = 'This field is required.';
-                } 
+
+                // Check if the value is an array (like 'skills')
+                if (is_array($value)) {
+                    // If the array is empty, it's an error
+                    if (empty($value)) {
+                        $errors[$field] = 'This field is required.';
+                    }
+                    // Optional: You could loop through $value here if you 
+                    // need to validate nested fields specifically.
+                } else {
+                    // Standard string validation
+                    if (trim((string)$value) === '') {
+                        $errors[$field] = 'This field is required.';
+                    }
+                }
             }
             return $errors;
         }

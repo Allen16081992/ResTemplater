@@ -8,7 +8,7 @@
             <h1><?= htmlspecialchars($slogan = mixedGrimoire::setPhrase('slogan')); ?></h1>
             <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = mixedGrimoire::setPhrase('tagline')); ?></p>
             <form class="buttons mt-5" action="client.php" method="post">
-                <button type="submit" id="cta" class="button is-medium btn-cta" name="demo" value="wizard">Create My Resume</button>
+                <button type="submit" id="cta" class="button is-medium btn-cta" name="wizard" value="wizard">Create My Resume</button>
                 <a href="#" class="button is-medium is-light">🔮 Browse Templates</a>
             </form>
           </div>

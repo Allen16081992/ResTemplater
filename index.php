@@ -4,9 +4,9 @@
   header('Expires: 0');         // expire immediately
     
   // Essential PHP files
-  require_once "./config/session_manager.conf.php"; 
+  require_once __DIR__ . '/config/session_manager.conf.php'; 
   // Miscellaneous PHP Files
-  include_once "./config/mixedGrimoire.conf.php";
+  include_once __DIR__ . '/config/mixedGrimoire.conf.php';
   SessionBook::invokeSession();
 ?>
 <!DOCTYPE html>
@@ -72,3 +72,6 @@
     <?php ViewBook::render('footer_sitemap.html'); ?>
 </body>
 </html>
+
+<!-- Cleanup required to prevent page persistence shenanigans-->
+<?php unset($_SESSION['action']); ?>

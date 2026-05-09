@@ -7,9 +7,7 @@
       </div>
       <div class="pw-status" aria-live="polite">
         <div class="pw-pill"><span>🧪</span><span>Draft saved locally</span></div>
-        <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
-          <a class="pw-btn" data-section="home">Switch Editor</a>
-        <?php } ?>
+        <a class="pw-btn" data-section="home">Switch Editor</a>
         <div style="opacity:.9">Mode: <strong>Quick Start</strong></div>
       </div>
     </header>
@@ -32,7 +30,8 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="./config/action_handler.conf.php" <?= isset($_SESSION['session_data']['user_id']) ?: 'target="_blank"'; ?> method="post">
+      <form action="./config/action_handler.conf.php" <?= isset($_SESSION['session_data']['user_id']) ?: 'target="_blank"'; ?> method="post" target="_blank">
+        <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
@@ -41,7 +40,8 @@
           <div class="pw-form">
             <div>
               <label class="pw-label" for="fullname">Full name *</label>
-              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['fullname'].'" disabled' : 'autocomplete="fullname"'; ?> value="Keira Greenhill">
+              <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['fullname'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+              <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['fullname'] ?? '').'"' : 'autocomplete="fullname"'; ?>>
             </div>
             <div>
               <label for="headline" class="pw-label">Headline</label>
@@ -231,22 +231,26 @@
             <div class="pw-row">
               <div>
                 <label class="pw-label" for="email">Email *</label>
-                <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['email'].'" disabled' : 'autocomplete="email"'; ?> value="keira_greenhill32@hotmail.com">
+                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($account['email'] ?? '').'"' : 'autocomplete="email"'; ?> value="jade_greenhill32@hotmail.com">
               </div>
               <div>
                 <label class="pw-label" for="phone">Phone *</label>
-                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['phone'].'" disabled' : 'autocomplete="tel"'; ?> value="063166457">
+                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['phone'] ?? '').'"' : 'autocomplete="tel"'; ?> value="063166457">
               </div>
             </div>
 
             <div class="pw-row">
               <div>
                 <label class="pw-label" for="city">City *</label>
-                <input type="text" id="city" name="city" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['city'].'" disabled' : 'autocomplete="address-level2"'; ?> value="Rotterdam">
+                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['city'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <input type="text" id="city" name="city" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['city'] ?? '').'"' : 'autocomplete="address-level2"'; ?> value="Rotterdam">
               </div>
               <div>
                 <label class="pw-label" for="country">Country *</label>
-                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.$data['country'].'" disabled' : 'autocomplete="country-name"'; ?> value="Netherlands">
+                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['country'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['country'] ?? '').'"' : 'autocomplete="country-name"'; ?> value="Netherlands">
               </div>
             </div>
           </div>
@@ -264,14 +268,13 @@
 
         <!-- STEP: Download -->
         <article class="pw-card" data-step="download">
-          <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
-            <input type="hidden" name="create" value="create">
-          <?php } ?>
           <div class="pw-final-only">
-            <input type="hidden" name="template" value="vintage">
-            <button type="submit" name="action" value="template" class="pw-btn pw-btn-primary">
-              <?= isset($_SESSION['session_data']['user_id']) ? 'Let’s save first' : 'Let’s Download'; ?>
-            </button>
+            <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="wizard">Save now</button>
+            <?php } else { ?>
+              <input type="hidden" name="template" value="vintage">
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template">Let’s Download</button>
+            <?php } ?>
           </div>
         </article>
       </form>

@@ -683,34 +683,43 @@
   padding: 1rem 0;
 }
 
-.radio-card-grid label, .radio-card {
-  flex: 1 1 calc(25% - 1rem); /* 4 per row */
+.radio-card-grid label, 
+.radio-card, 
+.edit-link {
+  flex: 1 1 calc(25% - 1rem); 
   min-width: 190px;
   background: #1f2937;
-  color: #e5e7eb;
+  color: #e5e7eb; /* Overrides the default blue link color */
   border: 1px solid #374151;
   border-radius: 10px;
   padding: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  
+  /* Critical additions for <a> tags */
+  display: block;          /* Makes it behave like a card box */
+  text-decoration: none;   /* Removes the underline */
+  line-height: 1.4;        /* Keeps your text spacing consistent */
 }
 
-.radio-card-grid label:hover, .radio-card:hover {
+/* Update the hover state */
+.radio-card-grid label:hover, 
+.radio-card:hover, 
+.edit-link:hover {
   background: #111827;
   border-color: #60a5fa;
+  color: #e5e7eb; /* Keeps text from turning blue on hover */
 }
 
-.radio-card-grid input[type="radio"] {
-  display: none;
+/* Handle the 'strong' and 'small' inside the link */
+.edit-link strong {
+  display: inline-block;
+  margin-left: 0.5rem; /* Space after the emoji */
 }
 
-.radio-card-grid input[type="radio"]:checked + span {
-  /* font-weight: bold; */
-  border-color: #60a5fa;
-}
-
-.radio-card-grid span {
+.edit-link small {
   display: block;
-  line-height: 1.4;
+  color: #9ca3af; /* A muted gray for the timestamp */
+  margin-top: 0.2rem;
 }

@@ -29,18 +29,18 @@
                 }
 
                 // Validate summary
-                $summary = trim((string)($this->postData['summary'] ?? ''));
-                $msg = ValidGrimoire::validateName($summary, false);
+                $headline = trim((string)($this->postData['headline'] ?? ''));
+                $msg = ValidGrimoire::validateName($headline, false);
                 if ($msg !== null) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = ['summary' => $msg];
+                    $_SESSION['error'] = ['headline' => $msg];
                     ViewBook::revert('builder'); 
                     return;
                 }
                 $uid = $this->postData['user_id'];
 
                 // DB querry (only after validation)
-                $new = $model->createResume($title, $summary, $uid);
+                $new = $model->createResume($title, $headline, $uid);
 
                 if ($new <= 0) {
                     // Hold error message + set previous UI state
@@ -124,6 +124,5 @@
                 ViewBook::revert('builder');  
                 return;
             }
-            exit;
         }
     }

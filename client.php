@@ -10,17 +10,23 @@
   SessionBook::invokeToken();
   //SessionBook::verifySession();
 
-  require_once __DIR__ . '/config/loadResumeData_conf.php';
+  require_once __DIR__ . '/config/loadResumeData.conf.php';
+    // Test variables
+      echo "<pre style='background: #000; color: #0f0; padding: 20px; z-index: 9999; position: relative;'>";
+      echo "LOGGED IN UID: " . ($_SESSION['session_data']['user_id'] ?? 'NONE') . "\n";
+      echo "GET RESUME ID: " . ($_GET['resume_id'] ?? 'NONE') . "\n";
+      echo "DATA KEYS: " . implode(', ', array_keys($data)) . "\n";
+      echo "ACTIVE PAPER STATUS: " . ($data['active_paper'] ? 'FOUND' : 'NULL') . "\n";
+      print_r($data['active_paper']);
+      echo "</pre>";
 
-  if (isset($_POST['demo'])) {
-    $_SESSION['action'] = $_POST['demo'];
-  }
 
-  // Test variables
     //   $_SESSION['error'] = [
     //     'title' => 'This field is required'
     //   ];
-    //$_SESSION['action'] = 'wizard';
+    //   $_SESSION['error'] = 'Not working...'
+    // $_SESSION['action'] = 'wizard';
+    // $_SESSION['success'] = 'Paper is saved';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,10 +66,10 @@
     <?php ViewBook::flashMessage(); ?>
     
     <main>
-        <?php ViewBook::render('section_profile.php', $data); ?>
-        <?php ViewBook::render('section_builder_select.php', $data); ?>
-        <?php ViewBook::render('section_ui_default.php', $data); ?>
-        <?php ViewBook::render('section_ui_wizard.php', $data); ?>     
+        <?php ViewBook::render('section_profile.php', $data ?? []); ?>
+        <?php ViewBook::render('section_builder_select.php', $data ?? []); ?>
+        <?php ViewBook::render('section_ui_default.php', $data ?? []); ?>
+        <?php ViewBook::render('section_ui_wizard.php', $data ?? []); ?>     
         <?php ViewBook::render('section_closure.php'); ?>
     </main>
 

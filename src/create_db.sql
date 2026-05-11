@@ -33,8 +33,10 @@
         ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-    INSERT INTO `accounts` (`email`, `password_hash`, `birth_date`) VALUES ('hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '1998-01-25');
+    INSERT INTO `accounts` (`id`, `email`, `password_hash`, `birth_date`) VALUES (1, 'hallohallo@gmail.com', '$argon2id$v=19$m=65536,t=2,p=1$Tm5KUG54Wks4MmI4MGVGZw$Q5eN9yv6TRCY5mA9svTu2w', '1998-01-25');
     INSERT INTO `contacts` (`fullname`, `phone`, `city`, `country`, `user_id`) VALUES ('Jade Greenhill', '634177567', 'Wieringen', 'Netherlands', 1);
+    ALTER TABLE accounts AUTO_INCREMENT = 2;
+    ALTER TABLE contacts AUTO_INCREMENT = 2;
 
     CREATE TABLE IF NOT EXISTS `resumes` (
         id           INT UNSIGNED NOT NULL AUTO_INCREMENT,

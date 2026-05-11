@@ -72,56 +72,40 @@
 
             // Validate email format
             $email = trim((string)($this->postData['email'] ?? ''));
-            $msg = ValidGrimoire::validateEmail($email);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['email' => $msg];
-                $this->oldForm();
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
+            if ($msg = ValidGrimoire::validateEmail($email)) {
+                $errors['email'] = $msg;
             }
 
             // Validate fullname
             $name = trim((string)($this->postData['fullname'] ?? ''));
-            $msg = ValidGrimoire::validateName($name, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['fullname' => $msg];
-                $this->oldForm();
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
+            if ($msg = ValidGrimoire::validateName($name, true)) {
+                $errors['fullname'] = $msg;
             }
 
             // Validate city
             $city = trim((string)($this->postData['city'] ?? ''));
-            $msg = ValidGrimoire::validateName($city, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['city' => $msg];
-                $this->oldForm();
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
+            if ($msg = ValidGrimoire::validateName($city, true)) {
+                $errors['city'] = $msg;
             }
 
             // Validate country
             $country = trim((string)($this->postData['country'] ?? ''));
-            $msg = ValidGrimoire::validateName($country, true);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['country' => $msg];
-                $this->oldForm();
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
+            if ($msg = ValidGrimoire::validateName($country, true)) {
+                $errors['country'] = $msg;
             }
 
             // Validate phone number format
             $phone = trim((string)($this->postData['phone'] ?? ''));
-            $msg = ValidGrimoire::validatePhone($phone);
-            if ($msg !== null) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['phone' => $msg];
+            if ($msg = ValidGrimoire::validatePhone($phone)) {
+                $errors['phone'] = $msg;
+            }
+
+            // Final check: if errors exist, send them back together
+            if (!empty($errors)) {
                 $this->oldForm();
-                ViewBook::revert($this->postData['action'] ?? ''); 
+                $_SESSION['error'] = $errors;
+                $_SESSION['error']['global'] = 'Some fields in the Wizard require your attention.';
+                ViewBook::revert($this->postData['action'] ?? '');
                 return;
             }
 
@@ -138,10 +122,6 @@
                 $this->postData['skills'] = $sessionOld['skills'];         
             }
 
-            // echo "<pre>";
-            // print_r($this->postData);
-            // echo "</pre>";
-
             // DB lookup (only after validation)  
             try {
                 $pdo = Database::Connect();
@@ -154,4 +134,4 @@
             ViewBook::revert($this->postData['action'] ?? '');
             exit;
         }
-    }
+    } // 157

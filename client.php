@@ -89,3 +89,6 @@
     </footer>
 </body>
 </html>
+
+<!-- Cleanup required to prevent page persistence shenanigans-->
+<?php unset($_SESSION['action']); ?>

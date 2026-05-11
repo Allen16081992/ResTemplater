@@ -20,7 +20,7 @@
 
             $hasAll = ($day !== '' && $month !== '' && $year !== '');
             if (!$hasAll) {
-                $_SESSION['error'] = ['date' => 'Please add your full date of birth.'];
+                $_SESSION['error'] = ['date' => 'Please add your date of birth.'];
                 $this->oldForm($day, $month, $year);
                 ViewBook::revert($this->postData['action'] ?? 'sign_up');
                 return;
@@ -117,7 +117,7 @@
             }
 
             // Registration done: redirect
-            $_SESSION['action'] = 'success';
+            $this->postData['action'] = 'success';
             ViewBook::revert($this->postData['action'] ?? 'success');
             exit;
         }

@@ -17,42 +17,12 @@
                     'path' => '/',
                     'domain' => '',
                     'secure' => $flag, // Dynamically enforce
-                    //'httponly' => true, 
+                    'httponly' => true, 
                     'samesite' => 'Lax', 
                 ]);
                 ini_set('session.use_strict_mode', '1');
                 session_start(); 
             }
-        }
-
-        public static function verifySession(): void {
-            if (isset($_SESSION['session_data']['user_id'])) {
-                $_SESSION['action'] = 'home';
-            } else {
-                $_SESSION['action'] = 'wizard';
-            }
-        }
-
-        public static function intrusionGuard(): void {
-            self::invokeSession();
-            if (!isset($_SESSION['session_data']['user_id'])) {
-                $_SESSION['error'] = '401: Access denied.';
-                header('Location: ../index.php');
-                exit;
-            }
-        }
-
-        public static function sessionRegenTimer() {
-            // Periodically renew the session ID against session fixation and hijacking
-            $lastRegen = $_SESSION['last_regen'] ?? 0;
-            $currentTime = time();
-            $regenInterval = 900; // Regenerate every 15 minutes
-
-            if ($currentTime - $lastRegen >= $regenInterval) {
-                session_regenerate_id(true);
-                $_SESSION['last_regen'] = $currentTime;
-            }
-            unset($lastRegen, $currentTime, $regenInterval);
         }
 
         public static function logoutUser(): void {
@@ -91,6 +61,36 @@
             }
             $_SESSION['last_login_attempt'] = time();
         }
+
+        public static function verifySession(): void {
+            if (isset($_SESSION['session_data']['user_id'])) {
+                $_SESSION['action'] = 'home';
+            } else {
+                $_SESSION['action'] = 'wizard';
+            }
+        }
+
+        public static function intrusionGuard(): void {
+            self::invokeSession();
+            if (!isset($_SESSION['session_data']['user_id'])) {
+                $_SESSION['error'] = '401: Access denied.';
+                header('Location: ../index.php');
+                exit;
+            }
+        }
+
+        public static function sessionRegenTimer() {
+            // Periodically renew the session ID against session fixation and hijacking
+            $lastRegen = $_SESSION['last_regen'] ?? 0;
+            $currentTime = time();
+            $regenInterval = 900; // Regenerate every 15 minutes
+
+            if ($currentTime - $lastRegen >= $regenInterval) {
+                session_regenerate_id(true);
+                $_SESSION['last_regen'] = $currentTime;
+            }
+            unset($lastRegen, $currentTime, $regenInterval);
+        }
         
         //────────────────────────────────────//
         //            TOKEN LOGIC             //
@@ -102,18 +102,22 @@
             }
         }
 
-        public static function isValidToken(string $token): bool {
-            self::invokeSession();
-            return hash_equals($_SESSION['csrf_token'] ?? '', $token);
-        }
-
         public static function enforceToken(): void {
             self::invokeSession();
             $token = $_POST['csrf_token'] ?? '';
+
+            // Verify string. Verify match. (prevents TypeErrors) (prevents CSRF)
             if (!is_string($token) || !hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
-                $_SESSION['error'] = '403: Forbidden. Request Denied.';
+                $_SESSION['error'] = 403;
                 ViewBook::revert('error');
             }
+
+            // if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
+            //     die("Missing Data - POST: " . isset($_POST['csrf_token']) . " | SESS: " . isset($_SESSION['csrf_token']));
+            // }
+            // if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            //     die("Mismatch! <br> POST: " . $_POST['csrf_token'] . "<br> SESS: " . $_SESSION['csrf_token']);
+            // }
         }
 
         public static function csrfField(): string {
@@ -166,11 +170,11 @@
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
             if (in_array($view, ['profile', 'wizard', 'builder'])) {
-                header('Location: ../client.php'); 
+                header('Location: /client.php'); 
             } elseif (in_array($view, ['error'])) {
-                header('Location: ../error.php'); 
+                header('Location: /error.php'); 
             } else {
-                header('Location: ../index.php'); 
+                header('Location: /index.php'); 
             }
             exit;
         }
@@ -214,6 +218,8 @@
             if (is_string($error)) {
                 echo '<div class="error animate__animated animate__bounceInDown">'.htmlspecialchars($error, ENT_QUOTES, 'UTF-8').'</div>';
                 unset($_SESSION['error']);
+            } elseif (is_array($error) && isset($error['global'])) {
+                echo '<div class="error animate__animated animate__bounceInDown">'.htmlspecialchars($error['global'], ENT_QUOTES, 'UTF-8').'</div>';
             } elseif (is_string($success)) {
                 echo '<div class="success animate__animated animate__bounceInDown">'.htmlspecialchars($success, ENT_QUOTES, 'UTF-8').'</div>';
                 unset($_SESSION['success']);

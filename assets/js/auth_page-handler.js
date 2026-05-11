@@ -27,7 +27,7 @@
     };
 
     const dobIsValid = () => {
-      const dateInput = form.querySelector('input[type="date"][required], input[type="date"]');
+      const dateInput = form.querySelector('input[type="date"]');
       const daySel = form.querySelector('select[name="day"]');
       const monthSel = form.querySelector('select[name="month"]');
       const yearSel = form.querySelector('select[name="year"]');

@@ -90,23 +90,22 @@
           </header>
 
           <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $_SESSION['session_data']['user_id'] : ''; ?>">
-            <input type="hidden" name="create">
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
                   <div class="is-flex">
-                    <label class="label">Title</label>
-                    <div id="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                    <label class="label" for="title">Title</label>
+                    <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
                   </div>
                   <div class="control">
-                    <input class="input" type="text" name="title" placeholder="...">
+                    <input type="text" id="title" name="title" class="pw-input" placeholder="...">
                   </div>
                 </div>
               </div>
             </div>
-            <button type="submit" class="button is-contrast" name="action" value="resume">Create</button>
+            <button type="submit" class="button is-contrast" name="action" value="resume:create">Create</button>
           </form>
         </section>
 
@@ -122,7 +121,6 @@
           <form id="form-delRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
-            <input type="hidden" name="delete">
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
@@ -140,7 +138,7 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="button is-danger" style="margin-top:7px;" name="action" value="resume">Delete</button>
+            <button type="submit" class="button is-danger" style="margin-top:7px;" name="action" value="resume:delete">Delete</button>
           </form>
         </section>
 
@@ -209,11 +207,10 @@
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="update">
             <div class="field">
               <label class="label">Resume Title</label>
               <div class="control">
-                <input class="input" type="text" name="title" placeholder="Name of this resume" value="<?= htmlspecialchars($master['title'] ?? '') ?>">
+                <input class="input" type="text" name="title" placeholder="Name of your job scroll" value="<?= htmlspecialchars($master['title'] ?? '') ?>">
               </div>
             </div>
 
@@ -225,7 +222,7 @@
             </div>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="action" value="resume" class="button btn-cta pw-save-btn">Save</button>
+              <button type="submit" name="action" value="resume:update" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>
           <?php } else { ?>
@@ -244,7 +241,7 @@
                   <div class="field">
                     <div class="is-flex">
                       <label class="label">Title</label>
-                      <div id="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                      <div class="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
                     </div>
                     <div class="control">
                       <input class="input" type="text" name="title" placeholder="...">
@@ -252,7 +249,7 @@
                   </div>
                 </div>
               </div>
-              <button type="submit" class="button is-contrast" name="action" value="resume">Create</button>
+              <button type="submit" class="button is-contrast" name="action" value="resume:create">Create</button>
             </form>
           <?php } ?>
         </section>
@@ -319,7 +316,7 @@
                         <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" name="delete" disabled>Remove this experience</button>
+                    <button type="button" class="button is-text pw-remove-item" name="delete">Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
                   <input type="hidden" name="exp_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
@@ -329,7 +326,7 @@
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="experience">+ Add an experience</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="action" value="experience" class="button btn-cta pw-save-btn" disabled>Save</button>
+              <button type="submit" name="action" value="experience:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
 
@@ -377,7 +374,7 @@
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="action" value="delete_exp">Remove this experience</button>
+              <button type="button" class="button is-text pw-remove-item" name="delete">Remove this experience</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -445,7 +442,7 @@
                         <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($edu['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" disabled>Remove this education</button>
+                    <button type="button" class="button is-text pw-remove-item">Remove this education</button>
                     <hr class="pw-repeater-divider">
                   </div>
                   <input type="hidden" name="edu_id[]" value="<?= htmlspecialchars($edu['id']) ?>">
@@ -455,7 +452,7 @@
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="education">+ Add an education</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="action" value="education" class="button btn-cta pw-save-btn" disabled>Save</button>
+              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="education:save" disabled>Save</button>
             </div>
           </form>
 
@@ -503,7 +500,7 @@
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="action" value="education">Remove this education</button>
+              <button type="button" class="button is-text pw-remove-item" name="delete">Remove this education</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -527,7 +524,6 @@
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            
             <!-- Projects ITEM -->
             <div class="pw-repeater" data-repeater="projects">
               <?php if (!empty($projects)) { ?>
@@ -557,7 +553,7 @@
                       </div>
                     </div>
                     
-                    <button type="button" class="button is-text pw-remove-item" name="delete">Remove this project</button>
+                    <button type="button" class="button is-text pw-remove-item">Remove this project</button>
                     <hr class="pw-repeater-divider">
                     <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($ass['id']) ?>">
                   </div>
@@ -567,7 +563,7 @@
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="projects">+ Add a project</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="action" value="projects" class="button btn-cta pw-save-btn" disabled>Save</button>
+              <button type="submit" name="action" value="projects:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
 
@@ -618,7 +614,6 @@
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="action" value="skill">
             <div class="pw-repeater" data-repeater="skills">
               <!-- Skills ITEM -->
               <?php if (!empty($skills)) { ?>
@@ -653,7 +648,7 @@
             </div>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="save" class="button btn-cta pw-save-btn" disabled>Save</button>
+              <button type="submit" name="action" value="skills:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
 
@@ -716,7 +711,7 @@
             <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="social">+ Add a link</button>
 
             <div class="pw-panel-actions">
-              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="set_social" disabled>Save</button>
+              <button type="submit" class="button btn-cta pw-save-btn" name="action" value="socials:save" disabled>Save</button>
             </div>
           </form>
 
@@ -747,15 +742,14 @@
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="action" value="template">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
-              <button type="submit" class="radio-card" name="template" value="vintage">
+              <button type="submit" class="radio-card" name="action" value="template:read|vintage">
                 <span>Vintage (1970 - 1980)</span>
               </button>
-              <button type="submit" class="radio-card" name="template" value="default">
+              <button type="submit" class="radio-card" name="action" value="template:read|business">
                 <span>Normal (Default)</span>
               </button>
-              <button type="submit" class="radio-card" name="template" value="new_contro">
+              <button type="submit" class="radio-card" name="action" value="template:read|new_controverse">
                 <span>New Controverse (Business)</span>
               </button>
             </div>

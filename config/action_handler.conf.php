@@ -3,7 +3,7 @@
     require_once __DIR__ . '/session_manager.conf.php';
     require_once __DIR__ . '/validGrimoire.conf.php';
 
-    // 1. Session Mechanics
+    // 1. Call Session Mechanics
     SessionBook::invokeSession();
     SessionBook::enforceToken();
 
@@ -14,14 +14,26 @@
         exit;
     }
 
-    // 3. Routing Table
+    /*=============================================
+    * SNAPSHOT HANDLER (The Action Handler)
+    * Format: "module:intent" (e.g. "resume:create")
+    * Snapshot: Everything before the colon.
+    ============================================*/
+
+    // Sanitize
+    $action = trim((string)($_POST['action'] ?? ''));
+
+    // 3. Take a Snapshot before ':'
+    $snapshot = strstr($action, ':', true) ?: $action;
+
+    // 4. Routing Table (Whitelist)
     $routes = [
-        'login'    => 'loginControl',
-        'signup'   => 'signupControl',
-        'account'  => 'userControl',
-        'contact'  => 'userControl',
-        'resume'   => 'resumeControl',
-        'template' => 'templateControl',
+        'login'     => 'loginControl',
+        'sign_up'   => 'signupControl',
+        'account'   => 'userControl',
+        'contact'   => 'userControl',
+        'resume'    => 'resumeControl',
+        'template'  => 'templateControl',
         'experience'=> 'experienceControl',
         'education' => 'educationControl',
         'projects'  => 'projectControl',
@@ -30,20 +42,22 @@
         'wizard'    => 'wizardControl'
     ];
 
-    $action = $_POST['action'] ?? '';
-    if (!is_string($action)) $action = '';
-    $action = trim($action);
-    
-    if (!isset($routes[$action])) {
-        $_SESSION['error'] = 403;
-        header('Location: ../error.php');
-        exit;
-    }
-    
-    // 4. Requires are now handled by our autoloader
-    $targetClass = $routes[$action];
+    if (isset($routes[$snapshot])) {
+        $targetClass = $routes[$snapshot];
 
-    // 5. Invoke Class & Function
-    $handler = new $targetClass($_POST);
-    $handler->handle();
+        // 5. Requires are handled by our "Aggressive Autoloader"
+        if (class_exists($targetClass)) {
+            $ritual = new $targetClass($_POST);
+            $ritual->handle();
+            exit;
+
+        } else { // file/class missing.
+            $_SESSION['error'] = "Unable to find [$targetClass].";
+        }
+    } else { // Error: Module not in whitelist.
+        $_SESSION['error'] = "Forbidden: The pendulum cannot swing to [$snapshot].";
+    }
+
+    // If we reach this point, something failed.
+    header('Location: ../client.php');
     exit;

@@ -239,33 +239,6 @@
     return /^\+?[0-9]{6,15}$/.test(s);
   }
 
-  // function isValidUrl(v) {
-  //   const s = String(v || "").trim();
-  //   if (!s) return true;
-
-  //   try {
-  //     const u = new URL(s.startsWith("http://") || s.startsWith("https://") ? s : "https://" + s);
-
-  //     if (!["http:", "https:"].includes(u.protocol)) return false;
-
-  //     const host = u.hostname;
-  //     if (host === "localhost") return true;
-  //     if (!host.includes(".")) return false;
-  //     if (host.endsWith(".")) return false;
-
-  //     return true;
-  //   } catch {
-  //     return false;
-  //   }
-  // }
-
-  // function normalizeUrl(v) {
-  //   const s = String(v || "").trim();
-  //   if (!s) return "";
-  //   if (/^https?:\/\//i.test(s)) return s;
-  //   return "https://" + s;
-  // }
-
   function pulseInvalid(el) {
     if (!el) return;
     const old = el.style.borderColor;
@@ -333,7 +306,6 @@
       pulseInvalid(firstName);
       return false;
     }
-
     return true;
   }
 
@@ -389,7 +361,6 @@
 
       return true;
     }
-
     return true;
   }
 
@@ -567,7 +538,6 @@
     state.expMore = null;
     if (expMoreVal) expMoreVal.value = "";
     clearChoiceGroup("expMore");
-
     showToast("Role saved");
 
     const expMoreIdx = route.indexOf("expMore");
@@ -588,7 +558,6 @@
     state.eduMore = null;
     if (eduMoreVal) eduMoreVal.value = "";
     clearChoiceGroup("eduMore");
-
     showToast("Education saved");
 
     const eduMoreIdx = route.indexOf("eduMore");
@@ -682,7 +651,6 @@
       pulseInvalid(firstName);
       return false;
     }
-
     return true;
   }
 
@@ -712,7 +680,6 @@
     ].includes(lower)) {
       return "Software / Tools";
     }
-
     return "";
   }
 
@@ -739,7 +706,6 @@
       </div>
       <button type="button" class="remove">✕</button>
     `;
-
     return row;
   }
 

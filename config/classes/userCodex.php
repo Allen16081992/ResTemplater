@@ -95,7 +95,7 @@
 
         public function deleteContact(int $uid): int {
             $stmt = $this->pdo->prepare('DELETE FROM contacts WHERE user_id = :user_id LIMIT 1');
-            $stmt->execute([':user_d' => $uid]);
+            $stmt->execute([':user_id' => $uid]);
             return $stmt->rowCount();
         }
     }

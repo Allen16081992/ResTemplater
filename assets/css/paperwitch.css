@@ -169,7 +169,7 @@ nav a.current { cursor: default; }
   left: 0;
   z-index: 1;
 }
-#server-field {
+.server-field {
   display:flex;
   position:relative;
   pointer-events: none; 

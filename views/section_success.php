@@ -1,10 +1,10 @@
 <section id="ready_user" class="<?= ViewBook::setVisibility('success'); ?>">
     <h1 class="title is-size-2 has-text-grey-light has-text-centered animate__animated animate__fadeInDown" style="margin-top: 3rem;">
-        ✨ Your account has been casted successfully ✨
+        ✨ Your account has been cast successfully ✨
     </h1>
 
     <p class="subtitle is-size-5 has-text-centered animate__animated animate__fadeIn animate__delay-1s" style="max-width: 36rem; margin: 1rem auto 2.5rem auto; line-height: 1.8;">
-        Welcome to PaperWitch, a resume editor born to life from a successful college project.
+        Welcome to Paper Witch, a resume editor born to life from a successful college project.
         Log in and make yourself at home. Your job scroll awaits ✨
     </p>
     <button class="button is-medium animate__animated animate__fadeIn animate__delay-2s" data-section="login">Log in here</button>

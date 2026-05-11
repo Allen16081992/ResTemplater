@@ -31,8 +31,8 @@
 
       <!-- STEP: Basics -->
       <form action="./config/action_handler.conf.php" <?= isset($_SESSION['session_data']['user_id']) ?: 'target="_blank"'; ?> method="post" target="_blank">
+        <?= SessionBook::csrfField(); ?>
         <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
           <p class="helptext">Just the essentials.</p>
@@ -261,19 +261,16 @@
           <h2>Check</h2>
           <p class="helptext">Here’s what we’ll put on your resume.</p>
           <div class="pw-summary" id="summaryGrid"></div>
-          <div class="pw-hint" style="margin-top:.85rem">
-            You can go back if you want to change something.
-          </div>
+          <div class="pw-hint" style="margin-top:.85rem">You can go back if you want to change something.</div>
         </article>
 
         <!-- STEP: Download -->
         <article class="pw-card" data-step="download">
           <div class="pw-final-only">
             <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
-              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="wizard">Save now</button>
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="wizard:save">Save now</button>
             <?php } else { ?>
-              <input type="hidden" name="template" value="vintage">
-              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template">Let’s Download</button>
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|vintage">Let’s Download</button>
             <?php } ?>
           </div>
         </article>

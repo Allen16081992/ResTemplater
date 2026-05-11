@@ -29,6 +29,9 @@
                 return;
             }
 
+            // ================================
+            //       AUTHENTICATION LOGIC     
+            // ================================
             // DB lookup (only after validation)
             $pdo = Database::Connect();
             $model = new userCodex($pdo);  

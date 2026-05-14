@@ -45,7 +45,7 @@
                 // Validate payload
                 $this->dataScan();
 
-                $uid      = $this->postData['user_id'] ?? 0;
+                $uid      = $_SESSION['session_data']['user_id'] ?? '';
                 $title    = trim((string)($this->postData['title'] ?? ''));
                 $headline = trim((string)($this->postData['headline'] ?? ''));
 
@@ -72,7 +72,7 @@
             } 
             elseif($intent === 'delete') {
                 $resid = $this->postData['resume_id'] ?? '';
-                $uid = $this->postData['user_id'] ?? '';
+                $uid = $_SESSION['session_data']['user_id'] ?? '';
 
                 // DB querry (only after validation)
                 $pdo = Database::Connect();

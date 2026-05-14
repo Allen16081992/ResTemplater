@@ -11,14 +11,14 @@
     </p>
 
     <article class="profile-wrap animate__animated animate__fadeIn animate__delay-2s">
-        <form action="./config/action_handler.conf.php" method="post">
+        <form action="config/action_handler.conf.php" method="post">
+            <?= SessionBook::csrfField(); ?>
             <div class="field">
                 <label for="password" class="label">Password</label>
+                <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('pwd') ?></div>
                 <input type="password" id="password" name="pwd" class="input" placeholder="••••••••">
             </div>
-            <button type="submit" name="action" value="account" class="button is-dark is-danger animate__animated animate__fadeIn animate__delay-3s">Erase me permanently</button>
-            <input type="hidden" name="id" value="<?= $_SESSION['session_data']['user_id'] ?? '' ?>">
-            <input type="hidden" name="closure">
+            <button type="submit" name="action" value="account:closure" class="button is-dark is-danger animate__animated animate__fadeIn animate__delay-3s">Erase me permanently</button>
         </form> 
     </article>
 </section>

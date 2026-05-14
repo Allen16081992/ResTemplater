@@ -60,6 +60,10 @@
         }
 
         public function handle(): void {
+            // Capture everything after the colon ':'
+            // $parts = explode(':', $this->postData['action'], 2);
+            // $intent = $parts[1] ?? '';
+
             // Validate for missing value
             $errors = ValidGrimoire::emptyField($this->postData);
             if (!empty($errors)) {
@@ -70,42 +74,37 @@
                 return;
             }
 
-            // Validate email format
-            $email = trim((string)($this->postData['email'] ?? ''));
-            if ($msg = ValidGrimoire::validateEmail($email)) {
-                $errors['email'] = $msg;
+            // Define the fields we care about
+            $fields = ['email', 'fullname', 'city', 'country', 'phone'];
+
+            foreach ($fields as $field) {
+                // 1. Get value, cast to string, trim
+                $value = trim((string)($this->postData[$field] ?? ''));
+                
+                // 2. Overwrite the original array immediately
+                $this->postData[$field] = $value;
+
+                // 3. Validate (using a dynamic switch or specific calls)
+                if ($field === 'email') {
+                    $msg = ValidGrimoire::validateEmail($value);
+                } elseif ($field === 'phone') {
+                    $msg = ValidGrimoire::validatePhone($value);
+                } else {
+                    // Name, City, Country all use the same method
+                    $msg = ValidGrimoire::validateName($value, true);
+                }
+
+                // Final check: if errors exist, send them back together
+                if ($msg) {
+                    $_SESSION['error'][$field] = $msg;
+                }
             }
 
-            // Validate fullname
-            $name = trim((string)($this->postData['fullname'] ?? ''));
-            if ($msg = ValidGrimoire::validateName($name, true)) {
-                $errors['fullname'] = $msg;
-            }
-
-            // Validate city
-            $city = trim((string)($this->postData['city'] ?? ''));
-            if ($msg = ValidGrimoire::validateName($city, true)) {
-                $errors['city'] = $msg;
-            }
-
-            // Validate country
-            $country = trim((string)($this->postData['country'] ?? ''));
-            if ($msg = ValidGrimoire::validateName($country, true)) {
-                $errors['country'] = $msg;
-            }
-
-            // Validate phone number format
-            $phone = trim((string)($this->postData['phone'] ?? ''));
-            if ($msg = ValidGrimoire::validatePhone($phone)) {
-                $errors['phone'] = $msg;
-            }
-
-            // Final check: if errors exist, send them back together
-            if (!empty($errors)) {
+            // If more than 1 entries
+            if (count($_SESSION['error']) > 0) {
                 $this->oldForm();
-                $_SESSION['error'] = $errors;
                 $_SESSION['error']['global'] = 'Some fields in the Wizard require your attention.';
-                ViewBook::revert($this->postData['action'] ?? '');
+                ViewBook::revert('wizard');
                 return;
             }
 
@@ -128,10 +127,9 @@
                 $modelRes = new wizardCodex($pdo);
                 $modelRes->setFullResume($this->postData);
             } catch (\Throwable $e) {
-                $_SESSION['error'] = "Saving failed. Please try again.";
+                $_SESSION['error'] = "Failed to save. Please try again.";
             }
-
-            ViewBook::revert($this->postData['action'] ?? '');
+            ViewBook::revert('wizard');
             exit;
         }
-    } // 157
+    }

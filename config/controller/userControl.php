@@ -5,48 +5,49 @@
         public function __construct(private array $postData) {}
         
         public function handle(): void {
-            // DB lookup (only after validation)
+            // 1. Extract the Intent (everything after the colon)
+            // ltrim ensures we remove the ':'
+            $module = strstr($this->postData['action'], ':', true) ?: $this->postData['action'];
+            $intent = ltrim(strchr($this->postData['action'], ':'), ':');
+
+            // DB lookup
             $pdo = Database::Connect();
             $model = new userCodex($pdo); 
 
-            // Account closure
-            if (!isset($this->postData['closure'])) {
+            // 2. Account deletion
+            if ($intent == 'closure') {
                 $exist = $model->findByEmail($this->postData['email']);
                 if (!$exist) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'User not found.';
-                    ViewBook::revert($postData['action'] ?? 'profile');
+                    ViewBook::revert('closure');
                     return; 
                 }
 
-                // If logged in user match, close account
+                // If user id match, close account
                 if ($exist['id'] === (int)$this->postData['id']) {
                     // Verify password
                     $pwd = (string)($this->postData['pwd'] ?? '');
                     if (!mixedGrimoire::checkHash($pwd, $exist['password_hash'])) {
                         // Hold error message + set previous UI state
-                        $_SESSION['error'] = ['pwd' => 'Password not right.'];
-
-                        // Set visibility
-                        $_SESSION['action'] = 'closure';
-                        ViewBook::revert($this->postData['action'] ?? 'closure');
+                        $_SESSION['error'] = ['pwd' => 'Incorrect password.'];
+                        ViewBook::revert('closure');
                         return;
                     }
                 }
 
                 // Delete user (only after validation)
-                $erase = $model->deleteAccount($exist['id']);
-                if ($erase <= 0) {
+                $burn = $model->deleteAccount($exist['id']);
+                if ($burn <= 0) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to delete account.';
-                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    ViewBook::revert('closure');
                     return;
                 }
 
-                // Set success message + redirect
-                $_SESSION['action'] = 'home';
+                // Set success message + redirect homepage
                 $_SESSION['success'] = 'Account closed. Data erased.';
-                ViewBook::revert($this->postData['action'] ?? '');
+                ViewBook::revert('home');
                 return;
             }
 
@@ -55,12 +56,11 @@
             if (!empty($errors)) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? 'profile');
+                ViewBook::revert('profile');
                 return;
             }
 
-            // Account details
-            if (isset($this->postData['account'])) {
+            if ($module == 'account') {
                 // Validate email format
                 $email = trim((string)($this->postData['email'] ?? ''));
                 if ($msg = ValidGrimoire::validateEmail($email)) {
@@ -76,56 +76,59 @@
                 // Final check: if errors exist, send them back together
                 if (!empty($errors)) {
                     $_SESSION['error'] = $errors;
-                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    ViewBook::revert('profile');
                     return;
-                }
+                }   
+                
 
-                $exist = $model->findByEmail($this->postData['email']);
+                $exist = $model->findByEmail($email);
                 if (!$exist) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Update failed. User not found.';
-                    ViewBook::revert($postData['action'] ?? 'profile');
+                    ViewBook::revert('profile');
                     return; 
                 }
                 
-                $user = $_SESSION['session_data']['user_id'];
-                $update = $model->updateEmail($user, $email);
-
                 // Verify if task was successful
+                $update = $model->updateEmail($_SESSION['session_data']['user_id'], $email);
                 if ($update <= 0) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Updating account failed.';
-                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    $_SESSION['error'] = 'Failed to update account.';
+                    ViewBook::revert('profile');
                     return;
                 }
 
                 if (!empty($pwd)) {
-                    $passw = $model->updateHash($user, $pwd);
+                    $passw = $model->updateHash($_SESSION['session_data']['user_id'], $pwd);
                     if ($passw <= 0) {
                         // Hold error message + set previous UI state
                         $_SESSION['error'] = 'Updating account failed.';
-                        ViewBook::revert($this->postData['action'] ?? 'profile');
+                        ViewBook::revert('profile');
                         return;
                     }
                 }
                 $_SESSION['success'] = 'Account updated.';
-            } 
 
-            // Personalia - Contacts
-            if (!isset($this->postData['contact'])) {
+            } elseif ($module == 'contact') {
                 $errors = [];
 
                 // Collect errors
-                $fields = ['fullname', 'city', 'country'];
+                $fields = ['fullname', 'city', 'country', 'phone'];
                 foreach ($fields as $field) {
+                    // 1. Trim and cast to string
                     $value = trim((string)($this->postData[$field] ?? ''));
+
+                    // 2. Overwrite the original postData with the "clean" version
+                    $this->postData[$field] = $value;
+
+                    // 3. Validate using the updated field
                     if ($msg = ValidGrimoire::validateName($value, true)) {
                         $errors[$field] = $msg;
                     }
                 }
 
-                // Separate logic for phone
-                $phone = trim((string)($this->postData['phone'] ?? ''));
+                // Validate phone
+                $phone = $this->postData['phone'];
                 if ($msg = ValidGrimoire::validatePhone($phone)) {
                     $errors['phone'] = $msg;
                 }
@@ -133,10 +136,14 @@
                 // Final check: if errors exist, send them back together
                 if (!empty($errors)) {
                     $_SESSION['error'] = $errors;
-                    ViewBook::revert($this->postData['action'] ?? 'profile');
+                    ViewBook::revert('profile');
                     return;
                 }
 
+                // Assign the user id to array
+                $this->postData['user_id'] = $_SESSION['session_data']['user_id'];
+
+                // Verify if contact information exist
                 $exist = $model->fetchContact($this->postData['user_id']);
                 if (!$exist) {
                     $contact = $model->createContact($this->postData);
@@ -147,13 +154,13 @@
                 // Verify if task was successful
                 if ($contact <= 0) {
                     // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Updating personal failed.';
-                    ViewBook::revert($postData['action'] ?? 'profile');
+                    $_SESSION['error'] = 'Failed to update personal info.';
+                    ViewBook::revert('profile');
                     return;
                 }
-                $_SESSION['success'] = 'Profile updated.';
+                $_SESSION['success'] = 'Personal info updated.';
             }
-            ViewBook::revert($postData['action'] ?? 'profile');
+            ViewBook::revert('profile');
             exit;
         }
     }

@@ -5,14 +5,11 @@
         public function __construct(private array $postData) {}
 
         public function handle(): void {
-            if (!isset($this->postData['template'])) {
-                $_SESSION['error'] = 404;
-                header('Location: ../../error.php'); 
-                exit;
-            }
+            // If $this->postData['action'] is "template:read|vintage"
+            $template = explode('|', $this->postData['action'])[1] ?? 'default';
 
             // 1. Pick the specific "Painter" (The Child Class)
-            switch ($this->postData['template']) {
+            switch ($template) {
                 case 'vintage':
                     require_once __DIR__ . '/../pdf_templates/vintage.src.php';
                     $pdf = new VintageTemplate();

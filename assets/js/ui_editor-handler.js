@@ -34,7 +34,7 @@
   }
 
   // Default panel
-  if (editor.querySelector("#panel-info")) activatePanel("info");
+  if (editor.querySelector("#panel-newRes")) activatePanel("newRes");
   else if (tabs[0]?.dataset.panel) activatePanel(tabs[0].dataset.panel);
 
   /* ---------------- REPEATER (experience/education/social) ---------------- */

@@ -61,3 +61,11 @@
     // If we reach this point, something failed.
     header('Location: ../client.php');
     exit;
+
+    // Testing Variables
+    // echo "<pre>POST Token: "; 
+    // var_dump($_POST['csrf_token'] ?? 'NOT SET'); 
+    // echo "<br>SESSION Token: "; 
+    // var_dump($_SESSION['csrf_token'] ?? 'NOT SET'); 
+    // echo "</pre>";
+    // die("Stopping here to see tokens.");

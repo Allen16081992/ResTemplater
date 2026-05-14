@@ -17,9 +17,9 @@
                         <?= SessionBook::csrfField(); ?>
                         <div class="field">
                             <label class="label" for="email">Email</label>
-                            <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                            <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
                             <div class="control has-icons-left">
-                                <input id="email" name="email" type="email" class="input" value="hallohallo@gmail.com <?php //ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" autocomplete="username" required>
+                                <input id="email" name="email" type="email" class="input" value="jade_greenhill32@outlook.com <?php //ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" autocomplete="username" required>
                                 <span class="icon is-small is-left">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 13.065 2.4 6.6h19.2L12 13.065Zm0 2.07L2.4 8.67V18h19.2V8.67L12 15.135Z"/></svg>
                                 </span>
@@ -28,9 +28,9 @@
                         
                         <div class="field">
                             <label class="label" for="password">Password</label>
-                            <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['pwd'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                            <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('pwd') ?></div>
                             <div class="control has-icons-left">
-                                <input id="password" name="pwd" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required value="hallohallo">
+                                <input id="password" name="pwd" type="password" class="input" placeholder="••••••••" autocomplete="current-password" required value="Jade West101">
                                 <span class="icon is-small is-left">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9h-2Zm-8 0V7a3 3 0 0 1 6 0v2H9Z"/></svg>
                                 </span>

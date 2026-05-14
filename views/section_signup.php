@@ -18,18 +18,14 @@
                         <?= SessionBook::csrfField(); ?>
                         <!-- Personal Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Personal Information</h3>
-                        <div class="field is-horizontal">
-                            <div class="field"> <!-- "field-body" ommited since removal of 'username' field -->
-                                <?php ViewBook::render('form_date_format.php'); ?>
-                            </div>
-                        </div>
+                        <?php ViewBook::render('form_date_format.php'); ?>
                         <hr class="divider mt-3 mb-2">
 
                         <!-- Account Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Account Details</h3>
                         <div class="field">
                             <label class="label" for="email">Email address</label>
-                            <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                            <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
                             <div class="control has-icons-left">
                                 <input id="email" name="email" type="email" class="input" value="<?= ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" required>
                                 <span class="icon is-small is-left">
@@ -39,8 +35,8 @@
                         </div>
 
                         <div class="toggle-eye">
-                            <label class="label" for="pwdField">Password</label>    
-                            <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['pwd'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>                 
+                            <label class="label" for="pwdField">Password</label>   
+                            <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('pwd') ?></div>             
                             <input id="pwdField" type="password" name="pwd" class="input" placeholder="••••••••" required>
                             <i class='bx bx-low-vision' aria-label="Toggle password visibility"></i>                      
                         </div>
@@ -69,3 +65,4 @@
         </div>
     </div>
 </section>
+<?php ViewBook::clearOldForm(); ?>

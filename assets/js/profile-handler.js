@@ -39,8 +39,8 @@
     saveBtn.textContent = "Save Changes";
 
     // Name the button so PHP can see which section was saved
-    if (form.id === "personal") saveBtn.name = "action", saveBtn.value = "contact";
-    if (form.id === "account") saveBtn.name = "action" , saveBtn.value = "account";
+    if (form.id === "personal") saveBtn.name = "action", saveBtn.value = "contact:update";
+    if (form.id === "account") saveBtn.name = "action" , saveBtn.value = "account:update";
 
     let isEditing = false;
 
@@ -50,12 +50,16 @@
       // Toggle button label
       editBtn.textContent = on ? "Cancel" : "Edit";
 
-      // Toggle inputs (skip immutable)
+      // Toggle inputs
       inputs.forEach((input) => {
-        if (IMMUTABLE_IDS.has(input.id)) return;
+        // 1. NEVER disable hidden fields (CSRF) or Immutable fields
+        if (IMMUTABLE_IDS.has(input.id) || input.type === "hidden") return;
 
-        if (on) input.removeAttribute("disabled");
-        else input.setAttribute("disabled", "disabled");
+        if (on) {
+          input.removeAttribute("disabled");
+        } else {
+          input.setAttribute("disabled", "disabled");
+        }
       });
 
       // Toggle Save button
@@ -77,7 +81,10 @@
 
     // Optional: lock fields right before submit to avoid double-click spam
     saveBtn.addEventListener("click", () => {
-      inputs.forEach((input) => input.setAttribute("disabled", "disabled"));
+      setTimeout(() => {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Saving...";
+      }, 0);
     });
   });
 

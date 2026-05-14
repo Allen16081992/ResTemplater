@@ -12,7 +12,7 @@
       $msg = 'Forbidden. Request Denied.';
       break;
     default:
-      $msg = 'It looks like the page you were looking for got affected by free will.<br> Quick! Take a broomstick and go before they see you!';
+      $msg = $code ?? 'It looks like the page you were looking for got affected by free will.<br> Quick! Take a broomstick and go before they see you!';
   }
 ?>
 <!DOCTYPE html>

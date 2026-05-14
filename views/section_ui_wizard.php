@@ -30,9 +30,8 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="./config/action_handler.conf.php" <?= isset($_SESSION['session_data']['user_id']) ?: 'target="_blank"'; ?> method="post" target="_blank">
+      <form action="config/action_handler.conf.php" method="post" <?= !isset($_SESSION['session_data']['user_id']) ? 'target="_blank"' : '' ?>>
         <?= SessionBook::csrfField(); ?>
-        <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
           <p class="helptext">Just the essentials.</p>
@@ -40,7 +39,7 @@
           <div class="pw-form">
             <div>
               <label class="pw-label" for="fullname">Full name *</label>
-              <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['fullname'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+              <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('fullname') ?></div>
               <input type="text" id="fullname" name="fullname" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['fullname'] ?? '').'"' : 'autocomplete="fullname"'; ?>>
             </div>
             <div>
@@ -231,12 +230,12 @@
             <div class="pw-row">
               <div>
                 <label class="pw-label" for="email">Email *</label>
-                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
                 <input type="email" id="email" name="email" class="pw-input" placeholder="you@example.com" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($account['email'] ?? '').'"' : 'autocomplete="email"'; ?> value="jade_greenhill32@hotmail.com">
               </div>
               <div>
                 <label class="pw-label" for="phone">Phone *</label>
-                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('phone') ?></div>
                 <input type="tel" id="phone" name="phone" class="pw-input" placeholder="+31…" <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['phone'] ?? '').'"' : 'autocomplete="tel"'; ?> value="063166457">
               </div>
             </div>
@@ -244,12 +243,12 @@
             <div class="pw-row">
               <div>
                 <label class="pw-label" for="city">City *</label>
-                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['city'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('city') ?></div>
                 <input type="text" id="city" name="city" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['city'] ?? '').'"' : 'autocomplete="address-level2"'; ?> value="Rotterdam">
               </div>
               <div>
                 <label class="pw-label" for="country">Country *</label>
-                <div id="server-field" class="animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['country'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('country') ?></div>
                 <input type="text" id="country" name="country" class="pw-input" placeholder="..." <?= isset($_SESSION['session_data']['user_id']) ? 'value="'.($contact['country'] ?? '').'"' : 'autocomplete="country-name"'; ?> value="Netherlands">
               </div>
             </div>

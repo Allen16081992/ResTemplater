@@ -16,7 +16,7 @@
                 $stmtResume->execute([
                     ':title'       => $postData['title'] ?? $postData['fullname'],
                     ':headline'    => $postData['headline'] ?? rand(0,100),
-                    ':user_id'     => $postData['user_id']
+                    ':user_id'     => $_SESSION['session_data']['user_id'] ?? ''
                 ]);
 
                 $resumeId = (int) $this->pdo->lastInsertId();
@@ -82,7 +82,7 @@
 
                 // 3️⃣ Insert Contacts
                 $stmtCon = $this->pdo->prepare('SELECT 1 FROM contacts WHERE user_id = :user_id LIMIT 1');
-                $stmtCon->execute([':user_id' => $postData['user_id']]);
+                $stmtCon->execute([':user_id' => $_SESSION['session_data']['user_id'] ?? '']);
 
                 if ($stmtCon->fetch() === false) {
                     $stmtEdu = $this->pdo->prepare("
@@ -96,7 +96,7 @@
                         ':phone'     => $postData['phone'],
                         ':city'      => $postData['city'],
                         ':country'   => $postData['country'],
-                        ':user_id'   => $postData['user_id']
+                        ':user_id'   => $_SESSION['session_data']['user_id'] ?? ''
                     ]);
                 }
 

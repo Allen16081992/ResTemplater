@@ -91,13 +91,12 @@
 
           <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="user_id" value="<?= isset($_SESSION['session_data']['user_id']) ? $_SESSION['session_data']['user_id'] : ''; ?>">
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
                   <div class="is-flex">
                     <label class="label" for="title">Title</label>
-                    <div class="server-field animate__animated animate__shakeX"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('title') ?></div>
                   </div>
                   <div class="control">
                     <input type="text" id="title" name="title" class="pw-input" placeholder="...">
@@ -119,15 +118,14 @@
           </header>
 
           <form id="form-delRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
                   <label for="pwDeleteResumeSelect" class="label">Resume</label>
                   <div class="select is-fullwidth">
                     <select id="pwDeleteResumeSelect" name="resume_id">
-                      <?php if (!empty($data['papers'])) { ?>
+                      <?php if (isset($data['papers']) && !empty($data['papers'])) { ?>
                         <option disabled selected>Select:</option>
                         <?php foreach ($data['papers'] as $resume) { ?>
                           <option value="<?= htmlspecialchars($resume['id']) ?>"><?= htmlspecialchars($resume['title']) ?></option>
@@ -152,8 +150,6 @@
           </header>
 
           <div class="pw-panel-form">
-            <!-- <input type="hidden" name="csrf_token" value="<?php //$_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="selectCV"> -->
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
               <?php if (!empty($data['papers'])): foreach ($data['papers'] as $resume): ?>
                 <a href="client.php?resume_id=<?= $resume['id'] ?>" class="edit-link">
@@ -204,8 +200,7 @@
           <!-- Toggle for include Account photo or not. -->
 
           <form id="form-info" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="field">
               <label class="label">Resume Title</label>
@@ -225,32 +220,6 @@
               <button type="submit" name="action" value="resume:update" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>
-          <?php } else { ?>
-            <header class="pw-panel-header">
-              <div>
-                <h2>Create a resume</h2>
-                <p>First, you create one.</p>
-              </div>
-            </header>
-
-            <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-              <input type="hidden" name="user_id">
-              <input type="hidden" name="create">
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <div class="is-flex">
-                      <label class="label">Title</label>
-                      <div class="server-field"><?= htmlspecialchars($_SESSION['error']['title'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
-                    </div>
-                    <div class="control">
-                      <input class="input" type="text" name="title" placeholder="...">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="button is-contrast" name="action" value="resume:create">Create</button>
-            </form>
           <?php } ?>
         </section>
 
@@ -270,8 +239,7 @@
           </header>
 
           <form id="form-experience" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
               <!-- EXPERIENCE ITEM -->
@@ -396,8 +364,7 @@
           </header>
 
           <form id="form-education" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
               <!-- Education ITEM -->
@@ -521,8 +488,7 @@
           </header>
 
           <form id="form-projects" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <!-- Projects ITEM -->
             <div class="pw-repeater" data-repeater="projects">
@@ -611,8 +577,7 @@
           <!-- Toggle for include Account photo or not. -->
 
           <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="skills">
               <!-- Skills ITEM -->
@@ -687,10 +652,8 @@
           </header>
 
           <form id="form-social" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
-            <input type="hidden" name="action" value="social">
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
               <?php if (!empty($socialurl)) { ?>
@@ -739,8 +702,7 @@
           </header>
 
           <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" target="_blank" method="post">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['session_data']['user_id'] ?? '') ?>">
+            <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
               <button type="submit" class="radio-card" name="action" value="template:read|vintage">

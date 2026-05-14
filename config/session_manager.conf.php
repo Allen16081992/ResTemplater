@@ -108,10 +108,9 @@
 
             // Verify string. Verify match. (prevents TypeErrors) (prevents CSRF)
             if (!is_string($token) || !hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
-                $_SESSION['error'] = 403;
+                $_SESSION['error'] = 'CSRF Mismatch detected.';
                 ViewBook::revert('error');
             }
-
             // if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
             //     die("Missing Data - POST: " . isset($_POST['csrf_token']) . " | SESS: " . isset($_SESSION['csrf_token']));
             // }

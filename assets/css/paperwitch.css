@@ -57,12 +57,11 @@
       radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.18), rgba(0,0,0,0) 40%),
       linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
 }
-
+html { background: var(--bg-gradients); }
 *, *::before, *::after {box-sizing: border-box;}
 body {
   display: flex;
   flex-direction: column;
-  background: var(--bg-gradients);
 }
 main { flex: 1; }
 body > header {
@@ -171,7 +170,7 @@ nav a.current { cursor: default; }
 }
 .server-field {
   display:flex;
-  position:relative;
+  position:absolute;
   pointer-events: none; 
   color:red;
   font-size: 0.75rem;
@@ -422,4 +421,123 @@ nav a.current { cursor: default; }
 .sub {
   font-size: 0.85rem;
   opacity: 0.7;
+}
+
+/* ==============
+   CLOSURE
+  ==============*/
+/* Header styling */
+.closure-header {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+.closure-header .title {
+  font-family: 'Cinzel', 'Georgia', serif; /* Optional fancy font match if you have one */
+  letter-spacing: 1px;
+}
+
+/* Master Layout Grid */
+.closure-grid-container {
+  max-width: 62rem;
+  margin: 0 auto 5rem auto;
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  gap: 3.5rem;
+  align-items: center; /* Vertically aligns image and text perfectly */
+  padding: 0 1.5rem;
+}
+
+/* Character Art Presentation */
+.closure-image-wrapper {
+  perspective: 1000px; /* Slight depth effect */
+}
+.closure-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 32rem;
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Content Stack */
+.closure-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Custom Semantic Warnings List */
+.closure-warning-box {
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+.closure-warning-list {
+  list-style-type: none !important;
+  margin-left: 0 !important;
+  color: #a0aec0;
+}
+.closure-warning-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.closure-warning-list li::before {
+  content: "✦"; /* Elegant magical star instead of basic bullet points */
+  position: absolute;
+  left: 0;
+  color: #f6ad55; /* Soft glowing orange/gold contrast color */
+}
+
+/* Form Container Card (Your styles expanded) */
+.closure-wrap {
+  max-width: 460px;
+  width: 100%;
+  padding: 2.5rem;
+  background: rgba(15, 17, 24, .75);
+  backdrop-filter: blur(8px); /* Subtle premium glassmorphism effect */
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 24px;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, .6);
+}
+
+/* Aesthetic matching dark input */
+.dark-input {
+  background-color: rgba(10, 12, 16, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  transition: border-color 0.3s ease;
+}
+.dark-input:focus {
+  border-color: #f14668 !important; /* Glows red when interacting to signify danger */
+  box-shadow: 0 0 0 0.125em rgba(241, 70, 104, 0.25) !important;
+}
+
+/* Prevent text highlighting on checkbox text click */
+.select-none {
+  user-select: none;
+}
+
+/* Responsive Overrides */
+@media (max-width: 840px) {
+  .closure-grid-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.25rem;
+    padding: 0 0.75rem;
+  }
+  .closure-image {
+    width: 100%;
+    width: 18rem;
+    height: 24rem;
+  }
+  .closure-content {
+    width: 100%; /* Force the text stack to take up full available width safely */
+    gap: 1.25rem;
+  }
+  .closure-wrap {
+    max-width: 100%;
+    padding: 1.5rem 1rem;
+  }
 }

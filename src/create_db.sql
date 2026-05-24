@@ -111,7 +111,7 @@
         sort_order  INT NOT NULL DEFAULT 0,
         created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        work_id     INT UNSIGNED NOT NULL,
+        experience_id     INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
         KEY idx_bullet_work_sort (work_id, sort_order),
@@ -127,7 +127,7 @@
         sort_order  INT NOT NULL DEFAULT 0,
         created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        acad_id     INT UNSIGNED NOT NULL,
+        education_id     INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
     KEY idx_bullet_acad_sort (acad_id, sort_order),
@@ -141,8 +141,7 @@
         id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
         text        TEXT NOT NULL,
         sort_order  INT NOT NULL DEFAULT 0,
-        project_id  INT UNSIGNED NOT NULL,
-        resume_id   INT UNSIGNED NOT NULL,
+        projects_id  INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
         KEY uq_project_resume_sort (project_id, sort_order),
@@ -155,7 +154,7 @@
     CREATE TABLE IF NOT EXISTS `skills` (
         id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
         name       VARCHAR(100) NOT NULL,
-        category   ENUM('language','framework','tool','platform','other') NOT NULL DEFAULT 'other',
+        category   ENUM('language', 'framework', 'tool', 'platform', 'technical', 'certificate', 'soft-skill', 'hard-skill', 'other') NOT NULL DEFAULT 'other',
         level      ENUM('basic','intermediate','advanced') NULL,
         sort_order INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

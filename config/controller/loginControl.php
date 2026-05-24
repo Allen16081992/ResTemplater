@@ -15,7 +15,7 @@
             if (!empty($errors)) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? 'login');
+                ViewBook::revert('login');
                 return;
             }
 
@@ -25,7 +25,7 @@
             if ($msg !== null) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['email' => $msg];
-                ViewBook::revert($this->postData['action'] ?? 'login'); 
+                ViewBook::revert('login'); 
                 return;
             }
 
@@ -41,7 +41,7 @@
             if ($user === false) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['email' => 'Invalid email or password.'];
-                ViewBook::revert($this->postData['action'] ?? 'login');
+                ViewBook::revert('login');
                 return;
             }
 
@@ -50,7 +50,7 @@
             if (!mixedGrimoire::checkHash($pwd, $user['password_hash'])) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['pwd' => 'Invalid email or password.'];
-                ViewBook::revert($this->postData['action'] ?? 'login');
+                ViewBook::revert('login');
                 return;
             }
 

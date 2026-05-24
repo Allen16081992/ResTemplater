@@ -1,0 +1,544 @@
+/* ========================================================================== */
+/*  PAPERWITCH CORE STYLESHEET                                                */
+/* -------------------------------------------------------------------------- */
+/*  File:        paperwitch.css                                               */
+/*  Author:      Allen Pieter                                                 */
+/*  Project:     PaperWitch — Resume Creation Tool                            */
+/*  Description: Core layout, navigation, and landing-page styles.            */
+/*               Defines root variables, gradients, navigation bar, hero      */
+/*               section, feature blocks, CTA bands, footer, and sparkles.    */
+/* -------------------------------------------------------------------------- */
+/*  Version:     1.0.0                                                        */
+/*  Created:     2025-10-21                                                   */
+/*  Compatibility: Chrome 112+, Edge 112+, Safari 16.5+, Firefox 117+         */
+/*  License:     © 2025 Allen Pieter. All rights reserved.                    */
+/* -------------------------------------------------------------------------- */
+/*  Notes:                                                                    */
+/*   • Employs global CSS variables for color and typography tokens.          */
+/*   • Fully nesting-ready: all selectors structured for native CSS nesting.  */
+/*   • Supported in Chromium 112+, Firefox 117+, Safari 17+.                  */
+/*   • Uses consistent clamp(), min(), and fluid units for responsiveness.    */
+/*   • Overflow-x hidden prevents minor skew-induced horizontal scroll.       */
+/*   • Sparkle effect styles defined at end for button hover bursts.          */
+/* -------------------------------------------------------------------------- */
+/*  Sections:                                                                 */
+/*   1. ROOT VARIABLES / GLOBALS                                              */
+/*   2. NAVIGATION (Landing)                                                  */
+/*   3. HERO + LANDING SECTIONS                                               */
+/* ========================================================================== */
+
+
+/* ==========================================================
+   1. ROOT VARIABLES / GLOBALS
+   ========================================================== */
+:root { 
+    --def-style:#333;
+    --def-styleII:#555;
+    --default:#007bff;
+    --buttercup:#f2bb16;
+    --torea-bay:#173ba6;
+    --bunting:#121d59;
+    --cold-purple:#a496d9;
+
+    --edit:rgb(181, 129, 25);
+    --edit-hover:rgb(62,149,163);
+
+    --trash:rgb(192, 50, 50);
+    --trash-hover:rgb(169, 47, 59);
+    --bg-window:rgba(0,0,0,0.8);
+
+    --accent: #8b5cf6;  /* witchy purple */
+    --bg: #0a0a0f;      /* site background */
+    --panel: #0f1118;   /* card base */
+    --muted: #a7a7b3;   /* subtle text */
+    --font-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+    --bg-gradients:
+      radial-gradient(1200px 600px at 10% -10%, rgba(139,92,246,.22), rgba(0,0,0,0) 40%),
+      radial-gradient(900px 500px at 100% 0%, rgba(79,70,229,.18), rgba(0,0,0,0) 40%),
+      linear-gradient(180deg, #14121f 0%, #0a0a10 70%);
+}
+
+*, *::before, *::after {box-sizing: border-box;}
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-gradients);
+}
+main { flex: 1; }
+body > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background: rgba(0,0,0,.5);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+footer { 
+  padding:2.5rem 0 2.5rem 0; 
+  a { color:#c7c7ff; } 
+}
+h1, h2, h3 { 
+  font-weight: 600;
+  font-family: Unna, Georgia, serif; 
+  letter-spacing: .2px; 
+}
+/* Base font sizes and line heights */
+h1 {
+  line-height: 1.1;
+  font-size: clamp(1.8rem, 4vw + 1rem, 3rem);
+}
+h2 {
+  line-height: 1.2;
+  font-size: clamp(1.6rem, 3vw + 1rem, 2.1rem);
+}
+h3 {
+  line-height: 1.3;
+  font-size: clamp(1.3rem, 2vw + 0.5rem, 1.8rem);
+}
+p {
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: clamp(1rem, 1.4vw + 0.25rem, 1.1rem);
+}
+.hidden {display:none;}
+
+/* ==========================================================
+   2. NAVIGATION BAR
+   ========================================================== */
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+}
+nav a {
+  color: azure;
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+nav a:hover, nav a.current {background-color: var(--def-styleII);}
+nav a.current { cursor: default; }
+#signUp { background:#04AA6D; }
+#signIn, a[data-section="logout"] {border: 2px solid #dfdfdf;} /* #44d884 */
+#logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
+.is-contrast { color: black; background:var(--buttercup);}
+
+
+/* ==========================================================
+   3. LOGIN + SIGNUP SECTIONS
+   ========================================================== */
+.form-window {
+  display: flex;
+  place-items: center;
+  /* width: min(1080px, 94vw); */
+  padding: clamp(14px, 2vw, 28px);
+  margin: 0 auto;
+}
+
+.toggle-eye > i {
+  position:absolute;
+  margin-top:8px;
+  margin-left:-35px;
+  font-size:1.4em;
+  cursor:pointer;
+  color:var(--muted);
+}
+.toggle-eye > i:hover {
+  color:rgb(58, 58, 253);
+}
+
+/* ─────────────────────────────────────────────── */
+/*  ✨ PAPERWITCH SERVER MESSAGE STYLING          */
+/* ─────────────────────────────────────────────── */
+
+/* Server message */
+#server-msg {
+  display:flex;
+  position:absolute;
+  pointer-events: none; 
+  top: 9rem;
+  left: 0;
+  z-index: 1;
+}
+.server-field {
+  display:flex;
+  position:absolute;
+  pointer-events: none; 
+  color:red;
+  font-size: 0.75rem;
+  margin-left: 1rem;
+  margin-top: 0.3rem;
+  z-index: 1;
+}
+
+#server-msg > div {
+  display:flex;
+  justify-content: center;
+  width:100vw;
+}
+/* New message colors */
+.error {
+  background-color: #2f1f1f;
+  color: #f87171; 
+  border: 1px solid #dc2626; 
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.success {
+  background-color: #222f1f;
+  color: #71f871; 
+  border: 1px solid #2cdc26; 
+  padding: 0.50rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+/* Retro message colors */
+.serV-error {
+  color:black;
+  background: radial-gradient(circle, rgba(252, 70, 107, 1) 0%, rgba(63, 94, 251, 1) 100%);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+.serV-good {
+  color:black;
+  border-radius: 6px;
+  background: radial-gradient(circle, rgba(8, 255, 0, 1) 15%, rgb(52, 52, 52) 50%);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+/* ─────────────────────────────────────────────── */
+/*  ✨ PAPERWITCH SPARKLE EFFECT                   */
+/*  Particle burst for CTA + Sign-up buttons       */
+/* ─────────────────────────────────────────────── */
+
+/* Spark container (auto-injected by JS) */
+.pw-emitter{position:absolute;inset:0;pointer-events:none;}
+.spark-particle{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:1px;background:#fff;box-shadow:0 0 6px rgba(255,255,255,.9);transform:translate(-50%,-50%) rotate(var(--th));opacity:0;animation:spark-burst .6s ease-out forwards;pointer-events:none;}
+.spark-particle:nth-child(3n){background:#9ae6ff;}
+.spark-particle:nth-child(3n+1){background:#60a5fa;}
+.spark-particle:nth-child(3n+2){background:#fda4af;}
+
+@keyframes spark-burst{
+  0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--th)) scale(.6);}
+  15%{opacity:1;}
+  100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--th)) translateX(var(--dist)) scale(.9);}
+}
+
+/* Accessibility: disable motion effects for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spark-particle { animation: none; opacity: 0; }
+}
+
+/* Mobile Devices */
+@media only screen and (max-width: 540px) and (orientation: portrait) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #logo { align-self:center; }
+  #logo img {height: clamp(9.5rem, 12vw, 10rem); width:auto;}
+  nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-around;
+    background: var(--def-style);
+    z-index:1;
+  }
+  nav a {
+    padding: 15px 20px;
+    margin: 2px;
+    background-color: #444;
+    color: white;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    border-radius:0;
+    min-width:5.9rem;
+  }
+  nav a:focus {background-color: var(--accent);}
+  a[data-section="login"] {border:none;}
+  a[data-section="sign_up"] {
+    background:#444; 
+    border-bottom: 2px solid #04AA6D; 
+    border-top: 2px solid #04AA6D;
+  } 
+  footer {margin-bottom:5.5rem; padding: 0 0 0 5px;}
+}
+
+/* ==========================================================
+   4. DEFAULT EDITOR STYLESHEET
+   ========================================================== */
+.pw-editor {
+  /* padding: 28px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(14px, 2vw, 28px);
+  min-height:70vh;
+}
+
+.pw-editor > .pw-panel {
+  width: min(680px, 100%);
+}
+
+.pw-option {
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+}
+
+.pw-option > .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.intro {
+  margin: 0 0 28px;
+  color: #555;
+  font: 16px/1.65 Arial, sans-serif;
+  max-width: 52ch;
+}
+
+.row > div > h2 {
+  margin: 0 0 6px;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.row > div > p {
+  margin: 0 0 22px;
+  color: #555;
+  line-height: 1.6;
+  max-width: 34ch;
+}
+
+.row > div > a {
+  width: fit-content;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid #111;
+  color: #111;
+  font-weight: 700;
+}
+
+.dark {
+  background: #111;
+  color: white;
+}
+
+/* ================================= 
+  5. Portrait Select
+   ================================*/
+.gallery {
+  display: grid;
+  /* repeat(auto-fit...) can leave cards left-aligned if there aren't enough to fill a row */
+  /* Using auto-center logic: */
+  grid-template-columns: repeat(auto-fit, 240px); 
+  justify-content: center; /* This centers the cards inside the gallery div */
+  gap: 40px;
+  width: min(1000px, 90vw);
+  margin: 0 auto; /* This centers the gallery div inside the page */
+}
+
+/* Frame */
+.card {
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s ease;
+  background: none;    /* Undo Bulma default */
+  box-shadow: none;    /* Undo Bulma default */
+  border: none;        /* Undo Bulma default */
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+/* Frame border */
+.frame {
+  padding: 12px;
+  background: linear-gradient(145deg, #6b4b1f, #3a2410);
+  border: 3px solid #c69b4c;
+  box-shadow:
+    0 0 20px rgba(198,155,76,0.4),
+    inset 0 0 15px rgba(0,0,0,0.6);
+}
+
+/* Painting area */
+.painting {
+  height: 180px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #120819, #2a1335);
+  position: relative;
+  overflow: hidden;
+  font-size: 60px;
+}
+
+/* Example visuals */
+.scroll::before {
+  content: "📜";
+}
+
+.cauldron::before {
+  content: "🧪";
+}
+
+.chaos::before {
+  content: "✨";
+}
+
+/* Glow on hover */
+.card:hover .painting {
+  box-shadow: 0 0 25px rgba(88,255,173,0.5);
+}
+
+/* Label plate */
+.label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.sub {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* ==============
+   CLOSURE
+  ==============*/
+/* Header styling */
+.closure-header {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+.closure-header .title {
+  font-family: 'Cinzel', 'Georgia', serif; /* Optional fancy font match if you have one */
+  letter-spacing: 1px;
+}
+
+/* Master Layout Grid */
+.closure-grid-container {
+  max-width: 62rem;
+  margin: 0 auto 5rem auto;
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  gap: 3.5rem;
+  align-items: center; /* Vertically aligns image and text perfectly */
+  padding: 0 1.5rem;
+}
+
+/* Character Art Presentation */
+.closure-image-wrapper {
+  perspective: 1000px; /* Slight depth effect */
+}
+.closure-image {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 32rem;
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Content Stack */
+.closure-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Custom Semantic Warnings List */
+.closure-warning-box {
+  color: #e2e8f0;
+  line-height: 1.6;
+}
+.closure-warning-list {
+  list-style-type: none !important;
+  margin-left: 0 !important;
+  color: #a0aec0;
+}
+.closure-warning-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.closure-warning-list li::before {
+  content: "✦"; /* Elegant magical star instead of basic bullet points */
+  position: absolute;
+  left: 0;
+  color: #f6ad55; /* Soft glowing orange/gold contrast color */
+}
+
+/* Form Container Card (Your styles expanded) */
+.closure-wrap {
+  max-width: 460px;
+  width: 100%;
+  padding: 2.5rem;
+  background: rgba(15, 17, 24, .75);
+  backdrop-filter: blur(8px); /* Subtle premium glassmorphism effect */
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 24px;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, .6);
+}
+
+/* Aesthetic matching dark input */
+.dark-input {
+  background-color: rgba(10, 12, 16, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  transition: border-color 0.3s ease;
+}
+.dark-input:focus {
+  border-color: #f14668 !important; /* Glows red when interacting to signify danger */
+  box-shadow: 0 0 0 0.125em rgba(241, 70, 104, 0.25) !important;
+}
+
+/* Prevent text highlighting on checkbox text click */
+.select-none {
+  user-select: none;
+}
+
+/* Responsive Overrides */
+@media (max-width: 840px) {
+  .closure-grid-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 1.25rem;
+    padding: 0 0.75rem;
+  }
+  .closure-image {
+    width: 100%;
+    width: 18rem;
+    height: 24rem;
+  }
+  .closure-content {
+    width: 100%; /* Force the text stack to take up full available width safely */
+    gap: 1.25rem;
+  }
+  .closure-wrap {
+    max-width: 100%;
+    padding: 1.5rem 1rem;
+  }
+}

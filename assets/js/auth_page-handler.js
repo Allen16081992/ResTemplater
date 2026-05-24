@@ -6,8 +6,8 @@
   const visual = document.getElementById("signupVisual");
 
   if (form && visual) {
-    const idleImg = 'url("assets/images/paperwitch_bold.png")';
-    const burstImg = 'url("assets/images/paperwitch_glow.png")';
+    const idleImg = 'url("assets/images/paperwitch_takehand.png")';
+    const burstImg = 'url("assets/images/paperwitch_radiate.png")';
 
     // Preload images
     [idleImg, burstImg].forEach((src) => {
@@ -27,17 +27,12 @@
     };
 
     const dobIsValid = () => {
-      const dateInput = form.querySelector('input[type="date"]');
       const daySel = form.querySelector('select[name="day"]');
       const monthSel = form.querySelector('select[name="month"]');
       const yearSel = form.querySelector('select[name="year"]');
-      const dateOk = dateInput ? isFilledInput(dateInput) : false;
 
-      const selectsOk =
-        !!daySel && !!monthSel && !!yearSel &&
+      return !!daySel && !!monthSel && !!yearSel &&
         isValidSelect(daySel) && isValidSelect(monthSel) && isValidSelect(yearSel);
-
-      return dateOk || selectsOk;
     };
 
     const allFilled = () => {

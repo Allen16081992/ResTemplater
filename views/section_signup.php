@@ -27,7 +27,7 @@
                             <label class="label" for="email">Email address</label>
                             <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
                             <div class="control has-icons-left">
-                                <input id="email" name="email" type="email" class="input" value="<?= ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" required>
+                                <input id="email" name="email" type="email" class="input" value="<?= ViewBook::setOldForm('email'); ?>" placeholder="you@domain.com" autocomplete="email" required>
                                 <span class="icon is-small is-left">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 13.065 2.4 6.6h19.2L12 13.065Zm0 2.07L2.4 8.67V18h19.2V8.67L12 15.135Z"/></svg>
                                 </span>

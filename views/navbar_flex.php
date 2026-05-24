@@ -1,5 +1,5 @@
 <header> <!-- Site navigation bar -->
-    <a href="index.php" id="logo"><img src="assets/images/witch_logo2.png" alt="Brand logo"></a>
+    <a href="index.php" id="logo"><img src="assets/images/webp/witch_logo2.webp" alt="Brand logo"></a>
     <?php
         // 1. Setup contextual state
         $isLoggedIn = isset($_SESSION['session_data']['user_id']);

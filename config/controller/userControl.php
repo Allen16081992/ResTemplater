@@ -3,7 +3,17 @@
     
     class userControl {
         public function __construct(private array $postData) {}
-        
+       
+        private function oldForm(): void {
+            $oldForm = [
+                'fullname' => $this->postData['fullname'] ?? '',
+                'phone' => $this->postData['phone'] ?? '',
+                'city' => $this->postData['city'] ?? '',
+                'country' => $this->postData['country'] ?? '',
+                'email' => $this->postData['email'] ?? ''
+            ];
+        }
+
         public function handle(): void {
             // 1. Extract the Intent (everything after the colon)
             // ltrim ensures we remove the ':'
@@ -51,9 +61,14 @@
                 return;
             }
 
-            // Validate for missing value
+            // Validate for missing value, but skip password
+            if ($this->postData['pwd'] == '') { 
+                unset($this->postData['pwd']); 
+            }
+
             $errors = ValidGrimoire::emptyField($this->postData);
             if (!empty($errors)) {
+                $this->oldForm();
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = $errors;
                 ViewBook::revert('profile');
@@ -61,28 +76,39 @@
             }
 
             if ($module == 'account') {
+                // echo "<pre>POST Token: "; 
+                // var_dump($_POST['csrf_token'] ?? 'NOT SET'); 
+                // echo "<br>SESSION Token: "; 
+                // var_dump($this->postData ?? 'NOT SET ENTRIES'); 
+                // echo "</pre>";
+                // die("Stopping here to see tokens.");
+
                 // Validate email format
                 $email = trim((string)($this->postData['email'] ?? ''));
                 if ($msg = ValidGrimoire::validateEmail($email)) {
                     $errors['email'] = $msg;
                 }
 
-                // Validate password
-                $pwd = trim((string)($this->postData['pwd'] ?? ''));
-                if ($msg = ValidGrimoire::validatePwd($pwd)) {
-                    $errors['pwd'] = $msg;
+                if (isset($this->postData['pwd'])) {
+                    // Validate password
+                    $pwd = trim((string)($this->postData['pwd'] ?? ''));
+                    if ($msg = ValidGrimoire::validatePwd($pwd)) {
+                        $errors['pwd'] = $msg;
+                    }
                 }
 
                 // Final check: if errors exist, send them back together
                 if (!empty($errors)) {
+                    $this->oldForm();
+                    // Hold error message + set previous UI state
                     $_SESSION['error'] = $errors;
                     ViewBook::revert('profile');
                     return;
-                }   
-                
+                }     
 
-                $exist = $model->findByEmail($email);
+                $exist = $model->fetchRow($_SESSION['session_data']['user_id']);
                 if (!$exist) {
+                    $this->oldForm();
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Update failed. User not found.';
                     ViewBook::revert('profile');
@@ -92,6 +118,7 @@
                 // Verify if task was successful
                 $update = $model->updateEmail($_SESSION['session_data']['user_id'], $email);
                 if ($update <= 0) {
+                    $this->oldForm();
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to update account.';
                     ViewBook::revert('profile');
@@ -101,6 +128,7 @@
                 if (!empty($pwd)) {
                     $passw = $model->updateHash($_SESSION['session_data']['user_id'], $pwd);
                     if ($passw <= 0) {
+                        $this->oldForm();
                         // Hold error message + set previous UI state
                         $_SESSION['error'] = 'Updating account failed.';
                         ViewBook::revert('profile');
@@ -113,7 +141,7 @@
                 $errors = [];
 
                 // Collect errors
-                $fields = ['fullname', 'city', 'country', 'phone'];
+                $fields = ['fullname', 'city', 'country'];
                 foreach ($fields as $field) {
                     // 1. Trim and cast to string
                     $value = trim((string)($this->postData[$field] ?? ''));
@@ -135,6 +163,7 @@
 
                 // Final check: if errors exist, send them back together
                 if (!empty($errors)) {
+                    $this->oldForm();
                     $_SESSION['error'] = $errors;
                     ViewBook::revert('profile');
                     return;
@@ -153,6 +182,7 @@
 
                 // Verify if task was successful
                 if ($contact <= 0) {
+                    $this->oldForm();
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to update personal info.';
                     ViewBook::revert('profile');

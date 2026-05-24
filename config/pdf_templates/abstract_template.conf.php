@@ -45,54 +45,76 @@
             return $first . ' ' . strtoupper(substr($last, 0, 1)) . '.';
         }
 
-        public function fetchData(int $resumeID, int $userID) {
+        public function fetchData(string $resid, int $uid) {
             $result = [];
-            $tables = ['resumes', 'accounts', 'contacts', 'experience', 'experience_bullets', 'education', 'education_bullets', 'projects', 'project_bullets', 'skills', 'socials'];
+            $tables = [
+                'resumes', 'accounts', 'contacts', 
+                'experience', 'education', 'projects', 'skills', 'socials',
+                'experience_bullets', 'education_bullets', 'projects_bullets',
+            ];
             $pdo = Database::connect();
 
             // Loop through each table and fetch data
             foreach ($tables as $table) {
                 if ($table === 'resumes') {
-                    $stmt = $pdo->prepare("SELECT resume_title FROM `$table` WHERE resumeID = ?");
-                    $stmt->execute([$resumeID]);
+                    $stmt = $pdo->prepare("SELECT title, headline FROM `$table` WHERE id = :resume_id");
+                    $stmt->execute([':resume_id' => $resid]);
                     $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
                 } elseif ($table === 'accounts') {
-                    $stmt = $pdo->prepare("SELECT email FROM `$table` WHERE userID = ?");
-                    $stmt->execute([$userID]);
+                    $stmt = $pdo->prepare("SELECT email FROM `$table` WHERE id = :user_id");
+                    $stmt->execute([':user_id' => $uid]);
                     $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
                 } elseif ($table === 'contacts') {
-                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE userID = ?");
-                    $stmt->execute([$userID]);
+                    // FIX 3: fetch() in plaats van fetchAll() om de data direct plat te slaan
+                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE user_id = :user_id");
+                    $stmt->execute([':user_id' => $uid]);
+                    $result[$table] = $stmt->fetch(PDO::FETCH_ASSOC);
+                } elseif (str_ends_with($table, '_bullets')) {
+
+                    $parentTable = str_replace('_bullets', '', $table);
+                    $foreignKey = $parentTable . '_id';
+                    
+                    $parentIDs = [];
+                    if (!empty($result[$parentTable])) {
+                        foreach ($result[$parentTable] as $parentRow) {
+                            $parentIDs[] = $parentRow['id'];
+                        }
+                    }
+
+                    if (empty($parentIDs)) {
+                        $result[$table] = [];
+                        continue;
+                    }
+
+                    $placeholders = implode(',', array_fill(0, count($parentIDs), '?'));
+                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE `$foreignKey` IN ($placeholders)");
+                    $stmt->execute($parentIDs);
                     $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                 } else {
-                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE resumeID = ?");
-                    $stmt->execute([$resumeID]);
+                    $stmt = $pdo->prepare("SELECT * FROM `$table` WHERE resume_id = ?");
+                    $stmt->execute([$resid]);
                     $result[$table] = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             }
 
-            if (empty($result['resumes'])) {
-                $_SESSION['error'] = 'No data found.';
-                header('location: ../client.php');          
-                exit;
-            }
-
+            $parchment = $this->sanitize($result['resumes']['title'] ?? 'Untitled');
             $email = $this->sanitize($result['accounts']['email'] ?? '');
 
-            $contact = [];
-            foreach ($result['contacts'] ?: [] as $item) {
-                $contact[] = [
-                    'fullname'  => $this->sanitize($item['fullname']),
-                    'phone'     => $this->sanitize($item['phone']),
-                    'city'      => $this->sanitize($item['city']),
-                    'country'   => $this->sanitize($item['country']),
-                    'image_url' => $item['image_url'] ?? ''
-                ];
-            }
+            // Directly map contacts and skip loop
+            $contactRow = $result['contacts'] ?: [];
+            $contact = [
+                'fullname'  => $this->sanitize($contactRow['fullname'] ?? ''),
+                'phone'     => $this->sanitize($contactRow['phone'] ?? ''),
+                'city'      => $this->sanitize($contactRow['city'] ?? ''),
+                'country'   => $this->sanitize($contactRow['country'] ?? ''),
+                'image_url' => $contactRow['image_url'] ?? ''
+            ];
 
             $experience = [];
             foreach (($result['experience'] ?? []) as $item) {
                 $experience[] = [
+                    'id'        => $item['id'], // FIX 2: Essentieel voor de bullets koppeling straks!
                     'title'     => $this->sanitize($item['title']),
                     'employer'  => $this->sanitize($item['employer']),
                     'start_date'=> $this->sanitize($item['start_date']),
@@ -104,6 +126,7 @@
             $education = [];
             foreach (($result['education'] ?? []) as $item) {
                 $education[] = [
+                    'id'        => $item['id'], // FIX 2: Essentieel voor de bullets koppeling straks!
                     'program'   => $this->sanitize($item['program']),
                     'school'    => $this->sanitize($item['school']),
                     'start_date'=> $this->sanitize($item['start_date']),
@@ -115,33 +138,34 @@
             $projects = [];
             foreach (($result['projects'] ?? []) as $item) {
                 $projects[] = [
-                    'title'    => $this->sanitize($item['title']),
-                    'role'     => $this->sanitize($item['role']),
-                    'summary'  => $this->sanitize($item['summary'])
+                    'id'        => $item['id'], // FIX 2: Essentieel voor de bullets koppeling straks!
+                    'title'     => $this->sanitize($item['title']),
+                    'role'      => $this->sanitize($item['role']),
+                    'summary'   => $this->sanitize($item['summary'])
                 ];
             }
 
             $exp_bullets = [];
             foreach (($result['experience_bullets'] ?? []) as $item) {
                 $exp_bullets[] = [
-                    'summary'  => $this->sanitize($item['summary']),
-                    'work_id'  => $item['work_id']
+                    'summary'       => $this->sanitize($item['summary']),
+                    'experience_id' => $item['experience_id']
                 ];
             }
 
             $edu_bullets = [];
             foreach (($result['education_bullets'] ?? []) as $item) {
                 $edu_bullets[] = [
-                    'summary'  => $this->sanitize($item['summary']),
-                    'edu_id'   => $item['edu_id']
+                    'summary'      => $this->sanitize($item['summary']),
+                    'education_id' => $item['education_id']
                 ];
             }
 
             $pro_bullets = [];
-            foreach (($result['project_bullets'] ?? []) as $item) {
+            foreach (($result['projects_bullets'] ?? []) as $item) {
                 $pro_bullets[] = [
-                    'summary'   => $this->sanitize($item['summary']),
-                    'project_id'=> $item['project_id']
+                    'summary'     => $this->sanitize($item['summary']),
+                    'projects_id' => $item['projects_id']
                 ];
             }
 
@@ -154,15 +178,23 @@
             }
 
             $social = [];
-            foreach (($result['social'] ?? []) as $item) {
+            foreach (($result['socials'] ?? []) as $item) {
                 $social[] = [
-                    'name'     => $this->sanitize($item['name']),
-                    'media_url'=> $item['media_url'] // Keep raw for QR generator
+                    'name'      => $this->sanitize($item['name']),
+                    'media_url' => $item['media_url'] 
                 ];
             }
 
+            // FIX 1: Check de headline uit $result['resumes'], want $this->data bestaat nog niet
+            if (empty($experience) && empty($education) && empty($projects)) {
+                $headline = 'This parchment is empty. Add some ingredients, silly!';
+            } else {
+                $headline = $result['resumes']['headline'] ?? '';
+            }
+
             $this->data = [
-                'resume_title' => $this->sanitize($result['resumes']['resume_title'] ?? 'Untitled'),
+                'resume_title' => $parchment,
+                'headline'     => $headline,
                 'email'        => $email,
                 'contact'      => $contact,
                 'skills'       => $skills,
@@ -177,84 +209,108 @@
         }
 
         public function loadPostData(array $post): void {
+            // Directly map contacts and skip loop
+            $headline = $this->sanitize($post['headline']);
+            $contact = [
+                'fullname' => $this->sanitize($post['fullname']),
+                'email'    => $this->sanitize($post['email']),
+                'phone'    => $this->sanitize($post['phone']),
+                'city'     => $this->sanitize($post['city']),
+                'country'  => $this->sanitize($post['country'])
+            ];
+
+            // $experience = [];
+            // foreach ($post['experience'] ?? [] as $item) {
+            //     if (!is_array($item)) continue;
+
+            //     $title      = $this->sanitize($item['title']);
+            //     $employer = $this->sanitize($item['employer']);
+            //     $summary     = $this->sanitize($item['summary'] ?? '');
+
+            //     if ($title === '' && $employer === '' && $summary === '') continue;
+
+            //     $experience[] = [
+            //         'title'      => $title,
+            //         'employer'   => $employer,
+            //         'start_date' => $this->sanitize($item['start_date']),
+            //         'end_date'   => $this->sanitize($item['end_date']),
+            //         'summary'    => $summary
+            //     ];
+            // }
             $experience = [];
+            $counter = 1;
             foreach ($post['experience'] ?? [] as $item) {
-                if (!is_array($item)) continue;
-
-                $title      = $this->sanitize($item['title']);
-                $employer = $this->sanitize($item['employer']);
-                $summary     = $this->sanitize($item['summary'] ?? '');
-
-                if ($title === '' && $employer === '' && $summary === '') continue;
-
                 $experience[] = [
-                    'title'      => $title,
-                    'employer'   => $employer,
-                    'start_date' => $this->sanitize($item['start_date']),
-                    'end_date'   => $this->sanitize($item['end_date']),
-                    'summary'    => $summary
+                    'id'        => $item['id'] ?? $counter, 
+                    'title'     => $this->sanitize($item['title']),
+                    'employer'  => $this->sanitize($item['employer']),
+                    'start_date'=> $this->sanitize($item['start_date']),
+                    'end_date'  => $this->sanitize($item['end_date']),
+                    'summary'   => $this->sanitize($item['summary'])
                 ];
+                $counter++;
             }
 
+            // $education = [];
+            // foreach ($post['education'] ?? [] as $item) {
+            //     if (!is_array($item)) continue;
+
+            //     $program = $this->sanitize($item['program']);
+            //     $school  = $this->sanitize($item['school']);
+            //     $start   = $this->sanitize($item['start_date']);
+            //     $end     = $this->sanitize($item['end_date']);
+            //     $summary    = $this->sanitize($item['summary'] ?? '');
+
+            //     if ($program === '' && $school === '' && $summary === '') continue;
+
+            //     $education[] = [
+            //         'program'    => $program,
+            //         'school'     => $school,
+            //         'start_date' => $start,
+            //         'end_date'   => $end,
+            //         'summary'    => $summary
+            //     ];
+            // }
             $education = [];
+            $counter = 1;
             foreach ($post['education'] ?? [] as $item) {
-                if (!is_array($item)) continue;
-
-                $program = $this->sanitize($item['program']);
-                $school  = $this->sanitize($item['school']);
-                $start   = $this->sanitize($item['start_date']);
-                $end     = $this->sanitize($item['end_date']);
-                $summary    = $this->sanitize($item['summary'] ?? '');
-
-                if ($program === '' && $school === '' && $summary === '') continue;
-
                 $education[] = [
-                    'program'    => $program,
-                    'school'     => $school,
-                    'start_date' => $start,
-                    'end_date'   => $end,
-                    'summary'    => $summary
+                    'id'        => $item['id'] ?? $counter, 
+                    'program'   => $this->sanitize($item['program']),
+                    'school'    => $this->sanitize($item['school']),
+                    'start_date'=> $this->sanitize($item['start_date']),
+                    'end_date'  => $this->sanitize($item['end_date']),
+                    'summary'   => $this->sanitize($item['summary'])
                 ];
+                $counter++;
             }
 
             $skills = [];
             foreach ($post['skills'] ?? [] as $item) {
-                if (!is_array($item)) continue;
-
-                $name     = $this->sanitize($item['name']);
-                $category = $this->sanitize($item['category']);
-
-                if ($name === '') continue;
-
                 $skills[] = [
-                    'name' => $name,
-                    'category' => $category
+                    'name'     => $this->sanitize($item['name']),
+                    'category' => $this->sanitize($item['category'])
                 ];
             }
 
             $social = [];
-            foreach ($post['social'] ?? [] as $item) {
-                if (!is_array($item)) continue;
-
-                $media = trim((string) ($item['name'] ?? ''));
-                if ($media === '') continue;
-
-                $social[] = [
-                    'media_url' => $media
-                ];
-            }         
+            foreach (($post['social'] ?? []) as $item) {
+                // Alleen toevoegen als er ook echt een naam of url is ingevuld
+                if (!empty($item['name']) || !empty($item['media_url'])) {
+                    $social[] = [
+                        'name'      => $this->sanitize($item['name'] ?? 'Media'),
+                        'media_url' => $this->sanitize($item['media_url'] ?? '') 
+                    ];
+                }
+            }        
 
             $this->data = [
-                'fullname' => trim((string) ($post['fullname'] ?? '')),
-                'headline' => trim((string) ($post['headline'] ?? '')),
-                'email' => trim((string) ($post['email'] ?? '')),
-                'city' => trim((string) ($post['city'] ?? '')),
-                'country' => trim((string) ($post['country'] ?? '')),
-                'phone' => trim((string) ($post['phone'] ?? '')),
-                'social' => trim((string) ($post['social'] ?? '')),
-                'experience' => $experience,
+                'headline'  => $headline,
+                'contact'   => $contact,
+                'experience'=> $experience,
                 'education' => $education,
-                'skills' => $skills
+                'skills'    => $skills,
+                'social'   => $social,
             ];
         }
         

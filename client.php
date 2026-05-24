@@ -21,10 +21,10 @@
       echo "</pre>";
 
 
-    //   $_SESSION['error'] = [
-    //     'title' => 'This field is required'
-    //   ];
-    //   $_SESSION['error'] = 'Not working...'
+    // $_SESSION['error'] = [
+    //   'title' => 'This field is required'
+    // ];
+    // $_SESSION['error'] = 'Not working...'
     // $_SESSION['action'] = 'wizard';
     // $_SESSION['success'] = 'Paper is saved';
 ?>
@@ -34,18 +34,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; upgrade-insecure-requests;"> -->
-    <meta name="description" content="PaperWitch is a lightweight resume toolkit of dutch origin where juniors and students can craft those boring job scrolls.">
-    <!-- Social Sharing -->
-    <meta property="og:title" content="Paperwitch - Thy Job Scroll Familiar">
-    <meta property="og:description" content="PaperWitch is a lightweight resume tooling kit of dutch origin where juniors and students can craft those boring job scrolls.">
-    <meta property="og:image" content="assets/images/falcon250.webp">
-    <meta property="og:locale" content="eng_ENG">
-    <meta property="og:type" content="website">
+    <meta name="description" content="PaperWitch is a lightweight resume generator from Dutch soil where juniors and students can forge impressively minimalist job scrolls.">
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/Favicon 180x180.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon 32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon 16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon/Favicon-180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon-16x16.png">
     <!-- CSS -->
+    <style>html, body { background: #14121f !important; color: #e8e8ef; }</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
@@ -91,4 +86,4 @@
 </html>
 
 <!-- Cleanup required to prevent page persistence shenanigans-->
-<?php unset($_SESSION['action']); ?>
+<?php unset($_SESSION['action'], $_SESSION['error']); ?>

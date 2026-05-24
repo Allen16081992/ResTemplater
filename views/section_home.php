@@ -9,7 +9,7 @@
             <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = mixedGrimoire::setPhrase('tagline')); ?></p>
             <form class="buttons mt-5" action="client.php" method="post">
                 <button type="submit" id="cta" class="button is-medium btn-cta" name="wizard" value="wizard">Create My Resume</button>
-                <a href="#" class="button is-medium is-light">🔮 Browse Templates</a>
+                <!-- <a href="#" class="button is-medium is-light">🔮 Browse Templates</a> -->
             </form>
           </div>
           <div class="column is-hidden-touch">
@@ -36,10 +36,10 @@
         <div class="template-card"><div class="template-thumb">Minimal</div></div>
         <div class="template-card"><div class="template-thumb">Witchy</div></div>
       </div>
-      <div class="buttons mt-5">
+      <!-- <div class="buttons mt-5">
         <a class="button is-light" href="#start">Try a Demo</a>
         <a class="button btn-cta" href="#start">Start Now</a>
-      </div>
+      </div> -->
     </div>
   </article>
   
@@ -49,29 +49,29 @@
   <article class="section">
     <div class="container">
       <h2 class="title is-3">Why PaperWitch</h2>
-      <div class="columns is-multiline">
+      <div class="columns is-multiline is-centered">
         <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">🧙 Stylish Templates</h3>
-            <p class="has-text-grey-light">Curated designs that feel modern, bold, and job‑ready—no corporate boredom.</p>
+            <p class="has-text-grey-light">Curated layouts that look like 80's typewriter, modern, or minimalistic.</p>
           </div>
         </div>
         <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">⚡ Fast & Simple</h3>
-            <p class="has-text-grey-light">Fill your info and export in minutes—no learning curve, no paywall.</p>
+            <p class="has-text-grey-light">Fill your info and export directly. No learning curve, no paywall.</p>
           </div>
         </div>
-        <div class="column is-6 is-3-desktop">
+        <!-- <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">🎨 Custom Colors & Fonts</h3>
             <p class="has-text-grey-light">Make it yours with instant color palettes and clean font pairings.</p>
           </div>
-        </div>
+        </div> -->
         <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">💾 One‑Click PDF</h3>
-            <p class="has-text-grey-light">TCPDF engine under the hood for crisp, ATS‑friendly exports.</p>
+            <p class="has-text-grey-light">FPDF engine under the hood for instant, ATS‑friendly exports.</p>
           </div>
         </div>
       </div>
@@ -88,17 +88,17 @@
         <div class="step has-text-left">
           <span class="num">1</span>
           <h3 class="title is-5">Fill Your Details</h3>
-          <p class="has-text-grey-light">Experience, education, skills—live preview as you type.</p>
+          <p class="has-text-grey-light">Experience, education, skills, contact details. We show a live preview at the end.</p>
         </div>
         <div class="step has-text-left">
           <span class="num">2</span>
           <h3 class="title is-5">Choose a Template</h3>
-          <p class="has-text-grey-light">Pick from Modern, Minimal, Creative, or Witchy collections.</p>
+          <p class="has-text-grey-light">Pick from Modern, Late 80's vintage, Projects-orientated, and more to come...</p>
         </div>
         <div class="step has-text-left">
           <span class="num">3</span>
           <h3 class="title is-5">Download</h3>
-          <p class="has-text-grey-light">Save as PDF — Ready to send or print.</p>
+          <p class="has-text-grey-light">Save as PDF. Ready to send or print.</p>
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@
   <!-- ========================================================
       TESTIMONIALS
   ========================================================= -->
-  <article class="section">
+  <!-- <article class="section">
     <div class="container">
       <h2 class="title is-3">Loved by Job‑Hunters</h2>
       <div class="columns is-multiline">
@@ -131,7 +131,7 @@
         </div>
       </div>
     </div>
-  </article>
+  </article> -->
   
   <!-- ========================================================
       PRICING / CTA BAND
@@ -143,11 +143,11 @@
         <div class="columns is-vcentered">
           <div class="column has-text-left">
             <h2>Try PaperWitch for Free</h2>
-            <p class="has-text-grey-light">Start building now. Upgrade anytime for premium templates & palettes.</p>
+            <p class="has-text-grey-light">Create your paper now!</p>
           </div>
-          <div class="column has-text-right-desktop">
-            <a class="button is-medium btn-cta" href="client.php">Start Creating</a>
-          </div>
+          <form class="column has-text-right-desktop" action="client.php" method="post">
+            <button type="submit" id="cta" class="button is-medium btn-cta" name="wizard" value="wizard">🔮 Start Creating</button>
+          </form>
         </div>
       </div>
     </div>

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /config/
+Disallow: /modules/
+
+Sitemap: https://www.paperwitch.eu/sitemap.xml

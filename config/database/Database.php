@@ -24,3 +24,6 @@
             }
         }
     }
+
+    // Before hosting
+    // enable oldForm('email') in section_login.php

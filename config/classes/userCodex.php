@@ -63,6 +63,12 @@
         // ==========================================================
         // 3. CONTACT CODEX
         // ========================================================== 
+        public function fetchRow(int $uid): array|false {
+            $stmt = $this->pdo->prepare('SELECT user_id FROM contacts WHERE user_id = :user_id LIMIT 1');
+            $stmt->execute([':user_id' => $uid]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
         public function fetchContact(int $uid): array|false {
             $stmt = $this->pdo->prepare('SELECT fullname, phone, city, country FROM contacts WHERE user_id = :user_id LIMIT 1');
             $stmt->execute([':user_id' => $uid]);

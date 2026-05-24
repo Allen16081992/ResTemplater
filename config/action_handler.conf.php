@@ -9,6 +9,7 @@
 
     // 2. Negate non-POST Requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $_SESSION = [];
         $_SESSION['error'] = 405;
         header('Location: ../error.php');
         exit;

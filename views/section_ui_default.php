@@ -89,14 +89,14 @@
             </div>
           </header>
 
-          <form id="form-newRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-newRes" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <div class="field is-horizontal">
               <div class="field-body">
                 <div class="field">
                   <div class="is-flex">
                     <label class="label" for="title">Title</label>
-                    <div class="server-field animate__animated animate__shakeX"><?= ViewBook::getError('title') ?></div>
+                    <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('title') ?></div>
                   </div>
                   <div class="control">
                     <input type="text" id="title" name="title" class="pw-input" placeholder="...">
@@ -117,7 +117,7 @@
             </div>
           </header>
 
-          <form id="form-delRes" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-delRes" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <div class="field is-horizontal">
               <div class="field-body">
@@ -199,13 +199,13 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-info" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-info" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="field">
               <label class="label">Resume Title</label>
               <div class="control">
-                <input class="input" type="text" name="title" placeholder="Name of your job scroll" value="<?= htmlspecialchars($master['title'] ?? '') ?>">
+                <input class="input" type="text" name="title" placeholder="..." value="<?= htmlspecialchars($master['title'] ?? '') ?>">
               </div>
             </div>
 
@@ -238,7 +238,7 @@
             </div>
           </header>
 
-          <form id="form-experience" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-experience" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
@@ -284,10 +284,10 @@
                         <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" name="delete">Remove this experience</button>
+                    <button type="button" class="button is-text pw-remove-item" name="action" value="experience:delete">Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
-                  <input type="hidden" name="exp_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
+                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
                 <?php } ?>
               <?php } ?>
             </div>
@@ -409,10 +409,10 @@
                         <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($edu['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item">Remove this education</button>
+                    <button type="button" class="button is-text pw-remove-item" name="action" value="education:delete">Remove this education</button>
                     <hr class="pw-repeater-divider">
                   </div>
-                  <input type="hidden" name="edu_id[]" value="<?= htmlspecialchars($edu['id']) ?>">
+                  <input type="hidden" name="education_id[]" value="<?= htmlspecialchars($edu['id']) ?>">
                 <?php } ?>
               <?php } ?>
             </div>
@@ -519,7 +519,7 @@
                       </div>
                     </div>
                     
-                    <button type="button" class="button is-text pw-remove-item">Remove this project</button>
+                    <button type="button" class="button is-text pw-remove-item" name="action" value="projects:delete">Remove this project</button>
                     <hr class="pw-repeater-divider">
                     <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($ass['id']) ?>">
                   </div>
@@ -576,7 +576,7 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-skills" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="skills">
@@ -591,12 +591,12 @@
                     <div class="control">
                       <select class="pw-select" name="skill[<?= $i ?>][category]">
                         <option disabled>Select a Category:</option>
-                        <option <?= $ski['category'] === 'Software / Tools' ? 'selected' : '' ?>>Software / Tools</option>
-                        <option <?= $ski['category'] === 'Languages' ? 'selected' : '' ?>>Languages</option>
-                        <option <?= $ski['category'] === 'Technical' ? 'selected' : '' ?>>Technical</option>
-                        <option <?= $ski['category'] === 'Certificate' ? 'selected' : '' ?>>Certificate</option>
-                        <option <?= $ski['category'] === 'Soft Skills' ? 'selected' : '' ?>>Soft Skills</option>
-                        <option <?= $ski['category'] === 'Hard Skills' ? 'selected' : '' ?>>Hard Skills</option>
+                        <option <?= $ski['category'] === 'tool' ? 'selected' : '' ?>>Software / Tools</option>
+                        <option <?= $ski['category'] === 'language' ? 'selected' : '' ?>>Languages</option>
+                        <option <?= $ski['category'] === 'technical' ? 'selected' : '' ?>>Technical</option>
+                        <option <?= $ski['category'] === 'certificate' ? 'selected' : '' ?>>Certificate</option>
+                        <option <?= $ski['category'] === 'soft-skill' ? 'selected' : '' ?>>Soft Skills</option>
+                        <option <?= $ski['category'] === 'hard-skill' ? 'selected' : '' ?>>Hard Skills</option>
                         <option <?= $ski['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
                       </select>
                     </div>
@@ -653,7 +653,7 @@
 
           <form id="form-social" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
               <?php if (!empty($socialurl)) { ?>
@@ -701,7 +701,7 @@
             </div>
           </header>
 
-          <form id="form-template" class="pw-panel-form" action="./config/action_handler.conf.php" target="_blank" method="post">
+          <form id="form-template" class="pw-panel-form" action="/config/action_handler.conf.php" target="_blank" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
@@ -709,10 +709,10 @@
                 <span>Vintage (1970 - 1980)</span>
               </button>
               <button type="submit" class="radio-card" name="action" value="template:read|business">
-                <span>Normal (Default)</span>
+                <span>Business (Default)</span>
               </button>
-              <button type="submit" class="radio-card" name="action" value="template:read|new_controverse">
-                <span>New Controverse (Business)</span>
+              <button type="submit" class="radio-card" name="action" value="template:read|contra">
+                <span>New Contra (Neo)</span>
               </button>
             </div>
           </form>

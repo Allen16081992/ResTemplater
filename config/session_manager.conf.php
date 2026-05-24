@@ -18,7 +18,7 @@
                     'domain' => '',
                     'secure' => $flag, // Dynamically enforce
                     'httponly' => true, 
-                    'samesite' => 'Lax', 
+                    'samesite' => 'Strict' // Lax
                 ]);
                 ini_set('session.use_strict_mode', '1');
                 session_start(); 
@@ -160,9 +160,15 @@
         }
    
         public static function render(string $view, array $data = []): void {
+            $filePath = './views/' . $view;
+
+            // Enforce version check
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate($filePath, true);
+            }
             $safeData = self::sanitize($data);
             extract($safeData);
-            require_once './views/'.$view; // file path
+            require $filePath;
         }
 
         public static function revert(string $view) : void {
@@ -170,9 +176,15 @@
             $_SESSION['action'] = $view;
             if (in_array($view, ['profile', 'wizard', 'builder'])) {
                 header('Location: /client.php'); 
+            } elseif (in_array($view, ['login', 'signup'])) {
+                header('Location: /index.php');
             } elseif (in_array($view, ['error'])) {
                 header('Location: /error.php'); 
             } else {
+                $uid = $_SESSION['session_data']['user_id'] ?? '';
+                $_SESSION = [];
+                // Restore the user session if exist
+                if (!empty($uid)) { $_SESSION['session_data']['user_id'] = $uid; }
                 header('Location: /index.php'); 
             }
             exit;
@@ -186,11 +198,11 @@
         //────────────────────────────────────//
         //          MESSAGING LOGIC           //
         //────────────────────────────────────//
-        public static function getError(string $field): string {
+        public static function getError(string $field) {
+            // Refactor error variable
             $error = $_SESSION['error'][$field] ?? '';
-            // Clear it after reading so it doesn't persist forever
             unset($_SESSION['error'][$field]); 
-            return htmlspecialchars($error, ENT_QUOTES, 'UTF-8');
+            return $error;
         }
 
         public static function flashForm(array $formData): void {

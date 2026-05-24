@@ -54,6 +54,7 @@
 *, *::before, *::after {box-sizing: border-box;}
 html {overflow-y: auto !important;}
 html, body {
+    background: var(--bg-gradients);
     overflow-x: hidden;  /* Prevents horizontal shifts */
     position: relative;   /* Ensures navbar positioning doesn't get reset */
     height: 100vh;
@@ -65,7 +66,6 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    background: var(--bg-gradients);
 }
 body > header {
     display: flex;

@@ -43,14 +43,14 @@
                 $errors['school'] = $msg;
             }
 
-            $startDate = ValidGrimoire::validateAndFormatDate($this->postData['start_date']);
+            $startDate = ValidGrimoire::validateAndFormatMonth($this->postData['start_date']);
             if ($startDate['error']) {
                 $errors['start_date'] = $startDate['error'];
             } else {
                 $this->postData['start_date'] = $startDate['date'];
             }
 
-            $endDate = ValidGrimoire::validateAndFormatDate($this->postData['end_date']);
+            $endDate = ValidGrimoire::validateAndFormatMonth($this->postData['end_date']);
             if ($endDate['error']) {
                 $errors['end_date'] = $endDate['error'];
             } else {

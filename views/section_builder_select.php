@@ -24,13 +24,13 @@
                 </a>
             <?php } ?>
 
-            <div class="card">
+            <!-- <div class="card">
                 <div class="frame">
                     <div class="painting chaos"></div>
                 </div>
                 <div class="label">Archive</div>
                 <div class="sub">Templates & experiments</div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

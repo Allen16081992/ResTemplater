@@ -82,13 +82,16 @@
             return null;
         }
 
-        public static function validateAndFormatDate(string $input): array {
+        public static function validateAndFormatMonth(string $input, bool $isEndDate = false): array {
+            // 1. Clean whitespace
             $input = trim(preg_replace('/\s+/', ' ', $input));
 
-            if ($input === 'end_date' && $input === '') {
+            // 2. Handle empty End Date fields as 'Present' (ongoing positions)
+            if ($isEndDate && $input === '') {
                 return ['error' => null, 'date' => 'Present'];
             }
 
+            // 3. Handle normal required field validation
             if ($input === '') {
                 return ['error' => 'Date is required.', 'date' => null];
             }
@@ -96,7 +99,7 @@
             $lower = strtolower($input);
 
             try {
-                // Handle exact natural phrases
+                // 4. Intercept conversational natural text phrases
                 if ($lower === 'today') {
                     $d = new DateTime('today');
                 } elseif ($lower === 'tomorrow') {
@@ -104,19 +107,21 @@
                 } elseif ($lower === 'yesterday') {
                     $d = new DateTime('yesterday');
                 } else {
-                    // Parse numeric or word-based full date
-                    $d = new DateTime($input);
+                    // 5. If it's a Chrome standard YYYY-MM, append the day so DateTime can parse it.
+                    // Otherwise, let PHP try to parse the Firefox custom input string.
+                    $parseInput = preg_match('/^\d{4}-\d{2}$/', $input) ? $input . '-01' : $input;
+                    $d = new DateTime($parseInput);
                 }
             } catch (Exception $e) {
-                return ['error' => 'Invalid date.', 'date' => null];
+                return ['error' => 'Invalid date format.', 'date' => null];
             }
 
-            // Ensure calendar date is valid
+            // 6. Double-check calendar authenticity (checks leap years, valid months, etc.)
             if (!checkdate((int)$d->format('m'), (int)$d->format('d'), (int)$d->format('Y'))) {
-                return ['error' => 'Invalid date.', 'date' => null];
+                return ['error' => 'Invalid calendar date.', 'date' => null];
             }
 
-            // Return formatted date for MariaDB
-            return ['error' => null, 'date' => $d->format('Y-m-d')];
+            // 7. Lock down output format to the 1st of the month for MariaDB DATE storage
+            return ['error' => null, 'date' => $d->format('Y-m-01')];
         }
     }

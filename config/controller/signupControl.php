@@ -22,15 +22,15 @@
             if (!$hasAll) {
                 $_SESSION['error'] = ['date' => 'Please add your date of birth.'];
                 $this->oldForm($day, $month, $year);
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
 
             // Validate date format
-            if (!checkdate((int)$month, (int)$day, (int)$year)) {
+            if (!checkdate((string)$month, (string)$day, (string)$year)) {
                 $_SESSION['error'] = ['date' => 'Please enter a valid date.'];
                 $this->oldForm($day, $month, $year);
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
 
@@ -43,12 +43,12 @@
             if ($age < 16) {
                 $_SESSION['error'] = ['date' => 'You must be at least 16 years old.'];
                 $this->oldForm($day, $month, $year);
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
         
             // Return the date in DD-MM-YYYY format
-            $this->postData['date'] = sprintf('%04d-%02d-%02d', (int)$year, (int)$month, (int)$day);
+            $this->postData['date'] = sprintf('%04d-%02d-%02d', (string)$year, (string)$month, (string)$day);
 
             // Validate for missing value
             $errors = ValidGrimoire::emptyField($this->postData);
@@ -58,7 +58,7 @@
 
                 // Hold error messages for previous UI state
                 $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
 
@@ -71,7 +71,7 @@
 
                 // Hold error message for previous UI state
                 $_SESSION['error'] = ['email' => $msg];
-                ViewBook::revert($this->postData['action'] ?? 'sign_up'); 
+                ViewBook::revert('sign_up'); 
                 return;
             }
 
@@ -84,7 +84,7 @@
 
                 // Hold error message for previous UI state
                 $_SESSION['error'] = ['pwd' => $msg];
-                ViewBook::revert($this->postData['action'] ?? 'sign_up'); 
+                ViewBook::revert('sign_up'); 
                 return;
             }
 
@@ -99,7 +99,7 @@
             if ($exist) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = 'Email address already in use.';
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
 
@@ -112,13 +112,12 @@
             if ($newUser <= 0) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = 'Sign Up failed.';
-                ViewBook::revert($this->postData['action'] ?? 'sign_up');
+                ViewBook::revert('sign_up');
                 return;
             }
 
             // Registration done: redirect
-            $this->postData['action'] = 'success';
-            ViewBook::revert($this->postData['action'] ?? 'success');
+            ViewBook::revert('success');
             exit;
         }
     }

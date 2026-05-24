@@ -83,13 +83,14 @@
                 
                 // 2. Overwrite the original array immediately
                 $this->postData[$field] = $value;
+                $msg = null;
 
                 // 3. Validate (using a dynamic switch or specific calls)
                 if ($field === 'email') {
                     $msg = ValidGrimoire::validateEmail($value);
                 } elseif ($field === 'phone') {
                     $msg = ValidGrimoire::validatePhone($value);
-                } else {
+                } elseif ($field !== 'start_date' || $field !== 'end_date') {
                     // Name, City, Country all use the same method
                     $msg = ValidGrimoire::validateName($value, true);
                 }
@@ -101,7 +102,7 @@
             }
 
             // If more than 1 entries
-            if (count($_SESSION['error']) > 0) {
+            if (!empty($_SESSION['error'])) {
                 $this->oldForm();
                 $_SESSION['error']['global'] = 'Some fields in the Wizard require your attention.';
                 ViewBook::revert('wizard');
@@ -121,13 +122,54 @@
                 $this->postData['skills'] = $sessionOld['skills'];         
             }
 
+            // ==========================================
+            // NEW: Timeline Date Processing Stage
+            // ==========================================
+            $timelines = ['experience', 'education'];
+
+            foreach ($timelines as $timeline) {
+                if (isset($this->postData[$timeline]) && is_array($this->postData[$timeline])) {
+                    foreach ($this->postData[$timeline] as $index => $item) {
+                        
+                        // 1. Validate & Clean Start Date
+                        if (isset($item['start_date'])) {
+                            $startResult = ValidGrimoire::validateAndFormatMonth($item['start_date'], false);
+                            if ($startResult['error']) {
+                                $_SESSION['error'][$timeline][$index]['start_date'] = $startResult['error'];
+                            } else {
+                                $this->postData[$timeline][$index]['start_date'] = $startResult['date'];
+                            }
+                        }
+
+                        // 2. Validate & Clean End Date (Flags TRUE for blank/Present allowance)
+                        if (isset($item['end_date'])) {
+                            $endResult = ValidGrimoire::validateAndFormatMonth($item['end_date'], true);
+                            if ($endResult['error']) {
+                                $_SESSION['error'][$timeline][$index]['end_date'] = $endResult['error'];
+                            } else {
+                                $this->postData[$timeline][$index]['end_date'] = $endResult['date'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Re-check for newly added timeline validation errors before executing DB commands
+            if (!empty($_SESSION['error'])) {
+                $this->oldForm();
+                $_SESSION['error']['global'] = 'Please review your timeline dates in the Wizard.';
+                ViewBook::revert('wizard');
+                return;
+            }
+            // ==========================================
+
             // DB lookup (only after validation)  
             try {
                 $pdo = Database::Connect();
                 $modelRes = new wizardCodex($pdo);
                 $modelRes->setFullResume($this->postData);
             } catch (\Throwable $e) {
-                $_SESSION['error'] = "Failed to save. Please try again.";
+                $_SESSION['error'] = "Failed to save resume. Please try again.";
             }
             ViewBook::revert('wizard');
             exit;

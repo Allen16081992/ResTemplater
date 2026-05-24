@@ -20,16 +20,16 @@
             <div class="field">
                 <div class="control">
                     <label for="fullname" class="label">Full Name</label>
-                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('fullname') ?></div>
-                    <input type="text" id="fullname" name="fullname" class="input" placeholder="..." value="<?= $contact['fullname'] ?? '' ?>">
+                    <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('fullname') ?></div>
+                    <input type="text" id="fullname" name="fullname" class="input" placeholder="..." value="<?= $contact['fullname'] ?? ViewBook::setOldForm('fullname') ?? '' ?>">
                 </div>
             </div>
 
             <div class="field is-grouped">
                 <div class="control">
                     <label for="phone" class="label">Phone Number</label>
-                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('phone') ?></div>
-                    <input type="tel" id="phone" name="phone" class="input" placeholder="+31 6 1234 5678" value="<?= $contact['phone'] ?? '' ?>" disabled>
+                    <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('phone') ?></div>
+                    <input type="tel" id="phone" name="phone" class="input" placeholder="+31 6 1234 5678" value="<?= $contact['phone'] ?? ViewBook::setOldForm('phone') ?? '' ?>" disabled>
                 </div>
                 <div class="control">
                     <label for="dateOfBirth" class="label">Date of Birth</label>
@@ -40,13 +40,13 @@
             <div class="field is-grouped">
                 <div class="control">
                     <label for="city" class="label">City</label>
-                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('city') ?></div>
-                    <input type="text" id="city" name="city" class="input" placeholder="Rotterdam" value="<?= $contact['city'] ?? '' ?>" disabled>
+                    <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('city') ?></div>
+                    <input type="text" id="city" name="city" class="input" placeholder="Rotterdam" value="<?= $contact['city'] ?? ViewBook::setOldForm('city') ?? '' ?>" disabled>
                 </div>
                 <div class="control">
                     <label for="country" class="label">Country</label>
-                    <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('country') ?></div>
-                    <input type="text" id="country" name="country" class="input" placeholder="Netherlands" value="<?= $contact['country'] ?? '' ?>" disabled>
+                    <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('country') ?></div>
+                    <input type="text" id="country" name="country" class="input" placeholder="Netherlands" value="<?= $contact['country'] ?? ViewBook::setOldForm('country') ?? '' ?>" disabled>
                 </div>
             </div>
             <div class="buttons mt-4">
@@ -60,12 +60,13 @@
             <h2>Account Details</h2>
             <div class="field">
                 <label for="email" class="label">Email</label>
-                <div id="server-field" class="animate__animated animate__shakeX"><?= ViewBook::getError('email') ?></div>
+                <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('email') ?></div>
                 <input type="email" id="email" name="email" class="input" placeholder="you@domain.com" value="<?= $account['email'] ?? '' ?>" disabled>
             </div>
 
             <div class="field">
                 <label for="password" class="label">Password</label>
+                <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('pwd') ?></div>
                 <input type="password" id="password" name="pwd" class="input" placeholder="••••••••" disabled>
             </div>
 

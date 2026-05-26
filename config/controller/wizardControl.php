@@ -171,7 +171,9 @@
             } catch (\Throwable $e) {
                 $_SESSION['error'] = "Failed to save resume. Please try again.";
             }
-            ViewBook::revert('wizard');
+            isset($_SESSION['session_data']['user_id']) 
+                ? ViewBook::revert('builder') 
+                : ViewBook::revert('wizard');
             exit;
         }
     }

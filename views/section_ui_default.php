@@ -706,7 +706,7 @@
 
           <form id="form-template" class="pw-panel-form" action="/config/action_handler.conf.php" target="_blank" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['active_paper']['master']['title'] ?? '') ?>">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">
               <button type="submit" class="radio-card" name="action" value="template:read|vintage">
                 <span>Vintage (1970 - 1980)</span>

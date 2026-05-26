@@ -69,6 +69,27 @@
         }
 
         public function generatePDF() {
+            error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+            ob_start();
+            // --- SHOVE TEST DATA HERE ---
+            $this->data['social'] = [
+                ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
+                ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
+                ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
+            ];
+
+            $this->data['projects'] = [
+                [
+                    'title'   => 'ResTemplater Engine',
+                    'role'    => 'Backend Architect',
+                    'summary' => 'A PHP-based engine designed to automate resume generation.'
+                ],
+                [
+                    'title'   => 'Cloud Dashboard',
+                    'role'    => 'Frontend Developer',
+                    'summary' => 'A React dashboard for monitoring real-time server metrics.'
+                ]
+            ];
             $this->AliasNbPages();
             $this->AddPage();
             $this->SetFont('Times', '', 12);
@@ -120,7 +141,7 @@
             $this->SetY($lineY + 6);
 
 
-            //////////////////// LAYOUT CALCULATIONS //////////////////
+            //////////////////// LAYOUT CALCULATIONS ////////////////////
             $topOfColumnsY = $this->GetY(); 
             $hasSocials = !empty($this->data['social']);
 
@@ -274,31 +295,44 @@
                 $this->SetX($contentX);
                 $skillY = $this->GetY();
 
-                // 1. Corrigeer de titel naar 'Skills'
                 $this->alignSubtitle('Skills', $contentX, $skillY);
                 
-                // Bereken de kolombreedte op basis van de beschikbare ruimte rechts
-                $colWidth = (200 - $contentX) / 2; 
+                // Calculate width for 6 columns based on available space
+                $maxCols = 6;
+                $availableWidth = 200 - $contentX;
+                $colWidth = $availableWidth / $maxCols; 
+                
+                $this->SetFont('Times', 'B', 10);
                 $count = 0;
 
                 foreach ($skillsData as $skill) {
-                    // Verdeel de skills netjes over 2 kolommen (links en rechts)
-                    $this->SetX($contentX + ($count % 2 * $colWidth));            
-                    $this->SetFont('Times', 'B', 10);
+                    // Calculate the X position based on current column index (0 to 5)
+                    $currentCol = $count % $maxCols;
+                    $this->SetX($contentX + ($currentCol * $colWidth));
                     
-                    // chr(149) is jouw vertrouwde Times-bulletpoint
-                    $this->Cell($colWidth, 5, chr(149) . ' ' . $this->sanitize($skill['name']), 0, ($count % 2 == 1 ? 1 : 0), 'L');
-                    $count++; 
+                    // Render the skill with your mandatory bulletpoint
+                    // The 'ln' parameter (0) keeps us on the same line until we hit the 6th skill
+                    $this->Cell($colWidth, 5, chr(149) . ' ' . $this->sanitize($skill['name']), 0, 0, 'L');
+                    
+                    $count++;
+
+                    // If we just filled the 6th column, trigger a line break
+                    if ($count % $maxCols == 0) {
+                        $this->Ln(6); 
+                    }
                 }
                 
-                // Als we op een oneven aantal zijn geëindigd, sluiten we de regel netjes af
-                if ($count % 2 != 0) $this->Ln(5);
+                // If we finished a row that wasn't exactly 6 items long, move to the next line
+                if ($count % $maxCols != 0) {
+                    $this->Ln(6);
+                }
 
-                // Teken de verticale lijn aan de rechterkant als er socials actief zijn
+                // Draw the vertical "Spine" line on the right
                 if (!empty($this->data['social'])) {
                     $this->Line(200, $skillY, 200, $this->GetY());
                 }
             }
+
             //////////////////// SKILLS SECTION //////////////////
             // $this->SetX($contentX);
             // $skillY = $this->GetY();

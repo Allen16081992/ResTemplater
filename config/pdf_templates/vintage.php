@@ -20,6 +20,27 @@
         }
 
         public function generatePDF() {
+            // error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+            // ob_start();
+            // // --- SHOVE TEST DATA HERE ---
+            // $this->data['social'] = [
+            //     ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
+            //     ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
+            //     ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
+            // ];
+
+            // $this->data['projects'] = [
+            //     [
+            //         'title'   => 'ResTemplater Engine',
+            //         'role'    => 'Backend Architect',
+            //         'summary' => 'A PHP-based engine designed to automate resume generation.'
+            //     ],
+            //     [
+            //         'title'   => 'Cloud Dashboard',
+            //         'role'    => 'Frontend Developer',
+            //         'summary' => 'A React dashboard for monitoring real-time server metrics.'
+            //     ]
+            // ];
             $this->AliasNbPages();
             $this->AddPage();
             $this->SetFont('Courier', '', 12);

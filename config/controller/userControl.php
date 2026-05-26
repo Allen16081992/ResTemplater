@@ -34,21 +34,20 @@
                     return; 
                 }
 
-                // If user id match, close account
-                if ($exist['id'] === (int)$this->postData['id']) {
-                    // Verify password
-                    $pwd = (string)($this->postData['pwd'] ?? '');
-                    if (!mixedGrimoire::checkHash($pwd, $exist['password_hash'])) {
-                        // Hold error message + set previous UI state
-                        $_SESSION['error'] = ['pwd' => 'Incorrect password.'];
-                        ViewBook::revert('closure');
-                        return;
-                    }
+                // 2. Validate Identity AND Password (The "Double Lock")
+                // If the ID is wrong OR the password is wrong, we stop.
+                $idMatches = ($exist['id'] === (int)$this->postData['id']);
+                $pwdMatches = mixedGrimoire::checkHash((string)($this->postData['pwd'] ?? ''), $exist['password_hash']);
+
+                if (!$idMatches || !$pwdMatches) {
+                    $_SESSION['error'] = ['pwd' => 'Verification failed. Password incorrect.'];
+                    ViewBook::revert('closure');
+                    return;
                 }
 
                 // Delete user (only after validation)
-                $burn = $model->deleteAccount($exist['id']);
-                if ($burn <= 0) {
+                $result = $model->deleteAccount($exist['id']);
+                if ($result <= 0) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to delete account.';
                     ViewBook::revert('closure');
@@ -76,13 +75,6 @@
             }
 
             if ($module == 'account') {
-                // echo "<pre>POST Token: "; 
-                // var_dump($_POST['csrf_token'] ?? 'NOT SET'); 
-                // echo "<br>SESSION Token: "; 
-                // var_dump($this->postData ?? 'NOT SET ENTRIES'); 
-                // echo "</pre>";
-                // die("Stopping here to see tokens.");
-
                 // Validate email format
                 $email = trim((string)($this->postData['email'] ?? ''));
                 if ($msg = ValidGrimoire::validateEmail($email)) {
@@ -194,3 +186,10 @@
             exit;
         }
     }
+
+    // echo "<pre>POST Token: "; 
+    // var_dump($_POST['csrf_token'] ?? 'NOT SET'); 
+    // echo "<br>SESSION Token: "; 
+    // var_dump($this->postData ?? 'NOT SET ENTRIES'); 
+    // echo "</pre>";
+    // die("Stopping here to see tokens.");

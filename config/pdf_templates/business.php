@@ -46,6 +46,7 @@
                 //////////////////// HEADLINE ///////////////////
                 if ($this->data['headline'] !== '') {
                     $currentY = $this->GetY() + 2; 
+                    $this->SetDrawColor(0, 80, 180); 
                     $this->Line(10, $currentY, 200, $currentY);
                     
                     $this->SetFont('Times', '', 11);
@@ -61,7 +62,6 @@
         
         function Footer() {
             if ($this->PageNo() > 1) {
-                // Page Number
                 $this->SetY(-15);
                 $this->SetFont('Arial','I',8);
                 $this->Cell(0, 10, 'Page '.$this->PageNo(), 0, 0, 'C');

@@ -658,28 +658,24 @@
   function detectSkillCategory(skill) {
     const lower = String(skill || "").trim().toLowerCase();
 
-    if ([
-      "teamwork",
-      "communication",
-      "planning",
-      "organization",
-      "problem solving",
-      "attention to detail",
-      "risk analysis"
-    ].includes(lower)) {
-      return "Soft Skills";
+    if (["teamwork", "communication", "planning", "problem solving", "time management"].includes(lower)) {
+      return "soft-skill";
     }
 
-    if ([
-      "first aid"
-    ].includes(lower)) {
-      return "Certificate";
+    if (["english", "dutch", "spanish"].includes(lower)) {
+        return "language";
     }
 
-    if ([
-      "microsoft excel"
-    ].includes(lower)) {
-      return "Software / Tools";
+    if (["first aid", "driving"].includes(lower)) {
+      return "certificate";
+    }
+
+    if (["microsoft excel", "jira", "photoshop", "illustrator"].includes(lower)) {
+      return "tool";
+    }
+
+    if (["welding", "python", "haccp"].includes(lower)) {
+      return "technical"; 
     }
     return "";
   }

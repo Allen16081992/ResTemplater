@@ -7,7 +7,6 @@
   require_once __DIR__ . '/config/session_manager.conf.php'; 
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
-  SessionBook::invokeToken();
   //SessionBook::verifySession();
 
   require_once __DIR__ . '/config/loadResumeData.conf.php';

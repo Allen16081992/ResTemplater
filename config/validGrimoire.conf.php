@@ -2,24 +2,23 @@
     class validGrimoire {
         public static function emptyField(array $postData): array {
             $errors = [];
-            $skip = ['action', 'headline', 'date', 'month'];
+            $skip = ['action', 'headline', 'date', 'month', 'csrf_token'];
+
+            // Map specific fields to custom human-friendly messages
+            $customMessages = [
+                'resume_id' => 'Please select a resume first.',
+                'fullname'  => 'We need your name for the header.'
+            ];
 
             foreach ($postData as $field => $value) {
                 if (in_array($field, $skip, true)) { continue; }
 
-                // Check if the value is an array (like 'skills')
-                if (is_array($value)) {
-                    // If the array is empty, it's an error
-                    if (empty($value)) {
-                        $errors[$field] = 'This field is required.';
-                    }
-                    // Optional: You could loop through $value here if you 
-                    // need to validate nested fields specifically.
-                } else {
-                    // Standard string validation
-                    if (trim((string)$value) === '') {
-                        $errors[$field] = 'This field is required.';
-                    }
+                // Determine if the field is "empty"
+                $isEmpty = is_array($value) ? empty($value) : trim((string)$value) === '';
+
+                if ($isEmpty) {
+                    // Use custom message if it exists, otherwise use the default
+                    $errors[$field] = $customMessages[$field] ?? 'This field is required.';
                 }
             }
             return $errors;

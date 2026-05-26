@@ -5,27 +5,31 @@
         // Create Resume
         public function createResume(string $title, string $desc, int $uid): int {
             $desc = $desc === '' ? null : $desc;
-            $stmt = $this->pdo->prepare('INSERT INTO resumes (title, headline, user_id) VALUES (:title, :headline, :user_id)');
-            $stmt->execute([
-                ':title'=> $title,
-                ':headline'     => $desc,
-                ':user_id'     => $uid
-            ]);
-            return (int) $this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare('INSERT INTO resumes (title, headline, user_id) VALUES (:title, :headline, :user_id)');
+                $stmt->execute([
+                    ':title'=> $title,
+                    ':headline'     => $desc,
+                    ':user_id'     => $uid
+                ]);
+                return (int) $this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Resume Insert Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         // Fetch All Resumes (Read)
         public function fetchResumes(int $uid) {
-            // Select user records
             $stmt = $this->pdo->prepare('SELECT id, title, updated_at FROM `resumes` WHERE user_id = :user_id');
             $stmt->execute([':user_id' => $uid]);
             $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $list;
         }
 
-        // Fetch * Resume (Read)
+        // Fetch Resume (Read)
         public function fetchResume(int $rid, int $uid) {
-            // Select user records
             $stmt = $this->pdo->prepare('SELECT * FROM `resumes` WHERE id = :resume_id AND user_id = :user_id');
             $stmt->execute([
                 ':resume_id' => $rid,
@@ -37,23 +41,35 @@
 
         // Update Resume
         public function updateResume(string $title, string $desc, int $uid) {
-            $stmt = $this->pdo->prepare('UPDATE resumes SET title = :title, headline = :headline WHERE user_id = :user_id');
-            $stmt->execute([
-                ':title'=> $title,
-                ':headline'     => $desc,
-                ':user_id'     => $uid
-            ]);
-            return (int) $this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare('UPDATE resumes SET title = :title, headline = :headline WHERE user_id = :user_id');
+                $stmt->execute([
+                    ':title'    => $title,
+                    ':headline' => $desc,
+                    ':user_id'  => $uid
+                ]);
+                return (int) $stmt->rowCount(); 
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1 
+                error_log("Resume Update Error: " . $e->getMessage());
+                return -1; 
+            }
         }
 
         // Delete Resume
         public function deleteResume(int $resumeID, int $uid) {
-            $stmt = $this->pdo->prepare('DELETE FROM resumes WHERE id = :resume_id AND user_id = :user_id');
-            $stmt->execute([
-                ':resume_id'=> $resumeID,
-                ':user_id'  => $uid
-            ]);
-            return $stmt->rowCount() > 0;
+            try {
+                $stmt = $this->pdo->prepare('DELETE FROM resumes WHERE id = :resume_id AND user_id = :user_id');
+                $stmt->execute([
+                    ':resume_id'=> $resumeID,
+                    ':user_id'  => $uid
+                ]);
+                return (int) $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Resume Delete Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         // Weird duck in the mix

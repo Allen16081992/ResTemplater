@@ -30,7 +30,7 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="config/action_handler.conf.php" method="post" target="_blank" <?php //!isset($_SESSION['session_data']['user_id']) ? 'target="_blank"' : '' ?>>
+      <form action="config/action_handler.conf.php" method="post" target="_blank">
         <?= SessionBook::csrfField(); ?>
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
@@ -184,13 +184,13 @@
                 <div class="control">
                   <select class="pw-select" name="skills[0][category]">
                     <option selected disabled>Select a Category:</option>
-                    <option>Software / Tools</option>
-                    <option>Languages</option>
-                    <option>Technical</option>
-                    <option>Certificate</option>
-                    <option>Soft Skills</option>
-                    <option>Hard Skills</option>
-                    <option>Other</option>
+                    <option value="tool">Software / Tools</option>
+                    <option value="language">Languages</option>
+                    <option value="technical">Technical</option>
+                    <option value="certificate">Certificate</option>
+                    <option value="soft-skill">Soft Skills</option>
+                    <option value="hard-skill">Hard Skills</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
                 <button type="button" class="remove">✕</button>
@@ -207,12 +207,18 @@
               <button type="button" class="pw-chip" data-skill="Teamwork">Teamwork</button>
               <button type="button" class="pw-chip" data-skill="Communication">Communication</button>
               <button type="button" class="pw-chip" data-skill="Planning">Planning</button>
-              <button type="button" class="pw-chip" data-skill="Organization">Organization</button>
+              <button type="button" class="pw-chip" data-skill="English">English</button>
+              <button type="button" class="pw-chip" data-skill="Spanish">Spanish</button>
               <button type="button" class="pw-chip" data-skill="Problem solving">Problem solving</button>
-              <button type="button" class="pw-chip" data-skill="Attention to detail">Attention to detail</button>
-              <button type="button" class="pw-chip" data-skill="Risk analysis">Risk analysis</button>
+              <button type="button" class="pw-chip" data-skill="Welding">Welding</button>
+              <button type="button" class="pw-chip" data-skill="Python">Python</button>
+              <button type="button" class="pw-chip" data-skill="Jira">Jira</button>
+              <button type="button" class="pw-chip" data-skill="Photoshop">Photoshop</button>
+              <button type="button" class="pw-chip" data-skill="Illustrator">Illustrator</button>
+              <button type="button" class="pw-chip" data-skill="Time Management">Time Management</button>
               <button type="button" class="pw-chip" data-skill="Microsoft Excel">Microsoft Excel</button>
               <button type="button" class="pw-chip" data-skill="First Aid">First Aid</button>
+              <button type="button" class="pw-chip" data-skill="HACCP">HACCP</button>
             </div>
           </div>
         </article>
@@ -271,6 +277,7 @@
             <?php } else { ?>
               <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|vintage">Let’s go Vintage</button>
               <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|business">Let’s go Modern</button>
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|contra">Let’s go Unconventional</button>
             <?php } ?>
           </div>
         </article>

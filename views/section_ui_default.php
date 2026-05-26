@@ -80,6 +80,7 @@
 
       <!-- MAIN PANELS -->
       <main class="pw-editor-main">
+
         <!-- CREATE RESUME -->
         <section id="panel-newRes" class="pw-editor-panel">
           <header class="pw-panel-header">
@@ -195,17 +196,19 @@
                 <li>● Rename your resume (Optional)</li>
                 <li>● Write a short summary about yourself (Optional)</li>
               </ul>
+              <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('resume_id') ?></div>
             </div>
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-info" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
+          <form id="form-info" class="pw-panel-form" action="config/action_handler.conf.php" method="post" target="_blank">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="field">
               <label class="label">Resume Title</label>
+              <div class="server-field animate__animated animate__shakeX"><?php ViewBook::getError('title') ?></div>
               <div class="control">
-                <input class="input" type="text" name="title" placeholder="..." value="<?= htmlspecialchars($master['title'] ?? '') ?>">
+                <input class="input" type="text" name="title" placeholder="..." value="<?= htmlspecialchars($master['title'] ?? 'IT Revisionist') ?>">
               </div>
             </div>
 
@@ -245,6 +248,7 @@
               <!-- EXPERIENCE ITEM -->
               <?php if (!empty($experience)) { ?>
                 <?php foreach ($experience as $exp) { ?>
+                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
@@ -287,7 +291,6 @@
                     <button type="button" class="button is-text pw-remove-item" name="action" value="experience:delete">Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
-                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
                 <?php } ?>
               <?php } ?>
             </div>
@@ -342,7 +345,7 @@
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="delete">Remove this experience</button>
+              <button type="button" class="button is-text pw-remove-item" name="experience:delete">Remove this experience</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -651,7 +654,7 @@
             </div>
           </header>
 
-          <form id="form-social" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-social" class="pw-panel-form" action="/config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="social">
@@ -666,7 +669,7 @@
                       </div>
                     </div>
                     <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($url['id']) ?>">
-                    <button type="submit" class="button is-text pw-remove-item" name="delete" value="<?= htmlspecialchars($url['id']) ?>">Remove this link</button>
+                    <button type="submit" class="button is-text pw-remove-item" name="action" value="socials:delete">Remove this link</button>
                   </div>
                 <?php } ?>
               <?php } ?>
@@ -712,7 +715,7 @@
                 <span>Business (Default)</span>
               </button>
               <button type="submit" class="radio-card" name="action" value="template:read|contra">
-                <span>New Contra (Neo)</span>
+                <span>Contra (Creative-Tech)</span>
               </button>
             </div>
           </form>

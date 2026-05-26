@@ -3,7 +3,6 @@
         public function __construct(private array $postData) {}
 
         public function handle(): void {
-            // If $this->postData['action'] is "template:read|vintage"
             $template = explode('|', $this->postData['action'])[1] ?? 'default';
 
             // 1. Pick the specific "Painter" (The Child Class)
@@ -16,10 +15,10 @@
                     require_once __DIR__ . '/../pdf_templates/business.php';
                     $pdf = new BusinessTemplate();
                     break;
-                // case 'contra':
-                //     require_once __DIR__ . '/../pdf_templates/contra.src.php';
-                //     $pdf = new ContraTemplate();
-                //     break;
+                case 'contra':
+                    require_once __DIR__ . '/../pdf_templates/contra.php';
+                    $pdf = new ContraTemplate();
+                    break;
                 default:
                     require_once __DIR__ . '/../pdf_templates/vintage.php';
                     $pdf = new VintageTemplate();

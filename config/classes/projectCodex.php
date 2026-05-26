@@ -4,10 +4,7 @@
 
         // Create Project
         public function createProject(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'INSERT INTO projects (title, role, summary, resume_id) 
-                VALUES (:title, :role, :summary, :resume_id)'
-            );
+            $stmt = $this->pdo->prepare('INSERT INTO projects (title, role, summary, resume_id) VALUES (:title, :role, :summary, :resume_id)');
             $stmt->execute([
                 ':title'    => $postData['title'],
                 ':role'     => $postData['role'],
@@ -19,9 +16,7 @@
 
         // Update Project
         public function updateProject(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'UPDATE projects SET title = :title, role = :role, summary = :summary WHERE resume_id = :resume_id'
-            );
+            $stmt = $this->pdo->prepare('UPDATE projects SET title = :title, role = :role, summary = :summary WHERE resume_id = :resume_id');
             $stmt->execute([
                 ':title'    => $postData['title'],
                 ':role'     => $postData['role'],

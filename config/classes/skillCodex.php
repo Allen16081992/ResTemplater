@@ -4,10 +4,7 @@
 
         // Create Skill
         public function createSkill(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'INSERT INTO skills (name, category, resume_id) 
-                VALUES (:name, :category, :resume_id)'
-            );
+            $stmt = $this->pdo->prepare('INSERT INTO skills (name, category, resume_id) VALUES (:name, :category, :resume_id)');
             $stmt->execute([
                 ':name'     => $postData['skill']['name'],
                 ':category'  => $postData['skill']['categoy'],
@@ -18,9 +15,7 @@
 
         // Update Skill
         public function updateSkill(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'UPDATE skills SET name = :name, category = :category WHERE id = :id AND resume_id = :resume_id'
-            );
+            $stmt = $this->pdo->prepare('UPDATE skills SET name = :name, category = :category WHERE id = :id AND resume_id = :resume_id');
             $stmt->execute([
                 'id'        => $postData['id'],
                 ':name'     => $postData['name'],

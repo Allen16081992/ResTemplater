@@ -55,7 +55,7 @@
                 'City'    => $this->data['contact']['city'] ?? '',
                 'Country' => $this->data['contact']['country'] ?? '',
                 'Phone'   => $this->data['contact']['phone'] ?? '',
-                'Email'   => $this->data['email'] ?? '', 
+                'Email'   => $this->data['contact']['email'] ?? '', 
             ];
 
             foreach ($rows as $label => $value) {

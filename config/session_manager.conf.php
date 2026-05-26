@@ -111,12 +111,14 @@
                 $_SESSION['error'] = 'CSRF Mismatch detected.';
                 ViewBook::revert('error');
             }
-            // if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token'])) {
-            //     die("Missing Data - POST: " . isset($_POST['csrf_token']) . " | SESS: " . isset($_SESSION['csrf_token']));
-            // }
-            // if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            //     die("Mismatch! <br> POST: " . $_POST['csrf_token'] . "<br> SESS: " . $_SESSION['csrf_token']);
-            // }
+			// Debugging payload dump
+			// echo "<pre>";
+			// echo "--- POST DATA ---\n";
+			// print_r($_POST);
+			// echo "\n--- SESSION DATA ---\n";
+			// print_r($_SESSION);
+			// echo "</pre>";
+			// die();
         }
 
         public static function csrfField(): string {
@@ -231,6 +233,7 @@
                 unset($_SESSION['error']);
             } elseif (is_array($error) && isset($error['global'])) {
                 echo '<div class="error animate__animated animate__bounceInDown">'.htmlspecialchars($error['global'], ENT_QUOTES, 'UTF-8').'</div>';
+                unset($_SESSION['error']);
             } elseif (is_string($success)) {
                 echo '<div class="success animate__animated animate__bounceInDown">'.htmlspecialchars($success, ENT_QUOTES, 'UTF-8').'</div>';
                 unset($_SESSION['success']);

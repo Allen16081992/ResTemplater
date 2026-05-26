@@ -7,10 +7,12 @@
         ============================================*/
         private function dataScan(): void {
             // Validate for missing value
+
             $error = ValidGrimoire::emptyField($this->postData);
+            unset($error['headline']);
             if (!empty($error)) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = ['title' => $error];
+                // Store the whole array of specific messages
+                $_SESSION['errors'] = $error;
                 ViewBook::revert('builder'); 
                 return;
             }
@@ -21,13 +23,13 @@
                 $errors['title'] = $msg;
             }
 
-            // Validate headline
+            // // Validate headline
             $headline = trim((string)($this->postData['headline'] ?? ''));
             if ($msg = ValidGrimoire::validateName($headline, false)) {
                 $errors['headline'] = $msg;
             }
 
-            // Final check: if errors exist, send them back together
+            // // Final check: if errors exist, send them back together
             if (!empty($errors)) {
                 $_SESSION['error'] = $errors;
                 ViewBook::revert('builder');
@@ -39,6 +41,8 @@
             // 1. Extract the Intent (everything after the colon)
             // ltrim ensures we remove the ':'
             $intent = ltrim(strchr($this->postData['action'], ':'), ':');
+            $pdo = Database::Connect();
+            $model = new resumeCodex($pdo);
 
             // 2. If no delete, scan the data
             if ($intent !== 'delete') {
@@ -49,49 +53,41 @@
                 $title    = trim((string)($this->postData['title'] ?? ''));
                 $headline = trim((string)($this->postData['headline'] ?? ''));
 
-                // DB querry (only after validation)
-                $pdo = Database::Connect();
-                $model = new resumeCodex($pdo);
-
                 // Use match to pick the method, then execute it
                 $result = match ($intent) {
                     'create' => $model->createResume($title, $headline, $uid),
                     'update' => $model->updateResume($title, $headline, $uid),
-                    default  => 0
+                    default  => -1
                 };
 
                 // One shared Logic Gate for the outcome
                 if ($result > 0) {
                     $_SESSION['success'] = "Resume " . ($intent === 'create' ? 'created' : 'updated') . ".";
+                } elseif ($result == 0) {
+                    $_SESSION['success'] = "Saved. No changes made.";
                 } else {
                     $_SESSION['error'] = "Resume $intent failed.";
                 }
-
                 ViewBook::revert('builder');
                 return;
-            } 
-            elseif($intent === 'delete') {
+
+            } elseif($intent === 'delete') {
                 $resid = $this->postData['resume_id'] ?? '';
                 $uid = $_SESSION['session_data']['user_id'] ?? '';
+                $result = $model->deleteResume($resid, $uid);
 
-                // DB querry (only after validation)
-                $pdo = Database::Connect();
-                $model = new resumeCodex($pdo);
-                $burn = $model->deleteResume($resid, $uid);
-
-                if (!$burn) {
+                if ($result <= 0) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Resume not found or already deleted.';
                     ViewBook::revert('builder');  
                     return;
                 }
-
+                
                 $_SESSION['success'] = 'Resume deleted.';
                 ViewBook::revert('builder');  
                 return;
 
-            } 
-            else { 
+            } else { 
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = 'Unknown action request.';
                 ViewBook::revert('builder');  

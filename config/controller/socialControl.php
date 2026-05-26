@@ -9,8 +9,8 @@
 
             if (isset($this->postData['delete'])) {
                 // DB querry (only after validation)
-                $clr = $model->deleteSocial($this->postData['delete'], $this->postData['resume_id']);
-                if (!$clr) {
+                $result = $model->deleteSocial($this->postData['delete'], $this->postData['resume_id']);
+                if (!$result) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to delete social media.';
                     ViewBook::revert($this->postData['action'] ?? '');

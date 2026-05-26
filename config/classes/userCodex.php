@@ -24,13 +24,19 @@
 
         public function createAccount(array $postData): int {
             $hashSigil = mixedGrimoire::pwHasher($postData['pwd']);
-            $stmt = $this->pdo->prepare('INSERT INTO accounts (email, password_hash, birth_date) VALUES (:email, :hashSigil, :birth_date)');
-            $stmt->execute([
-                ':email'      => $postData['email'],
-                ':hashSigil'  => $hashSigil,
-                ':birth_date' => $postData['date'] // 'YYYY-MM-DD'
-            ]);
-            return (int)$this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare('INSERT INTO accounts (email, password_hash, birth_date) VALUES (:email, :hashSigil, :birth_date)');
+                $stmt->execute([
+                    ':email'      => $postData['email'],
+                    ':hashSigil'  => $hashSigil,
+                    ':birth_date' => $postData['date'] // 'YYYY-MM-DD'
+                ]);
+                return (int)$this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Account Insert Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         // ==========================================================
@@ -43,21 +49,39 @@
         }
 
         public function updateEmail(int $uid, string $email): int {
-            $stmt = $this->pdo->prepare('UPDATE accounts SET email = :email WHERE id = :id LIMIT 1');
-            $stmt->execute([':email' => $email, ':id' => $uid]);
-            return $stmt->rowCount();
+            try {
+                $stmt = $this->pdo->prepare('UPDATE accounts SET email = :email WHERE id = :id LIMIT 1');
+                $stmt->execute([':email' => $email, ':id' => $uid]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1 
+                error_log("Account Update Error: " . $e->getMessage());
+                return -1; 
+            }
         }
 
         public function updateHash(int $uid, string $pwdHash): int {
-            $stmt = $this->pdo->prepare('UPDATE accounts SET password_hash = :hashSigil WHERE id = :id LIMIT 1');
-            $stmt->execute([':hashSigil' => $pwdHash, ':id' => $uid]);
-            return $stmt->rowCount();
+            try {
+                $stmt = $this->pdo->prepare('UPDATE accounts SET password_hash = :hashSigil WHERE id = :id LIMIT 1');
+                $stmt->execute([':hashSigil' => $pwdHash, ':id' => $uid]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1 
+                error_log("Account Update Error: " . $e->getMessage());
+                return -1; 
+            }
         }
 
         public function deleteAccount(int $uid): int {
-            $stmt = $this->pdo->prepare('DELETE FROM accounts WHERE id = :id LIMIT 1');
-            $stmt->execute([':id' => $uid]);
-            return $stmt->rowCount();
+            try {
+                $stmt = $this->pdo->prepare('DELETE FROM accounts WHERE id = :id LIMIT 1');
+                $stmt->execute([':id' => $uid]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Account Delete Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         // ==========================================================
@@ -76,32 +100,50 @@
         }
 
         public function createContact(array $postData): int {
-            $stmt = $this->pdo->prepare('INSERT INTO contacts (fullname, phone, city, country, user_id) VALUES (:fullname, :phone, :city, :country, :user_id)');
-            $stmt->execute([
-                ':fullname' => $postData['fullname'],
-                ':phone'     => $postData['phone'],
-                ':city'      => $postData['city'],
-                ':country'   => $postData['country'],
-                ':user_id'   => $postData['user_id']
-            ]);
-            return (int) $this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare('INSERT INTO contacts (fullname, phone, city, country, user_id) VALUES (:fullname, :phone, :city, :country, :user_id)');
+                $stmt->execute([
+                    ':fullname' => $postData['fullname'] ?? null,
+                    ':phone'     => $postData['phone'] ?? null,
+                    ':city'      => $postData['city'] ?? null,
+                    ':country'   => $postData['country'] ?? null,
+                    ':user_id'   => $postData['user_id']
+                ]);
+                return (int) $this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Personal Info Insert Error: " . $e->getMessage());
+                return -1;
+            }
         }
         
         public function updateContact(array $postData): int {
-            $stmt = $this->pdo->prepare('UPDATE contacts SET fullname = :fullname, phone = :phone, city = :city, country = :country WHERE user_id = :user_id LIMIT 1');
-            $stmt->execute([
-                ':fullname' => $postData['fullname'],
-                ':phone'     => $postData['phone'],
-                ':city'      => $postData['city'],
-                ':country'   => $postData['country'],
-                ':user_id'   => $postData['user_id']
-            ]);
-            return $stmt->rowCount();
+            try {
+                $stmt = $this->pdo->prepare('UPDATE contacts SET fullname = :fullname, phone = :phone, city = :city, country = :country WHERE user_id = :user_id LIMIT 1');
+                $stmt->execute([
+                    ':fullname' => $postData['fullname'] ?? null,
+                    ':phone'     => $postData['phone'] ?? null,
+                    ':city'      => $postData['city'] ?? null,
+                    ':country'   => $postData['country'] ?? null,
+                    ':user_id'   => $postData['user_id']
+                ]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Personal Info Update Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         public function deleteContact(int $uid): int {
-            $stmt = $this->pdo->prepare('DELETE FROM contacts WHERE user_id = :user_id LIMIT 1');
-            $stmt->execute([':user_id' => $uid]);
-            return $stmt->rowCount();
+            try {
+                $stmt = $this->pdo->prepare('DELETE FROM contacts WHERE user_id = :user_id LIMIT 1');
+                $stmt->execute([':user_id' => $uid]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Personal Info Delete Error: " . $e->getMessage());
+                return -1;
+            }
         }
     }

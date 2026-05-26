@@ -99,15 +99,15 @@
             }
 
             $parchment = $this->sanitize($result['resumes']['title'] ?? 'Untitled');
-            $email = $this->sanitize($result['accounts']['email'] ?? '');
 
             // Directly map contacts and skip loop
             $contactRow = $result['contacts'] ?: [];
             $contact = [
-                'fullname'  => $this->sanitize($contactRow['fullname'] ?? ''),
-                'phone'     => $this->sanitize($contactRow['phone'] ?? ''),
-                'city'      => $this->sanitize($contactRow['city'] ?? ''),
-                'country'   => $this->sanitize($contactRow['country'] ?? ''),
+                'email'     => $this->sanitize($result['accounts']['email']),
+                'fullname'  => $this->sanitize($contactRow['fullname']),
+                'phone'     => $this->sanitize($contactRow['phone']),
+                'city'      => $this->sanitize($contactRow['city']),
+                'country'   => $this->sanitize($contactRow['country']),
                 'image_url' => $contactRow['image_url'] ?? ''
             ];
 
@@ -195,7 +195,6 @@
             $this->data = [
                 'resume_title' => $parchment,
                 'headline'     => $headline,
-                'email'        => $email,
                 'contact'      => $contact,
                 'skills'       => $skills,
                 'experience'   => $experience,

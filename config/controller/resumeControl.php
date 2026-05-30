@@ -50,25 +50,38 @@
                 $this->dataScan();
 
                 $uid      = $_SESSION['session_data']['user_id'] ?? '';
+                $resid    = trim((string)($this->postData['resume_id'] ?? ''));
                 $title    = trim((string)($this->postData['title'] ?? ''));
                 $headline = trim((string)($this->postData['headline'] ?? ''));
 
                 // Use match to pick the method, then execute it
                 $result = match ($intent) {
                     'create' => $model->createResume($title, $headline, $uid),
-                    'update' => $model->updateResume($title, $headline, $uid),
+                    'update' => $model->updateResume($title, $headline, $resid, $uid),
+                    'clone'  => $model->cloneResume($resid, $uid), // The new ritual
                     default  => -1
                 };
 
                 // One shared Logic Gate for the outcome
                 if ($result > 0) {
-                    $_SESSION['success'] = "Resume " . ($intent === 'create' ? 'created' : 'updated') . ".";
+                    $verb = match ($intent) {
+                        'create' => 'created',
+                        'update' => 'updated',
+                        'clone'  => 'cloned',
+                        default  => 'processed'
+                    };
+                    $_SESSION['success'] = "Resume $verb.";
                 } elseif ($result == 0) {
                     $_SESSION['success'] = "Saved. No changes made.";
                 } else {
                     $_SESSION['error'] = "Resume $intent failed.";
                 }
-                ViewBook::revert('builder');
+
+                // Catch the ID for the redirect
+                // If it was a clone, $result (the new ID). 
+                // Otherwise, stick with the existing $resid.
+                $finalId = ($intent === 'clone' || $intent === 'create') ? $result : $resid;
+                ViewBook::revert('builder', $finalId);
                 return;
 
             } elseif($intent === 'delete') {

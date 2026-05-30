@@ -220,6 +220,7 @@
             </div>
 
             <div class="pw-panel-actions">
+              <button type="submit" name="action" value="resume:clone" class="button is-contrast">Clone</button>
               <button type="submit" name="action" value="resume:update" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>
@@ -243,25 +244,26 @@
 
           <form id="form-experience" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
               <!-- EXPERIENCE ITEM -->
               <?php if (!empty($experience)) { ?>
-                <?php foreach ($experience as $exp) { ?>
-                  <input type="hidden" name="experience_id[]" value="<?= htmlspecialchars($exp['id']) ?>">
+                <?php foreach ($experience as $i => $exp) { ?>
+                  <input type="hidden" name="experience[<?= $i ?>][id]" value="<?= htmlspecialchars($exp['id']) ?>">
+
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
                         <div class="field">
                           <label class="label">Job title</label>
                           <div class="control">
-                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($exp['title']) ?>">
+                            <input class="input" type="text" name="experience[<?= $i ?>][title]" value="<?= htmlspecialchars($exp['title']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">Company</label>
                           <div class="control">
-                            <input class="input" type="text" name="employer[]" value="<?= htmlspecialchars($exp['employer']) ?>">
+                            <input class="input" type="text" name="experience[<?= $i ?>][employer]" value="<?= htmlspecialchars($exp['employer']) ?>">
                           </div>
                         </div>
                       </div>
@@ -271,13 +273,13 @@
                         <div class="field">
                           <label class="label">Start</label>           
                           <div class="control">
-                            <input class="input" type="month" name="start_date[]" value="<?= !empty($exp['start_date']) ? date('Y-m', strtotime($exp['start_date'])) : '' ?>">
+                            <input class="input" type="month" name="experience[<?= $i ?>][start_date]" value="<?= !empty($exp['start_date']) ? date('Y-m', strtotime($exp['start_date'])) : '' ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="end_date[]" value="<?= !empty($exp['end_date']) ? date('Y-m', strtotime($exp['end_date'])) : '' ?>">
+                            <input class="input" type="month" name="experience[<?= $i ?>][end_date]" value="<?= !empty($exp['end_date']) ? date('Y-m', strtotime($exp['end_date'])) : '' ?>">
                           </div>
                         </div>
                       </div>
@@ -285,10 +287,10 @@
                     <div class="field">
                       <label class="label">Description</label>
                       <div class="control">
-                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
+                        <textarea class="textarea" name="experience[<?= $i ?>][summary]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" name="action" value="experience:delete">Remove this experience</button>
+                    <button type="button" class="button is-text pw-remove-item" name="action" value="experience:delete|<?= htmlspecialchars($exp['id']) ?>">Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
                 <?php } ?>
@@ -345,7 +347,7 @@
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="experience:delete">Remove this experience</button>
+              <button type="button" class="button is-text pw-remove-item" name="education:delete">Remove this experience</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -492,7 +494,7 @@
 
           <form id="form-projects" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <!-- Projects ITEM -->
             <div class="pw-repeater" data-repeater="projects">
               <?php if (!empty($projects)) { ?>
@@ -581,7 +583,7 @@
 
           <form id="form-skills" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="skills">
               <!-- Skills ITEM -->
               <?php if (!empty($skills)) { ?>
@@ -589,10 +591,10 @@
                 <div class="pw-repeater-item">                         
                   <div class="field is-grouped skill-row">
                     <div class="control">
-                      <input type="text" name="skill[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($ski['name']) ?>">
+                      <input type="text" name="skills[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($ski['name']) ?>">
                     </div>
                     <div class="control">
-                      <select class="pw-select" name="skill[<?= $i ?>][category]">
+                      <select class="pw-select" name="skills[<?= $i ?>][category]">
                         <option disabled>Select a Category:</option>
                         <option <?= $ski['category'] === 'tool' ? 'selected' : '' ?>>Software / Tools</option>
                         <option <?= $ski['category'] === 'language' ? 'selected' : '' ?>>Languages</option>
@@ -603,8 +605,8 @@
                         <option <?= $ski['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
                       </select>
                     </div>
-                    <input type="hidden" name="skill[<?= $i ?>][id]" value="<?= htmlspecialchars($ski['id']) ?>">
-                    <button type="submit" class="remove" name="delete" value="<?= htmlspecialchars($ski['id']) ?>">✕</button>
+                    <input type="hidden" name="skills[<?= $i ?>][id]" value="<?= htmlspecialchars($ski['id']) ?>">
+                    <button type="submit" class="remove" name="skills:delete" value="<?= htmlspecialchars($ski['id']) ?>">✕</button>
                   </div>  
                 </div>
                 <?php } ?>
@@ -615,7 +617,7 @@
               <p id="skillWarning" class="help is-danger"></p>
             </div>
 
-            <div class="pw-panel-actions">
+            <div class="pw-panel-actions"><!-- If any skill exist, disabled attribute is removed by JS -->
               <button type="submit" name="action" value="skills:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>

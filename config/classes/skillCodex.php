@@ -3,12 +3,13 @@
         public function __construct(private PDO $pdo) {} 
 
         // Create Skill
-        public function createSkill(array $postData): int {
-            $stmt = $this->pdo->prepare('INSERT INTO skills (name, category, resume_id) VALUES (:name, :category, :resume_id)');
+        public function createSkill(array $data): int {
+            $stmt = $this->pdo->prepare('INSERT INTO skills (name, category, sort_order, resume_id) VALUES (:name, :category, :sort_order, :resume_id)');
             $stmt->execute([
-                ':name'     => $postData['skill']['name'],
-                ':category'  => $postData['skill']['categoy'],
-                ':resume_id' => $postData['resume_id']
+                ':name'       => $data['name'] ?? '',
+                ':category'   => $data['category'] ?? 'other',
+                ':sort_order' => $data['sort_order'] ?? 0,
+                ':resume_id'  => $data['resume_id']
             ]);
             return (int) $this->pdo->lastInsertId();
         }

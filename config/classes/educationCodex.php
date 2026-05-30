@@ -2,6 +2,10 @@
     final class educationCodex {
         public function __construct(private PDO $pdo) {} 
 
+        // ==========================================================
+        // 1. EDUCATION
+        // ========================================================== 
+
         // Create Experience
         public function createEducation(array $postData): int {
             $stmt = $this->pdo->prepare(
@@ -43,5 +47,26 @@
                 ':resume_id'=> $resume
             ]);
             return $stmt->rowCount() > 0;
+        }
+
+        // ==========================================================
+        // 2. BULLET POINTS
+        // ========================================================== 
+
+        // Create Education_Bulletpoint
+        public function createBulletpoint(string $desc, ?int $sort, int $edu): bool {
+            try {
+                $stmt = $this->pdo->prepare('INSERT INTO education_bullets (text, sort_order, education_id) VALUES (:text, :sort, :education_id)');
+                $stmt->execute([
+                    ':text' => $desc,
+                    ':sort' => $sort,
+                    ':education_id'=> $edu
+                ]);
+                return (int) $this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Exducation Bulletpoint Insert Error: " . $e->getMessage());
+                return -1;
+            }
         }
     }

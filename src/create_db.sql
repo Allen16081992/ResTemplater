@@ -102,7 +102,10 @@
         sort_order  INT NOT NULL DEFAULT 0,
         resume_id   INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
-        CONSTRAINT fk_proj_resume FOREIGN KEY (resume_id) REFERENCES resumes(id) ON DELETE CASCADE
+
+        CONSTRAINT fk_proj_resume 
+            FOREIGN KEY (resume_id) REFERENCES resumes(id) 
+            ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     CREATE TABLE IF NOT EXISTS `experience_bullets` (
@@ -114,10 +117,10 @@
         experience_id     INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
-        KEY idx_bullet_work_sort (work_id, sort_order),
+        KEY idx_bullet_work_sort (experience_id, sort_order),
 
     CONSTRAINT fk_bullet_work
-        FOREIGN KEY (work_id) REFERENCES experience(id)
+        FOREIGN KEY (experience_id) REFERENCES experience(id)
         ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -130,10 +133,10 @@
         education_id     INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
-    KEY idx_bullet_acad_sort (acad_id, sort_order),
+    KEY idx_bullet_acad_sort (education_id, sort_order),
 
     CONSTRAINT fk_bullet_acad
-        FOREIGN KEY (acad_id) REFERENCES education(id)
+        FOREIGN KEY (education_id) REFERENCES education(id)
         ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -141,13 +144,15 @@
         id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
         text        TEXT NOT NULL,
         sort_order  INT NOT NULL DEFAULT 0,
+        created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         projects_id  INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 
-        KEY uq_project_resume_sort (project_id, sort_order),
+        KEY uq_project_resume_sort (projects_id, sort_order),
 
         CONSTRAINT fk_project_resume
-            FOREIGN KEY (resume_id) REFERENCES resumes(id)
+            FOREIGN KEY (projects_id) REFERENCES projects(id)
             ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

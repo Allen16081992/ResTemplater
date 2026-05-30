@@ -173,11 +173,14 @@
             require $filePath;
         }
 
-        public static function revert(string $view) : void {
+        public static function revert(string $view, ?int $id = null) : void {
+            // 1. Prepare the query string if an ID is provided
+            $query = ($id !== null) ? "?resume_id=$id" : "";
+
             // Read previous UI state from submit button
             $_SESSION['action'] = $view;
             if (in_array($view, ['profile', 'wizard', 'builder'])) {
-                header('Location: /client.php'); 
+                header('Location: /client.php' . $query); 
             } elseif (in_array($view, ['login', 'signup'])) {
                 header('Location: /index.php');
             } elseif (in_array($view, ['error'])) {

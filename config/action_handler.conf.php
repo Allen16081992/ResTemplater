@@ -38,7 +38,7 @@
         'experience'=> 'experienceControl',
         'education' => 'educationControl',
         'projects'  => 'projectControl',
-        'skill'     => 'skillControl',
+        'skills'     => 'skillControl',
         'social'    => 'socialControl',
         'wizard'    => 'wizardControl'
     ];

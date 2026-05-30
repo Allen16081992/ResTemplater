@@ -3,89 +3,80 @@
         public function __construct(private array $postData) {}
 
         public function handle(): void {
-            // DB querry (only after validation)
+            // 1. Extract the Intent (everything after the colon)
+            // ltrim ensures we remove the ':'
+            $intent = ltrim(strchr($this->postData['action'], ':'), ':');
+            $resid = $this->postData['resume_id'] ?? '';
             $pdo = Database::Connect();
             $model = new skillCodex($pdo); 
 
-            if (isset($this->postData['delete'])) {
-                // DB querry (only after validation)
-                $trash = $model->deleteSkill($this->postData['delete'], $this->postData['resume_id']);
-                if (!$trash) {
+            if ($intent === 'delete') {
+                $sid = $this->postData['skills:delete'] ?? '';
+
+                if (empty($sid)) {
+                    $_SESSION['error'] = 'Failed to verify Skill.';
+                    ViewBook::revert('builder', $resid);
+                    return;
+                }
+
+                $pyre = $model->deleteSkill($sid, $resid);
+                if (!$pyre) {
                     // Hold error message + set previous UI state
                     $_SESSION['error'] = 'Failed to delete skill.';
-                    ViewBook::revert($this->postData['action'] ?? '');
+                    ViewBook::revert('builder', $resid); 
                     return;
                 }
 
-                $_SESSION['success'] = 'Skill is removed.';
-                ViewBook::revert('builder');  
+                $_SESSION['success'] = 'Skill purged from the records.';
+                ViewBook::revert('builder', $resid);  
                 return;
-            }  
-            
-            // Validate for missing value
-            $errors = ValidGrimoire::emptyField($this->postData);
-            if (!empty($errors)) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
-            }
 
-            $cleanSkills = [];
+            } elseif ($intent === 'save') {
+                $successCount = 0;
+                $sourceData = $this->postData['skills'] ?? [];
+                
+                foreach ($sourceData as $skill) {
+                    $name = trim((string)($skill['name'] ?? ''));
+                    $category = trim((string)($skill['category'] ?? ''));
+                    $sid = !empty($skill['id']) ? (int)$skill['id'] : null;
 
-            // Validate job title
-            foreach ($this->postData['skill'] ?? [] as $i => $skill) {
-                $name = trim((string) ($skill['name'] ?? ''));
-                $category = trim((string) ($skill['category'] ?? ''));
-                $id = isset($skill['id']) ? (int) $skill['id'] : null;
+                    // --- THE SKIP LOGIC ---
+                    // If it's a fresh row with no data, just skip it instead of erroring out
+                    if ($name === '' && $category === '' && empty($sid)) continue;
 
-                // Skip fully empty rows
-                if ($name === '' && $category === '') {
-                    continue;
+                    // Reset per-row errors
+                    $rowErrors = [];
+                    if ($msg = ValidGrimoire::validateName($name, true, 80)) $rowErrors['name'] = $msg;
+                    if ($msg = ValidGrimoire::validateName($category, true, 80)) $rowErrors['category'] = $msg;
+
+                    if (!empty($rowErrors)) {
+                        $_SESSION['error'] = $rowErrors;
+                        ViewBook::revert('builder', $resid); 
+                        return;
+                    }
+
+                    $payload = [
+                        'id'        => $sid,
+                        'name'      => $name,
+                        'category'  => $category,
+                        'resume_id' => $resid
+                    ];
+
+                    $result = empty($sid) 
+                        ? $model->createSkill($payload) 
+                        : $model->updateSkill($payload);
+
+                    if ($result > 0) $successCount++;
                 }
 
-                if ($msg = ValidGrimoire::validateName($name, true, 80)) {
-                    $errors['name'] = $msg;
-                }
-
-                if ($msg = ValidGrimoire::validateName($category, true, 80)) {
-                    $errors['category'] = $msg;
-                }
-
-                // Final check: if errors exist, send them back together
-                if (!empty($errors)) {
-                    $_SESSION['error'] = $errors;
-                    ViewBook::revert($this->postData['action'] ?? 'profile');
-                    return;
-                }
-
-                $cleanSkills[] = [
-                    'id' => $id,
-                    'name' => $name,
-                    'category' => $category,
-                    'resume_id' => $this->postData['resume_id']
-                ];
-            }
-
-            // Verify experience id
-            foreach ($cleanSkills as $item) {
-                if (empty($item['id'])){
-                    $skill = $model->createSkill($cleanSkills);
+                // --- THE FAIL-SAFE ---
+                if ($successCount === 0 && !empty($sourceData)) {
+                    $_SESSION['success'] = 'Record verified. No changes were necessary.';
                 } else {
-                    $skill = $model->updateSkill($cleanSkills);
+                    $_SESSION['success'] = "Successfully updated $successCount skill(s).";
                 }
-            }
-
-            if ($skill <= 0) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = 'Failed to save skills.';
-                ViewBook::revert($this->postData['action'] ?? ''); 
+                ViewBook::revert('builder', $resid);
                 return;
             }
-
-            $_SESSION['success'] = 'Skills saved.';
-            ViewBook::revert($this->postData['action'] ?? '');
-            return;
         }
-
     }

@@ -122,7 +122,9 @@
       "paperwitch_despise.png",
       "paperwitch_confidant.png",
       "paperwitch_resentful.png",
-      "paperwitch_nurse.png"
+      "paperwitch_festival.png",
+      "paperwitch_scientist.png",
+      "paperwitch_air.png"
     ];
 
     // 48-hour deterministic rotation

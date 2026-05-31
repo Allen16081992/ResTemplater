@@ -100,6 +100,8 @@
         role       VARCHAR(100) NOT NULL,
         summary VARCHAR(2048) NULL,
         sort_order  INT NOT NULL DEFAULT 0,
+        created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         resume_id   INT UNSIGNED NOT NULL,
         PRIMARY KEY (id),
 

@@ -11,13 +11,13 @@
 
   require_once __DIR__ . '/config/loadResumeData.conf.php';
     // Test variables
-    //   echo "<pre style='background: #000; color: #0f0; padding: 20px; z-index: 9999; position: relative;'>";
-    //   echo "LOGGED IN UID: " . ($_SESSION['session_data']['user_id'] ?? 'NONE') . "\n";
-    //   echo "GET RESUME ID: " . ($_GET['resume_id'] ?? 'NONE') . "\n";
-    //   echo "DATA KEYS: " . implode(', ', array_keys($data)) . "\n";
-    //   echo "ACTIVE PAPER STATUS: " . ($data['active_paper'] ? 'FOUND' : 'NULL') . "\n";
-    //   print_r($data['active_paper']);
-    //   echo "</pre>";
+      echo "<pre style='background: #000; color: #0f0; padding: 20px; z-index: 9999; position: relative;'>";
+      echo "LOGGED IN UID: " . ($_SESSION['session_data']['user_id'] ?? 'NONE') . "\n";
+      echo "GET RESUME ID: " . ($_GET['resume_id'] ?? 'NONE') . "\n";
+      echo "DATA KEYS: " . implode(', ', array_keys($data)) . "\n";
+      echo "ACTIVE PAPER STATUS: " . ($data['active_paper'] ? 'FOUND' : 'NULL') . "\n";
+      print_r($data['active_paper']);
+      echo "</pre>";
 
     // $_SESSION['error'] = [
     //   'title' => 'This field is required'

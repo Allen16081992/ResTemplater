@@ -29,6 +29,18 @@
             }
         }
 
+        // Fetch Education
+        public function getEducation(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('SELECT * FROM education WHERE resume_id = :resume_id ORDER BY start_date DESC');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Education Fetch Error: " . $e->getMessage());
+                return [];
+            }
+        }
+
         // Update Education
         public function updateEducation(array $postData): int {
             try {
@@ -84,8 +96,25 @@
                 return (int) $this->pdo->lastInsertId();
             } catch (PDOException $e) {
                 // Log the details to fix later, then return -1
-                error_log("Exducation Bulletpoint Insert Error: " . $e->getMessage());
+                error_log("Education Bulletpoint Insert Error: " . $e->getMessage());
                 return -1;
+            }
+        }
+
+        // Fetch all Bullets for a specific Resume (Joined for efficiency)
+        public function getBulletpoints(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('
+                    SELECT b.* FROM education_bullets b
+                    JOIN education e ON b.education_id = e.id
+                    WHERE e.resume_id = :resume_id
+                    ORDER BY e.id, b.sort_order
+                ');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Education Bulletpoint Fetch Error: " . $e->getMessage());
+                return [];
             }
         }
     }

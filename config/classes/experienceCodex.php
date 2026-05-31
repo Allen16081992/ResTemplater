@@ -29,6 +29,18 @@
             }
         }
 
+        // Fetch Experience
+        public function getExperience(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('SELECT * FROM experience WHERE resume_id = :resume_id ORDER BY start_date DESC');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Experience Fetch Error: " . $e->getMessage());
+                return [];
+            }
+        }
+
         // Update Experience
         public function updateExperience(array $postData): int {
             try {
@@ -86,6 +98,23 @@
                 // Log the details to fix later, then return -1
                 error_log("Experience Bulletpoint Insert Error: " . $e->getMessage());
                 return -1;
+            }
+        }
+
+        // Fetch all Bullets for a specific Resume (Joined for efficiency)
+        public function getBulletpoints(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('
+                    SELECT b.* FROM experience_bullets b
+                    JOIN experience e ON b.experience_id = e.id
+                    WHERE e.resume_id = :resume_id
+                    ORDER BY e.id, b.sort_order
+                ');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Experience Bulletpoint Fetch Error: " . $e->getMessage());
+                return [];
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
     // Load files
-    require_once __DIR__ . '/abstract_template.conf.php';
+    require_once __DIR__ . '/abstract_template.php';
 
     class ContraTemplate extends BaseTemplate {
         function drawContraShard() {

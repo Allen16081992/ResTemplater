@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
     // Load files
-    require_once __DIR__ . '/abstract_template.conf.php';
+    require_once __DIR__ . '/abstract_template.php';
 
     class VintageTemplate extends BaseTemplate {
         function Header() {
@@ -22,40 +22,26 @@
         public function generatePDF() {
             // error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
             // ob_start();
-            // // --- SHOVE TEST DATA HERE ---
-            // $this->data['social'] = [
-            //     ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
-            //     ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
-            //     ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
-            // ];
+            // TEMPORARY DEBUG: Dump the cauldron to check array keys
+            //echo '<pre>'; print_r($this->data); echo '</pre>'; die();
 
-            // $this->data['projects'] = [
-            //     [
-            //         'title'   => 'ResTemplater Engine',
-            //         'role'    => 'Backend Architect',
-            //         'summary' => 'A PHP-based engine designed to automate resume generation.'
-            //     ],
-            //     [
-            //         'title'   => 'Cloud Dashboard',
-            //         'role'    => 'Frontend Developer',
-            //         'summary' => 'A React dashboard for monitoring real-time server metrics.'
-            //     ]
-            // ];
             $this->AliasNbPages();
             $this->AddPage();
             $this->SetFont('Courier', '', 12);
 
-            // Resume title becomes Filename
-            $name = $this->data['contact']['fullname'] ?? 'My Scroll';
+            // 1. Correct Variable Assignments
+            $resumeTitle = $this->data['master']['title'] ?? 'My Scroll';
+            $fullname    = $this->data['contact']['fullname'] ?? 'Stranger';
+            $headline    = $this->data['master']['headline'] ?? '';
             $today = $this->printDate('today');
-            $this->SetTitle($this->abbrFullname($name) . " " . $today);
+            $this->SetTitle($this->abbrFullname($fullname) . " " . $today);
 
 
             //////////////////// HEADLINE ///////////////////
-            if ($this->data['headline'] !== '') {
+            if ($headline !== '') {
                 $this->SetFont('Courier', '', 8);
                 $this->SetX(77);
-                $this->MultiCell(0, 2, $this->data['headline'], 0, 'L');
+                $this->MultiCell(0, 2, $headline, 0, 'L');
             }
             $this->Ln(4);
             
@@ -71,8 +57,8 @@
             $rowH   = 4;
             $y = $this->GetY();
             $rows = [
-                'Name'    => $name ?? '',
-                'Initial' => $this->abbrFullname($name ?? '', 'dotted'), // The 1990s touch!
+                'Name'    => $fullname ?? '',
+                'Initial' => $this->abbrFullname($fullname ?? '', 'dotted'), // The 1990s touch!
                 'City'    => $this->data['contact']['city'] ?? '',
                 'Country' => $this->data['contact']['country'] ?? '',
                 'Phone'   => $this->data['contact']['phone'] ?? '',
@@ -91,11 +77,7 @@
 
             //////////////////// RIGHT COLUMN: ADAPTIVE STACK //////////////////            
             // 1. Determine the Order (Your Teleportation Logic)
-            if (empty($this->data['experience'])) {
-                $order = ['projects', 'education'];
-            } else {
-                $order = ['experience', 'education', 'projects'];
-            }
+            $order = empty($this->data['experience']) ? ['projects', 'education'] : ['experience', 'education', 'projects'];
 
             // 2. The Vintage Master Loop
             foreach ($order as $section) {
@@ -149,11 +131,6 @@
                                 $this->MultiCell(0, 4, $bullet['summary'], 0, 'L');
                             }
                         }
-                        // foreach ($item['bullets'] as $bullet) {
-                        //     $this->SetX(78);
-                        //     $this->Cell(4, 4, chr(149), 0, 0); 
-                        //     $this->MultiCell(0, 4, $bullet['summary'], 0, 'L');
-                        // }
                     }
                     $this->Ln(2); // Vintage spacing between entries
                 }
@@ -181,9 +158,9 @@
 
             ///////////////////////// (TWO COLUMN) ///////////////////////////
             //////////////////// QR CODES (BOTTOM CENTERED) //////////////////
-            if (class_exists('QRcode') && !empty($this->data['social'])) {
+            if (class_exists('QRcode') && !empty($this->data['socials'])) {
                 $maxSocials = 4;
-                $socials = array_slice($this->data['social'], 0, $maxSocials);
+                $socials = array_slice($this->data['socials'], 0, $maxSocials);
                 $count = count($socials);
 
                 if ($count > 0) {
@@ -240,6 +217,29 @@
             $this->Output();
         }
     }
+
+    // RIGHT UNDER generatePDF()
+    // error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+    // ob_start();
+    // // --- SHOVE TEST DATA HERE ---
+    // $this->data['social'] = [
+    //     ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
+    //     ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
+    //     ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
+    // ];
+
+    // $this->data['projects'] = [
+    //     [
+    //         'title'   => 'ResTemplater Engine',
+    //         'role'    => 'Backend Architect',
+    //         'summary' => 'A PHP-based engine designed to automate resume generation.'
+    //     ],
+    //     [
+    //         'title'   => 'Cloud Dashboard',
+    //         'role'    => 'Frontend Developer',
+    //         'summary' => 'A React dashboard for monitoring real-time server metrics.'
+    //     ]
+    // ];
 
     // --- 2. Temporary Test Data ---
     // $this->data['social'] = [

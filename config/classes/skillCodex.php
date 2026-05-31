@@ -19,6 +19,18 @@
             }
         }
 
+        // Fetch Education
+        public function getSkill(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('SELECT * FROM skills WHERE resume_id = :resume_id ORDER BY created_at ASC');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Skills Fetch Error: " . $e->getMessage());
+                return [];
+            }
+        }
+
         // Update Skill
         public function updateSkill(array $postData): int {
             try {

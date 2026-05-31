@@ -18,6 +18,18 @@
             }
         }
 
+        // Fetch Education
+        public function getSocial(int $resid): array {
+            try {
+                $stmt = $this->pdo->prepare('SELECT * FROM socials WHERE resume_id = :resume_id ORDER BY created_at ASC');
+                $stmt->execute([':resume_id' => $resid]);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            } catch (PDOException $e) {
+                error_log("Social Fetch Error: " . $e->getMessage());
+                return [];
+            }
+        }
+
         // Update Social
         public function updateSocial(array $postData): int {
             try {

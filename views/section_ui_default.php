@@ -273,13 +273,13 @@
                         <div class="field">
                           <label class="label">Start</label>           
                           <div class="control">
-                            <input class="input" type="month" name="experience[<?= $i ?>][start_date]" value="<?= !empty($exp['start_date']) ? date('Y-m', strtotime($exp['start_date'])) : '' ?>">
+                            <input class="input" type="month" placeholder="e.g. Jan 2024 or 2024-01" name="experience[<?= $i ?>][start_date]" value="<?= !empty($exp['start_date']) ? date('Y-m', strtotime($exp['start_date'])) : '' ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="experience[<?= $i ?>][end_date]" value="<?= !empty($exp['end_date']) ? date('Y-m', strtotime($exp['end_date'])) : '' ?>">
+                            <input class="input" type="month" placeholder="e.g. Jan 2024 or 2024-01" name="experience[<?= $i ?>][end_date]" value="<?= !empty($exp['end_date']) ? date('Y-m', strtotime($exp['end_date'])) : '' ?>">
                           </div>
                         </div>
                       </div>
@@ -290,7 +290,7 @@
                         <textarea class="textarea" name="experience[<?= $i ?>][summary]" rows="3"><?= htmlspecialchars($exp['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" name="action" value="experience:delete|<?= htmlspecialchars($exp['id']) ?>">Remove this experience</button>
+                    <button type="submit" class="button is-text pw-remove-item" name="action" value="experience:delete|<?= htmlspecialchars($exp['id']) ?>">Remove this experience</button>
                     <hr class="pw-repeater-divider">
                   </div>
                 <?php } ?>
@@ -311,13 +311,13 @@
                   <div class="field">
                     <label class="label">Job title</label>
                     <div class="control">
-                      <input class="input" type="text" name="title[]" placeholder="Role / Position">
+                      <input class="input" type="text" name="experience[INDEX][title]" placeholder="Role / Position">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Company</label>
                     <div class="control">
-                      <input class="input" type="text" name="employer[]" placeholder="Company / Organization">
+                      <input class="input" type="text" name="experience[INDEX][employer]" placeholder="Company / Organization">
                     </div>
                   </div>
                 </div>
@@ -328,13 +328,13 @@
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <input class="input" type="month" name="start_date[]">
+                      <input class="input" type="month" name="experience[INDEX][start_date]">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="end_date[]">
+                      <input class="input" type="month" name="experience[INDEX][end_date]">
                     </div>
                   </div>
                 </div>
@@ -343,11 +343,11 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="summary[]" rows="3" placeholder="(Optional) What did you actually do, fix or improve?"></textarea>
+                  <textarea class="textarea" name="experience[INDEX][summary]" rows="3" placeholder="(Optional) What did you actually do, fix or improve?"></textarea>
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="education:delete">Remove this experience</button>
+              <button type="button" class="button is-text pw-remove-item" name="experience:delete">Remove this experience</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -368,26 +368,28 @@
             </div>
           </header>
 
-          <form id="form-education" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
+          <form id="form-education" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
-            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($data['resdata']['id'] ?? '') ?>">
+            <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
               <!-- Education ITEM -->
               <?php if (!empty($education)) { ?>
-                <?php foreach ($education as $edu) { ?>
+                <?php foreach ($education as $i => $edu) { ?>
+                  <input type="hidden" name="education[<?= $i ?>][id]" value="<?= htmlspecialchars($edu['id']) ?>">
+
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
                         <div class="field">
-                          <label class="label">Course</label>
+                          <label class="label">Program</label>
                           <div class="control">
-                            <input class="input" type="text" name="program[]" value="<?= htmlspecialchars($edu['program']) ?>">
+                            <input class="input" type="text" name="education[<?= $i ?>][program]" value="<?= htmlspecialchars($edu['program']) ?>">
                           </div>
                         </div>
                         <div class="field">
-                          <label class="label">Institute</label>
+                          <label class="label">School</label>
                           <div class="control">
-                            <input class="input" type="text" name="school[]" value="<?= htmlspecialchars($edu['school']) ?>">
+                            <input class="input" type="text" name="education[<?= $i ?>][school]" value="<?= htmlspecialchars($edu['school']) ?>">
                           </div>
                         </div>
                       </div>
@@ -397,13 +399,13 @@
                         <div class="field">
                           <label class="label">Start</label>
                           <div class="control">
-                            <input class="input" type="month" name="start_date[]" value="<?= !empty($edu['start_date']) ? date('Y-m', strtotime($edu['start_date'])) : '' ?>">
+                            <input class="input" type="month" name="education[<?= $i ?>][start_date]" value="<?= !empty($edu['start_date']) ? date('Y-m', strtotime($edu['start_date'])) : '' ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">End</label>
                           <div class="control">
-                            <input class="input" type="month" name="end_date[]" value="<?= !empty($edu['end_date']) ? date('Y-m', strtotime($edu['end_date'])) : '' ?>">
+                            <input class="input" type="month" name="education[<?= $i ?>][end_date]" value="<?= !empty($edu['end_date']) ? date('Y-m', strtotime($edu['end_date'])) : '' ?>">
                           </div>
                         </div>
                       </div>
@@ -411,13 +413,12 @@
                     <div class="field">
                       <label class="label">Description</label>
                       <div class="control">
-                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($edu['summary'] ?? '') ?></textarea>
+                        <textarea class="textarea" name="education[<?= $i ?>][summary]" rows="3"><?= htmlspecialchars($edu['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
-                    <button type="button" class="button is-text pw-remove-item" name="action" value="education:delete">Remove this education</button>
+                    <button type="submit" class="button is-text pw-remove-item" name="action" value="education:delete|<?= htmlspecialchars($edu['id']) ?>">Remove this education</button>
                     <hr class="pw-repeater-divider">
                   </div>
-                  <input type="hidden" name="education_id[]" value="<?= htmlspecialchars($edu['id']) ?>">
                 <?php } ?>
               <?php } ?>
             </div>
@@ -436,13 +437,13 @@
                   <div class="field">
                     <label class="label">Program</label>
                     <div class="control">
-                      <input class="input" type="text" name="program[]" placeholder="Program / Course">
+                      <input class="input" type="text" name="education[INDEX][program]" placeholder="Program / Course">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">School</label>
                     <div class="control">
-                      <input class="input" type="text" name="school[]" placeholder="School / Organization">
+                      <input class="input" type="text" name="education[INDEX][school]" placeholder="School / Organization">
                     </div>
                   </div>
                 </div>
@@ -453,13 +454,13 @@
                   <div class="field">
                     <label class="label">Start</label>
                     <div class="control">
-                      <input class="input" type="month" name="start_date[]">
+                      <input class="input" type="month" name="education[INDEX][start_date]">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">End</label>
                     <div class="control">
-                      <input class="input" type="month" name="end_date[]">
+                      <input class="input" type="month" name="education[INDEX][end_date]">
                     </div>
                   </div>
                 </div>
@@ -468,11 +469,11 @@
               <div class="field">
                 <label class="label">Description</label>
                 <div class="control">
-                  <textarea class="textarea" name="summary[]" rows="3" placeholder="(Optional) What did you study or learn?"></textarea>
+                  <textarea class="textarea" name="education[INDEX][summary]" rows="3" placeholder="(Optional) What did you study or learn?"></textarea>
                 </div>
               </div>
 
-              <button type="button" class="button is-text pw-remove-item" name="delete">Remove this education</button>
+              <button type="button" class="button is-text pw-remove-item" name="education:delete">Remove this education</button>
               <hr class="pw-repeater-divider">
             </div>
           </template>
@@ -498,20 +499,22 @@
             <!-- Projects ITEM -->
             <div class="pw-repeater" data-repeater="projects">
               <?php if (!empty($projects)) { ?>
-                <?php foreach ($projects as $ass) { ?>
+                <?php foreach ($projects as $i => $pro) { ?>
+                  <input type="hidden" name="projects[<?= $i ?>][id]" value="<?= htmlspecialchars($pro['id']) ?>">
+
                   <div class="pw-repeater-item">
                     <div class="field is-horizontal">
                       <div class="field-body">
                         <div class="field">
                           <label class="label">Project Name</label>
                           <div class="control">
-                            <input class="input" type="text" name="title[]" value="<?= htmlspecialchars($ass['title']) ?>">
+                            <input class="input" type="text" name="projects[<?= $i ?>][title]" value="<?= htmlspecialchars($pro['title']) ?>">
                           </div>
                         </div>
                         <div class="field">
                           <label class="label">Your Role</label>
                           <div class="control">
-                            <input class="input" type="text" name="role[]" value="<?= htmlspecialchars($ass['role'] ?? 'Lead Developer') ?>">
+                            <input class="input" type="text" name="projects[<?= $i ?>][role]" value="<?= htmlspecialchars($pro['role']) ?>">
                           </div>
                         </div>
                       </div>
@@ -520,13 +523,12 @@
                     <div class="field">
                       <label class="label">Project Summary & Tech Stack</label>
                       <div class="control">
-                        <textarea class="textarea" name="summary[]" rows="3"><?= htmlspecialchars($ass['summary'] ?? '') ?></textarea>
+                        <textarea class="textarea" name="projects[<?= $i ?>][summary]" rows="3"><?= htmlspecialchars($pro['summary'] ?? '') ?></textarea>
                       </div>
                     </div>
                     
-                    <button type="button" class="button is-text pw-remove-item" name="action" value="projects:delete">Remove this project</button>
+                    <button type="submit" class="button is-text pw-remove-item" name="action" value="projects:delete|<?= htmlspecialchars($pro['id']) ?>">Remove this project</button>
                     <hr class="pw-repeater-divider">
-                    <input type="hidden" name="project_id[]" value="<?= htmlspecialchars($ass['id']) ?>">
                   </div>
                 <?php } ?>
               <?php } ?>
@@ -546,13 +548,13 @@
                   <div class="field">
                     <label class="label">Project Name</label>
                     <div class="control">
-                      <input class="input" type="text" name="title[]" placeholder="e.g. ResTemplater Engine">
+                      <input class="input" type="text" name="projects[INDEX][title]" placeholder="e.g. ResTemplater Engine">
                     </div>
                   </div>
                   <div class="field">
                     <label class="label">Your Role</label>
                     <div class="control">
-                      <input class="input" type="text" name="role[]" placeholder="e.g. Backend Architect">
+                      <input class="input" type="text" name="projects[INDEX][role]" placeholder="e.g. Backend Architect">
                     </div>
                   </div>
                 </div>
@@ -561,7 +563,7 @@
               <div class="field">
                 <label class="label">Project Summary & Tech Stack</label>
                 <div class="control">
-                  <textarea class="textarea" name="summary[]" rows="3" placeholder="What was the goal? What tech did you use? (PHP, SQL, etc.)"></textarea>
+                  <textarea class="textarea" name="projects[INDEX][summary]" rows="3" placeholder="What was the goal?"></textarea>
                 </div>
               </div>
 
@@ -588,27 +590,28 @@
               <!-- Skills ITEM -->
               <?php if (!empty($skills)) { ?>
                 <?php foreach ($skills as $i => $ski) { ?>
-                <div class="pw-repeater-item">                         
-                  <div class="field is-grouped skill-row">
-                    <div class="control">
-                      <input type="text" name="skills[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($ski['name']) ?>">
-                    </div>
-                    <div class="control">
-                      <select class="pw-select" name="skills[<?= $i ?>][category]">
-                        <option disabled>Select a Category:</option>
-                        <option <?= $ski['category'] === 'tool' ? 'selected' : '' ?>>Software / Tools</option>
-                        <option <?= $ski['category'] === 'language' ? 'selected' : '' ?>>Languages</option>
-                        <option <?= $ski['category'] === 'technical' ? 'selected' : '' ?>>Technical</option>
-                        <option <?= $ski['category'] === 'certificate' ? 'selected' : '' ?>>Certificate</option>
-                        <option <?= $ski['category'] === 'soft-skill' ? 'selected' : '' ?>>Soft Skills</option>
-                        <option <?= $ski['category'] === 'hard-skill' ? 'selected' : '' ?>>Hard Skills</option>
-                        <option <?= $ski['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
-                      </select>
-                    </div>
-                    <input type="hidden" name="skills[<?= $i ?>][id]" value="<?= htmlspecialchars($ski['id']) ?>">
-                    <button type="submit" class="remove" name="skills:delete" value="<?= htmlspecialchars($ski['id']) ?>">✕</button>
-                  </div>  
-                </div>
+                  <input type="hidden" name="skills[<?= $i ?>][id]" value="<?= htmlspecialchars($ski['id']) ?>">
+
+                  <div class="pw-repeater-item">                         
+                    <div class="field is-grouped skill-row">
+                      <div class="control">
+                        <input type="text" name="skills[<?= $i ?>][name]" class="pw-input" value="<?= htmlspecialchars($ski['name']) ?>">
+                      </div>
+                      <div class="control">
+                        <select class="pw-select" name="skills[<?= $i ?>][category]">
+                          <option disabled>Select a Category:</option>
+                          <option value="tool" <?= $ski['category'] === 'tool' ? 'selected' : '' ?>>Software / Tools</option>
+                          <option value="language" <?= $ski['category'] === 'language' ? 'selected' : '' ?>>Languages</option>
+                          <option value="technical" <?= $ski['category'] === 'technical' ? 'selected' : '' ?>>Technical</option>
+                          <option value="certificate" <?= $ski['category'] === 'certificate' ? 'selected' : '' ?>>Certificate</option>
+                          <option value="soft-skill" <?= $ski['category'] === 'soft-skill' ? 'selected' : '' ?>>Soft Skills</option>
+                          <option value="hard-skill" <?= $ski['category'] === 'hard-skill' ? 'selected' : '' ?>>Hard Skills</option>
+                          <option value="Other" <?= $ski['category'] === 'Other' ? 'selected' : '' ?>>Other</option>
+                        </select>
+                      </div>
+                      <button type="submit" class="remove" name="action" value="skills:delete|<?= htmlspecialchars($ski['id']) ?>">✕</button>
+                    </div>  
+                  </div>
                 <?php } ?>
               <?php } ?>
             </div>
@@ -632,13 +635,13 @@
                 <div class="control">
                   <select class="pw-select" name="skill[]['category']">
                     <option selected disabled>Select a Category:</option>
-                    <option>Software / Tools</option>
-                    <option>Languages</option>
-                    <option>Technical</option>
-                    <option>Certificate</option>
-                    <option>Soft Skills</option>
-                    <option>Hard Skills</option>
-                    <option>Other</option>
+                    <option value="tool">Software / Tools</option>
+                    <option value="language">Languages</option>
+                    <option value="technical">Technical</option>
+                    <option value="certificate">Certificate</option>
+                    <option value="soft-skill">Soft Skills</option>
+                    <option value="hard-skill">Hard Skills</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <button type="button" class="remove is-text pw-remove-item">✕</button>
@@ -662,16 +665,16 @@
             <div class="pw-repeater" data-repeater="social">
               <!-- Social ITEM -->
               <?php if (!empty($socialurl)) { ?>
-                <?php foreach ($socialurl as $url) { ?>
+                <?php foreach ($socialurl as $i => $url) { ?>
                   <div class="pw-repeater-item">
                     <div class="field">
                       <label class="label">Link</label>
                       <div class="control">
-                        <input class="input" type="url" name="social[<?= $i ?>][media_url]" value="<?= htmlspecialchars($url['media_url']) ?>">
+                        <input class="input" type="url" name="socials[<?= $i ?>][media_url]" value="<?= htmlspecialchars($url['media_url']) ?>" placeholder="https://linkedin.com/in/...">
                       </div>
                     </div>
-                    <input type="hidden" name="social[<?= $i ?>][id]" value="<?= htmlspecialchars($url['id']) ?>">
-                    <button type="submit" class="button is-text pw-remove-item" name="action" value="socials:delete">Remove this link</button>
+                    <input type="hidden" name="socials[<?= $i ?>][id]" value="<?= htmlspecialchars($url['id']) ?>">
+                    <button type="submit" class="button is-text pw-remove-item" name="action" value="socials:delete|<?= htmlspecialchars($url['id']) ?>">Remove this link</button>
                   </div>
                 <?php } ?>
               <?php } ?>
@@ -689,7 +692,7 @@
               <div class="field">
                 <label class="label">Link</label>
                 <div class="control">
-                  <input class="input" type="url" name="social[]" placeholder="https://example.com">
+                  <input class="input" type="url" name="socials[INDEX][media_url]" placeholder="https://example.com">
                 </div>
               </div>
               <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>

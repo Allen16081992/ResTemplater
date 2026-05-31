@@ -3,69 +3,77 @@
         public function __construct(private array $postData) {}
 
         public function handle(): void {
-            // DB querry (only after validation)
             $pdo = Database::Connect();
             $model = new projectCodex($pdo); 
+            $resid = !empty($this->postData['resume_id']) ? (int)$this->postData['resume_id'] : null;
 
-            if (isset($this->postData['delete'])) {
-                // DB querry (only after validation)
-                $trash = $model->deleteProject($this->postData['project_id'], $this->postData['resume_id']);
-                if (!$trash) {
-                    // Hold error message + set previous UI state
-                    $_SESSION['error'] = 'Failed to delete project.';
-                    ViewBook::revert($this->postData['action'] ?? '');
-                    return;
+            // 1. Disect the raw string
+            $parts = explode('|', $this->postData['action']);
+            $rawAction = $parts[0];
+
+            // 1. Extract the Intent (everything after the colon)
+            $intent = ltrim(strchr($rawAction, ':'), ':');
+
+            if ($intent === 'delete') {
+                $prid = isset($parts[1]) ? (int)$parts[1] : null;
+
+                $result = $model->deleteProject($prid, $resid);
+                if ($result <= 0) {
+                    $_SESSION['error'] = "Failed to delete project.";
+                } else {
+                    $_SESSION['success'] = "Project purged from records.";
+                }
+                ViewBook::revert('builder', $resid);
+                return; 
+
+            } elseif ($intent === 'save') {
+                $successCount = 0;
+                $sourceData = $this->postData['projects'] ?? [];
+
+                foreach ($sourceData as $report) {
+                    // Extract and sanitize
+                    $prid = !empty($report['id'] ?? null) ? (int)$report['id'] : null;
+                    $title= $report['title'];
+                    $role = $report['role'];
+
+                    // If it's a new row and everything is blank, ignore it
+                    if (empty($prid) && $title === '' && $role === '') {
+                        continue;
+                    }
+
+                    // Per-row validation (The Blocker)
+                    $rowErrors = [];
+                    if ($msg = ValidGrimoire::validateName($title, true, 120)) $rowErrors['title'] = $msg;
+                    if ($msg = ValidGrimoire::validateName($role, true, 120)) $rowErrors['role'] = $msg;
+
+                    if (!empty($rowErrors)) {
+                        $_SESSION['error'] = $rowErrors;
+                        ViewBook::revert('builder', $resid);
+                        return;
+                    }
+
+                    // Prepare payload
+                    $payload = [
+                        'id'        => $prid,
+                        'resume_id' => $resid,
+                        'title'     => $title, 
+                        'role'      => $role, 
+                        'summary'   => trim((string)($report['summary'] ?? ''))
+                    ];
+
+                    // Batch execution: Update if ID exists, otherwise Create
+                    $result = empty($prid) 
+                        ? $model->createProject($payload) 
+                        : $model->updateProject($payload);
+
+                    if ($result > 0) $successCount++;
                 }
 
-                $_SESSION['success'] = 'Project removed.';
-                ViewBook::revert('builder');  
+                $_SESSION['success'] = $successCount > 0 
+                    ? "Successfully updated $successCount project(s)." 
+                    : "Records verified. No changes needed.";
+                ViewBook::revert('builder', $resid);
                 return;
             }
-
-            // Validate for missing value
-            $errors = ValidGrimoire::emptyField($this->postData);
-            if (!empty($errors)) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? '');
-                return;
-            }
-
-            // Validate project name
-            $title = trim((string)($this->postData['title'] ?? ''));
-            if ($msg = ValidGrimoire::validateName($title, true)) {
-                $errors['title'] = $msg;
-            }
-
-            // Validate project role
-            $role = trim((string)($this->postData['role'] ?? ''));
-            if ($msg = ValidGrimoire::validateName($role, true)) {
-                $errors['role'] = $msg;
-            }
-
-            // Final check: if errors exist, send them back together
-            if (!empty($errors)) {
-                $_SESSION['error'] = $errors;
-                ViewBook::revert($this->postData['action'] ?? 'profile');
-                return;
-            }
-
-            // Verify project id
-            if (empty($this->postData['project_id'])) {
-                $project = $model->createProject($this->postData);
-            } else {
-                $project = $model->updateProject($this->postData);
-            }
-
-            if ($project <= 0) {
-                // Hold error message + set previous UI state
-                $_SESSION['error'] = 'Failed to save project.';
-                ViewBook::revert($this->postData['action'] ?? ''); 
-                return;
-            }
-
-            $_SESSION['success'] = 'Project saved.';
-            ViewBook::revert($this->postData['action'] ?? '');
-            return;
         }
     }

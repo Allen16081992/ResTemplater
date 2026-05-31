@@ -53,12 +53,12 @@
         }
 
         // Delete Experience
-        public function deleteExperience(int $exp, int $resume) {
+        public function deleteExperience(int $exp, int $resid) {
             try {
                 $stmt = $this->pdo->prepare('DELETE FROM experience WHERE id = :exp_id AND resume_id = :resume_id');
                 $stmt->execute([
                     ':exp_id'=> $exp,
-                    ':resume_id'=> $resume
+                    ':resume_id'=> $resid
                 ]);
                 return $stmt->rowCount();
             } catch (PDOException $e) {

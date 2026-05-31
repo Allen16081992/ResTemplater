@@ -5,7 +5,7 @@
         public function handle(): void {
             $pdo = Database::Connect();
             $model = new experienceCodex($pdo); 
-            $resid = $this->postData['resume_id'] ?? '';
+            $resid = !empty($this->postData['resume_id']) ? (int)$this->postData['resume_id'] : null;
 
             // 1. Disect the raw string
             $parts = explode('|', $this->postData['action']);
@@ -13,6 +13,7 @@
 
             // 1. Extract the Intent (everything after the colon)
             $intent = ltrim(strchr($rawAction, ':'), ':');
+            
             if ($intent === 'delete') {
                 $exid = isset($parts[1]) ? (int)$parts[1] : null;
 
@@ -20,24 +21,24 @@
                 if ($result <= 0) {
                     $_SESSION['error'] = "Failed to delete experience.";
                 } else {
-                    $_SESSION['success'] = "Experience deleted.";
+                    $_SESSION['success'] = "Experience purged from records.";
                 }
                 ViewBook::revert('builder', $resid);
                 return; 
 
             } elseif ($intent === 'save') {
                 $successCount = 0;
-                $experiences = $this->postData['experience'] ?? [];
+                $sourceData = $this->postData['experience'] ?? [];
 
-                foreach ($experiences as $job) {
+                foreach ($sourceData as $job) {
                     // Sanitize these first for any loop iteration
                     $formattedStart = null;
                     $formattedEnd = null;
 
                     // Extract and sanitize
-                    $eid      = !empty($job['id']) ? (int)$job['id'] : null;
-                    $title    = $job['title'];
-                    $employer = $job['employer'];
+                    $eid = !empty($job['id'] ?? null) ? (int)$job['id'] : null;
+                    $title = $job['title'];
+                    $employer= $job['employer'];
 
                     // If it's a new row and everything is blank, ignore it
                     if (empty($eid) && $title === '' && $employer === '' && empty($job['start_date'])) {
@@ -92,7 +93,7 @@
                         ? $model->createExperience($payload) 
                         : $model->updateExperience($payload);
 
-                    if ($result) $successCount++;
+                    if ($result > 0) $successCount++;
                 }
 
                 $_SESSION['success'] = $successCount > 0 

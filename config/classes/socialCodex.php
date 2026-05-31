@@ -21,10 +21,10 @@
         // Update Social
         public function updateSocial(array $postData): int {
             try {
-                $stmt = $this->pdo->prepare('UPDATE socials SET media_url = :media_url WHERE id = :social_id AND resume_id = :resume_id');
+                $stmt = $this->pdo->prepare('UPDATE socials SET media_url = :media_url WHERE id = :id AND resume_id = :resume_id');
                 $stmt->execute([
+                    ':id'=> $postData['id'],
                     ':media_url'=> $postData['media_url'],
-                    ':social_id'        => $postData['id'],
                     ':resume_id'=> $postData['resume_id']
                 ]);
                 return $stmt->rowCount();
@@ -36,12 +36,12 @@
         }
 
         // Delete Social
-        public function deleteSocial(int $id, int $resID) {
+        public function deleteSocial(int $id, int $resid) {
             try {
                 $stmt = $this->pdo->prepare('DELETE FROM socials WHERE id = :id AND resume_id = :resume_id');
                 $stmt->execute([
                     ':id'=> $id,
-                    ':resume_id'=> $resID
+                    ':resume_id'=> $resid
                 ]);
                 return $stmt->rowCount();
             } catch (PDOException $e) {

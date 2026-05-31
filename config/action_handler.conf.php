@@ -39,7 +39,7 @@
         'education' => 'educationControl',
         'projects'  => 'projectControl',
         'skills'     => 'skillControl',
-        'social'    => 'socialControl',
+        'socials'    => 'socialControl',
         'wizard'    => 'wizardControl'
     ];
 

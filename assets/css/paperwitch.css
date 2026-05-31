@@ -99,6 +99,10 @@ p {
   line-height: 1.5;
   font-size: clamp(1rem, 1.4vw + 0.25rem, 1.1rem);
 }
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Flips black to white */
+  cursor: pointer;
+}
 .hidden {display:none;}
 
 /* ==========================================================
@@ -130,7 +134,6 @@ nav a.current { cursor: default; }
 #signIn, a[data-section="logout"] {border: 2px solid #dfdfdf;} /* #44d884 */
 #logo img {height: clamp(8rem, 12vw, 10rem); width:auto;}
 .is-contrast { color: black; background:var(--buttercup);}
-
 
 /* ==========================================================
    3. LOGIN + SIGNUP SECTIONS

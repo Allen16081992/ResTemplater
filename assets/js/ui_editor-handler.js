@@ -62,6 +62,25 @@
     saveBtn.classList.toggle("is-disabled", !enabled); // optional Bulma-ish hint
   }
 
+  // function wireRemoveButtons(container) {
+  //   const scope = findSectionRoot(container);
+  //   const removeButtons = container.querySelectorAll(".pw-remove-item");
+
+  //   removeButtons.forEach((btn) => {
+  //     if (btn.dataset.wired === "1") return;
+  //     btn.dataset.wired = "1";
+
+  //     btn.addEventListener("click", () => {
+  //       const item = btn.closest(".pw-repeater-item");
+  //       if (item) item.remove();
+
+  //       // After removal
+  //       setSaveEnabled(scope, getItemCount(container) > 0);
+  //     });
+  //   });
+  // }
+
+  // No form submission prevent on remove item 
   function wireRemoveButtons(container) {
     const scope = findSectionRoot(container);
     const removeButtons = container.querySelectorAll(".pw-remove-item");
@@ -70,11 +89,25 @@
       if (btn.dataset.wired === "1") return;
       btn.dataset.wired = "1";
 
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", (e) => {
         const item = btn.closest(".pw-repeater-item");
-        if (item) item.remove();
+        const actionValue = btn.value;
 
-        // After removal
+        // If it's a real DB record (has a pipe | and an ID)
+        if (actionValue && actionValue.includes('|')) {
+          // DO NOTHING ELSE. 
+          // Let the default "submit" behavior take over.
+          // The browser will POST to action_handler.conf.php.
+          return; 
+        }
+
+        // If it's just a newly added "ghost" row (no ID yet)
+        // We handle this purely in JS because the DB doesn't know it exists.
+        if (item) {
+          item.remove();
+          // Since it's a button type="button", it won't submit anyway.
+        }
+
         setSaveEnabled(scope, getItemCount(container) > 0);
       });
     });

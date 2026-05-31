@@ -164,11 +164,11 @@
         }
 
         // Delete Resume
-        public function deleteResume(int $resumeID, int $uid) {
+        public function deleteResume(int $resid, int $uid) {
             try {
                 $stmt = $this->pdo->prepare('DELETE FROM resumes WHERE id = :resume_id AND user_id = :user_id');
                 $stmt->execute([
-                    ':resume_id'=> $resumeID,
+                    ':resume_id'=> $resid,
                     ':user_id'  => $uid
                 ]);
                 return (int) $stmt->rowCount();

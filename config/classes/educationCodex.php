@@ -6,47 +6,66 @@
         // 1. EDUCATION
         // ========================================================== 
 
-        // Create Experience
+        // Create Education
         public function createEducation(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'INSERT INTO education (title, institute, start_date, end_date, summary, resume_id) 
-                VALUES (:title, :institute, :start_date, :end_date, :summary, :resume_id)'
-            );
-            $stmt->execute([
-                ':title'     => $postData['title'],
-                ':institute' => $postData['institute'],
-                ':start_date'=> $postData['start_date'],
-                ':end_date'  => $postData['end_date'],
-                ':summary'   => $postData['summary'],
-                ':resume_id' => $postData['resume_id']
-            ]);
-            return (int) $this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare(
+                    'INSERT INTO education (program, school, start_date, end_date, summary, resume_id) 
+                    VALUES (:program, :school, :start_date, :end_date, :summary, :resume_id)'
+                );
+                $stmt->execute([
+                    ':program'   => $postData['program'],
+                    ':school'    => $postData['school'],
+                    ':start_date'=> $postData['start_date'],
+                    ':end_date'  => $postData['end_date'],
+                    ':summary'   => $postData['summary'],
+                    ':resume_id' => $postData['resume_id']
+                ]);
+                return (int) $this->pdo->lastInsertId();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1 
+                error_log("Education Insert Error: " . $e->getMessage());
+                return -1; 
+            }
         }
 
-        // Update Experience
+        // Update Education
         public function updateEducation(array $postData): int {
-            $stmt = $this->pdo->prepare(
-                'UPDATE education SET title = :title, institute = :institute, start_date = :start_date, end_date = :end_date, summary = :summary WHERE resume_id = :resume_id'
-            );
-            $stmt->execute([
-                ':title'     => $postData['title'],
-                ':institute' => $postData['institute'],
-                ':start_date'=> $postData['start_date'],
-                ':end_date'  => $postData['end_date'],
-                ':summary'   => $postData['summary'],
-                ':resume_id' => $postData['resume_id']
-            ]);
-            return (int) $this->pdo->lastInsertId();
+            try {
+                $stmt = $this->pdo->prepare(
+                    'UPDATE education SET program = :program, school = :school, start_date = :start_date, end_date = :end_date, summary = :summary WHERE id = :id AND resume_id = :resume_id'
+                );
+                $stmt->execute([
+                    ':id'        => $postData['id'],
+                    ':program'   => $postData['program'],
+                    ':school'    => $postData['school'],
+                    ':start_date'=> $postData['start_date'],
+                    ':end_date'  => $postData['end_date'],
+                    ':summary'   => $postData['summary'],
+                    ':resume_id' => $postData['resume_id']
+                ]);
+                return (int) $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1 
+                error_log("Education Update Error: " . $e->getMessage());
+                return -1; 
+            }
         }
 
-        // Delete Experience
-        public function deleteEducation(int $edu, int $resume) {
-            $stmt = $this->pdo->prepare('DELETE FROM education WHERE edu_id = :edu_id AND resume_id = :resume_id');
-            $stmt->execute([
-                ':edu_id'=> $edu,
-                ':resume_id'=> $resume
-            ]);
-            return $stmt->rowCount() > 0;
+        // Delete Education
+        public function deleteEducation(int $edu, int $resid) {
+            try {
+                $stmt = $this->pdo->prepare('DELETE FROM education WHERE id = :id AND resume_id = :resume_id');
+                $stmt->execute([
+                    ':id'=> $edu,
+                    ':resume_id'=> $resid
+                ]);
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                // Log the details to fix later, then return -1
+                error_log("Education Delete Error: " . $e->getMessage());
+                return -1;
+            }
         }
 
         // ==========================================================

@@ -44,7 +44,10 @@
                 }
             }
             
-            ImageDestroy($image);
+            // Version-safe cleanup for PHP 8.1+
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($image); 
+            }
         }
     
         //----------------------------------------------------------------------
@@ -59,7 +62,10 @@
                 ImageJpeg($image, $filename, $q);            
             }
             
-            ImageDestroy($image);
+            // Version-safe cleanup
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($image);
+            }
         }
     
         //----------------------------------------------------------------------
@@ -88,7 +94,11 @@
             
             $target_image =ImageCreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
-            ImageDestroy($base_image);
+
+            // ALWAYS check base_image cleanup too
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($base_image);
+            }
             
             return $target_image;
         }

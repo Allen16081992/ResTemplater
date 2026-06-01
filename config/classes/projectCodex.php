@@ -76,7 +76,7 @@
         // ========================================================== 
 
         // Create Projects_Bulletpoint
-        public function createBulletpoint(string $desc, ?int $sort, int $pro): bool {
+        public function createProjectBullet(string $desc, ?int $sort, int $pro): bool {
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO projects_bullets (text, sort_order, projects_id) VALUES (:text, :sort, :projects_id)');
                 $stmt->execute([

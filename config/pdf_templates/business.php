@@ -5,7 +5,7 @@
     class BusinessTemplate extends BaseTemplate {
         private function alignSubtitle(string $title, float $contentX, float &$startY): void {
             $startY = $this->GetY();
-            $hasSocials = !empty($this->data['social']);
+            $hasSocials = !empty($this->data['socials']);
             $align = $hasSocials ? 'L' : 'C';
 
             $this->SetX($contentX);
@@ -44,14 +44,14 @@
                 
 
                 //////////////////// HEADLINE ///////////////////
-                if ($this->data['headline'] !== '') {
+                if ($this->data['master']['headline'] !== '') {
                     $currentY = $this->GetY() + 2; 
                     $this->SetDrawColor(0, 80, 180); 
                     $this->Line(10, $currentY, 200, $currentY);
                     
                     $this->SetFont('Times', '', 11);
                     $this->SetX(77); // Set the position for text
-                    $this->MultiCell(0, 10, $this->data['headline'], 0, 'L');
+                    $this->MultiCell(0, 10, $this->data['master']['headline'], 0, 'L');
 
                     // Set the cursor for the next section (Contact)
                     $this->SetY($currentY + 10); 
@@ -69,27 +69,29 @@
         }
 
         public function generatePDF() {
-            error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-            ob_start();
+            // error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+            // ob_start();
+            // TEMPORARY DEBUG: Dump the cauldron to check array keys
+            //echo '<pre>'; print_r($this->data); echo '</pre>'; die();
             // --- SHOVE TEST DATA HERE ---
-            $this->data['social'] = [
-                ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
-                ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
-                ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
-            ];
+            // $this->data['socials'] = [
+            //     ['name' => 'Coolblue', 'media_url' => 'https://www.coolblue.nl/'],
+            //     ['name' => 'YouTube',  'media_url' => 'https://www.youtube.com/'],
+            //     ['name' => 'UbiSoft',  'media_url' => 'https://store.ubisoft.com/']
+            // ];
 
-            $this->data['projects'] = [
-                [
-                    'title'   => 'ResTemplater Engine',
-                    'role'    => 'Backend Architect',
-                    'summary' => 'A PHP-based engine designed to automate resume generation.'
-                ],
-                [
-                    'title'   => 'Cloud Dashboard',
-                    'role'    => 'Frontend Developer',
-                    'summary' => 'A React dashboard for monitoring real-time server metrics.'
-                ]
-            ];
+            // $this->data['projects'] = [
+            //     [
+            //         'title'   => 'ResTemplater Engine',
+            //         'role'    => 'Backend Architect',
+            //         'summary' => 'A PHP-based engine designed to automate resume generation.'
+            //     ],
+            //     [
+            //         'title'   => 'Cloud Dashboard',
+            //         'role'    => 'Frontend Developer',
+            //         'summary' => 'A React dashboard for monitoring real-time server metrics.'
+            //     ]
+            // ];
             $this->AliasNbPages();
             $this->AddPage();
             $this->SetFont('Times', '', 12);
@@ -103,11 +105,12 @@
 
             // Sanitize data using htmlspecialchars
             // Resume title becomes Filename
+            $resume = $this->data['master']['title'] ?? '';
             $name = $this->data['contact']['fullname'] ?? 'My Scroll';
             $today = $this->printDate('today');
 
-            if (isset($this->data['resume'][0]['resume_title'])) {
-                $doc = htmlspecialchars($this->data['resume'][0]['resume_title']); 
+            if (isset($resume)) {
+                $doc = htmlspecialchars($resume); 
                 $this->SetTitle($doc.' '.$today);
             } else { 
                 // Wizard
@@ -122,13 +125,12 @@
             $this->SetFont('Times', '', 10);
             
             // We bouwen één lange string van alle contactinfo
-            $zip     = '3011 MC';
             $city    = $this->data['contact']['city'];
             $phone   = $this->data['contact']['phone'];
             $email   = $this->data['contact']['email'];
             $country = $this->data['contact']['country'];
             
-            $contactString = "{$phone}   |   {$email}   |   {$zip}, {$city}   |   {$country}";
+            $contactString = "{$phone}   |   {$email}   |   {$city}   |   {$country}";
             
             // Print de string perfect gecentreerd over de hele pagina (breedte 190mm)
             $this->Cell(190, 0, $contactString, 0, 1, 'C'); 
@@ -143,7 +145,7 @@
 
             //////////////////// LAYOUT CALCULATIONS ////////////////////
             $topOfColumnsY = $this->GetY(); 
-            $hasSocials = !empty($this->data['social']);
+            $hasSocials = !empty($this->data['socials']);
 
             // Define widths and positions based on whether socials exist
             if (class_exists('QRcode') && $hasSocials) {
@@ -162,7 +164,7 @@
                 $maxSocials = 3;
                 $counter = 0;
 
-                foreach ($this->data['social'] as $social) {
+                foreach ($this->data['socials'] as $social) {
                     if ($counter >= $maxSocials) break;
                     
                     $mediaPath = $social['media_url'] ?? 'https://google.com';
@@ -328,7 +330,7 @@
                 }
 
                 // Draw the vertical "Spine" line on the right
-                if (!empty($this->data['social'])) {
+                if (!empty($this->data['socials'])) {
                     $this->Line(200, $skillY, 200, $this->GetY());
                 }
             }
@@ -353,7 +355,7 @@
             //     if ($count % 2 != 0) $this->Ln(5);
 
             //     // Draw the Adaptive Vertical Line (Same logic as Education)
-            //     if (!empty($this->data['social'])) {
+            //     if (!empty($this->data['socials'])) {
             //         $this->Line(200, $skillY, 200, $this->GetY());
             //     }
             // }
@@ -365,7 +367,7 @@
         }
     }
 
-    // $this->data['social'] = [
+    // $this->data['socials'] = [
     //     [
     //         'name'      => 'Coolblue',
     //         'media_url' => 'https://www.coolblue.nl/?srsltid=AfmBOopkfD1YKbhGqKxnDIxlV504riquRmxvE-hURF2eKwDjoxdqqed3'

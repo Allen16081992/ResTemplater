@@ -85,7 +85,7 @@
         // ========================================================== 
 
         // Create Education_Bulletpoint
-        public function createBulletpoint(string $desc, ?int $sort, int $edu): bool {
+        public function createEducationBullet(string $desc, ?int $sort, int $edu): bool {
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO education_bullets (text, sort_order, education_id) VALUES (:text, :sort, :education_id)');
                 $stmt->execute([

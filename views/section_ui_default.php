@@ -201,7 +201,7 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-info" class="pw-panel-form" action="config/action_handler.conf.php" method="post" target="_blank">
+          <form id="form-info" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="field">
@@ -220,7 +220,9 @@
             </div>
 
             <div class="pw-panel-actions">
-              <button type="submit" name="action" value="resume:clone" class="button is-contrast">Clone</button>
+              <?php $isCopy = (strpos($master['title'], '(Copy)') !== false); if (!$isCopy) { ?>
+                <button type="submit" name="action" value="resume:clone" class="button is-contrast">Clone</button>
+              <?php } ?>
               <button type="submit" name="action" value="resume:update" class="button btn-cta pw-save-btn">Save</button>
             </div>
           </form>

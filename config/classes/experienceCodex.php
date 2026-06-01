@@ -85,7 +85,7 @@
         // ========================================================== 
 
         // Create Experience_Bulletpoint
-        public function createBulletpoint(string $desc, ?int $sort, int $exp): bool {
+        public function createExperienceBullet(string $desc, ?int $sort, int $exp): bool {
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO experience_bullets (text, sort_order, experience_id) VALUES (:text, :sort, :experience_id)');
                 $stmt->execute([

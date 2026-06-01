@@ -1,4 +1,5 @@
-<?php
+<?php ini_set('display_errors', 1);
+error_reporting(E_ALL);
     final class resumeCodex {
         public function __construct(private PDO $pdo) {} 
 
@@ -16,112 +17,6 @@
             } catch (PDOException $e) {
                 // Log the details to fix later, then return -1
                 error_log("Resume Insert Error: " . $e->getMessage());
-                return -1;
-            }
-        }
-
-        // Duplicate Resume
-        public function cloneResume(int $rid, int $uid): int {
-            try {
-                $this->pdo->beginTransaction();
-
-                // 1. Fetch the original to get the title/headline
-                $original = $this->fetchResume($rid, $uid);
-                $sections = $this->fetchCompositeData($rid); // Get the rest
-                if (!$original) throw new Exception("Original not found.");
-
-                // 2. Create the new Parent
-                $newTitle = $original['title'] . " (Copy)";
-                $newRid = $this->createResume($newTitle, $original['headline'], $uid);
-
-                $いち = new experienceCodex($this->pdo); 
-                $に   = new educationCodex($this->pdo);
-                $さん = new projectCodex($this->pdo); 
-                $よん = new skillCodex($this->pdo);  
-                $ご   = new socialCodex($this->pdo);  
-
-                // Now, cast the duplication rituals...
-                foreach ($sections['experience'] as $exp) {
-                    // Take existing experience data.
-                    $clonedData = $exp;
-                    
-                    // Swap resume_id for the new one.
-                    $clonedData['resume_id'] = $newRid;
-
-                    // Now '1' can consume the array exactly how it likes
-                    $newEXP = $いち->createExperience($clonedData);
-
-                    // Re-link the bullets to the NEW experience ID
-                    if ($newEXP > 0) {
-                        foreach ($sections['experience_bullets'] as $bullet) {
-                            // Only copy bullets that belonged to the OLD experience ID
-                            if ($bullet['experience_id'] == $exp['id']) {
-                                $いち->createBulletpoint($bullet['text'], $bullet['sort_order'], $newEXP);
-                            }
-                        }
-                    }
-                }
-                // Education Loop
-                foreach ($sections['education'] as $edu) {
-                    $clonedData = $edu;
-                    $clonedData['resume_id'] = $newRid;
-                    $newEDU = $に->createEducation($clonedData);
-
-                    if ($newEDU > 0) {
-                        foreach ($sections['education_bullets'] as $bullet) {
-                            // FIX: Check against $edu['id']
-                            if ($bullet['education_id'] == $edu['id']) { 
-                                $に->createBulletpoint($bullet['text'], $bullet['sort_order'], $newEDU);
-                            }
-                        }
-                    }
-                }
-                // Projects Loop
-                foreach ($sections['projects'] as $pro) {
-                    $clonedData = $pro;
-                    $clonedData['resume_id'] = $newRid;
-                    $newPRO = $さん->createProject($clonedData);
-
-                    if ($newPRO > 0) {
-                        foreach ($sections['projects_bullets'] as $bullet) {
-                            // FIX: Check against $pro['id']
-                            if ($bullet['projects_id'] == $pro['id']) {
-                                $さん->createBulletpoint($bullet['text'], $bullet['sort_order'], $newPRO);
-                            }
-                        }
-                    }
-                }
-                foreach ($sections['skills'] as $ski) {
-                    // 1. Prepare the payload to match the createSkill 'Contract'
-                    $payload = [
-                        'resume_id' => $newRid,
-                        'skill' => [
-                            'name'     => $ski['name'],
-                            'category' => $ski['category']
-                        ]
-                    ];
-
-                    // 2. Pass the correctly structured payload to '4'
-                    $newSKI = $よん->createSkill($payload);
-                }
-                foreach ($sections['socials'] as $soc) {
-                    // Take existing experience data.
-                    $clonedData = $soc;
-                    
-                    // Swap resume_id for the new one.
-                    $clonedData['resume_id'] = $newRid;
-
-                    // Now '3' can consume the array exactly how it likes
-                    $newSOC = $ご->createSocial($clonedData);
-                }
-
-                // Repeat for Education and Projects...
-                $this->pdo->commit();
-                return $newRid;
-
-            } catch (Exception $e) {
-                $this->pdo->rollBack();
-                error_log("Clone Resume Failed: " . $e->getMessage());
                 return -1;
             }
         }
@@ -226,5 +121,89 @@
             }
 
             return $data; 
+        }
+
+        // Weird duck in the mix
+        private function cloneBullets(array $bullets, string $fk, array $map, $codex) {
+            foreach ($bullets as $bullet) {
+                $oldParentId = $bullet[$fk];
+                if (isset($map[$oldParentId])) {
+                    $codex->createBulletpoint($bullet['text'], $bullet['sort_order'], $map[$oldParentId]);
+                }
+            }
+        }
+
+        // Duplicate Resume (Fetch + Create-Orchestrator)
+        public function cloneResume(int $resid, int $uid): int|array {
+            $this->pdo->beginTransaction();
+            
+            $original = $this->fetchResume($resid, $uid);
+            if (strpos($original['title'], '(Copy)') !== false) {
+                throw new Exception("CRITICAL: STOP! You are trying to clone a (Copy).");
+            }
+            $tables = $this->fetchCompositeData($resid);
+            $newRid = $this->createResume($original['title'] . " (Copy)", $original['headline'], $uid);
+
+            $idMap = ['experience' => [], 'education' => [], 'projects' => []];
+
+            // 0. Instantiate Codex Classes
+            $expCodex = new experienceCodex($this->pdo);
+            $eduCodex = new educationCodex($this->pdo);
+            $proCodex = new projectCodex($this->pdo);
+            $skiCodex = new skillCodex($this->pdo);
+            $socCodex = new socialCodex($this->pdo);
+
+            // 1. Clone Parents and Build ID Map
+            // EXPERIENCE
+            foreach ($tables['experience'] as $row) {
+                $oldId = $row['id'];
+                $row['resume_id'] = $newRid;
+                $idMap['experience'][$oldId] = $expCodex->createExperience($row);
+            }
+            // EDUCATION
+            foreach ($tables['education'] as $row) {
+                $oldId = $row['id'];
+                $row['resume_id'] = $newRid;
+                $idMap['education'][$oldId] = $eduCodex->createEducation($row);
+            }
+            // PROJECTS
+            foreach ($tables['projects'] as $row) {
+                $oldId = $row['id'];
+                $row['resume_id'] = $newRid;
+                $idMap['projects'][$oldId] = $proCodex->createProject($row);
+            }
+
+            // 2. Simple Tables
+            foreach ($tables['skills'] as $row) {
+                $row['resume_id'] = $newRid;
+                $skiCodex->createSkill($row);
+            }
+            foreach ($tables['socials'] as $row) {
+                $row['resume_id'] = $newRid;
+                $socCodex->createSocial($row);
+            }
+
+            // 3. Clone Bullets with ID mapping
+            // EXPERIENCE BULLETS
+            foreach ($tables['experience_bullets'] as $row) {
+                if (isset($idMap['experience'][$row['experience_id']])) {
+                    $expCodex->createExperienceBullet($row['text'], $row['sort_order'], $idMap['experience'][$row['experience_id']]);
+                }
+            }
+            // EDUCATION BULLETS
+            foreach ($tables['education_bullets'] as $row) {
+                if (isset($idMap['education'][$row['education_id']])) {
+                    $eduCodex->createEducationBullet($row['text'], $row['sort_order'], $idMap['education'][$row['education_id']]);
+                }
+            }
+            // PROJECT BULLETS
+            foreach ($tables['project_bullets'] as $row) {
+                if (isset($idMap['projects'][$row['projects_id']])) {
+                    $proCodex->createProjectBullet($row['text'], $row['sort_order'], $idMap['projects'][$row['projects_id']]);
+                }
+            }
+
+            $this->pdo->commit();
+            return $newRid;
         }
     }

@@ -58,7 +58,7 @@
                 $result = match ($intent) {
                     'create' => $model->createResume($title, $headline, $uid),
                     'update' => $model->updateResume($title, $headline, $resid, $uid),
-                    'clone'  => $model->cloneResume($resid, $uid), // The new ritual
+                    'clone'  => $model->cloneResume($resid, $uid),
                     default  => -1
                 };
 
@@ -77,8 +77,7 @@
                     $_SESSION['error'] = "Resume $intent failed.";
                 }
 
-                // Catch the ID for the redirect
-                // If it was a clone, $result (the new ID). 
+                // If clone, $result (set new ID). 
                 // Otherwise, stick with the existing $resid.
                 $finalId = ($intent === 'clone' || $intent === 'create') ? $result : $resid;
                 ViewBook::revert('builder', $finalId);

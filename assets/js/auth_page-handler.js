@@ -6,7 +6,7 @@
   const visual = document.getElementById("signupVisual");
 
   if (form && visual) {
-    const idleImg = 'url("assets/images/paperwitch_takehand.png")';
+    const idleImg = 'url("assets/images/paperwitch_bold.png")';
     const burstImg = 'url("assets/images/paperwitch_radiate.png")';
 
     // Preload images
@@ -122,8 +122,7 @@
       "paperwitch_despise.png",
       "paperwitch_confidant.png",
       "paperwitch_resentful.png",
-      "paperwitch_festival.png",
-      "paperwitch_scientist.png",
+      "paperwitch_headphone.png",
       "paperwitch_air.png"
     ];
 

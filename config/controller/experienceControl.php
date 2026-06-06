@@ -29,55 +29,55 @@
             } elseif ($intent === 'save') {
                 $successCount = 0;
                 $sourceData = $this->postData['experience'] ?? [];
+                
+                // Master error tracker to hold issues across all rows
+                $allErrors = [];
 
-                foreach ($sourceData as $job) {
-                    // Sanitize these first for any loop iteration
+                // Transaction boundary start - either everything saves or nothing saves
+                $pdo->beginTransaction();
+
+                foreach ($sourceData as $index => $job) {
                     $formattedStart = null;
                     $formattedEnd = null;
 
-                    // Extract and sanitize
                     $eid = !empty($job['id'] ?? null) ? (int)$job['id'] : null;
-                    $title = $job['title'];
-                    $employer= $job['employer'];
+                    $title = $job['title'] ?? '';
+                    $employer = $job['employer'] ?? '';
 
-                    // If it's a new row and everything is blank, ignore it
+                    // Cleanly ignore blank ghost rows without throwing errors
                     if (empty($eid) && $title === '' && $employer === '' && empty($job['start_date'])) {
                         continue;
                     }
 
-                    // Per-row validation (The Blocker)
+                    // Per-row validation error tracking
                     $rowErrors = [];
                     if ($msg = ValidGrimoire::validateName($title, true, 120)) $rowErrors['title'] = $msg;
                     if ($msg = ValidGrimoire::validateName($employer, true, 120)) $rowErrors['employer'] = $msg;
 
-                    // 1. Validate Start Date
-                    $startDate = ValidGrimoire::validateAndFormatMonth($job['start_date'], false);
+                    $startDate = ValidGrimoire::validateAndFormatMonth($job['start_date'] ?? '', false);
                     if ($startDate['error']) {
                         $rowErrors['start_date'] = $startDate['error'];
                     } else {
-                        $formattedStart = $startDate['date']; // This is your Y-m-01
+                        $formattedStart = $startDate['date'];
                     }
 
-                    // 2. Validate End Date
-                    $endDate = ValidGrimoire::validateAndFormatMonth($job['end_date'], true);
+                    $endDate = ValidGrimoire::validateAndFormatMonth($job['end_date'] ?? '', true);
                     if ($endDate['error']) {
                         $rowErrors['end_date'] = $endDate['error'];
                     } else {
-                        $formattedEnd = $endDate['date']; // Could be Y-m-01 or 'Present'
+                        $formattedEnd = $endDate['date'];
                     }
 
+                    // If this specific row has errors, stash them under its unique frontend index
                     if (!empty($rowErrors)) {
-                        $_SESSION['error'] = $rowErrors;
-                        ViewBook::revert('builder', $resid);
-                        return;
+                        $allErrors[$index] = $rowErrors;
+                        continue; // Skip database handling for this row, check the remaining rows
                     }
 
-                    // Translate 'Present' to DB-friendly NULL
                     if ($formattedEnd === 'Present') { 
                         $formattedEnd = null; 
                     }
 
-                    // Prepare payload
                     $payload = [
                         'id'          => $eid,
                         'resume_id'   => $resid,
@@ -88,17 +88,35 @@
                         'summary'     => trim((string)($job['summary'] ?? ''))
                     ];
 
-                    // Batch execution: Update if ID exists, otherwise Create
+                    // Execute row processing
                     $result = empty($eid) 
                         ? $model->createExperience($payload) 
                         : $model->updateExperience($payload);
 
-                    if ($result > 0) $successCount++;
+                    if ($result >= 0) { // Using >= 0 because an unchanged row update returns 0, which is still a success
+                        $successCount++;
+                    } else {
+                        // If the model returned -1 due to an internal execution error
+                        $allErrors[$index]['database'] = "Internal database execution error.";
+                    }
                 }
+
+                // 3. THE FINAL EVALUATION GATE
+                if (!empty($allErrors)) {
+                    // An error occurred somewhere. Roll back all database adjustments instantly
+                    $pdo->rollBack();
+                    $_SESSION['error'] = $allErrors; // Your frontend can now pinpoint exactly which row broke
+                    ViewBook::revert('builder', $resid);
+                    return;
+                }
+
+                // Everything across all batches compiled beautifully—commit to storage
+                $pdo->commit();
 
                 $_SESSION['success'] = $successCount > 0 
                     ? "Successfully updated $successCount experience(s)." 
                     : "Records verified. No changes needed.";
+                
                 ViewBook::revert('builder', $resid);
                 return;
             }

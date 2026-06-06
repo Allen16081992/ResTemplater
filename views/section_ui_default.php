@@ -304,55 +304,6 @@
               <button type="submit" name="action" value="experience:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
-
-          <!-- TEMPLATE FOR JS CLONING -->
-          <template id="tpl-experience-item">
-            <div class="pw-repeater-item">
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <label class="label">Job title</label>
-                    <div class="control">
-                      <input class="input" type="text" name="experience[INDEX][title]" placeholder="Role / Position">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Company</label>
-                    <div class="control">
-                      <input class="input" type="text" name="experience[INDEX][employer]" placeholder="Company / Organization">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <label class="label">Start</label>
-                    <div class="control">
-                      <input class="input" type="month" name="experience[INDEX][start_date]">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">End</label>
-                    <div class="control">
-                      <input class="input" type="month" name="experience[INDEX][end_date]">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="label">Description</label>
-                <div class="control">
-                  <textarea class="textarea" name="experience[INDEX][summary]" rows="3" placeholder="(Optional) What did you actually do, fix or improve?"></textarea>
-                </div>
-              </div>
-
-              <button type="button" class="button is-text pw-remove-item" name="experience:delete">Remove this experience</button>
-              <hr class="pw-repeater-divider">
-            </div>
-          </template>
         </section>
 
         <!-- Education PANEL -->

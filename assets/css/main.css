@@ -145,6 +145,322 @@ nav a.current { cursor: default; }
     background: radial-gradient(circle, rgb(52, 52, 52) 15%, rgba(8, 255, 0, 1) 100%);
 } */
 
+/* Custom Properties for the Younger Crowd */
+:root {
+    --witch-purple: #a855f7;
+    --witch-glow: rgba(168, 85, 247, 0.4);
+    --glass: rgba(15, 17, 26, 0.7);
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+.hero {
+    background-color: #050508;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 1. The Background Glows */
+.magic-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(79, 70, 229, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+/* 2. Typography */
+.witch-title {
+    font-family: 'Unna', serif;
+    font-weight: 700;
+    color: #fff !important;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    font-size: 0.85rem;
+    color: var(--witch-purple);
+}
+
+/* 3. The Glow Button */
+.btn-glow {
+    background: var(--witch-purple) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 700;
+    box-shadow: 0 0 20px var(--witch-glow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px var(--witch-purple);
+}
+
+/* 4. Bento Grid (The modern standard) */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 180px;
+    gap: 1.5rem;
+}
+
+.bento-item {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 2rem;
+    transition: border 0.3s;
+}
+
+.bento-item:hover {
+    border-color: var(--witch-purple);
+}
+
+.main-feature {
+    grid-column: span 2;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), transparent);
+}
+
+/* 5. Floating Mockup Animation */
+.mockup-container {
+    position: relative;
+    height: 400px;
+}
+
+.main-preview {
+    width: 300px;
+    height: 400px;
+    background: #fff;
+    border-radius: 12px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.floating-sheet {
+    position: absolute;
+    width: 250px;
+    height: 350px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    z-index: 1;
+    animation: float 6s infinite ease-in-out;
+}
+
+.sheet-1 { top: -20px; right: 20px; animation-delay: 0s; }
+.sheet-2 { bottom: -20px; left: 20px; animation-delay: 3s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(2deg); }
+    50% { transform: translateY(-20px) rotate(-2deg); }
+}
+
+/* Mockup Internal Details */
+.preview-header { height: 40px; background: #eee; margin-bottom: 20px; width: 60%; }
+.preview-line { height: 10px; background: #f0f0f0; margin-bottom: 10px; border-radius: 5px; }
+.preview-line.long { width: 100%; }
+.preview-line.mid { width: 70%; }
+.preview-line.short { width: 40%; }
+
+/* Showcase Layout */
+.showcase-area {
+    background: radial-gradient(circle at center, rgba(168, 85, 247, 0.05) 0%, transparent 70%);
+}
+
+.workbench {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    perspective: 1000px;
+}
+
+/* Glass Editor Styles */
+.editor-side {
+    transform: rotateY(15deg);
+    background: rgba(15, 17, 26, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 20px;
+    width: 320px;
+    box-shadow: -20px 20px 50px rgba(0,0,0,0.5);
+}
+
+.glass-input {
+    background: rgba(255,255,255,0.03);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 2px solid transparent;
+}
+
+.active-input {
+    border-left: 2px solid var(--witch-purple);
+    background: rgba(168, 85, 247, 0.05);
+}
+
+.label-ghost {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--witch-purple);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.input-line { color: #fff; font-family: monospace; font-size: 0.9rem; }
+
+/* Resume Preview Styles */
+.preview-side {
+    transform: rotateY(-10deg);
+}
+
+.resume-paper {
+    width: 380px;
+    height: 480px;
+    background: #fff;
+    color: #1a1a1a;
+    padding: 3rem;
+    border-radius: 4px;
+    box-shadow: 20px 20px 60px rgba(168, 85, 247, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.contra-style h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    letter-spacing: -1px;
+}
+
+.paper-content .line {
+    height: 8px;
+    background: #eee;
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.line.short { width: 60%; }
+
+/* The "Blink" Animation */
+.cursor-blink::after {
+    content: "|";
+    animation: blink 1s infinite;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+    .workbench { flex-direction: column; gap: 2rem; }
+    .editor-side, .resume-paper { transform: none; width: 100%; max-width: 350px; }
+}
+
+[contenteditable="true"] {
+    cursor: text;
+    outline: none; /* Removes the ugly default browser focus border */
+    transition: color 0.2s ease;
+}
+
+[contenteditable="true"]:hover {
+    color: #a78bfa; /* Faint purple highlight on hover to show interactivity */
+}
+
+/* Optional styling for the resume preview text to look crisp */
+.paper-section-title {
+    font-size: 0.65rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    color: #555;
+}
+
+.paper-exp-text {
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+/* Manifesto Container Section */
+.manifesto-section {
+    background: #0f1115; /* Deep midnight background */
+    padding: 6rem 1.5rem;
+}
+
+/* Custom Title Styling if needed */
+.witch-title {
+    color: #ffffff;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Modern Glass Card Styling */
+.manifesto-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 2.5rem;
+    height: 100%;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.manifesto-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(167, 139, 250, 0.3); /* Subtle purple brand glow */
+    box-shadow: 0 10px 30px rgba(167, 139, 250, 0.05);
+}
+
+/* Card Elements */
+.manifesto-card .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    display: inline-block;
+}
+
+.manifesto-card .title {
+    color: #ffffff !important;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.manifesto-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Privacy Note Banner */
+.privacy-badge {
+    display: inline-block;
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    color: #a78bfa;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+}
+
+.privacy-badge strong {
+    color: #ffffff;
+}
+
 /* ==========================================================
    3. HERO + LANDING SECTIONS
    ========================================================== */
@@ -485,11 +801,10 @@ form {
 .elegant-divider {
   width: 80rem;
   max-height: 10rem;
-  /* background: url("/assets/images/divider3.png") center / contain no-repeat; */
   opacity: 0.70;
   pointer-events: none;
   user-select: none;
-  filter: saturate(0); /* optional: reduces “metallic” vibe */
+  filter: saturate(0);
 }
 
 /* ==========================================================

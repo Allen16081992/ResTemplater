@@ -30,7 +30,13 @@
                 $successCount = 0;
                 $sourceData = $this->postData['education'] ?? [];
 
-                foreach ($sourceData as $course) {
+                // Master error tracker to hold issues across all rows
+                $allErrors = [];
+
+                // Transaction boundary start - either everything saves or nothing saves
+                $pdo->beginTransaction();
+
+                foreach ($sourceData as $index => $course) {
                     // Sanitize these first for any loop iteration
                     $formattedStart = null;
                     $formattedEnd = null;
@@ -66,13 +72,12 @@
                         $formattedEnd = $endDate['date']; // Could be Y-m-01 or 'Present'
                     }
 
+                    // If a row has errors, stash them in unique index
                     if (!empty($rowErrors)) {
-                        $_SESSION['error'] = $rowErrors;
-                        ViewBook::revert('builder', $resid);
-                        return;
+                        $allErrors[$index] = $rowErrors;
+                        continue; // Skip database handling for this row
                     }
 
-                    // Translate 'Present' to DB-friendly NULL
                     if ($formattedEnd === 'Present') { 
                         $formattedEnd = null; 
                     }
@@ -93,12 +98,30 @@
                         ? $model->createEducation($payload) 
                         : $model->updateEducation($payload);
 
-                    if ($result > 0) $successCount++;
+                    if ($result > 0) { 
+                        $successCount++;
+                    } else {
+                        // If the model returned -1 due to an internal execution error
+                        $allErrors[$index]['database'] = "Internal database execution error.";                       
+                    }
                 }
+
+                // 3. THE FINAL EVALUATION GATE
+                if (!empty($allErrors)) {
+                    // An error occurred somewhere. Roll back all database adjustments instantly
+                    $pdo->rollBack();
+                    $_SESSION['error'] = $allErrors; // Your frontend can now pinpoint exactly which row broke
+                    ViewBook::revert('builder', $resid);
+                    return;
+                }
+
+                // Everything across all batches compiled beautifully—commit to storage
+                $pdo->commit();
 
                 $_SESSION['success'] = $successCount > 0 
                     ? "Successfully updated $successCount education(s)." 
                     : "Records verified. No changes needed.";
+                
                 ViewBook::revert('builder', $resid);
                 return;
             }

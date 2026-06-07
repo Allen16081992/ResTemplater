@@ -24,7 +24,7 @@
                 <option value="" selected disabled>----</option>
                 <?php
                     $currentYear = date('Y');
-                    $targetYear = 1908;
+                    $targetYear = 1948;
                     for ($year = $currentYear - 15; $year >= $targetYear; $year--) {
                         echo '<option value="'.$year.'">'.$year.'</option>';
                     }

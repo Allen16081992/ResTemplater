@@ -5,7 +5,7 @@
             $grimoireLines = [
                 "Many jobs list Impossible Stacks but * Are Understaffed",
                 "Requiring to work under stress means * Poor Management",
-                "A 'Competitive Salary' without numbers * Is a Red Flag",           
+                "A 'Competitive Salary' without numbers is * A Red Flag",           
                 "Asking for flexibility means * Overtime Assured",
                 "Most Vacancies are written for * The Gutter.",
                 "Cast a Resume that * Gets You Hired.",

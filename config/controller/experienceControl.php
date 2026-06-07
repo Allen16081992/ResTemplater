@@ -68,10 +68,10 @@
                         $formattedEnd = $endDate['date'];
                     }
 
-                    // If this specific row has errors, stash them under its unique frontend index
+                    // If a row has errors, stash them in unique index
                     if (!empty($rowErrors)) {
                         $allErrors[$index] = $rowErrors;
-                        continue; // Skip database handling for this row, check the remaining rows
+                        continue; // Skip database handling for this row
                     }
 
                     if ($formattedEnd === 'Present') { 

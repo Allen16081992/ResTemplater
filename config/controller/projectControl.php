@@ -30,7 +30,13 @@
                 $successCount = 0;
                 $sourceData = $this->postData['projects'] ?? [];
 
-                foreach ($sourceData as $report) {
+                // Master error tracker to hold issues across all rows
+                $allErrors = [];
+
+                // Transaction boundary start - either everything saves or nothing saves
+                $pdo->beginTransaction();
+
+                foreach ($sourceData as $index => $report) {
                     // Extract and sanitize
                     $prid = !empty($report['id'] ?? null) ? (int)$report['id'] : null;
                     $title= $report['title'];
@@ -46,10 +52,10 @@
                     if ($msg = ValidGrimoire::validateName($title, true, 120)) $rowErrors['title'] = $msg;
                     if ($msg = ValidGrimoire::validateName($role, true, 120)) $rowErrors['role'] = $msg;
 
+                    // If a row has errors, stash them in unique index
                     if (!empty($rowErrors)) {
-                        $_SESSION['error'] = $rowErrors;
-                        ViewBook::revert('builder', $resid);
-                        return;
+                        $allErrors[$index] = $rowErrors;
+                        continue; // Skip database handling for this row
                     }
 
                     // Prepare payload
@@ -66,12 +72,30 @@
                         ? $model->createProject($payload) 
                         : $model->updateProject($payload);
 
-                    if ($result > 0) $successCount++;
+                    if ($result > 0) { 
+                        $successCount++; 
+                    } else {
+                        // If the model returned -1 due to an internal execution error
+                        $allErrors[$index]['database'] = "Internal database execution error.";                       
+                    }
                 }
+
+                // 3. THE FINAL EVALUATION GATE
+                if (!empty($allErrors)) {
+                    // An error occurred somewhere. Roll back all database adjustments instantly
+                    $pdo->rollBack();
+                    $_SESSION['error'] = $allErrors; // Your frontend can now pinpoint exactly which row broke
+                    ViewBook::revert('builder', $resid);
+                    return;
+                }
+
+                // Everything across all batches compiled beautifully—commit to storage
+                $pdo->commit();
 
                 $_SESSION['success'] = $successCount > 0 
                     ? "Successfully updated $successCount project(s)." 
                     : "Records verified. No changes needed.";
+                    
                 ViewBook::revert('builder', $resid);
                 return;
             }

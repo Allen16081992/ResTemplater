@@ -381,55 +381,6 @@
               <button type="submit" class="button btn-cta pw-save-btn" name="action" value="education:save" disabled>Save</button>
             </div>
           </form>
-
-          <!-- TEMPLATE FOR JS CLONING -->
-          <template id="tpl-education-item">
-            <div class="pw-repeater-item">
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <label class="label">Program</label>
-                    <div class="control">
-                      <input class="input" type="text" name="education[INDEX][program]" placeholder="Program / Course">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">School</label>
-                    <div class="control">
-                      <input class="input" type="text" name="education[INDEX][school]" placeholder="School / Organization">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <label class="label">Start</label>
-                    <div class="control">
-                      <input class="input" type="month" name="education[INDEX][start_date]">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">End</label>
-                    <div class="control">
-                      <input class="input" type="month" name="education[INDEX][end_date]">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="label">Description</label>
-                <div class="control">
-                  <textarea class="textarea" name="education[INDEX][summary]" rows="3" placeholder="(Optional) What did you study or learn?"></textarea>
-                </div>
-              </div>
-
-              <button type="button" class="button is-text pw-remove-item" name="education:delete">Remove this education</button>
-              <hr class="pw-repeater-divider">
-            </div>
-          </template>
         </section>
 
         <!-- Projects PANEL -->
@@ -492,38 +443,6 @@
               <button type="submit" name="action" value="projects:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
-
-          <!-- TEMPLATE FOR JS CLONING -->
-          <template id="tpl-projects-item">
-            <div class="pw-repeater-item">
-              <div class="field is-horizontal">
-                <div class="field-body">
-                  <div class="field">
-                    <label class="label">Project Name</label>
-                    <div class="control">
-                      <input class="input" type="text" name="projects[INDEX][title]" placeholder="e.g. ResTemplater Engine">
-                    </div>
-                  </div>
-                  <div class="field">
-                    <label class="label">Your Role</label>
-                    <div class="control">
-                      <input class="input" type="text" name="projects[INDEX][role]" placeholder="e.g. Backend Architect">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="field">
-                <label class="label">Project Summary & Tech Stack</label>
-                <div class="control">
-                  <textarea class="textarea" name="projects[INDEX][summary]" rows="3" placeholder="What was the goal?"></textarea>
-                </div>
-              </div>
-
-              <button type="button" class="button is-text pw-remove-item">Remove this project</button>
-              <hr class="pw-repeater-divider">
-            </div>
-          </template>
         </section>
 
         <!-- SKILLS PANEL -->
@@ -536,7 +455,7 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-skills" class="pw-panel-form" action="config/action_handler.conf.php" method="post">
+          <form id="form-skills" class="pw-panel-form" action="./config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="skills">
@@ -577,30 +496,6 @@
               <button type="submit" name="action" value="skills:save" class="button btn-cta pw-save-btn" disabled>Save</button>
             </div>
           </form>
-
-          <!-- TEMPLATE FOR JS CLONING -->
-          <template id="tpl-skills-item">
-            <div class="pw-repeater-item">
-              <div class="field is-grouped skill-row">
-                <div class="control">
-                  <input type="text" name="skill[]['name']" class="pw-input" placeholder="...">
-                </div>
-                <div class="control">
-                  <select class="pw-select" name="skill[]['category']">
-                    <option selected disabled>Select a Category:</option>
-                    <option value="tool">Software / Tools</option>
-                    <option value="language">Languages</option>
-                    <option value="technical">Technical</option>
-                    <option value="certificate">Certificate</option>
-                    <option value="soft-skill">Soft Skills</option>
-                    <option value="hard-skill">Hard Skills</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <button type="button" class="remove is-text pw-remove-item">✕</button>
-              </div>
-            </div>
-          </template>
         </section>
 
         <!-- SOCIAL MEDIA PANEL -->
@@ -615,7 +510,7 @@
           <form id="form-social" class="pw-panel-form" action="/config/action_handler.conf.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
-            <div class="pw-repeater" data-repeater="social">
+            <div class="pw-repeater" data-repeater="socials">
               <!-- Social ITEM -->
               <?php if (!empty($socialurl)) { ?>
                 <?php foreach ($socialurl as $i => $url) { ?>
@@ -632,25 +527,12 @@
                 <?php } ?>
               <?php } ?>
             </div>
-            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="social">+ Add a link</button>
+            <button type="button" class="button is-dark is-small pw-add-item" data-repeater-target="socials">+ Add a link</button>
 
             <div class="pw-panel-actions">
               <button type="submit" class="button btn-cta pw-save-btn" name="action" value="socials:save" disabled>Save</button>
             </div>
           </form>
-
-          <!-- TEMPLATE FOR JS CLONING -->
-          <template id="tpl-social-item">
-            <div class="pw-repeater-item">
-              <div class="field">
-                <label class="label">Link</label>
-                <div class="control">
-                  <input class="input" type="url" name="socials[INDEX][media_url]" placeholder="https://example.com">
-                </div>
-              </div>
-              <button type="button" class="button is-text pw-remove-item" name="action" value="delete_social">Remove this link</button>
-            </div>
-          </template>
         </section>
 
         <!-- TEMPLATES -->

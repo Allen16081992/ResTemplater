@@ -4,7 +4,7 @@
   const editor = document.querySelector(".pw-editor-shell");
   if (!editor) return;
 
-  function createCauldronExpBlock(i) {
+  function createExpBlock(i) {
     const item = document.createElement("div");
     item.className = "pw-repeater-item";
     item.dataset.experienceIndex = String(i);
@@ -51,10 +51,143 @@
         </div>
       </div>
 
-      <button type="button" class="button is-text pw-remove-item" name="experience:delete">Remove this experience</button>
+      <button type="button" class="button is-text pw-remove-item">Remove this experience</button>
       <hr class="pw-repeater-divider">
     `;
+    return item;
+  }
 
+  function createEduBlock(i) {
+    const item = document.createElement("div");
+    item.className = "pw-repeater-item";
+    item.dataset.educationIndex = String(i);
+
+    item.innerHTML = `
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <div class="field">
+            <label class="label">Program</label>
+            <div class="control">
+              <input class="input" type="text" name="education[${i}][program]" placeholder="Program">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">School</label>
+            <div class="control">
+              <input class="input" type="text" name="education[${i}][school]" placeholder="School">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <div class="field">
+            <label class="label">Start</label>     
+            <div class="control">
+              <input class="input" type="month" placeholder="e.g. Jan 2024 or 2024-01" name="education[${i}][start_date]">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">End</label>
+            <div class="control">
+              <input class="input" type="month" placeholder="e.g. Jan 2024 or 2024-01" name="education[${i}][end_date]">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+          <textarea class="textarea" name="education[${i}][summary]" rows="3" placeholder="(Optional) What did you study or learn?"></textarea>
+        </div>
+      </div>
+
+      <button type="button" class="button is-text pw-remove-item">Remove this education</button>
+      <hr class="pw-repeater-divider">
+    `;
+    return item;
+  }
+
+  function createProjBlock(i) {
+    const item = document.createElement("div");
+    item.className = "pw-repeater-item";
+    item.dataset.projectsIndex = String(i);
+
+    item.innerHTML = `
+      <div class="field is-horizontal">
+        <div class="field-body">
+          <div class="field">
+            <label class="label">Project Name</label>
+            <div class="control">
+              <input class="input" type="text" name="projects[${i}][title]" placeholder="e.g. Thesis">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Your Role</label>
+            <div class="control">
+              <input class="input" type="text" name="projects[${i}][role]" placeholder="e.g. Random">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Project Summary & Tech Stack</label>
+        <div class="control">
+          <textarea class="textarea" name="projects[${i}][summary]" rows="3" placeholder="What was the goal?"></textarea>
+        </div>
+      </div>
+
+      <button type="button" class="button is-text pw-remove-item">Remove this project</button>
+      <hr class="pw-repeater-divider">
+    `;
+    return item;
+  }
+
+  function createSkillBlock(i) {
+    const item = document.createElement("div");
+    item.className = "pw-repeater-item";
+    item.dataset.skillsIndex = String(i);
+
+    item.innerHTML = `
+      <div class="field is-grouped skill-row">
+        <div class="control">
+          <input type="text" name="skills[${i}][name]" class="pw-input" placeholder="...">
+        </div>
+        <div class="control">
+          <select class="pw-select" name="skills[${i}][category]">
+            <option selected disabled>Select a Category:</option>
+            <option value="tool">Software / Tools</option>
+            <option value="language">Languages</option>
+            <option value="technical">Technical</option>
+            <option value="certificate">Certificate</option>
+            <option value="soft-skill">Soft Skills</option>
+            <option value="hard-skill">Hard Skills</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button type="button" class="remove is-text pw-remove-item">✕</button>
+      </div>
+    `;
+    return item;
+  }
+
+  function createSocBlock(i) {
+    const item = document.createElement("div");
+    item.className = "pw-repeater-item";
+    item.dataset.socialsIndex = String(i);
+
+    item.innerHTML = `
+      <div class="field">
+        <label class="label">Link</label>
+        <div class="control">
+          <input class="input" type="url" name="socials[${i}][media_url]" placeholder="https://example.com">
+        </div>
+      </div>
+      <button type="button" class="button is-text pw-remove-item">Remove this link</button>
+    `;   
     return item;
   }
 
@@ -190,12 +323,19 @@
 
       // 2. Direct traffic to our programmatic generator
       if (targetName === "experience") {
-        newBlock = createCauldronExpBlock(uniqueIndex);
-      }
+        newBlock = createExpBlock(uniqueIndex);
+      } 
       // NOTE: When you build your education module later, you'll just add:
-      // else if (targetName === "education") {
-      //   newBlock = createCauldronEduBlock(uniqueIndex);
-      // }
+      else if (targetName === "education") {
+        newBlock = createEduBlock(uniqueIndex);
+      }
+      else if (targetName === "projects") {
+        newBlock = createProjBlock(uniqueIndex);
+      } else if (targetName === "skills") {
+        newBlock = createSkillBlock(uniqueIndex);
+      } else if (targetName === "socials") { // <-- Intercepts data-repeater-target="social"
+        newBlock = createSocBlock(uniqueIndex);
+      }
 
       // Safety check in case targetName doesn't match a generator yet
       if (!newBlock) return;

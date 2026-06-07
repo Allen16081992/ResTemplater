@@ -66,6 +66,7 @@
     <?php ViewBook::render('navbar_flex.php'); ?>
     
     <main>
+        <?php ViewBook::render('section_home.php'); ?> 
         <?php ViewBook::render('section_landing.php'); ?>  
         <?php ViewBook::render('section_login.php'); ?>
         <?php ViewBook::render('section_signup.php'); ?>  

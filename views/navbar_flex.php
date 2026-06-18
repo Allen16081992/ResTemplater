@@ -13,7 +13,7 @@
             $links = [
                 ['label' => 'Profile', 'href' => '#', 'attr' => 'data-section="profile"'],
                 ['label' => 'Resume',  'href' => '#', 'attr' => 'data-section="home"'],
-                ['label' => 'Logout',  'href' => 'config/logout_user.php', 'attr' => '']
+                ['label' => 'Logout',  'href' => 'engine/logout_user.php', 'attr' => '']
             ];
         } elseif (!$isLoggedIn && $isClientPage) {
             // This handles the "Back" button requirement
@@ -45,7 +45,7 @@
             <?php //if (!isset($_SESSION['session_data']['user_id'])) { ?>
                 <!-- <a href="index.php">Back</a>  -->
             <?php //} else { ?>
-                <!-- <a href="../config/logout_user.php">Logout</a>   -->
+                <!-- <a href="../engine/logout_user.php">Logout</a>   -->
             <?php //} ?>
         <?php //} else { ?>  
             <!-- <a href="#" data-section="policy">Privacy</a>  

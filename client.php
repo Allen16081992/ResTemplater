@@ -4,12 +4,15 @@
   header('Expires: 0');         // expire immediately
 
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.php'; 
+  require_once __DIR__ . '/engine/session_manager.php'; 
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
   //SessionBook::verifySession();
 
-  require_once __DIR__ . '/config/loadResumeData.php';
+  // Session check! so must appear last!
+  require_once __DIR__ . '/engine/loadResumeData.php';
+  include_once __DIR__ . '/views/version_deosil.php'; 
+
     // Test variables
     //   echo "<pre style='background: #000; color: #0f0; padding: 20px; z-index: 9999; position: relative;'>";
     //   echo "LOGGED IN UID: " . ($_SESSION['session_data']['user_id'] ?? 'NONE') . "\n";
@@ -43,16 +46,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-    <link rel="stylesheet" href="assets/css/paperwitch.css">
-    <link rel="stylesheet" href="assets/css/profile.css">
-    <link rel="stylesheet" href="assets/css/ui_wizard.css">
+    <link rel="stylesheet" href="assets/css/paperwitch.css?v=<?= $site_version; ?>">
+    <link rel="stylesheet" href="assets/css/profile.css?v=<?= $site_version; ?>">
+    <link rel="stylesheet" href="assets/css/ui_wizard.css?v=<?= $site_version; ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>"A Lightweight Toolkit" | CV Templater</title>
     <!-- Javascript -->
-    <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/ui_editor-handler.js"></script>
-    <script defer src="assets/js/ui_wizard-handler.js"></script>
-    <script defer src="assets/js/profile-handler.js"></script>
+    <script defer src="assets/js/section-handler.js?v=<?= $site_version; ?>"></script>
+    <script defer src="assets/js/ui_editor-handler.js?v=<?= $site_version; ?>"></script>
+    <script defer src="assets/js/ui_wizard-handler.js?v=<?= $site_version; ?>"></script>
+    <script defer src="assets/js/profile-handler.js?v=<?= $site_version; ?>"></script>
 </head>
 <body>
     <?php ViewBook::render('navbar_flex.php'); ?>

@@ -34,7 +34,7 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="config/action_handler.php" method="post" target="_blank">
+      <form action="engine/action_handler.php" method="post" target="_blank">
         <?= SessionBook::csrfField(); ?>
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>

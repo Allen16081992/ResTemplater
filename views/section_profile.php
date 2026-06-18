@@ -14,7 +14,7 @@
             </div>
         </header>
 
-        <form id="personal" class="profile-section" action="./config/action_handler.php" method="post">
+        <form id="personal" class="profile-section" action="./engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <h2>Personal Details</h2>
             <div class="field">
@@ -55,7 +55,7 @@
             </div>
         </form>
 
-        <form id="account" class="profile-section" action="./config/action_handler.php" method="post">
+        <form id="account" class="profile-section" action="./engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <h2>Account Details</h2>
             <div class="field">

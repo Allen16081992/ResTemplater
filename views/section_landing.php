@@ -17,9 +17,7 @@
           </p>
           <form class="buttons mt-6" action="client.php" method="post">
             <button type="submit" class="button is-medium btn-glow" name="wizard" value="wizard">🔮 Start Brewing</button>
-            <button class="button is-medium is-ghost has-text-white">
-              View Grimoire (Templates)
-            </button>
+            <button type="button" class="button is-medium is-ghost has-text-white">View Grimoire (Templates)</button>
           </form>
         </div>
         

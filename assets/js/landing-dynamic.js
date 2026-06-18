@@ -196,7 +196,7 @@
                     "Visual Display & Trend Forecasting Academy Workshop",
                     "Certified Retail Service & Customer Experience Specialist"
                 ]
-            }
+            },
             {
                 id: "industrial",
                 titles: ["MIG/TIG WELDER", "FABRICATION TECHNICIAN", "STRUCTURAL FITTER"],

@@ -1,8 +1,9 @@
 <?php
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.php'; 
+  require_once __DIR__ . '/engine/session_manager.php'; 
   // Miscellaneous PHP Files
-  include_once __DIR__ . '/config/mixedGrimoire.php';
+  include_once __DIR__ . '/engine/mixedGrimoire.php';
+  include_once __DIR__ . '/views/version_deosil.php';
   SessionBook::invokeSession();
 ?>
 <!DOCTYPE html>
@@ -39,14 +40,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/export_page.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=<?= $site_version; ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>Your Job Hunting Familiar - Free Resume Builder</title>
     <!-- Javascript -->
-    <script defer src="assets/js/section-handler.js"></script>
-    <script defer src="assets/js/landing-dynamic.js"></script>
-    <script defer src="assets/js/auth_page-handler.js"></script>
+    <script defer src="assets/js/section-handler.js?v=<?= $site_version; ?>"></script>
+    <script defer src="assets/js/landing-dynamic.js?v=<?= $site_version; ?>"></script>
+    <script defer src="assets/js/auth_page-handler.js?v=<?= $site_version; ?>"></script>
     <script defer src="assets/js/cta-padding-mobile.js"></script><!-- CSS refinement for mobile -->
     <script defer src="assets/js/sparks_effect.js"></script>
     <script type="application/ld+json"> {

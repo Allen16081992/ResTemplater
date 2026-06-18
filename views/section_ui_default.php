@@ -90,7 +90,7 @@
             </div>
           </header>
 
-          <form id="form-newRes" class="pw-panel-form" action="config/action_handler.php" method="post">
+          <form id="form-newRes" class="pw-panel-form" action="engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <div class="field is-horizontal">
               <div class="field-body">
@@ -118,7 +118,7 @@
             </div>
           </header>
 
-          <form id="form-delRes" class="pw-panel-form" action="config/action_handler.php" method="post">
+          <form id="form-delRes" class="pw-panel-form" action="engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <div class="field is-horizontal">
               <div class="field-body">
@@ -201,7 +201,7 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-info" class="pw-panel-form" action="config/action_handler.php" method="post">
+          <form id="form-info" class="pw-panel-form" action="engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="field">
@@ -244,7 +244,7 @@
             </div>
           </header>
 
-          <form id="form-experience" class="pw-panel-form" action="config/action_handler.php" method="post">
+          <form id="form-experience" class="pw-panel-form" action="engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="experience">
@@ -321,7 +321,7 @@
             </div>
           </header>
 
-          <form id="form-education" class="pw-panel-form" action="config/action_handler.php" method="post">
+          <form id="form-education" class="pw-panel-form" action="engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="education">
@@ -397,7 +397,7 @@
             </div>
           </header>
 
-          <form id="form-projects" class="pw-panel-form" action="./config/action_handler.php" method="post">
+          <form id="form-projects" class="pw-panel-form" action="./engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <!-- Projects ITEM -->
@@ -455,7 +455,7 @@
           </header>
           <!-- Toggle for include Account photo or not. -->
 
-          <form id="form-skills" class="pw-panel-form" action="./config/action_handler.php" method="post">
+          <form id="form-skills" class="pw-panel-form" action="./engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="skills">
@@ -507,7 +507,7 @@
             </div>
           </header>
 
-          <form id="form-social" class="pw-panel-form" action="/config/action_handler.php" method="post">
+          <form id="form-social" class="pw-panel-form" action="/engine/action_handler.php" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id'] ?? '') ?>">
             <div class="pw-repeater" data-repeater="socials">
@@ -544,7 +544,7 @@
             </div>
           </header>
 
-          <form id="form-template" class="pw-panel-form" action="/config/action_handler.php" target="_blank" method="post">
+          <form id="form-template" class="pw-panel-form" action="/engine/action_handler.php" target="_blank" method="post">
             <?= SessionBook::csrfField(); ?>
             <input type="hidden" name="resume_id" value="<?= htmlspecialchars($master['id']) ?>">
             <div class="radio-card-grid animate__animated animate__fadeIn" id="resumeSelector">

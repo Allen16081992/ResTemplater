@@ -210,10 +210,13 @@
 
             // 1. Determine the Order
             if (empty($this->data['experience'])) {
-                // If no experience, Projects "teleports" to the top
+                // Experience is dropped entirely; Projects teleports to pole position
                 $order = ['projects', 'education'];
+            } elseif (empty($this->data['education'])) {
+                // Education is dropped entirely; Projects teleports to pole position
+                $order = ['projects', 'experience'];
             } else {
-                // Standard traditional order
+                // Standard traditional stack sequence
                 $order = ['experience', 'education', 'projects'];
             }
 
@@ -264,7 +267,7 @@
                         $this->SetTextColor(0, 0, 0);
                     } else {
                         // Summary is empty: Verify bullet points
-                        $bulletKey = ($section === 'experience') ? 'exp_bullets' : (($section === 'education') ? 'edu_bullets' : 'pro_bullets');
+                        $bulletKey = ($section === 'experience') ? 'experience_bullets' : (($section === 'education') ? 'education_bullets' : 'projects_bullets');
                         $foreignKey = ($section === 'experience') ? 'experience_id' : (($section === 'education') ? 'education_id' : 'projects_id');
                         
                         // Verify if they contain any data

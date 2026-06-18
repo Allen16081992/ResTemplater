@@ -4,12 +4,12 @@
   header('Expires: 0');         // expire immediately
 
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.conf.php'; 
+  require_once __DIR__ . '/config/session_manager.php'; 
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
   //SessionBook::verifySession();
 
-  require_once __DIR__ . '/config/loadResumeData.conf.php';
+  require_once __DIR__ . '/config/loadResumeData.php';
     // Test variables
     //   echo "<pre style='background: #000; color: #0f0; padding: 20px; z-index: 9999; position: relative;'>";
     //   echo "LOGGED IN UID: " . ($_SESSION['session_data']['user_id'] ?? 'NONE') . "\n";

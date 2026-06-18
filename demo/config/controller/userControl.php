@@ -1,5 +1,5 @@
 <?php // PHP Files
-    require_once __DIR__ . '/../mixedGrimoire.conf.php';
+    require_once __DIR__ . '/../mixedGrimoire.php';
     
     class userControl {
         public function __construct(private array $postData) {}

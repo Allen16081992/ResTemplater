@@ -1,5 +1,5 @@
 <?php // Load PHP Files
-    require_once __DIR__ . '/../mixedGrimoire.conf.php';
+    require_once __DIR__ . '/../mixedGrimoire.php';
 
     final class userCodex {
         public function __construct(private PDO $pdo) {}

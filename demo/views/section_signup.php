@@ -14,7 +14,7 @@
                         <p class="auth-sub">This portal is under construction.</p>
                     </div>
 
-                    <form id="signup_form" action="config/action_handler.conf.php" method="post">
+                    <form id="signup_form" action="config/action_handler.php" method="post">
                         <?= SessionBook::csrfField(); ?>
                         <!-- Personal Information -->
                         <h3 class="title is-size-5 has-text-grey-light">Personal Information</h3>

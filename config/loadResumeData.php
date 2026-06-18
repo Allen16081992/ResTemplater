@@ -1,5 +1,5 @@
 <?php // Load PHP Files
-    require_once __DIR__ . '/autoloader.conf.php'; 
+    require_once __DIR__ . '/autoloader.php'; 
     $pdo = Database::Connect();
     $data = [
         'account' => [],

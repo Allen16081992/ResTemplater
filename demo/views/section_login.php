@@ -13,7 +13,7 @@
                         <h1 class="auth-title">Welcome back</h1>
                         <p class="auth-sub" style="color:crimson;">This portal is under construction.
                     </div>
-                    <form action="config/action_handler.conf.php" method="post">
+                    <form action="config/action_handler.php" method="post">
                         <?= SessionBook::csrfField(); ?>
                         <div class="field">
                             <label class="label" for="email">Email</label>

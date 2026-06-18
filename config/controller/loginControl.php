@@ -1,5 +1,5 @@
 <?php // PHP Files
-    require_once __DIR__ . '/../mixedGrimoire.conf.php';
+    require_once __DIR__ . '/../validGrimoire.php';
 
     class loginControl {
         public function __construct(private array $postData) {}
@@ -47,7 +47,7 @@
 
             // Verify password
             $pwd = (string)($this->postData['pwd'] ?? '');
-            if (!mixedGrimoire::checkHash($pwd, $user['password_hash'])) {
+            if (!validGrimoire::checkHash($pwd, $user['password_hash'])) {
                 // Hold error message + set previous UI state
                 $_SESSION['error'] = ['pwd' => 'Invalid email or password.'];
                 ViewBook::revert('login');

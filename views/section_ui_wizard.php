@@ -7,7 +7,11 @@
       </div>
       <div class="pw-status" aria-live="polite">
         <div class="pw-pill"><span>🧪</span><span>Draft saved locally</span></div>
-        <a class="pw-btn" data-section="home">Switch Editor</a>
+        <?php if (isset($_SESSION['session_data']['user_id'])) { ?>
+          <a class="pw-btn" data-section="home">Switch Editor</a>
+        <?php } else { ?>
+          <a class="pw-btn" href="index.php">Homepage</a>
+        <?php } ?>
         <div style="opacity:.9">Mode: <strong>Quick Start</strong></div>
       </div>
     </header>
@@ -30,7 +34,7 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="config/action_handler.conf.php" method="post" target="_blank">
+      <form action="config/action_handler.php" method="post" target="_blank">
         <?= SessionBook::csrfField(); ?>
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>
@@ -277,7 +281,7 @@
             <?php } else { ?>
               <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|vintage">Let’s go Vintage</button>
               <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|business">Let’s go Modern</button>
-              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|contra">Let’s go Unconventional</button>
+              <button type="submit" class="pw-btn pw-btn-primary" name="action" value="template:read|contra">Go Creative/Tech</button>
             <?php } ?>
           </div>
         </article>

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
     // Load files & libraries.
-    require_once __DIR__ . '/../session_manager.conf.php';
+    require_once __DIR__ . '/../session_manager.php';
     require_once __DIR__ . '/../../modules/fpdf185/fpdf.php';
     include_once __DIR__ . '/../../modules/phpqrcode/qrlib.php';
  

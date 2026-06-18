@@ -1,7 +1,7 @@
 <?php // PHP Files
-    require_once __DIR__ . '/autoloader.conf.php'; 
-    require_once __DIR__ . '/session_manager.conf.php';
-    require_once __DIR__ . '/validGrimoire.conf.php';
+    require_once __DIR__ . '/autoloader.php'; 
+    require_once __DIR__ . '/session_manager.php';
+    require_once __DIR__ . '/validGrimoire.php';
 
     // 1. Call Session Mechanics
     SessionBook::invokeSession();

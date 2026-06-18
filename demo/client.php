@@ -4,13 +4,13 @@
   header('Expires: 0');         // expire immediately
 
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.conf.php'; 
+  require_once __DIR__ . '/config/session_manager.php'; 
   SessionBook::invokeSession();
   SessionBook::sessionRegenTimer();
   SessionBook::invokeToken();
   //SessionBook::verifySession();
 
-  // require_once __DIR__ . '/config/loadResumeData.conf.php';
+  // require_once __DIR__ . '/config/loadResumeData.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

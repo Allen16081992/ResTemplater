@@ -7,7 +7,7 @@
 
   if (form && visual) {
     const idleImg = 'url("assets/images/paperwitch_bold.png")';
-    const burstImg = 'url("assets/images/paperwitch_radiate.png")';
+    const burstImg = 'url("assets/images/paperwitch_glow.png")';
 
     // Preload images
     [idleImg, burstImg].forEach((src) => {

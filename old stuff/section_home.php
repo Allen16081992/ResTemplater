@@ -8,16 +8,15 @@
             <h1><?= htmlspecialchars($slogan = mixedGrimoire::setPhrase('slogan')); ?></h1>
             <p class="subtitle hero-sub mt-3"><?= htmlspecialchars($cta = mixedGrimoire::setPhrase('tagline')); ?></p>
             <form class="buttons mt-5" action="client.php" method="post">
-                <button type="submit" id="cta" class="button is-medium btn-cta" name="wizard" value="wizard">Create My Resume</button>
+                <button type="submit" id="cta" class="button is-medium" name="wizard" value="wizard">Create My Resume</button>
                 <a href="#" class="button is-medium is-light" data-section="landing">🔮 New Homepage</a>
             </form>
           </div>
-          <div class="column is-hidden-touch">
-            <!-- Placeholder device/mockup -->
+          <!-- <div class="column is-hidden-touch">
             <div class="template-card">
               <div class="template-thumb">Live Preview Placeholder</div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -26,7 +25,7 @@
   <!-- ========================================================
       SHOWCASE
   ========================================================= -->
-  <article id="templates" class="section angled-top">
+  <!-- <article id="templates" class="section angled-top">
     <div class="container has-text-left">
       <h2 class="title is-3">See the Magic</h2>
       <p class="subtitle is-6 has-text-grey-light">Pick a vibe. Tweak the colors. Download as PDF.</p>
@@ -36,17 +35,17 @@
         <div class="template-card"><div class="template-thumb">Minimal</div></div>
         <div class="template-card"><div class="template-thumb">Witchy</div></div>
       </div>
-      <!-- <div class="buttons mt-5">
+      <div class="buttons mt-5">
         <a class="button is-light" href="#start">Try a Demo</a>
         <a class="button btn-cta" href="#start">Start Now</a>
-      </div> -->
+      </div>
     </div>
-  </article>
+  </article> -->
   
   <!-- ========================================================
       FEATURES
   ========================================================= -->
-  <article class="section">
+  <!-- <article class="section">
     <div class="container">
       <h2 class="title is-3">Why PaperWitch</h2>
       <div class="columns is-multiline is-centered">
@@ -62,12 +61,12 @@
             <p class="has-text-grey-light">Fill your info and export directly. No learning curve, no paywall.</p>
           </div>
         </div>
-        <!-- <div class="column is-6 is-3-desktop">
+        <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">🎨 Custom Colors & Fonts</h3>
             <p class="has-text-grey-light">Make it yours with instant color palettes and clean font pairings.</p>
           </div>
-        </div> -->
+        </div>
         <div class="column is-6 is-3-desktop">
           <div class="feature-card has-text-left">
             <h3 class="title is-5">💾 One‑Click PDF</h3>
@@ -76,12 +75,12 @@
         </div>
       </div>
     </div>
-  </article>
+  </article> -->
 
   <!-- ========================================================
       HOW IT WORKS
   ========================================================= -->
-  <article class="section angled-top">
+  <!-- <article class="section angled-top">
     <div class="container">
       <h2 class="title is-3">How It Works</h2>
       <div class="how-steps mt-4">
@@ -102,7 +101,7 @@
         </div>
       </div>
     </div>
-  </article>
+  </article> -->
 
   <!-- ========================================================
       TESTIMONIALS
@@ -136,7 +135,7 @@
   <!-- ========================================================
       PRICING / CTA BAND
   ========================================================= -->
-  <article class="section angled-top">
+  <!-- <article class="section angled-top">
     <img class="elegant-divider" src="assets/images/divider1.png" alt="elegant divider">
     <div class="container">
       <div class="cta-band p-6">
@@ -151,5 +150,5 @@
         </div>
       </div>
     </div>
-  </article>
+  </article> -->
 </section>

@@ -32,7 +32,7 @@
 
             <!-- Interaction Card -->
             <article class="closure-wrap animate__animated animate__fadeIn animate__delay-2s">
-                <form action="config/action_handler.conf.php" method="post" id="closureForm">
+                <form action="config/action_handler.php" method="post" id="closureForm">
                     <?= SessionBook::csrfField(); ?>
                     
                     <!-- Safety Acknowledgment Checkbox -->

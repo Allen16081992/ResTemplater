@@ -1,8 +1,8 @@
 <?php
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.conf.php'; 
+  require_once __DIR__ . '/config/session_manager.php'; 
   // Miscellaneous PHP Files
-  include_once __DIR__ . '/config/mixedGrimoire.conf.php';
+  include_once __DIR__ . '/config/mixedGrimoire.php';
   SessionBook::invokeSession();
 ?>
 <!DOCTYPE html>

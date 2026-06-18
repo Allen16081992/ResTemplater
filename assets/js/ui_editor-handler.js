@@ -13,7 +13,7 @@
       <div class="field is-horizontal">
         <div class="field-body">
           <div class="field">
-            <label class="label">Job title</label>
+            <label class="label">Profession</label>
             <div class="control">
               <input class="input" type="text" name="experience[${i}][title]" placeholder="Role / Position">
             </div>
@@ -284,7 +284,7 @@
         if (actionValue && actionValue.includes('|')) {
           // DO NOTHING ELSE. 
           // Let the default "submit" behavior take over.
-          // The browser will POST to action_handler.conf.php.
+          // The browser will POST to action_handler.php.
           return; 
         }
 

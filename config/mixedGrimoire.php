@@ -5,7 +5,7 @@
             $grimoireLines = [
                 "Many jobs list Impossible Stacks but * Are Understaffed",
                 "Requiring to work under stress means * Poor Management",
-                "A 'Competitive Salary' without numbers is * A Red Flag",           
+                "A 'Competitive Salary' and no numbers is * A Red Flag",           
                 "Asking for flexibility means * Overtime Assured",
                 "Most Vacancies are written for * The Gutter.",
                 "Cast a Resume that * Gets You Hired.",
@@ -62,17 +62,5 @@
             // safety check: fallback to call-to-action
             if (!isset($data[$type])) { $type = 'cta'; }  
             return $data[$type][array_rand($data[$type])];
-        }
-
-        public static function pwHasher(string $pwd): string {
-            return password_hash($pwd, PASSWORD_ARGON2ID, [
-                'memory_cost' => 65536, // 64 MiB (in KiB)
-                'time_cost'   => 2,
-                'threads'     => 1,
-            ]);
-        }
-
-        public static function checkHash(string $pwd, string $hash): bool {
-            return $hash !== '' && password_verify($pwd, $hash);
         }
     }

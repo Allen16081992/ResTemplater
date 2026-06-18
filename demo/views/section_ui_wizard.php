@@ -30,7 +30,7 @@
       </article>
 
       <!-- STEP: Basics -->
-      <form action="config/action_handler.conf.php" method="post" target="_blank" <?php //!isset($_SESSION['session_data']['user_id']) ? 'target="_blank"' : '' ?>>
+      <form action="config/action_handler.php" method="post" target="_blank" <?php //!isset($_SESSION['session_data']['user_id']) ? 'target="_blank"' : '' ?>>
         <?= SessionBook::csrfField(); ?>
         <article class="pw-card" data-step="basics">
           <h2>Basics</h2>

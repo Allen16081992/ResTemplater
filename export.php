@@ -4,7 +4,7 @@
   header('Expires: 0');         // expire immediately
   
   // Essential PHP files
-  require_once "./config/session_manager.conf.php"; 
+  require_once "./config/session_manager.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="en">

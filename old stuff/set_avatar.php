@@ -1,5 +1,5 @@
 <?php
-require_once '../session_manager.conf.php';
+require_once '../session_manager.php';
 SessionBook::invokeSession();
 
 if (isset($_POST['avatar'])) {

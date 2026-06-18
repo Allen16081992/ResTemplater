@@ -42,27 +42,20 @@
             if (!preg_match('/\S/u', $password)) { return 'Password must contain at least one non-space character.'; }
             return null; 
         }
-
         public static function validateName(string $value, bool $required = true, int $maxLen = 80): ?string {
             $value = trim($value);
+            
+            // 1. Structural Checks (Crucial for DB and UI integrity)
             if ($required && $value === '') { return 'This field is required.'; }
             if ($value === '') { return null; }
             if (mb_strlen($value, 'UTF-8') > $maxLen) { return "Maximum {$maxLen} characters allowed."; }
 
-            // Disallow control characters
+            // 2. Security Check: Disallow hidden ASCII control characters 
+            // This stops null bytes (\x00) and line breaks (\x0A/\x0D) from breaking FPDF or DB inserts
             if (preg_match('/[\x00-\x1F\x7F]/u', $value)) {
-                return 'Contains invalid characters.';
+                return 'Contains invalid system control characters.';
             }
 
-            // Letters + separators only
-            if (!preg_match("/^[\p{L} .'-]+$/u", $value)) {
-                return 'Only letters, spaces, dots, hyphens and apostrophes allowed.';
-            }
-
-            // Must contain at least one letter
-            if (!preg_match('/\p{L}/u', $value)) {
-                return 'Must contain at least one letter.';
-            }
             return null;
         }
 
@@ -122,5 +115,17 @@
 
             // 7. Lock down output format to the 1st of the month for MariaDB DATE storage
             return ['error' => null, 'date' => $d->format('Y-m-01')];
+        }
+
+        public static function pwHasher(string $pwd): string {
+            return password_hash($pwd, PASSWORD_ARGON2ID, [
+                'memory_cost' => 65536, // 64 MiB (in KiB)
+                'time_cost'   => 2,
+                'threads'     => 1,
+            ]);
+        }
+
+        public static function checkHash(string $pwd, string $hash): bool {
+            return $hash !== '' && password_verify($pwd, $hash);
         }
     }

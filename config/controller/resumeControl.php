@@ -95,7 +95,7 @@
                     return;
                 }
                 
-                $_SESSION['success'] = 'Resume deleted.';
+                $_SESSION['success'] = 'Resume purged from records.';
                 ViewBook::revert('builder');  
                 return;
 

@@ -49,6 +49,8 @@
             if (session_status() === PHP_SESSION_ACTIVE) {
                 session_destroy();
             }
+            header('Location: ../index.php');
+            exit;
         }
 
         // Rate limiter against brute-force attacks, bot abuse, spamming form submissions
@@ -177,27 +179,26 @@
             // 1. Prepare the query string if an ID is provided
             $query = ($id !== null) ? "?resume_id=$id" : "";
 
-            // Read previous UI state from submit button
+            // 2. Read previous UI state from submit button
             $_SESSION['action'] = $view;
             if (in_array($view, ['profile', 'wizard', 'builder'])) {
                 header('Location: /client.php' . $query); 
-            } elseif (in_array($view, ['login', 'signup'])) {
-                header('Location: /index.php');
             } elseif (in_array($view, ['error'])) {
                 header('Location: /error.php'); 
             } else {
-                $uid = $_SESSION['session_data']['user_id'] ?? '';
-                $_SESSION = [];
-                // Restore the user session if exist
-                if (!empty($uid)) { $_SESSION['session_data']['user_id'] = $uid; }
-                header('Location: /index.php'); 
+                // Check if active user before redirect
+                if (isset($_SESSION['session_data']['user_id'])) {
+                    $uid = $_SESSION['session_data']['user_id'] ?? '';
+                    $_SESSION = []; // Clear session
+
+                    // Restore user session if exist
+                    if (!empty($uid)) { 
+                        $_SESSION['session_data']['user_id'] = $uid; 
+                    }
+                }
+                header('Location: /index.php');
             }
             exit;
-        }
-
-        public static function setEditor() {
-            $_SESSION['action'] = $_POST['action'] ?? '';
-            unset($_POST['action']);  
         }
 
         //────────────────────────────────────//

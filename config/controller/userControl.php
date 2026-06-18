@@ -1,5 +1,5 @@
 <?php // PHP Files
-    require_once __DIR__ . '/../mixedGrimoire.conf.php';
+    require_once __DIR__ . '/../validGrimoire.php';
     
     class userControl {
         public function __construct(private array $postData) {}
@@ -37,7 +37,7 @@
                 // 2. Validate Identity AND Password (The "Double Lock")
                 // If the ID is wrong OR the password is wrong, we stop.
                 $idMatches = ($exist['id'] === (int)$this->postData['id']);
-                $pwdMatches = mixedGrimoire::checkHash((string)($this->postData['pwd'] ?? ''), $exist['password_hash']);
+                $pwdMatches = validGrimoire::checkHash((string)($this->postData['pwd'] ?? ''), $exist['password_hash']);
 
                 if (!$idMatches || !$pwdMatches) {
                     $_SESSION['error'] = ['pwd' => 'Verification failed. Password incorrect.'];

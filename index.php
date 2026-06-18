@@ -1,12 +1,12 @@
 <?php
   // Essential PHP files
-  require_once __DIR__ . '/config/session_manager.conf.php'; 
+  require_once __DIR__ . '/config/session_manager.php'; 
   // Miscellaneous PHP Files
-  include_once __DIR__ . '/config/mixedGrimoire.conf.php';
+  include_once __DIR__ . '/config/mixedGrimoire.php';
   SessionBook::invokeSession();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,18 +31,21 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon/Favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon/Favicon-16x16.png">
     <!-- CSS -->
-     <style>html, body { background: #14121f !important; color: #e8e8ef; }</style>
+    <style>
+        /* html, body { background: #14121f !important; color: #e8e8ef; } */
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unna:wght@400;700&family=Inter:wght@400;600;800&display=swap">
     <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/export_page.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <title>Your Job Hunting Familiar - Free Resume Builder</title>
     <!-- Javascript -->
     <script defer src="assets/js/section-handler.js"></script>
+    <script defer src="assets/js/landing-dynamic.js"></script>
     <script defer src="assets/js/auth_page-handler.js"></script>
     <script defer src="assets/js/cta-padding-mobile.js"></script><!-- CSS refinement for mobile -->
     <script defer src="assets/js/sparks_effect.js"></script>
@@ -66,7 +69,6 @@
     <?php ViewBook::render('navbar_flex.php'); ?>
     
     <main>
-        <?php ViewBook::render('section_home.php'); ?> 
         <?php ViewBook::render('section_landing.php'); ?>  
         <?php ViewBook::render('section_login.php'); ?>
         <?php ViewBook::render('section_signup.php'); ?>  

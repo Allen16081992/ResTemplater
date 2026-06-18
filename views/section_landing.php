@@ -1,99 +1,92 @@
-<section id="landing" class="<?= ViewBook::setVisibility('landing'); ?> hero is-fullheight">
-<div class="magic-bg"></div>
+<section id="home" class="<?= ViewBook::setVisibility('home'); ?> hero is-fullheight">
+  <div class="magic-bg"></div>
 
   <!-- ========================================================
       HERO SECTION (THE HOOK)
   ========================================================= -->
-  <div class="hero-body">
+    <div class="hero-body">
     <div class="container">
       <div class="columns is-vcentered">
         <div class="column is-6 has-text-left">
           <div class="badge mb-4">✨ No Paywalls. No Bullshit. Just Magic.</div>
           <h1 class="title is-1 witch-title">
             <?= mixedGrimoire::castMagicalHeader(); ?>
-            <!-- Cast a Resume that <span class="text-gradient">Gets You Hired.</span> -->
           </h1>
           <p class="subtitle mt-4 is-5 has-text-grey-light">
             Stop fighting with Word docs. PaperWitch uses a touch of code and a dash of style to brew professional PDFs in minutes.
           </p>
-          <div class="buttons mt-6">
-            <button class="button is-medium btn-glow">
-              <span>🔮 Start Brewing</span>
-            </button>
+          <form class="buttons mt-6" action="client.php" method="post">
+            <button type="submit" class="button is-medium btn-glow" name="wizard" value="wizard">🔮 Start Brewing</button>
             <button class="button is-medium is-ghost has-text-white">
               View Grimoire (Templates)
             </button>
-          </div>
+          </form>
         </div>
         
-<div class="column is-6 is-hidden-touch">
-  <div class="mockup-container">
-    
-    <!-- Background Sheet 1 (250px x 350px) -->
-    <div class="floating-sheet sheet-1" id="hero-sheet-1" style="padding: 1.15rem; overflow: hidden; display: flex; flex-direction: column;">
-      <div class="sheet-glass-header contra-style"></div>
-      <div class="sheet-glass-headline" style="color: var(--witch-purple); font-weight: bold; font-size: 0.52rem; opacity: 0.8; font-family: 'Inter', sans-serif; min-height: 12px; margin-top: 1px;"></div>
-      
-      <div class="paper-content" style="margin: 4px 0;"><div class="line" style="height: 3px; background: rgba(255,255,255,0.1);"></div></div>
-      
-      <!-- Experience Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">EXPERIENCE</div>
-      <div class="sheet-glass-exp" style="min-height: 52px; line-height: 1.3;"></div>
-      
-      <!-- Skills Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-top: 4px; margin-bottom: 2px;">CORE LOGIC SKILLS</div>
-      <div class="sheet-glass-skills" style="min-height: 24px; display: flex; flex-wrap: wrap; gap: 2px 8px;"></div>
-      
-      <!-- Education Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-top: 8px; margin-bottom: 2px;">EDUCATION</div>
-      <div class="sheet-glass-edu" style="min-height: 14px;"></div>
-    </div>
-    
-    <!-- Background Sheet 2 (250px x 350px) -->
-    <div class="floating-sheet sheet-2" id="hero-sheet-2" style="padding: 1.15rem; overflow: hidden; display: flex; flex-direction: column;">
-      <div class="sheet-glass-header contra-style"></div>
-      <div class="sheet-glass-headline" style="color: var(--witch-purple); font-weight: bold; font-size: 0.52rem; opacity: 0.8; font-family: 'Inter', sans-serif; min-height: 12px; margin-top: 1px;"></div>
-      
-      <div class="paper-content" style="margin: 4px 0;"><div class="line" style="height: 3px; background: rgba(255,255,255,0.1);"></div></div>
-      
-      <!-- Experience Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-bottom: 2px;">EXPERIENCE</div>
-      <div class="sheet-glass-exp" style="min-height: 52px; line-height: 1.3;"></div>
-      
-      <!-- Skills Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-top: 4px; margin-bottom: 2px;">CORE LOGIC SKILLS</div>
-      <div class="sheet-glass-skills" style="min-height: 24px; display: flex; flex-wrap: wrap; gap: 2px 8px;"></div>
-      
-      <!-- Education Block -->
-      <div style="font-size: 0.45rem; color: rgba(255,255,255,0.4); font-weight: bold; letter-spacing: 0.5px; margin-top: 8px; margin-bottom: 2px;">EDUCATION</div>
-      <div class="sheet-glass-edu" style="min-height: 14px;"></div>
-    </div>
-    
-    <!-- Main Center Preview (300px x 400px) -->
-    <div class="main-preview" id="hero-main-preview" style="margin: 0 auto; padding: 1.25rem 1.5rem; overflow: hidden; display: flex; flex-direction: column;">
-       <div id="hero-main-name" class="cursor-blink" style="min-height: 24px; display: block;"></div>
-       <div id="hero-main-headline" style="color: var(--witch-purple); font-weight: bold; font-size: 0.62rem; min-height: 14px; display: block; margin-top: 2px; font-family: 'Inter', sans-serif;"></div>
-       
-       <div class="paper-content" style="margin: 6px 0;">
-           <div class="line" style="height: 4px; background: #eee;"></div>
-       </div>
-       
-       <div class="paper-section-title" style="font-size: 0.52rem; letter-spacing: 0.5px; margin-bottom: 3px;">EXPERIENCE</div>
-       <div id="hero-main-exp" style="min-height: 50px; display: block;"></div>
-       
-       <div class="paper-section-title" style="font-size: 0.52rem; letter-spacing: 0.5px; margin-top: 6px; margin-bottom: 3px;">CORE LOGIC SKILLS</div>
-       <div id="hero-main-skills" style="min-height: 28px; display: flex; flex-wrap: wrap; gap: 4px 12px;"></div>
-       
-       <div class="paper-section-title" style="font-size: 0.52rem; letter-spacing: 0.5px; margin-top: 28px; margin-bottom: 3px;">EDUCATION</div>
-       <div id="hero-main-edu" style="min-height: 20px; display: block;"></div>
-       
-       <div class="paper-content" style="margin-top: auto; padding-top: 4px;">
-         <div class="line" style="height: 4px; background: #eee; margin-bottom: 0;"></div>
-       </div>
-    </div>
+        <div class="column is-6 is-hidden-touch">
+            <div class="mockup-container">
+                
+                <!-- Background Sheet 1 (250px x 350px) -->
+                <div class="floating-sheet sheet-1" id="hero-sheet-1">
+                    <div class="sheet-glass-header contra-style"></div>
+                    <div class="sheet-glass-headline"></div>
+                    
+                    <div class="paper-content micro-gap">
+                        <div class="line micro-line"></div>
+                    </div>
+                    
+                    <div class="glass-section-title">EXPERIENCE</div>
+                    <div class="sheet-glass-exp"></div>
+                    
+                    <div class="glass-section-title top-space-sm">CORE LOGIC SKILLS</div>
+                    <div class="sheet-glass-skills"></div>
+                    
+                    <div class="glass-section-title top-space-md">EDUCATION</div>
+                    <div class="sheet-glass-edu"></div>
+                </div>
 
-  </div>
-</div>
+                <div class="floating-sheet sheet-2" id="hero-sheet-2">
+                    <div class="sheet-glass-header contra-style"></div>
+                    <div class="sheet-glass-headline"></div>
+                    
+                    <div class="paper-content micro-gap">
+                        <div class="line micro-line"></div>
+                    </div>
+                    
+                    <div class="glass-section-title">EXPERIENCE</div>
+                    <div class="sheet-glass-exp"></div>
+                    
+                    <div class="glass-section-title top-space-sm">CORE LOGIC SKILLS</div>
+                    <div class="sheet-glass-skills"></div>
+                    
+                    <div class="glass-section-title top-space-md">EDUCATION</div>
+                    <div class="sheet-glass-edu"></div>
+                </div>
+                
+                <div class="main-preview" id="hero-main-preview">
+                    <div id="hero-main-name" class="cursor-blink"></div>
+                    <div id="hero-main-headline"></div>
+                    
+                    <div class="paper-content standard-gap">
+                        <div class="line divider-main"></div>
+                    </div>
+                    
+                    <div class="paper-section-title exp-title-space">EXPERIENCE</div>
+                    <div id="hero-main-exp"></div>
+                    
+                    <div class="paper-section-title skills-title-space">CORE LOGIC SKILLS</div>
+                    <div id="hero-main-skills"></div>
+                    
+                    <div class="paper-section-title edu-title-space">EDUCATION</div>
+                    <div id="hero-main-edu"></div>
+                    
+                    <div class="paper-content footer-push">
+                        <div class="line divider-main no-margin-bottom"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
       </div>
     </div>
@@ -132,15 +125,15 @@
                   <div class="glass-input">
                       <span class="label-ghost">Name</span>
                       <!-- contenteditable makes this standard div behave like an input field -->
-                      <div class="input-line" id="ghost-name" contenteditable="true" spellcheck="false">Alex Sterling</div>
+                      <div class="input-line" id="ghost-name" contenteditable="plaintext-only" spellcheck="false">Alex Sterling</div>
                   </div>
                   <div class="glass-input">
                       <span class="label-ghost">Headline</span>
-                      <div class="input-line" id="ghost-headline" contenteditable="true" spellcheck="false">Full-Stack Alchemist</div>
+                      <div class="input-line" id="ghost-headline" contenteditable="plaintext-only" spellcheck="false">Full-Stack Alchemist</div>
                   </div>
                   <div class="glass-input active-input">
                       <span class="label-ghost">Experience</span>
-                      <div class="input-line cursor-blink" id="ghost-exp" contenteditable="true" spellcheck="false">Working on PaperWitc_</div>
+                      <div class="input-line cursor-blink" id="ghost-exp" contenteditable="plaintext-only" spellcheck="false">Working on Paper Witch</div>
                   </div>
               </div>
 
@@ -155,7 +148,7 @@
                       <hr>
                       <div class="paper-content">
                           <h4 class="paper-section-title">EXPERIENCE</h4>
-                          <p class="paper-exp-text" id="paper-exp">Working on PaperWitc_</p>
+                          <p class="paper-exp-text" id="paper-exp">Working on Paper Witch</p>
                           <div class="line"></div>
                           <div class="line short"></div>
                       </div>
@@ -224,268 +217,3 @@
     </div>
   </section>
 </section>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Core Elements
-    const ghostName = document.getElementById('ghost-name');
-    const ghostHeadline = document.getElementById('ghost-headline');
-    const ghostExp = document.getElementById('ghost-exp');
-
-    const paperName = document.getElementById('paper-name');
-    const paperHeadline = document.getElementById('paper-headline');
-    const paperExp = document.getElementById('paper-exp');
-
-    // Helper function to handle text mirroring
-    const syncText = (source, target, isUpperCase = false) => {
-        source.addEventListener('input', () => {
-            let text = source.innerText;
-            
-            // Hard Cap at 25 characters
-            if (text.length > 25) {
-                text = text.substring(0, 25);
-                source.innerText = text; // Forces the editable div to truncate
-                
-                // This snippet places the blinking text cursor back at the end of the text
-                const range = document.createRange();
-                const sel = window.getSelection();
-                range.setStart(source.childNodes[0], 25);
-                range.collapse(true);
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-
-            // If they clear everything, keep a faint placeholder space so layout doesn't collapse
-            if (text.trim() === '') {
-                target.innerText = ' ';
-                return;
-            }
-            
-            target.innerText = isUpperCase ? text.toUpperCase() : text;
-        });
-    };
-
-    // Initialize the live mirroring
-    if (ghostName && paperName) syncText(ghostName, paperName, true); // Contra style uses uppercase names
-    if (ghostHeadline && paperHeadline) syncText(ghostHeadline, paperHeadline);
-    if (ghostExp && paperExp) syncText(ghostExp, paperExp);
-
-const heroMainName = document.getElementById('hero-main-name');
-    const heroMainHeadline = document.getElementById('hero-main-headline');
-    const heroMainExp = document.getElementById('hero-main-exp');
-    const heroMainSkills = document.getElementById('hero-main-skills');
-    const heroMainEdu = document.getElementById('hero-main-edu');
-    const heroSheet1 = document.getElementById('hero-sheet-1');
-    const heroSheet2 = document.getElementById('hero-sheet-2');
-
-    const firstNames = ["Alexander", "Morgan", "Elena", "Marcus", "Valerie", "Viktor", "Sylvia"];
-    const lastNames = ["Vane", "Blackwood", "Thorne", "Kross", "Sterling", "Vance", "Arcane"];
-    const titles = ["SYSTEMS ENGINEER", "FULL-STACK ARCHITECT", "INFRASTRUCTURE ENGINEER", "PIPELINE SPECIALIST", "ROUTING ENGINEER"];
-    
-    const experiencePool = [
-        "Engineered high-throughput custom data pipelines. Rewrote legacy framework logic into native routines. Refitted automated architectures under zero-downtime.",
-        "Dismantled monolithic application spaghetti. Deployed ultra-clean vanilla routing structures that cut server response latencies in half.",
-        "Reverse-engineered proprietary black-box APIs to recover legacy system control. Optimized automated memory allocation and fortified backends.",
-        "Architected bare-metal deployment environments. Developed custom automation scripts that replaced bloated third-party dependencies."
-    ];
-
-    const skillsPool = [
-        ["Vanilla JS", "Native PHP", "Custom Routing", "SQL Optimization"],
-        ["Low-Level Engine", "DOM Manipulation", "Data Architecture", "Bare-Metal Dev"],
-        ["Memory Management", "API Remodeling", "Clean Logic", "Zero-Dependency"],
-        ["Pipeline Automation", "Backend Infrastructure", "Algorithm Fixes", "Hardware Mapping"]
-    ];
-
-    const educationPool = [
-        "Self-Taught / Raw Production Forge (2018 - Present)",
-        "B.S. Computer Engineering & Systems Architecture",
-        "Advanced Academy of Low-Level Core Paradigms",
-        "Autonomous System Logic Certification Lab"
-    ];
-
-    // Engine Tracker Phases
-    let currentPhase = 'name'; // 'name' -> 'title' -> 'exp' -> 'skills' -> 'edu'
-    let textIndex = 0;
-    let skillIndex = 0;
-    let loopTimeout = null;
-
-    let activeIdentity = { name: "", title: "", exp: "", skills: [], edu: "" };
-    let historicalResumes = [];
-
-    function generateRandomIdentity() {
-        const first = firstNames[Math.floor(Math.random() * firstNames.length)];
-        const last = lastNames[Math.floor(Math.random() * lastNames.length)];
-        return {
-            name: `${first} ${last}`.toUpperCase(),
-            title: titles[Math.floor(Math.random() * titles.length)],
-            exp: experiencePool[Math.floor(Math.random() * experiencePool.length)],
-            skills: skillsPool[Math.floor(Math.random() * skillsPool.length)],
-            edu: educationPool[Math.floor(Math.random() * educationPool.length)]
-        };
-    }
-
-    // Background cards template updates
-    function updateBackgroundSheets() {
-        const renderSheetData = (sheetElement, identityData) => {
-            if (!sheetElement || !identityData) return;
-
-            // 1. Name Allocation
-            sheetElement.querySelector('.sheet-glass-header').innerHTML = 
-                `<h3 style="font-family: 'Inter', sans-serif; font-weight: 900; font-size: 0.82rem; color: rgba(255,255,255,0.75); margin:0; letter-spacing: -0.5px;">${identityData.name}</h3>`;
-            
-            // 2. Headline Allocation
-            sheetElement.querySelector('.sheet-glass-headline').innerHTML = 
-                `<span style="display:inline-block; vertical-align:top;">${identityData.title}</span>`;
-            
-            // 3. Experience Allocation (Sliced to guarantee no height overflow)
-            const cappedExp = identityData.exp.length > 75 ? identityData.exp.substring(0, 75) + "..." : identityData.exp;
-            sheetElement.querySelector('.sheet-glass-exp').innerHTML = 
-                `<p style="font-size: 0.44rem; color: rgba(255,255,255,0.35); margin:0; font-family: sans-serif;">${cappedExp}</p>`;
-            
-            // 4. Skills Dual-Column Allocation
-            let skillsHTML = "";
-            identityData.skills.forEach(skill => {
-                skillsHTML += `<div style="font-size: 0.44rem; font-weight: 600; color: rgba(255,255,255,0.5); width: calc(50% - 4px); display:flex; align-items:center;">• ${skill}</div>`;
-            });
-            sheetElement.querySelector('.sheet-glass-skills').innerHTML = skillsHTML;
-            
-            // 5. Education Allocation
-            sheetElement.querySelector('.sheet-glass-edu').innerHTML = 
-                `<div style="font-size: 0.44rem; color: rgba(255,255,255,0.4); font-weight: 500; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${identityData.edu}</div>`;
-        };
-
-        // Render sheet 1 with the immediate previous history profile
-        if (historicalResumes.length > 0 && heroSheet1) {
-            renderSheetData(heroSheet1, historicalResumes[historicalResumes.length - 1]);
-        }
-        // Render sheet 2 with the second oldest profile in the timeline array
-        if (historicalResumes.length > 1 && heroSheet2) {
-            renderSheetData(heroSheet2, historicalResumes[historicalResumes.length - 2]);
-        }
-    }
-
-    function runFoundryEngine() {
-        // Phase 1: Name Line
-        if (currentPhase === 'name') {
-            if (textIndex < activeIdentity.name.length) {
-                heroMainName.innerHTML = `<h3 style="font-family: 'Inter', sans-serif; font-weight: 900; margin:0; font-size: 1.15rem; letter-spacing: -0.5px; line-height: 1.1; color: #1a1a1a;">${activeIdentity.name.substring(0, textIndex + 1)}</h3>`;
-                textIndex++;
-                loopTimeout = setTimeout(runFoundryEngine, 45);
-            } else {
-                currentPhase = 'title';
-                textIndex = 0;
-                loopTimeout = setTimeout(runFoundryEngine, 200);
-            }
-        }
-        // Phase 2: Professional Title
-        else if (currentPhase === 'title') {
-            if (textIndex < activeIdentity.title.length) {
-                // Using internal HTML to lock a stable line layout shape
-                heroMainHeadline.innerHTML = `<span style="display:inline-block; vertical-align:top;">${activeIdentity.title.substring(0, textIndex + 1)}</span>`;
-                textIndex++;
-                loopTimeout = setTimeout(runFoundryEngine, 30);
-            } else {
-                currentPhase = 'exp';
-                textIndex = 0;
-                heroMainName.classList.remove('cursor-blink');
-                heroMainExp.classList.add('cursor-blink');
-                loopTimeout = setTimeout(runFoundryEngine, 350);
-            }
-        }
-        // Phase 3: Experience Block (Clean Capped Bounds)
-        else if (currentPhase === 'exp') {
-            const maxVisibleChars = 90; // Tuned tighter to allow space for new modules
-            const cappedText = activeIdentity.exp.length > maxVisibleChars 
-                ? activeIdentity.exp.substring(0, maxVisibleChars) + "..." 
-                : activeIdentity.exp;
-
-            if (textIndex < cappedText.length) {
-                heroMainExp.innerHTML = `<p class="paper-exp-text" style="margin:0; font-size: 0.55rem; line-height: 1.35; color: #333; font-weight: 500;">${cappedText.substring(0, textIndex + 1)}</p>`;
-                textIndex++;
-                loopTimeout = setTimeout(runFoundryEngine, 10);
-            } else {
-                currentPhase = 'skills';
-                textIndex = 0;
-                skillIndex = 0;
-                heroMainExp.classList.remove('cursor-blink');
-                loopTimeout = setTimeout(runFoundryEngine, 300);
-            }
-        }
-        // Phase 4: Dynamic Bullet Point Skills (Appears token by token)
-        else if (currentPhase === 'skills') {
-            if (skillIndex < activeIdentity.skills.length) {
-                const currentSkillText = activeIdentity.skills[skillIndex];
-                
-                if (textIndex < currentSkillText.length) {
-                    // Update the active typing item slot
-                    let renderingHTML = "";
-                    for(let i=0; i<skillIndex; i++) {
-                        renderingHTML += `<div style="font-size: 0.52rem; font-weight: 600; color: #444; width: calc(50% - 6px); display:flex; align-items:center;">• ${activeIdentity.skills[i]}</div>`;
-                    }
-                    renderingHTML += `<div class="cursor-blink" style="font-size: 0.52rem; font-weight: 600; color: #444; width: calc(50% - 6px); display:flex; align-items:center;">• ${currentSkillText.substring(0, textIndex + 1)}</div>`;
-                    heroMainSkills.innerHTML = renderingHTML;
-                    
-                    textIndex++;
-                    loopTimeout = setTimeout(runFoundryEngine, 20);
-                } else {
-                    skillIndex++;
-                    textIndex = 0;
-                    loopTimeout = setTimeout(runFoundryEngine, 150);
-                }
-            } else {
-                // Skills complete
-                // Clean cursor flags from children lists
-                const children = heroMainSkills.children;
-                if(children.length > 0) children[children.length-1].classList.remove('cursor-blink');
-                
-                currentPhase = 'edu';
-                textIndex = 0;
-                heroMainEdu.classList.add('cursor-blink');
-                loopTimeout = setTimeout(runFoundryEngine, 300);
-            }
-        }
-        // Phase 5: Education
-        else if (currentPhase === 'edu') {
-            if (textIndex < activeIdentity.edu.length) {
-                heroMainEdu.innerHTML = `<div style="font-size: 0.52rem; color: #555; font-weight: 500; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${activeIdentity.edu.substring(0, textIndex + 1)}</div>`;
-                textIndex++;
-                loopTimeout = setTimeout(runFoundryEngine, 15);
-            } else {
-                heroMainEdu.classList.remove('cursor-blink');
-                historicalResumes.push({...activeIdentity});
-                if (historicalResumes.length > 5) historicalResumes.shift();
-
-                // Hold complete state on screen for 6 seconds
-                loopTimeout = setTimeout(() => {
-                    updateBackgroundSheets();
-
-                    // Master Fade Out across all generated channels
-                    const targets = [heroMainName, heroMainHeadline, heroMainExp, heroMainSkills, heroMainEdu];
-                    targets.forEach(t => {
-                        t.style.opacity = 0;
-                        t.style.transition = "opacity 0.4s ease";
-                    });
-
-                    setTimeout(() => {
-                        targets.forEach(t => { t.innerHTML = ""; t.style.opacity = 1; });
-
-                        currentPhase = 'name';
-                        textIndex = 0;
-                        heroMainName.classList.add('cursor-blink');
-                        
-                        activeIdentity = generateRandomIdentity();
-                        runFoundryEngine();
-                    }, 500);
-                }, 6000);
-            }
-        }
-    }
-
-    historicalResumes.push(generateRandomIdentity());
-    historicalResumes.push(generateRandomIdentity());
-    updateBackgroundSheets();
-
-    activeIdentity = generateRandomIdentity();
-    if (heroMainName) heroMainName.classList.add('cursor-blink');
-    setTimeout(runFoundryEngine, 600);
-});
-</script>

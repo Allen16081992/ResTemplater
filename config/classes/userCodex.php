@@ -1,5 +1,5 @@
 <?php // Load PHP Files
-    require_once __DIR__ . '/../mixedGrimoire.conf.php';
+    require_once __DIR__ . '/../validGrimoire.php';
 
     final class userCodex {
         public function __construct(private PDO $pdo) {}
@@ -23,7 +23,7 @@
         }
 
         public function createAccount(array $postData): int {
-            $hashSigil = mixedGrimoire::pwHasher($postData['pwd']);
+            $hashSigil = validGrimoire::pwHasher($postData['pwd']);
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO accounts (email, password_hash, birth_date) VALUES (:email, :hashSigil, :birth_date)');
                 $stmt->execute([
